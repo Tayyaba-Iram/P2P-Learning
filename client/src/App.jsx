@@ -1,10 +1,6 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import { createContext } from "react"
-export const userContext = createContext();
 
 function App() {
-  
-
   return (
     <userContext.Provider value={user}>
     <BrowserRouter>
