@@ -13,7 +13,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check for empty fields
+  
     if (email === "") {
       toast.error("Email is required!", {});
     } else if (!email.includes("@")) {
