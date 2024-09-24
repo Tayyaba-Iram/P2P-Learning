@@ -1,13 +1,13 @@
 body, html {
   height: 100%;
   margin: 0;
-  font-family: Arial, sans-serif; /* Optional: for better typography */
-  background-color: #f0f2f5; /* Optional: light background */
+  font-family: Arial, sans-serif; 
+  background-color: #f0f2f5; 
 }
 
 
 .signup {
-  display: flex; /* Use flexbox */
+  display: flex; 
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   height: 186vh; /* Full viewport height */
