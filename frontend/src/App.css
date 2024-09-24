@@ -288,6 +288,17 @@ p {
   box-sizing: border-box; /* Include padding and border in width calculation */
 }
 
+.service-card img {
+  width: 45%; /* Makes the image span the full width of the card */
+  height: 148px; /* Fixed height for the image */
+  justify-content: center;
+  padding-left: 27%;
+  object-fit: cover; /* Ensures the image covers the area without stretching */
+  border-top-left-radius: 8px; /* Rounds the top-left corner of the image */
+  border-top-right-radius: 8px; /* Rounds the top-right corner of the image */
+  display: block; /* Ensures there’s no extra space below the image */
+}
+
 /* Individual service card */
 .service-card {
   background-color: #ffffff; /* White background */
