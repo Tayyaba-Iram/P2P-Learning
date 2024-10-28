@@ -217,6 +217,7 @@ body, html {
   color: #2c5711;
   text-decoration: none;
   margin: 0 15px;
+  font-size: 14pt;
 }
 
 .home {
@@ -225,6 +226,18 @@ body, html {
   justify-content: center; /* Center the content horizontally */
   padding: 20px; /* Optional padding */
 }
+
+
+.SS{
+  font-weight: bold;
+  margin-left: -300px;
+  color: #2c5711;
+  text-decoration: none;
+  font-size: 14pt;
+}
+  
+
+
 
 .Peers {
   max-width: 60%; /* Limit the image width */
