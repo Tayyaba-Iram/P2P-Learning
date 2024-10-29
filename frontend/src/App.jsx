@@ -5,6 +5,8 @@ import Login from './Login'
 import { createContext } from "react"
 export const userContext = createContext();
 import Navbar from './Navbar'
+import ScheduleSession from './ScheduleSession';
+
 
 function App() {
   return (
@@ -12,8 +14,10 @@ function App() {
     <Navbar/>
     <Routes>
       <Route path="/" element={<Home />}></Route>
+      <Route path='/ScheduleSession' element = {<ScheduleSession/>}></Route>
       <Route path='/register' element = {<Register />}></Route>
       <Route path='/login' element = {<Login />}></Route>
+     
     </Routes>
     </BrowserRouter>
   )
