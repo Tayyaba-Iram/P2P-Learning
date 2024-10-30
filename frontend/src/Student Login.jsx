@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast'; 
-import './App.css';
+import './Student Login.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   axios.defaults.withCredentials = true;
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
 
-  
     if (email === "") {
       toast.error("Email is required!", {});
     } else if (!email.includes("@")) {
@@ -23,20 +22,22 @@ function Login() {
     } else if (password.length < 4) {
       toast.error("Password must be at least 4 characters!", {});
     } else {
-      axios.post('http://localhost:3001/login', { email, password })
+      axios.post('http://localhost:3001/api/login', { email, password })
         .then(res => {
-          if (res.data === "Success") {
+          if (res.data.success) {
             toast.success('Login successfully!');
+            setTimeout(() => {
+              navigate('/');
+            }, 1000);
             setEmail(''); 
             setPassword('');
-            window.location.href = "/"; 
           } else {
-            toast.error('Login failed. Please check your credentials.');
+            toast.error('Login failed. ' + res.data.message);
           }
         })
         .catch(err => {
           console.log(err);
-          toast.error('An error occurred. Please try again.');
+          toast.error('Invalid email or password!');
         });
     }
   }
@@ -72,7 +73,7 @@ function Login() {
           </form>
           <br />
           <p>Don't have an account? <strong><Link to="/register" style={{ color: '#548635', textDecoration: 'underline' }}>Sign up</Link></strong></p>
-          </div>
+        </div>
       </div>
       <Toaster position="top-center" />
     </>

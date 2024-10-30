@@ -1,0 +1,66 @@
+
+.login {
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full viewport height */
+  }
+  
+  .login_form {
+    width: 500px; /* Form width */
+    padding: 20px; /* Padding inside form */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+    background-color: #fff; /* White background */
+  }
+   
+  .login_form .login-logo {
+    display: block; /* Makes the image a block element */
+    margin: 0 auto; /* Centers the logo horizontally */
+    max-width: 150px; /* Maximum width of the logo */
+    height: auto; /* Keeps the aspect ratio */
+    margin-bottom: 20px; /* Space below the logo */
+  }
+  .login_form h1{
+    text-align: center;
+    color: #48742F;
+  }
+  
+  .login_form p{
+    text-align: center;
+  }
+  
+  .login_form form div {
+    margin-bottom: 15px; /* Space between form fields */
+  }
+  
+  .login_form form input {
+    width: 100%; /* Full width of the container */
+    padding: 10px; /* Padding inside input */
+    margin-top: 5px; /* Space above input */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  
+  .login_btn {
+    width: 100%; /* Full width */
+    padding: 10px; /* Space inside button */
+    background-color: #48742F; /* Primary color */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 16px; /* Font size */
+    margin-top: 10px; /* Space above button */
+  }
+  
+  .login_btn:hover {
+    background-color: #2c5711; /* Darker shade on hover */
+  }
+  
+  .login_form p {
+    margin: 10px 0; /* Space above and below */
+  }
+  

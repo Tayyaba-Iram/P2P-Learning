@@ -1,10 +1,10 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import Home from "./Home"
-import Register from './Register'
-import Login from './Login'
+import Home from "./Student Home"
+import Register from './Student Register'
+import Login from './Student Login'
 import { createContext } from "react"
 export const userContext = createContext();
-import Navbar from './Navbar'
+import Navbar from './Student Navbar'
 
 function App() {
   return (
@@ -12,6 +12,7 @@ function App() {
     <Navbar/>
     <Routes>
       <Route path="/" element={<Home />}></Route>
+      <Route path='/register' element = {<Register />}></Route>
       <Route path='/register' element = {<Register />}></Route>
       <Route path='/login' element = {<Login />}></Route>
     </Routes>

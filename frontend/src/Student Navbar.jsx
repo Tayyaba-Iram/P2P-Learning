@@ -1,11 +1,14 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import {  useLocation } from 'react-router-dom';
 import { userContext } from './App';
+import './Student Navbar.css';
 
 
 function Navbar() {
     const user = useContext(userContext);
 
+    const location = useLocation(); 
     return (
         <div className="navbar">
             <div className="logo-container">
@@ -13,8 +16,9 @@ function Navbar() {
                 <h3 className="logo-text">P2P Learning</h3>
             </div>
             <div className="nav-mid-links">
-                <Link to="/" className='link'>Home</Link></div>
-            <Link to="/ScheduleSession" className="SS">ScheduleSession</Link>
+            <Link to="/" className={`link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
+                <Link to="/services" className={`link ${location.pathname === '/services' ? 'active' : ''}`}>Services</Link>
+                </div>
             <div className="auth-buttons">
 
                 <Link to="/register"> <button className="btn">Sign Up</button> </Link>
