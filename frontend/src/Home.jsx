@@ -21,34 +21,37 @@ function Home() {
     <h1 className="services-title">Our Services</h1>
     <div class="services">
     <div class="service-card">
+        <img src="Community.png" alt="Peer Community"></img>
         <h3>Peer Community</h3>
         <p>Join a community of like-minded peers to share knowledge and support each other in learning.</p>
     </div>
     <div class="service-card">
+        <img src="Earn.png" alt="Fun and Earn"></img>
         <h3>Fun and Earn</h3>
         <p>Engage in activities that allow you to learn, have fun by sending meal to close friends.</p>
     </div>
     <div class="service-card">
+        <img src="Broadcast.png" alt="Broadcast Learning Request"></img>
         <h3>Broadcast Learning Request</h3>
         <p>Request help from the community on specific topics or challenges you're facing.</p>
     </div>
     <div class="service-card">
+        <img src="Content.jpg" alt="Content Sharing"></img>
         <h3>Content Sharing</h3>
         <p>Share resources, notes, and other learning materials with your peers.</p>
     </div>
     <div class="service-card">
+        <img src="Schedule.png" alt="Schedule Sessions"></img>
         <h3>Schedule Sessions</h3>
         <p>Organize and schedule study sessions with your peers for collaborative learning.</p>
     </div>
     <div class="service-card">
+        <img src="Repository.png" alt="Create Own Repository"></img>
         <h3>Create Own Repository</h3>
         <p>Build and maintain your own repository of knowledge, accessible to your peers.</p>
     </div>
 </div>
-
-
-
-   
+ 
     </>
   );
 }

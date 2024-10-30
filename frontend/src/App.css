@@ -217,6 +217,7 @@ body, html {
   color: #2c5711;
   text-decoration: none;
   margin: 0 15px;
+  font-size: 14pt;
 }
 
 .container {
@@ -265,6 +266,18 @@ button {
   justify-content: center; /* Center the content horizontally */
   padding: 20px; /* Optional padding */
 }
+
+
+.SS{
+  font-weight: bold;
+  margin-left: -300px;
+  color: #2c5711;
+  text-decoration: none;
+  font-size: 14pt;
+}
+  
+
+
 
 .Peers {
   max-width: 60%; /* Limit the image width */
@@ -326,6 +339,17 @@ p {
   margin: 20px auto; /* Center the container on the page */
   max-width: 1200px; /* Limit the maximum width */
   box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+.service-card img {
+  width: 45%; /* Makes the image span the full width of the card */
+  height: 148px; /* Fixed height for the image */
+  justify-content: center;
+  padding-left: 27%;
+  object-fit: cover; /* Ensures the image covers the area without stretching */
+  border-top-left-radius: 8px; /* Rounds the top-left corner of the image */
+  border-top-right-radius: 8px; /* Rounds the top-right corner of the image */
+  display: block; /* Ensures there’s no extra space below the image */
 }
 
 /* Individual service card */
