@@ -122,3 +122,8 @@
 .cancel-btn:hover {
     background-color: #bbb;
 }
+
+.agenda{
+    background-color:white;
+    margin-top: 50px;
+}

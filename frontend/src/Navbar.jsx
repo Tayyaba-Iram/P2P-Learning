@@ -13,7 +13,9 @@ function Navbar() {
                 <h3 className="logo-text">P2P Learning</h3>
             </div>
             <div className="nav-mid-links">
-                <Link to="/" className='link'>Home</Link></div>
+                <Link to="/" className='link'>Home</Link>
+                <Link to="/ScheduleSession" className='link'>ScheduleSession</Link>
+                </div>
                 <div className="auth-buttons">
                 <Link to="/register"> <button className="btn">Sign Up</button> </Link>
                 <Link to="/login"> <button className="btn">Sign In</button> </Link>
