@@ -7,7 +7,6 @@ export const userContext = createContext();
 import Navbar from './Student Navbar'
 import ScheduleSession from './ScheduleSession';
 
->>>>>>> 557f65bd434920a6be760eb101d675bcb3d3a90b
 
 function App() {
   return (
