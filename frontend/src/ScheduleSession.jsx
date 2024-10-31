@@ -13,37 +13,40 @@ const ScheduleSession = () => {
   });
   const [agenda, setAgenda] = useState([]);
   const [meetingLink, setMeetingLink] = useState('');
+  const [copyText, setCopyText] = useState("Mark as Copied"); // Button text state
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSessionDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: value,
-    }));
+    setSessionDetails({ ...sessionDetails, [e.target.name]: e.target.value });
   };
 
   const handleDateChange = (date) => {
-    setSessionDetails((prevDetails) => ({
-      ...prevDetails,
-      date: date,
-    }));
+    setSessionDetails({ ...sessionDetails, date });
   };
 
   const handleAddSession = () => {
-    const { topic, startTime, endTime, date } = sessionDetails;
-
-    if (!topic || !startTime || !endTime || !date) {
+    if (!sessionDetails.topic || !sessionDetails.startTime || !sessionDetails.endTime) {
       alert("Please fill in all required fields.");
       return;
     }
-
-    setAgenda((prevAgenda) => [...prevAgenda, sessionDetails]);
+    setAgenda([sessionDetails]);
     setMeetingLink(`https://meetinglink.com/${Math.floor(Math.random() * 10000)}`);
     setModalOpen(false);
   };
 
   const handleCancel = () => {
     setModalOpen(false);
+  };
+
+  const handleCopy = () => {
+    const sessionText = `Topic: ${sessionDetails.topic}\nDate: ${sessionDetails.date.toDateString()}\nStart Time: ${sessionDetails.startTime}\nEnd Time: ${sessionDetails.endTime}\nMeeting Link: ${meetingLink}`;
+    navigator.clipboard.writeText(sessionText);
+    setCopyText("✔️ Copied!"); // Show tick mark in button text
+    setTimeout(() => setCopyText("Mark as Copied"), 2000); // Reset text after 2 seconds
+  };
+
+  const handleClearAgenda = () => {
+    setAgenda([]);
+    setMeetingLink('');
   };
 
   return (
@@ -56,8 +59,7 @@ const ScheduleSession = () => {
       {isModalOpen && (
         <div className="form-backdrop">
           <div className="schedule-form">
-            <h2>New Session Details</h2>
-            
+            <h2 className="page-title">New Session Details</h2>
             <div className="form-step">
               <h3>Step 1: Enter Topic Name</h3>
               <label>Topic:</label>
@@ -70,7 +72,6 @@ const ScheduleSession = () => {
                 placeholder="Enter the session topic"
               />
             </div>
-
             <div className="form-step">
               <h3>Step 2: Select Date</h3>
               <label>Date:</label>
@@ -81,7 +82,6 @@ const ScheduleSession = () => {
                 required
               />
             </div>
-
             <div className="form-step">
               <h3>Step 3: Set Time</h3>
               <label>Start Time:</label>
@@ -101,12 +101,11 @@ const ScheduleSession = () => {
                 required
               />
             </div>
-
             <div className="form-actions">
               <button className="submit-btn" onClick={handleAddSession}>
                 Add Session
               </button>
-              <button className="cancel-btn" onClick={handleCancel}>
+              <button className="clear-btn" onClick={handleCancel}>
                 Cancel
               </button>
             </div>
@@ -120,15 +119,23 @@ const ScheduleSession = () => {
           <ul>
             {agenda.map((session, index) => (
               <li key={index}>
-                <em>Your Session Topic:</em> {session.topic} <br />
-                <em>Your Selected Date:</em> {session.date.toDateString()} <br />
-                <em>Session Start Time:</em> {session.startTime} <br />
-                <em>Session End Time:</em> {session.endTime} <br />
+                <em>Topic:</em> {session.topic} <br />
+                <em>Date:</em> {session.date.toDateString()} <br />
+                <em>Start Time:</em> {session.startTime} <br />
+                <em>End Time:</em> {session.endTime} <br />
               </li>
             ))}
           </ul>
           <div className="meeting-link">
             <em>Meeting Link:</em> <a href={meetingLink} target="_blank" rel="noopener noreferrer">{meetingLink}</a>
+          </div>
+          <div className="action-buttons">
+            <button className="copy-btn" onClick={handleCopy}>
+              {copyText}
+            </button>
+            <button className="clear-btn" onClick={handleClearAgenda}>
+              Cancel
+            </button>
           </div>
         </div>
       )}
