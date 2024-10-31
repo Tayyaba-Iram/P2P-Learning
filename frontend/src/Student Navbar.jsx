@@ -16,9 +16,8 @@ function Navbar() {
                 <h3 className="logo-text">P2P Learning</h3>
             </div>
             <div className="nav-mid-links">
-            <Link to="/" className={`link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
-                <Link to="/services" className={`link ${location.pathname === '/services' ? 'active' : ''}`}>Services</Link>
-                </div>
+                <Link to="/" className='link'>Home</Link></div>
+            <Link to="/ScheduleSession" className="SS">ScheduleSession</Link>
             <div className="auth-buttons">
 
                 <Link to="/register"> <button className="btn">Sign Up</button> </Link>
