@@ -68,6 +68,9 @@ function Login() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}  
               />
+              <Link to="/forgot-password" className="forgot-password-link" style={{ display: 'block', marginTop: '5px', color: '#548635', textDecoration: 'underline' }}>
+                Forgot Password?
+              </Link>
             </div>
             <button className='login_btn'>Login</button>
           </form>
