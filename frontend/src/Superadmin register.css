@@ -1,0 +1,146 @@
+.registration-container {
+    display: flex;
+    height: 100vh;
+    background:  #2c5711;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+.signup-header {
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+    gap: 10px; /* Space between the logo and heading */
+}
+
+.signup-logo {
+    width: 50px; /* Adjust size as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 20px;
+    margin-top: 0px;
+}
+
+.signup-header h1 {
+    margin: 0; /* Remove default margin from h1 for better alignment */
+    color: #333; /* Set color to ensure readability */
+    font-size: 1.5rem; /* Adjust font size as desired */
+    margin-bottom: 20px;
+}
+
+.left-section {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.left-section .icon {
+    width: 60px;
+    margin-bottom: 20px;
+}
+
+.left-section h2 {
+    font-size: 26px;
+   
+}
+
+.left-section p {
+    font-size: 18px;
+    margin: 10px 0;
+    font-style: italic;
+    margin-bottom: 0%;
+}
+
+.left-section .login-button {
+    background-color:#f4f4f5;
+    color: #48742F;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    width: 150px;
+}
+
+.right-section {
+    width: 65%;
+    padding: 40px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background: white;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.role-switch {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.role-button {
+    background: #e5e7eb;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    margin: 0 10px;
+    width: 25%;
+    height: 100%;
+}
+
+.role-button.active {
+    background:  #F9D748;
+    color: white;
+}
+
+.form {
+    width: 80%;
+    max-width: 600px;
+    
+}
+
+.form-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.email{
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+
+.form-group input, .form-group select {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+}
+
+.register-button {
+    background-color:#48742F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.role-toggle label {
+    padding: 20px; /* Add padding for better appearance */
+    text-align: center; /* Center the text inside each label */
+    cursor: pointer; /* Change cursor to pointer for clickability */
+}
+

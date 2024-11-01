@@ -15,8 +15,10 @@ function Navbar() {
                 <img src="Logo.jpg" alt="P2P Learning" className="logo-image" />
                 <h3 className="logo-text">P2P Learning</h3>
             </div>
-            <div className="nav-mid-links">
-                <Link to="/" className='link'>Home</Link></div>
+            < div className="nav-mid-links">
+                <Link to="/" className='link'>Home</Link>
+                <Link to="/adminregister" className='link'>Admin</Link>
+                </div>
             <Link to="/ScheduleSession" className="SS">ScheduleSession</Link>
             <div className="auth-buttons">
 
