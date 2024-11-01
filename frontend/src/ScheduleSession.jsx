@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
+import axios from 'axios';
 import './ScheduleSession.css';
 
 const ScheduleSession = () => {
@@ -13,7 +14,14 @@ const ScheduleSession = () => {
   });
   const [agenda, setAgenda] = useState([]);
   const [meetingLink, setMeetingLink] = useState('');
-  const [copyText, setCopyText] = useState("Mark as Copied"); // Button text state
+  const [copyText, setCopyText] = useState("Mark as Copied");
+
+  // Fetch saved sessions on component load using axios.get
+  useEffect(() => {
+    axios.get('http://localhost:3001/api/sessions')
+      .then(response => setAgenda(response.data))
+      .catch(error => console.error('Error fetching sessions:', error));
+  }, []);
 
   const handleInputChange = (e) => {
     setSessionDetails({ ...sessionDetails, [e.target.name]: e.target.value });
@@ -28,9 +36,23 @@ const ScheduleSession = () => {
       alert("Please fill in all required fields.");
       return;
     }
-    setAgenda([sessionDetails]);
-    setMeetingLink(`https://meetinglink.com/${Math.floor(Math.random() * 10000)}`);
-    setModalOpen(false);
+
+    const newSession = {
+      ...sessionDetails,
+      date: sessionDetails.date.toISOString(),
+      meetingLink: `https://meetinglink.com/${Math.floor(Math.random() * 10000)}`
+    };
+
+    axios.post('http://localhost:3001/api/addsessions', newSession)
+      .then(response => {
+        setAgenda(prevAgenda => [...prevAgenda, response.data]); // Add new session
+        setMeetingLink(response.data.meetingLink);
+        setModalOpen(false); // Close the modal
+      })
+      .catch(error => {
+        console.error('Error saving session:', error);
+        alert("Error saving session. Please try again.");
+      });
   };
 
   const handleCancel = () => {
@@ -40,8 +62,8 @@ const ScheduleSession = () => {
   const handleCopy = () => {
     const sessionText = `Topic: ${sessionDetails.topic}\nDate: ${sessionDetails.date.toDateString()}\nStart Time: ${sessionDetails.startTime}\nEnd Time: ${sessionDetails.endTime}\nMeeting Link: ${meetingLink}`;
     navigator.clipboard.writeText(sessionText);
-    setCopyText("✔️ Copied!"); // Show tick mark in button text
-    setTimeout(() => setCopyText("Mark as Copied"), 2000); // Reset text after 2 seconds
+    setCopyText("✔️ Copied!");
+    setTimeout(() => setCopyText("Mark as Copied"), 2000);
   };
 
   const handleClearAgenda = () => {
@@ -120,7 +142,7 @@ const ScheduleSession = () => {
             {agenda.map((session, index) => (
               <li key={index}>
                 <em>Topic:</em> {session.topic} <br />
-                <em>Date:</em> {session.date.toDateString()} <br />
+                <em>Date:</em> {new Date(session.date).toDateString()} <br />
                 <em>Start Time:</em> {session.startTime} <br />
                 <em>End Time:</em> {session.endTime} <br />
               </li>
@@ -134,7 +156,7 @@ const ScheduleSession = () => {
               {copyText}
             </button>
             <button className="clear-btn" onClick={handleClearAgenda}>
-              Cancel
+              Clear Agenda
             </button>
           </div>
         </div>

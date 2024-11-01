@@ -4,6 +4,8 @@ import cors from 'cors';
 import StudentModel from './models/Student.js';  // Import StudentModel
 import studentRoutes from './routes/studentRoutes.js';
 import auth from './routes/auth.js'
+import sessionRoutes from './routes/sessionsRoutes.js';
+
 
 const app = express();
 app.use(express.json());
@@ -55,6 +57,7 @@ mongoose.connect('mongodb://localhost:27017/P2P-Learning')
 // Use student routes
 app.use('/api', studentRoutes);
 app.use('/api', auth);
+app.use('/api', sessionRoutes);
 
 // Start the server
 app.listen(3001, () => {
