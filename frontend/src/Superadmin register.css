@@ -62,7 +62,7 @@
     cursor: pointer;
     font-size: 16px;
     margin-top: 20px;
-    width: 150px;
+    width: 160px;
 }
 
 .right-section {
@@ -79,28 +79,7 @@
     
 }
 
-.role-switch {
-    display: flex;
-    margin-bottom: 20px;
-}
 
-.role-button {
-    background: #e5e7eb;
-    color: #333;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 20px;
-    margin: 0 10px;
-    width: 25%;
-    height: 100%;
-}
-
-.role-button.active {
-    background:  #F9D748;
-    color: white;
-}
 
 .form {
     width: 80%;
@@ -111,7 +90,8 @@
 .form-group {
     display: flex;
     gap: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 7px;
+    color: black;
 }
 .email{
     margin-top: 5px;
@@ -124,6 +104,8 @@
     padding: 10px;
     border: 1px solid #d1d5db;
     border-radius: 5px;
+    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 .register-button {
@@ -134,8 +116,10 @@
     border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
-    width: 100%;
+    width: 30%;
     margin-top: 10px;
+    margin-left: 35%;
+    
 }
 
 .role-toggle label {

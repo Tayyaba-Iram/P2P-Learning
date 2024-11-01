@@ -18,6 +18,7 @@ function Navbar() {
             <div className="nav-mid-links">
                 <Link to="/" className='link'>Home</Link></div>
             <Link to="/ScheduleSession" className="SS">ScheduleSession</Link>
+            <Link to="/adminregister" className="SS">Admin</Link>
             <div className="auth-buttons">
 
                 <Link to="/register"> <button className="btn">Sign Up</button> </Link>

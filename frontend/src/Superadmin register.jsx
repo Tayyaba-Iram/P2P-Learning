@@ -4,7 +4,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import './Superadmin register.css';
 
-function Register() {
+function SuperRegister() {
     const [role, setRole] = useState('student'); 
   const [name, setName] = useState('');
   const [sapid, setSapid] = useState('');
@@ -148,7 +148,7 @@ function Register() {
 
       <div className="role-toggle">
 
-  <input type="radio" id="universityadmin" name="role" value="universityadmin" checked={role === 'universityadmin'} onChange={() => setRole('universityadmin')} 
+  <input type="radio" id="universityadmin" name="role" value="universityadmin" checked={role === 'universityadmin'} onChange={() => setRole('university Admin')} 
   />
   <label htmlFor="universityadmin" className={role === 'universityadmin' ? 'active' : ''}>University Admin</label>
   <input type="radio" id="student" name="role" value="student" checked={role === 'student'} onChange={() => setRole('student')} 
@@ -211,4 +211,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default SuperRegister;
