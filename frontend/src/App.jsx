@@ -6,7 +6,6 @@ import { createContext } from "react"
 export const userContext = createContext();
 import Navbar from './Student Navbar'
 import ScheduleSession from './ScheduleSession';
-import RegistrationForm from './Superadmin register'
 
 
 function App() {
@@ -16,7 +15,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />}></Route>
       <Route path='/ScheduleSession' element = {<ScheduleSession/>}></Route>
-      <Route path='/adminregister' element = {<RegistrationForm />}></Route>
+      <Route path='/register' element = {<Register />}></Route>
       <Route path='/register' element = {<Register />}></Route>
       <Route path='/login' element = {<Login />}></Route>
      

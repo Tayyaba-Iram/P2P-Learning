@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import {  useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { userContext } from './App';
 import './Student Navbar.css';
 
@@ -8,17 +8,15 @@ import './Student Navbar.css';
 function Navbar() {
     const user = useContext(userContext);
 
-    const location = useLocation(); 
+    const location = useLocation();
     return (
         <div className="navbar">
             <div className="logo-container">
                 <img src="Logo.jpg" alt="P2P Learning" className="logo-image" />
                 <h3 className="logo-text">P2P Learning</h3>
             </div>
-            < div className="nav-mid-links">
-                <Link to="/" className='link'>Home</Link>
-                <Link to="/adminregister" className='link'>Admin</Link>
-                </div>
+            <div className="nav-mid-links">
+                <Link to="/" className='link'>Home</Link></div>
             <Link to="/ScheduleSession" className="SS">ScheduleSession</Link>
             <div className="auth-buttons">
 
