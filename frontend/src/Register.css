@@ -1,6 +1,6 @@
 .registration-container {
     display: flex;
-    height: 100vh;
+    height: 90vh;
     background:  #2c5711;
     color: #333;
     font-family: Arial, sans-serif;
@@ -12,10 +12,11 @@
 }
 
 .signup-logo {
-    width: 50px; /* Adjust size as needed */
+    width: 120px; /* Adjust size as needed */
     height: auto; /* Maintain aspect ratio */
     margin-bottom: 20px;
     margin-top: 0px;
+    border-radius: 50%;
 }
 
 .signup-header h1 {
@@ -36,11 +37,6 @@
     padding: 20px;
 }
 
-.left-section .icon {
-    width: 60px;
-    margin-bottom: 20px;
-}
-
 .left-section h2 {
     font-size: 26px;
    
@@ -57,12 +53,12 @@
     background-color:#f4f4f5;
     color: #48742F;
     border: none;
-    padding: 10px 20px;
     border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
     margin-top: 20px;
     width: 160px;
+    margin-left: 2%;
 }
 
 .right-section {
@@ -78,8 +74,6 @@
     align-items: center;
     
 }
-
-
 
 .form {
     width: 80%;

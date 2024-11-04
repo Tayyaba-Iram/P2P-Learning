@@ -12,7 +12,9 @@ const verifiedStudentSchema = new mongoose.Schema({
   semester: { type: Number, required: true },
   password: { type: String, required: true },
   cpassword: { type: String, required: true },
-  verifiedAt: { type: Date, default: Date.now },  // Timestamp of verification
+  verifiedAt: { type: Date, default: Date.now },  
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },// Timestamp of verification
 });
 
 const VerifiedStudentModel = mongoose.model('VerifiedStudent', verifiedStudentSchema);

@@ -49,4 +49,20 @@ router.post('/registerStudent', async (req, res) => {
   }
 });
 
+router.get('/verifiedStudents', async (req, res) => {
+  try {
+    const verifiedStudents = await VerifiedStudentModel.find();
+    res.status(200).json(verifiedStudents);
+    console.log('Student verified and saved to verified collection:', verifiedStudents);
+
+  } catch (error) {
+    console.error('Error fetching verified students:', error);
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+});
+
+
+
+
+
 export default router;

@@ -5,7 +5,7 @@ import VerifiedStudentModel from '../models/VerifiedStudent.js';
 const router = express.Router();
 
 // Login route
-router.post('/login', async (req, res) => {
+router.post('/studentlogin', async (req, res) => {
   const { email, password } = req.body;
 
   try {

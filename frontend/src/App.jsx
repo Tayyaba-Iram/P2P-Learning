@@ -1,13 +1,16 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Home from "./Student Home"
-import Register from './Student Register'
-import Login from './Student Login'
 import { createContext } from "react"
 export const userContext = createContext();
 import Navbar from './Student Navbar'
 import ScheduleSession from './ScheduleSession';
-import SuperRegister from './Superadmin register'
-
+import Register from './Register'
+import Login from './Login';
+import Dashboard from './Superadmin Dashboard';
+import ForgotPassword from './ForgetPassword';
+import ComplaintForm from './Complain Form';
+import AdminDashboard from './UniAdmin Dashboard';
+import aaDashboard from './Uniadmin Home';
 
 function App() {
   return (
@@ -17,8 +20,12 @@ function App() {
       <Route path="/" element={<Home />}></Route>
       <Route path='/ScheduleSession' element = {<ScheduleSession/>}></Route>
       <Route path='/register' element = {<Register />}></Route>
-      <Route path='/adminregister' element = {<SuperRegister />}></Route>
       <Route path='/login' element = {<Login />}></Route>
+      <Route path='/superdashboard' element = {<Dashboard />}></Route>
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/complain-form" element={<ComplaintForm />} />
+      <Route path="/admindashboard" element={<AdminDashboard />} />
+
      
     </Routes>
     </BrowserRouter>
