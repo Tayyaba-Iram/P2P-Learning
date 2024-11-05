@@ -7,10 +7,11 @@ import ScheduleSession from './ScheduleSession';
 import Register from './Register'
 import Login from './Login';
 import Dashboard from './Superadmin Dashboard';
-import ForgotPassword from './ForgetPassword';
 import ComplaintForm from './Complain Form';
 import AdminDashboard from './UniAdmin Dashboard';
-import aaDashboard from './Uniadmin Home';
+import AdminRegister from './Admin Registeration';
+import ForgotPassword from './Forgot Password';
+import ResetPassword from './Reset Password';
 
 function App() {
   return (
@@ -25,6 +26,12 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/complain-form" element={<ComplaintForm />} />
       <Route path="/admindashboard" element={<AdminDashboard />} />
+      <Route path="/adminregisteration" element={<AdminRegister />} />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
+      <Route path="/resetpassword/:token" element={<ResetPassword />} />
+
+
+
 
      
     </Routes>

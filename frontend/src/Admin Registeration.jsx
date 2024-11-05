@@ -4,22 +4,18 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import './Register.css';
 
-function Register() {
+function AdminRegister() {
   const [name, setName] = useState('');
   const [sapid, setSapid] = useState('');
   const [email, setEmail] = useState('');
   const [cnic, setCnic] = useState('');
   const [phone, setPhone] = useState('');
   const [university, setUniversity] = useState('');
-  const [campus, setCampus] = useState('');
-  const [program, setProgram] = useState('');
-  const [semester, setSemester] = useState('');
-  const [specification, setSpecification] = useState('');
+  const [campus, setCampus] = useState([]);  // Changed to array for multiple selections
   const [password, setPassword] = useState('');
   const [cpassword, setCpassword] = useState('');
   const [universities, setUniversities] = useState([]);
   const [campusOptions, setCampusOptions] = useState([]);
-  const [programOptions, setProgramOptions] = useState([]);
 
   const navigate = useNavigate();
 
@@ -33,27 +29,23 @@ function Register() {
         toast.error('Failed to fetch universities');
       }
     };
-
     fetchUniversities();
   }, []);
 
   useEffect(() => {
     const selectedUniversity = universities.find(uni => uni.name === university);
     setCampusOptions(selectedUniversity ? selectedUniversity.campuses : []);
-    setCampus(''); // Reset campus when university changes
-    setProgram(''); // Reset program when university changes
+    setCampus([]); // Reset campus when university changes
   }, [university, universities]);
 
-  useEffect(() => {
-    const selectedCampus = campusOptions.find(camp => camp.name === campus);
-    setProgramOptions(selectedCampus ? selectedCampus.programs : []);
-    setProgram(''); // Reset program when campus changes
-  }, [campus, campusOptions]);
+  const handleCampusChange = (campusName) => {
+    setCampus(prev => 
+      prev.includes(campusName) ? prev.filter(c => c !== campusName) : [...prev, campusName]
+    );
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Validation and submission logic
     if (!name) {
       toast.error("Name is required!");
     } else if (!sapid) {
@@ -66,13 +58,9 @@ function Register() {
       toast.error("CNIC is required!");
     } else if (!university) {
       toast.error("University is required!");
-    } else if (!campus) {
-      toast.error("Campus is required!");
-    } else if (!program) {
-      toast.error("Program is required!");
-    } else if (!semester) {
-      toast.error("Semester is required!");
-    } else if (!password) {
+    } else if (campus.length === 0) {
+      toast.error("At least one campus selection is required!");
+    }  else if (!password) {
       toast.error("Password is required!");
     } else if (password.length < 4) {
       toast.error("Password must be at least 4 characters!");
@@ -84,20 +72,20 @@ function Register() {
       toast.error("Password and confirm password must match!");
     } else {
       axios
-        .post('http://localhost:3001/api/registerStudent', {
-     name, sapid, email, cnic, phone, university, campus, program, semester, specification, password, cpassword
+        .post('http://localhost:3001/api/registerUniAdmin', {
+          name, sapid, email, cnic, phone, university, campus, password, cpassword
         })
         .then(() => {
           toast.success("Registration Successful!");
           setTimeout(() => {
-            navigate('/login');
+            navigate('/superdashboard');
           }, 2000);
         })
         .catch((err) => {
           if (err.response && err.response.data.error === "Email is already registered.") {
             toast.error("Email already exists!");
           } else {
-            toast.error("Registration failed due to incorrect data.");
+            toast.error("Registration failed.");
           }
         });
     }
@@ -128,32 +116,31 @@ function Register() {
             <input type="text" placeholder="CNIC" value={cnic} onChange={(e) => setCnic(e.target.value)} />
           </div>
           <div className="form-group">
-          <input type="text" placeholder="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <input type="text" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
             <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)}>
               <option value="" hidden>Select University</option>
               {universities.map((uni) => (
                 <option key={uni._id} value={uni.name}>{uni.name}</option>
               ))}
             </select>
-            </div>
-              <div className="form-group">
-            <select id="campus" value={campus} onChange={(e) => setCampus(e.target.value)} disabled={!university}>
-              <option value="" hidden>Select Campus</option>
-              {campusOptions.map((camp) => (
-                <option key={camp._id} value={camp.name}>{camp.name}</option>
-              ))}
-            </select>
-            <select id="program" value={program} onChange={(e) => setProgram(e.target.value)} disabled={!campus}>
-              <option value="" hidden>Select Program</option>
-              {programOptions.map((prog) => (
-                <option key={prog._id} value={prog.name}>{prog.name}</option>
-              ))}
-            </select>
           </div>
           <div className="form-group">
-            <input type="text" placeholder="Semester" value={semester} onChange={(e) => setSemester(e.target.value)} />
-            <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} />
+            <label>Select Campus:</label>
+            <div className="checkbox-group">
+              {campusOptions.map((camp) => (
+                <label key={camp._id}>
+                  <input
+                    type="checkbox"
+                    value={camp.name}
+                    checked={campus.includes(camp.name)}
+                    onChange={() => handleCampusChange(camp.name)}
+                  />
+                  {camp.name}
+                </label>
+              ))}
+            </div>
           </div>
+         
           <div className="form-group">
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <input type="password" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} />
@@ -165,4 +152,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default AdminRegister;

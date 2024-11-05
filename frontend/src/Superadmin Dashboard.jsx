@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import axios from 'axios';
 import './Superadmin Dashboard.css';
 
@@ -264,6 +266,7 @@ function Dashboard() {
           </div>
         ) : (
           <div>
+         <Link to="/adminregisteration"><button className="btn">Add Admin</button></Link>
             <button onClick={handleAddClick}>Add University</button>
             <ul>
               {universities.map((university) => (

@@ -7,6 +7,9 @@ import sessionRoutes from './routes/sessionsRoutes.js';
 import UniAdminRoutes from './routes/UniAdminRoutes.js';
 import ComplainRoutes from './routes/ComplainRoutes.js';
 import UniversityRoutes from './routes/UniversityRoutes.js'
+import SuperAdminRoutes from './routes/SuperAdminRoutes.js'
+import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js'
+
 const app = express();
 app.use(express.json());
 app.use(cors({
@@ -30,6 +33,9 @@ app.use('/api', UniAdminRoutes);
 app.use('/api', ComplainRoutes)
 app.use('/api', UniversityRoutes)
 app.use('/api/universities', UniversityRoutes);
+app.use('/api', SuperAdminRoutes)
+app.use('/api', ResetPasswordRoutes)
+
 
 // Start the server
 app.listen(3001, () => {
