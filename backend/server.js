@@ -15,6 +15,8 @@ app.use(cors({
   credentials: true
 }));
 
+
+
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/P2P-Learning')
   .then(() => {
@@ -53,6 +55,9 @@ mongoose.connect('mongodb://localhost:27017/P2P-Learning')
       .catch(err => console.error('Error saving students:', err));
   })
   .catch(err => console.error('Error connecting to MongoDB:', err));
+
+
+  
 
 // Use student routes
 app.use('/api', studentRoutes);

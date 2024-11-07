@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import 'react-datepicker/dist/react-datepicker.css';
-import DatePicker from 'react-datepicker';
 import axios from 'axios';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './ScheduleSession.css';
 
 const ScheduleSession = () => {
@@ -13,14 +13,22 @@ const ScheduleSession = () => {
     date: new Date(),
   });
   const [agenda, setAgenda] = useState([]);
-  const [meetingLink, setMeetingLink] = useState('');
-  const [copyText, setCopyText] = useState("Mark as Copied");
+  const [copiedSessionId, setCopiedSessionId] = useState(null);
 
-  // Fetch saved sessions on component load using axios.get
   useEffect(() => {
-    axios.get('http://localhost:3001/api/sessions')
-      .then(response => setAgenda(response.data))
-      .catch(error => console.error('Error fetching sessions:', error));
+    const fetchSessions = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/sessions');
+        const updatedSessions = response.data.map(session => ({
+          ...session,
+          status: session.status || 'Pending',
+        }));
+        setAgenda(updatedSessions);
+      } catch (error) {
+        console.error('Error fetching sessions:', error);
+      }
+    };
+    fetchSessions();
   }, []);
 
   const handleInputChange = (e) => {
@@ -31,8 +39,9 @@ const ScheduleSession = () => {
     setSessionDetails({ ...sessionDetails, date });
   };
 
-  const handleAddSession = () => {
-    if (!sessionDetails.topic || !sessionDetails.startTime || !sessionDetails.endTime) {
+  const handleAddSession = async () => {
+    const { topic, startTime, endTime } = sessionDetails;
+    if (!topic || !startTime || !endTime) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -40,35 +49,50 @@ const ScheduleSession = () => {
     const newSession = {
       ...sessionDetails,
       date: sessionDetails.date.toISOString(),
-      meetingLink: `https://meetinglink.com/${Math.floor(Math.random() * 10000)}`
+      meetingLink: `https://meet.jit.si/${Math.floor(Math.random() * 10000)}`,  // Correct way to generate the link
+      status: 'Pending',
     };
+    
 
-    axios.post('http://localhost:3001/api/addsessions', newSession)
-      .then(response => {
-        setAgenda(prevAgenda => [...prevAgenda, response.data]); // Add new session
-        setMeetingLink(response.data.meetingLink);
-        setModalOpen(false); // Close the modal
-      })
-      .catch(error => {
-        console.error('Error saving session:', error);
-        alert("Error saving session. Please try again.");
-      });
+    try {
+      const response = await axios.post('http://localhost:3001/api/sessions', newSession);
+      setAgenda(prevAgenda => [...prevAgenda, response.data]);
+      setModalOpen(false);
+      setSessionDetails({ topic: '', startTime: '', endTime: '', date: new Date() });
+    } catch (error) {
+      console.error('Error saving session:', error);
+      alert("Error saving session. Please try again.");
+    }
   };
 
-  const handleCancel = () => {
-    setModalOpen(false);
-  };
-
-  const handleCopy = () => {
-    const sessionText = `Topic: ${sessionDetails.topic}\nDate: ${sessionDetails.date.toDateString()}\nStart Time: ${sessionDetails.startTime}\nEnd Time: ${sessionDetails.endTime}\nMeeting Link: ${meetingLink}`;
+  const handleCopy = (sessionId, session) => {
+    const sessionText = `Topic: ${session.topic}\nDate: ${new Date(session.date).toDateString()}\nStart Time: ${formatTime(session.startTime)}\nEnd Time: ${formatTime(session.endTime)}\nMeeting Link: ${session.meetingLink}`;
+    
     navigator.clipboard.writeText(sessionText);
-    setCopyText("✔️ Copied!");
-    setTimeout(() => setCopyText("Mark as Copied"), 2000);
+    
+    setCopiedSessionId(sessionId);
+
+    setTimeout(() => {
+      setCopiedSessionId(null);
+    }, 2000);
   };
 
-  const handleClearAgenda = () => {
-    setAgenda([]);
-    setMeetingLink('');
+  const handleCancel = async (sessionId) => {
+    try {
+      await axios.delete(`http://localhost:3001/api/sessions/${sessionId}`);
+      setAgenda(prevAgenda => prevAgenda.filter((session) => session._id !== sessionId));
+      alert('Session deleted');
+    } catch (error) {
+      console.error('Error deleting session:', error);
+      alert("Error canceling session. Please try again.");
+    }
+  };
+
+  const formatTime = (time) => {
+    const [hour, minute] = time.split(':');
+    const formattedHour = hour % 12 || 12;
+    const ampm = hour < 12 ? 'AM' : 'PM';
+    return `${formattedHour}:${minute} ${ampm}`;
   };
 
   return (
@@ -81,55 +105,42 @@ const ScheduleSession = () => {
       {isModalOpen && (
         <div className="form-backdrop">
           <div className="schedule-form">
-            <h2 className="page-title">New Session Details</h2>
-            <div className="form-step">
-              <h3>Step 1: Enter Topic Name</h3>
-              <label>Topic:</label>
-              <input
-                type="text"
-                name="topic"
-                value={sessionDetails.topic}
-                onChange={handleInputChange}
-                required
-                placeholder="Enter the session topic"
-              />
-            </div>
-            <div className="form-step">
-              <h3>Step 2: Select Date</h3>
-              <label>Date:</label>
-              <DatePicker
-                selected={sessionDetails.date}
-                onChange={handleDateChange}
-                className="datepicker"
-                required
-              />
-            </div>
-            <div className="form-step">
-              <h3>Step 3: Set Time</h3>
-              <label>Start Time:</label>
-              <input
-                type="time"
-                name="startTime"
-                value={sessionDetails.startTime}
-                onChange={handleInputChange}
-                required
-              />
-              <label>End Time:</label>
-              <input
-                type="time"
-                name="endTime"
-                value={sessionDetails.endTime}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+            <h2 className="form-title">New Session Details</h2>
+            <label className='topic'>Topic:</label>
+            <input
+              type="text"
+              name="topic"
+              value={sessionDetails.topic}
+              onChange={handleInputChange}
+              placeholder="Enter the session topic"
+              required
+            />
+            <label className='date'>Date:</label>
+            <DatePicker
+              selected={sessionDetails.date}
+              onChange={handleDateChange}
+              className="datepicker"
+              required
+            />
+            <label>Start Time:</label>
+            <input
+              type="time"
+              name="startTime"
+              value={sessionDetails.startTime}
+              onChange={handleInputChange}
+              required
+            />
+            <label>End Time:</label>
+            <input
+              type="time"
+              name="endTime"
+              value={sessionDetails.endTime}
+              onChange={handleInputChange}
+              required
+            />
             <div className="form-actions">
-              <button className="submit-btn" onClick={handleAddSession}>
-                Add Session
-              </button>
-              <button className="clear-btn" onClick={handleCancel}>
-                Cancel
-              </button>
+              <button className="submit-btn" onClick={handleAddSession}>Add Session</button>
+              <button className="clear-btn" onClick={() => setModalOpen(false)}>Cancel</button>
             </div>
           </div>
         </div>
@@ -138,27 +149,43 @@ const ScheduleSession = () => {
       {agenda.length > 0 && (
         <div className="agenda">
           <h3>Session Agenda</h3>
-          <ul>
-            {agenda.map((session, index) => (
-              <li key={index}>
-                <em>Topic:</em> {session.topic} <br />
-                <em>Date:</em> {new Date(session.date).toDateString()} <br />
-                <em>Start Time:</em> {session.startTime} <br />
-                <em>End Time:</em> {session.endTime} <br />
-              </li>
-            ))}
-          </ul>
-          <div className="meeting-link">
-            <em>Meeting Link:</em> <a href={meetingLink} target="_blank" rel="noopener noreferrer">{meetingLink}</a>
-          </div>
-          <div className="action-buttons">
-            <button className="copy-btn" onClick={handleCopy}>
-              {copyText}
-            </button>
-            <button className="clear-btn" onClick={handleClearAgenda}>
-              Clear Agenda
-            </button>
-          </div>
+          <table className="agenda-table">
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Meeting Link</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {agenda.map((session) => (
+                <tr key={session._id} className={session.status === 'Canceled' ? 'canceled-row' : ''}>
+                  <td>{session.topic}</td>
+                  <td>{new Date(session.date).toDateString()}</td>
+                  <td>{formatTime(session.startTime)}</td>
+                  <td>{formatTime(session.endTime)}</td>
+                  <td>
+                    <a href={session.meetingLink} target="_blank" rel="noopener noreferrer">
+                      {session.meetingLink}
+                    </a>
+                  </td>
+                  <td>{session.status}</td>
+                  <td>
+                    {session.status !== 'Canceled' && (
+                      <button onClick={() => handleCopy(session._id, session)}>
+                        {copiedSessionId === session._id ? 'Copied!' : 'Copy'}
+                      </button>
+                    )}
+                    <button onClick={() => handleCancel(session._id)}>Cancel</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

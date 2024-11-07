@@ -1,187 +1,109 @@
 .schedule-session-container {
-    font-family: 'Arial', sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
     padding: 20px;
-    margin-top: 200px;
-    background: #f8faf8;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .page-title {
-    font-size: 28px;
-    font-weight: bold;
-    color: black;
+    font-size: 24px;
     margin-bottom: 20px;
-    text-align: center;
 }
 
-
-button {
+.schedule-btn {
+    background-color: #48742F; /* Updated color */
+    color: white;
     padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s;
     border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.schedule-btn{
-    background: #48742F;
-    color: #fff;
-    margin-left: 300px;
-
+.schedule-btn:hover {
+    background-color: #3a5b24; /* Darker shade for hover effect */
 }
-
-.schedule-btn:hover{
-    background: #48742F;
-}
-
-.clear-btn {
-    background: #e74c3c;
-    color: #fff;
-}
-
-.cancel-btn:hover {
-    background: #c0392b;
-}
-
-.submit-btn {
-    background: #48742F;
-    color: #fff;
-}
-
-.copy-btn:hover {
-    background:#48742F;
-}
-
 
 .form-backdrop {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    right: 0;
+    bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.copy-btn {
-    background-color: #007bff; /* Change to your preferred color */
-    color: white; /* Ensures button text is white */
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
-}
-
-.copy-btn:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    z-index: 1000;
 }
 
 .schedule-form {
-    background: #fff;
-    padding: 20px 30px;
+    background: white;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px;
 }
 
-.form-step h3 {
-    font-size: 18px;
-    color: black;
-    margin-bottom: 10px;
-    
+.form-title {
+    margin-bottom: 20px;
+    font-size: 20px;
 }
 
-label {
-    font-size: 14px;
-    color: #7f8c8d;
-}
-
-input[type="text"], input[type="time"], .datepicker {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    border: 1px solid #bdc3c7;
-    font-size: 16px;
-}
-
-input[type="text"]:focus, input[type="time"]:focus, .datepicker:focus {
-    outline: none;
-    border-color: #48742F;
-}
-
-
-.agenda {
-    padding: 30px;
-    background: #ecf0f1;
-    border-radius: 40px;
-    border-left: 4px solid #48742F;
-    border-right: 4px solid #48742F;
-    margin-top: 1000;
-}
-
-.agenda h3 {
-    font-size: 22px;
-    color: black;
-    margin-bottom: 15px;
-}
-
-.agenda ul {
-    list-style: none;
-    padding: 0;
-}
-
-.agenda li {
-    padding: 10px 0;
-    border-bottom: 1px solid #bdc3c7;
-    font-size: 16px;
-    color: black;
-}
-
-.meeting-link {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #020202;
-    font-weight: bold;
-
-}
-
-.meeting-link a {
-    color: #2b0b81;
-    text-decoration: none;
-}
-
-.meeting-link a:hover {
-    text-decoration: underline;
-}
-
-
-.action-buttons {
+.form-actions {
     display: flex;
     justify-content: space-between;
+}
+
+.submit-btn, .clear-btn, .action-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #48742F;
+
+}
+
+.submit-btn {
+    background-color: #48742F; /* Updated color */
+    color: white;
+}
+
+.clear-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.action-btn {
+    background-color: #dc3545;
+    color: black;
+}
+
+.agenda-table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
 }
 
-.copy-btn {
-    background-color: #48742F; /* Change to your preferred color */
-    color: white; /* Ensures button text is white */
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
+.agenda-table th, .agenda-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
 }
 
-.copy-btn:hover {
-    background-color: #48742F; /* Darker shade on hover */
+.agenda-table th {
+    background-color: #48742F; /* Updated color */
+    color: white;
 }
+
+.canceled-row {
+    background-color: #f8d7da; /* Light red background for canceled sessions */
+}
+
+.copy-btn{
+   
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #48742F;
+    margin-right: 20px;
+}
+
