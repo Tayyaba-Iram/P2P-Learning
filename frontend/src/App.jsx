@@ -12,6 +12,7 @@ import AdminDashboard from './UniAdmin Dashboard';
 import AdminRegister from './Admin Registeration';
 import ForgotPassword from './Forgot Password';
 import ResetPassword from './Reset Password';
+import UpdateProfile from './Student Update Profile';
 
 function App() {
   return (
@@ -28,12 +29,10 @@ function App() {
       <Route path="/admindashboard" element={<AdminDashboard />} />
       <Route path="/adminregisteration" element={<AdminRegister />} />
       <Route path="/forgotpassword" element={<ForgotPassword />} />
-      <Route path="/resetpassword/:token" element={<ResetPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/studentupdateprofile" element={<UpdateProfile />} />
 
 
-
-
-     
     </Routes>
     </BrowserRouter>
   )

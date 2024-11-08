@@ -54,7 +54,9 @@ function AdminRegister() {
       toast.error("Email is required!");
     } else if (!email.includes("@")) {
       toast.warning("Email must include '@'!");
-    } else if (!cnic) {
+    } else if (!email.endsWith("@admin.edu.pk")) {
+      toast.error("Email must be from the domain 'admin.edu.pk'!");
+    }else if (!cnic) {
       toast.error("CNIC is required!");
     } else if (!university) {
       toast.error("University is required!");

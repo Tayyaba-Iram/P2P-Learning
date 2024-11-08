@@ -26,7 +26,7 @@ function Login() {
       // Determine database to check based on email domain
       if (email.endsWith('@admin.edu.pk')) {
         // VerifiedUniAdmin database check
-        axios.post('http://localhost:3001/api/adminlogin', { email, password })
+        axios.post('http://localhost:3001/api/adminlogin', { email, password }, { withCredentials: true })
           .then(res => {
             if (res.data.success) {
               toast.success('University Admin login successful!');
@@ -45,7 +45,7 @@ function Login() {
           });
       } else if (email.endsWith('@gmail.com')) {
         // Superadmin database check or create if not exists
-        axios.post('http://localhost:3001/api/superadmin-check-or-create', { email, password })
+        axios.post('http://localhost:3001/api/superadmin-check-or-create', { email, password }, { withCredentials: true })
           .then(res => {
             if (res.data.created) {
               toast.success('Super Admin account created successfully!');

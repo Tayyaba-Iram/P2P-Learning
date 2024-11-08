@@ -61,7 +61,32 @@ router.get('/verifiedStudents', async (req, res) => {
   }
 });
 
+router.put('/update-profile/:id', async (req, res) => {
+  const { id } = req.params;
+  const { phone, campus, program, semester, specification, password, cpassword } = req.body;
 
+  // Check if passwords match
+  if (password !== cpassword) {
+    return res.status(400).json({ success: false, message: 'Passwords do not match' });
+  }
+
+  try {
+    const updatedStudent = await VerifiedStudentModel.findByIdAndUpdate(
+      id,
+      { phone, campus, program, semester, specification, password, cpassword },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({ success: false, message: 'Student not found' });
+    }
+
+    res.json({ success: true, message: 'Profile updated successfully', student: updatedStudent });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 
 
 
