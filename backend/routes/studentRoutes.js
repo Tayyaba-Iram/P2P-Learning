@@ -2,6 +2,7 @@
 import express from 'express';
 import StudentModel from '../models/Student.js';
 import VerifiedStudentModel from '../models/VerifiedStudent.js';
+import verifyUser from '../middleware/verifyUser.js'; // Import the middleware
 
 const router = express.Router();
 
@@ -61,30 +62,80 @@ router.get('/verifiedStudents', async (req, res) => {
   }
 });
 
-router.put('/update-profile/:id', async (req, res) => {
-  const { id } = req.params;
-  const { phone, campus, program, semester, specification, password, cpassword } = req.body;
-
-  // Check if passwords match
-  if (password !== cpassword) {
-    return res.status(400).json({ success: false, message: 'Passwords do not match' });
-  }
-
+// Fetch the logged-in student's profile data
+router.get('/get-profile', verifyUser, async (req, res) => {
   try {
-    const updatedStudent = await VerifiedStudentModel.findByIdAndUpdate(
-      id,
-      { phone, campus, program, semester, specification, password, cpassword },
-      { new: true, runValidators: true }
-    );
+    // Use the email from the verified token
+    const userEmail = req.email;
 
-    if (!updatedStudent) {
-      return res.status(404).json({ success: false, message: 'Student not found' });
+    // Fetch the user's data from the database
+    const student = await VerifiedStudentModel.findOne({ email: userEmail });
+
+    // Check if the student exists
+    if (!student) {
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    res.json({ success: true, message: 'Profile updated successfully', student: updatedStudent });
-  } catch (error) {
-    console.error('Error updating profile:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    // Return the student data as a response
+    res.status(200).json({ 
+      success: true,
+      user: {
+        name: student.name,
+        email: student.email,
+        phone: student.phone,
+        university: student.university,
+        campus: student.campus,
+        program: student.program,
+        semester: student.semester,
+        specification: student.specification,
+        password: student.password,
+        cpassword: student.cpassword,
+      }
+    });
+  } catch (err) {
+    console.error('Error fetching profile:', err);
+    res.status(500).json({ success: false, message: 'An error occurred while fetching profile data.' });
+  }
+});
+
+router.put('/update-profile', verifyUser, async (req, res) => {
+  const { phone, campus, program, semester, specification, password, cpassword } = req.body;
+
+  try {
+    // Use the email from the verified token
+    const userEmail = req.email;
+
+    // Fetch the user's data from the VerifiedStudentModel
+    const student = await VerifiedStudentModel.findOne({ email: userEmail });
+
+    // Check if the student exists
+    if (!student) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Update fields only if they are provided in the request body
+    if (phone) student.phone = phone;
+    if (campus) student.campus = campus;
+    if (program) student.program = program;
+    if (semester) student.semester = semester;
+    if (specification) student.specification = specification;
+
+    // Update password and confirm password if both are provided
+    if (password && cpassword) {
+      if (password !== cpassword) {
+        return res.status(400).json({ success: false, message: 'Passwords do not match' });
+      }
+      student.password = password;
+      student.cpassword = cpassword;
+    }
+
+    // Save the updated student profile
+    await student.save();
+
+    res.status(200).json({ success: true, message: 'Profile updated successfully' });
+  } catch (err) {
+    console.error('Error updating profile:', err);
+    res.status(500).json({ success: false, message: 'An error occurred while updating profile.' });
   }
 });
 

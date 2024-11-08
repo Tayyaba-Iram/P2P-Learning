@@ -13,7 +13,8 @@ import AdminRegister from './Admin Registeration';
 import ForgotPassword from './Forgot Password';
 import ResetPassword from './Reset Password';
 import UpdateProfile from './Student Update Profile';
-
+import axios from 'axios';
+axios.defaults.withCredentials=true;
 function App() {
   return (
     <BrowserRouter>

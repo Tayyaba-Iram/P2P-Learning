@@ -14,7 +14,7 @@ const verifyUser = (req, res, next) => {
             return res.json("The token is wrong");
         } else {
             req.email = decoded.email;
-            req.username = decoded.username;
+            req.name = decoded.name;
             next();  // Proceed to the next middleware or route
         }
     });

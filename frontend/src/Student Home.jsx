@@ -29,7 +29,7 @@ function Home() {
       {/* Display user data if available */}
       {userData ? (
         <div className="user-info">
-          <h2>Welcome, {userData.username}!</h2>
+          <h2>Welcome: {userData.name}!</h2>
           <p>Email: {userData.email}</p>
         </div>
       ) : (

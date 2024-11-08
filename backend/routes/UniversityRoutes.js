@@ -26,6 +26,40 @@ router.post('/addUniversity', async (req, res) => {
     }
 });
 
+// API route to add a campus to a specific university
+router.post('/api/universities/:universityId/campuses', async (req, res) => {
+  try {
+    const { universityId } = req.params;
+    const { name } = req.body; // Assuming you're passing campus name
+    const newCampus = { name, programs: [] };
+    const updatedUniversity = await University.findByIdAndUpdate(
+      universityId,
+      { $push: { campuses: newCampus } },
+      { new: true }
+    );
+    res.status(201).json(updatedUniversity);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding campus', error });
+  }
+});
+
+// API route to add a program to a specific campus in a university
+router.post('/api/universities/:universityId/campuses/:campusId/programs', async (req, res) => {
+  try {
+    const { universityId, campusId } = req.params;
+    const { name } = req.body; // Assuming you're passing program name
+    const updatedUniversity = await University.findOneAndUpdate(
+      { _id: universityId, 'campuses._id': campusId },
+      { $push: { 'campuses.$.programs': { name } } },
+      { new: true }
+    );
+    res.status(201).json(updatedUniversity);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding program', error });
+  }
+});
+
+
 router.get('/universities', async (req, res) => {
     try {
         const universities = await University.find(); // Fetch all universities

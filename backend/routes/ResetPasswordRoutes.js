@@ -68,23 +68,36 @@ router.post('/request-reset-password', async (req, res) => {
 // Reset password
 router.post('/reset-password/:token', async (req, res) => {
   const { token } = req.params;
-  const { newPassword } = req.body;
+  const { newPassword, confirmPassword } = req.body;
 
-  if (!newPassword) return res.status(400).json({ success: false, message: 'New password is required' });
+  // Check if both passwords are provided
+  if (!newPassword || !confirmPassword) {
+    return res.status(400).json({ success: false, message: 'Both password and confirm password are required' });
+  }
+
+  // Ensure newPassword matches confirmPassword
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ success: false, message: 'Passwords do not match' });
+  }
 
   try {
+    // Verify the token to get the user's email
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const { email } = decoded;
+
+    // Get the appropriate model based on email domain
     const Model = getModelByEmailDomain(email);
-    
     if (!Model) {
       return res.status(400).json({ success: false, message: 'Invalid email domain' });
     }
 
+    // Find the user by email
     const user = await Model.findOne({ email });
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
+    // Update both password and confirm password fields
     user.password = newPassword;
+    user.cpassword = confirmPassword;
     await user.save();
 
     res.json({ success: true, message: 'Password reset successfully' });

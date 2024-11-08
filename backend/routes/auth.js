@@ -9,7 +9,7 @@ const router = express.Router();
 // Helper function to generate JWT token
 const generateToken = (user) => {
   return jwt.sign(
-    { email: user.email, username: user.username }, // Payload
+    { email: user.email, name: user.name }, // Payload
     process.env.JWT_SECRET_KEY, // Secret key for signing
     { expiresIn: '1h' } // Expiration time
   );
@@ -44,7 +44,12 @@ router.post('/studentlogin', async (req, res) => {
 
 
     // Successful login
-    res.json({ success: true, message: 'Login successful.' });
+    res.json({ success: true, message: 'Login successful.',
+      token,
+      user: { email: student.email, name: student.name }
+     });
+     console.log("name: ", student.name);
+     console.log("email: ", student.email);
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
