@@ -49,18 +49,27 @@ router.post('/registerStudent', async (req, res) => {
   }
 });
 
-
 router.get('/verifiedStudents', async (req, res) => {
   try {
-    const verifiedStudents = await VerifiedStudentModel.find();
-    res.status(200).json(verifiedStudents);
-    console.log('Student verified and saved to verified collection:', verifiedStudents);
+    const query = req.query.query || ''; // Get search query from request
+    const regex = new RegExp(query, 'i'); // Create a case-insensitive regex for search
 
+    // Find students matching the search query in name or specification
+    const verifiedStudents = await VerifiedStudentModel.find({
+      $or: [
+        { name: { $regex: regex } },
+        { specification: { $regex: regex } },
+      ],
+    });
+
+    res.status(200).json(verifiedStudents);
+    console.log('Students fetched based on search query:', verifiedStudents);
   } catch (error) {
     console.error('Error fetching verified students:', error);
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 });
+
 
 // Fetch the logged-in student's profile data
 router.get('/get-profile', verifyUser, async (req, res) => {

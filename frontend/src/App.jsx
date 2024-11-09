@@ -14,6 +14,9 @@ import ForgotPassword from './Forgot Password';
 import ResetPassword from './Reset Password';
 import UpdateProfile from './Student Update Profile';
 import axios from 'axios';
+import AddUniversity from './Add University';
+import EditUniversity from './Edit University';
+import Chat from './Chat';
 axios.defaults.withCredentials=true;
 function App() {
   return (
@@ -32,6 +35,10 @@ function App() {
       <Route path="/forgotpassword" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/studentupdateprofile" element={<UpdateProfile />} />
+      <Route path="/adduniversity" element={<AddUniversity />} />
+      <Route path="/edituniversity" element={<EditUniversity />} />
+      <Route path="/chat" element={<Chat />} />
+
 
 
     </Routes>

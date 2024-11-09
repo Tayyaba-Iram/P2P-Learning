@@ -8,15 +8,14 @@ function Home() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch the dashboard data from the backend API
-    axios.get('http://localhost:3001/api/student-dashboard', { withCredentials: true }) // Send the token stored in cookies
+    axios.get('http://localhost:3001/api/student-dashboard', { withCredentials: true })
       .then(response => {
-        setUserData(response.data.user); // Store the user info
+        setUserData(response.data.user);
       })
       .catch(err => {
         setError(err.response ? err.response.data.error : 'An error occurred');
       });
-  }, []); // Fetch data when component mounts
+  }, []);
 
   return (
     <div className="content">
@@ -26,7 +25,6 @@ function Home() {
         </div>
       </div>
 
-      {/* Display user data if available */}
       {userData ? (
         <div className="user-info">
           <h2>Welcome: {userData.name}!</h2>
@@ -38,15 +36,8 @@ function Home() {
         </div>
       )}
 
-      {/* Search Bar */}
-      <div className="search-bar">
-        <input type="text" placeholder="Search..." />
-        <button type="button">Search</button>
-      </div>
-
-      {/* Link to update profile */}
-      <Link to="/studentupdateprofile">
-        <button className="register-button">Update Profile</button>
+      <Link to="/chat">
+        <button className="register-button">Go to Chat</button>
       </Link>
     </div>
   );
