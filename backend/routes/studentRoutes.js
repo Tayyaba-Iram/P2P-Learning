@@ -7,10 +7,10 @@ const router = express.Router();
 
 // Registration endpoint
 router.post('/registerStudent', async (req, res) => {
-  const { name, sapid, email, cnic, university, levelOfStudy, campus, program, semester, password, cpassword } = req.body;
+  const { name, sapid, email, cnic, phone, university, campus, program, semester,specification, password, cpassword } = req.body;
 
   console.log('Received data:', {
-    name, sapid, email, cnic, university, levelOfStudy, campus, program, semester, password, cpassword
+    name, sapid, email, cnic, phone, university, campus, program, semester,specification, password, cpassword
   });
 
   try {
@@ -23,14 +23,13 @@ router.post('/registerStudent', async (req, res) => {
 
     // Check if the student exists in the StudentModel collection
     const student = await StudentModel.findOne({
-      name, sapid, email, cnic, university, levelOfStudy, campus, program, semester
-    });
+      name, sapid, email, cnic, phone, university, campus, program,  semester});
 
     if (student) {
       console.log('Student found:', student);
 
       // Create a new verified student object, including password fields
-      const verifiedStudentData = { ...student.toObject(), password, cpassword };
+      const verifiedStudentData = { ...student.toObject(), specification,phone,password, cpassword };
 
       // Save to VerifiedStudentModel collection
       const verifiedStudent = new VerifiedStudentModel(verifiedStudentData);
@@ -48,5 +47,22 @@ router.post('/registerStudent', async (req, res) => {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 });
+
+
+router.get('/verifiedStudents', async (req, res) => {
+  try {
+    const verifiedStudents = await VerifiedStudentModel.find();
+    res.status(200).json(verifiedStudents);
+    console.log('Student verified and saved to verified collection:', verifiedStudents);
+
+  } catch (error) {
+    console.error('Error fetching verified students:', error);
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+});
+
+
+
+
 
 export default router;

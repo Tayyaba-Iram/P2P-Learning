@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import "./MeetingRoom.css";
+import "./MeetingRoom.css"; // Ensure this contains necessary styles for the meeting room
 
 const MeetingRoom = () => {
   const location = useLocation();
-  const meetingLink = location.state?.meetingLink || "DefaultMeetingRoom";
+  const meetingLink = location.state?.meetingLink || "DefaultMeetingRoom";  // Default room if no link provided
 
   useEffect(() => {
     const loadJitsiAPI = () => {
       if (window.JitsiMeetExternalAPI) {
-        const domain = "meet.jit.si"; // You can use other Jitsi servers if needed
+        const domain = "meet.jit.si";  // Jitsi server domain
         const options = {
           roomName: meetingLink,
           width: "100%",
@@ -19,14 +19,12 @@ const MeetingRoom = () => {
             startWithAudioMuted: true,
             startWithVideoMuted: true,
             enableWelcomePage: false,
-            prejoinPageEnabled: false, // Skips the pre-join page
+            prejoinPageEnabled: false,
             startAudioOnly: true,
-            disableModeratorIndicator: true, // Attempt to disable moderator role
-            disableDeepLinking: true, // Avoids redirecting to the Jitsi app on mobile
-            p2p: {
-              enabled: true // Peer-to-peer mode for fewer restrictions
-            },
-            requireDisplayName: false, // Bypasses the need for a display name
+            disableModeratorIndicator: true,
+            disableDeepLinking: true,
+            p2p: { enabled: true },
+            requireDisplayName: false,
           },
           interfaceConfigOverwrite: {
             TOOLBAR_BUTTONS: [
@@ -35,7 +33,7 @@ const MeetingRoom = () => {
             SHOW_JITSI_WATERMARK: false,
             SHOW_WATERMARK_FOR_GUESTS: false,
             HIDE_INVITE_MORE_HEADER: true,
-          }
+          },
         };
 
         try {
