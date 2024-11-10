@@ -1,5 +1,4 @@
 import express from 'express';
-import bcrypt from 'bcrypt'; // Consider using bcrypt for password hashing
 import SuperAdminModel from '../models/Superadmin.js';
 
 const router = express.Router();
@@ -17,8 +16,7 @@ router.post('/superadmin-check-or-create', async (req, res) => {
 
             if (superAdmin) {
                 // Verify existing super admin login
-                const isMatch = await bcrypt.compare(password, superAdmin.password);
-                if (isMatch) {
+                if (password === superAdmin.password) {
                     res.json({ success: true, created: false });
                 } else {
                     res.json({ success: false, message: 'Incorrect password' });
@@ -29,8 +27,7 @@ router.post('/superadmin-check-or-create', async (req, res) => {
             }
         } else {
             // No accounts exist, create a new super admin
-            const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
-            const newSuperAdmin = new SuperAdminModel({ email, password: hashedPassword });
+            const newSuperAdmin = new SuperAdminModel({ email, password });
             await newSuperAdmin.save();
             res.json({ success: true, created: true });
         }

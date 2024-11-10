@@ -1,5 +1,6 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
+import SuperAdminModel from '../models/Superadmin.js'; // Adjust path as necessary
+import VerifiedStudentModel from '../models/VerifiedStudent.js'; // Adjust path as necessary
 import UniAdminModel from '../models/UniAdmin.js'; // Adjust path as necessary
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
@@ -17,9 +18,16 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Generate a password reset token function
-const generateResetToken = (email) => {
-  return jwt.sign({ email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+// Function to get the appropriate model based on email domain
+const getModelByEmailDomain = (email) => {
+  if (email.endsWith('@gmail.com')) {
+    return SuperAdminModel;
+  } else if (email.endsWith('@students.riphah.edu.pk')) {
+    return VerifiedStudentModel;
+  } else if (email.endsWith('@admin.edu.pk')) {
+    return UniAdminModel;
+  }
+  return null;
 };
 
 // Request password reset
@@ -27,16 +35,22 @@ router.post('/request-reset-password', async (req, res) => {
   const { email } = req.body;
 
   try {
-    const user = await UniAdminModel.findOne({ email });
+    const Model = getModelByEmailDomain(email);
+    if (!Model) {
+      return res.status(400).json({ success: false, message: 'Invalid email domain' });
+    }
+
+    const user = await Model.findOne({ email });
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
     console.log('User found');
 
-    const resetToken = generateResetToken(user.email);
+    const resetToken = jwt.sign({ email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 
     // Send email with reset link
-    const resetLink = `http://localhost:3001/reset-password/${resetToken}`;
+    const resetLink = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    console.log('Reset link:', resetLink);
     await transporter.sendMail({
       from: process.env.MY_GMAIL,
       to: user.email,
@@ -50,27 +64,40 @@ router.post('/request-reset-password', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
 // Reset password
 router.post('/reset-password/:token', async (req, res) => {
   const { token } = req.params;
-  const { newPassword } = req.body;
+  const { newPassword, confirmPassword } = req.body;
 
-  // Check if the new password is provided
-  if (!newPassword) {
-    return res.status(400).json({ success: false, message: 'New password is required' });
+  // Check if both passwords are provided
+  if (!newPassword || !confirmPassword) {
+    return res.status(400).json({ success: false, message: 'Both password and confirm password are required' });
+  }
+
+  // Ensure newPassword matches confirmPassword
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ success: false, message: 'Passwords do not match' });
   }
 
   try {
-    // Verify the token
+    // Verify the token to get the user's email
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    const user = await UniAdminModel.findOne({ email: decoded.email });
+    const { email } = decoded;
 
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+    // Get the appropriate model based on email domain
+    const Model = getModelByEmailDomain(email);
+    if (!Model) {
+      return res.status(400).json({ success: false, message: 'Invalid email domain' });
     }
 
-    // Directly save the new password without hashing
-    user.password = newPassword; // Set the new password directly
+    // Find the user by email
+    const user = await Model.findOne({ email });
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    // Update both password and confirm password fields
+    user.password = newPassword;
+    user.cpassword = confirmPassword;
     await user.save();
 
     res.json({ success: true, message: 'Password reset successfully' });

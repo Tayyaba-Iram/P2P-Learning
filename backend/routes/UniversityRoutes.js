@@ -25,6 +25,61 @@ router.post('/addUniversity', async (req, res) => {
         res.status(500).send('Failed to add/update university due to an internal error');
     }
 });
+router.put('/universities/:id', async (req, res) => {
+  const { id } = req.params; // University ID
+  const updateData = req.body; // Data to update
+
+  try {
+    // Check if the university exists
+    const university = await University.findById(id);
+
+    if (!university) {
+      return res.status(404).json({ message: 'University not found' });
+    }
+
+    // Update the university document
+    const updatedUniversity = await University.findByIdAndUpdate(id, updateData, { new: true });
+
+    // Send back the updated university data
+    res.status(200).json(updatedUniversity);
+  } catch (error) {
+    console.error('Error updating university:', error);
+    res.status(500).json({ message: 'Failed to update university' });
+  }
+});
+// API route to add a campus to a specific university
+router.post('/api/universities/:universityId/campuses', async (req, res) => {
+  try {
+    const { universityId } = req.params;
+    const { name } = req.body; // Assuming you're passing campus name
+    const newCampus = { name, programs: [] };
+    const updatedUniversity = await University.findByIdAndUpdate(
+      universityId,
+      { $push: { campuses: newCampus } },
+      { new: true }
+    );
+    res.status(201).json(updatedUniversity);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding campus', error });
+  }
+});
+
+// API route to add a program to a specific campus in a university
+router.post('/api/universities/:universityId/campuses/:campusId/programs', async (req, res) => {
+  try {
+    const { universityId, campusId } = req.params;
+    const { name } = req.body; // Assuming you're passing program name
+    const updatedUniversity = await University.findOneAndUpdate(
+      { _id: universityId, 'campuses._id': campusId },
+      { $push: { 'campuses.$.programs': { name } } },
+      { new: true }
+    );
+    res.status(201).json(updatedUniversity);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding program', error });
+  }
+});
+
 
 router.get('/universities', async (req, res) => {
     try {
@@ -101,7 +156,7 @@ router.delete('/universities/:universityId/campuses/:campusId/programs/:programI
 });
 
 // Route to edit a university's name
-router.put('/universities/:id', async (req, res) => {
+router.put('/api/universities/:universityId', async (req, res) => {
     const { name } = req.body;
     try {
       const updatedUniversity = await University.findByIdAndUpdate(
@@ -117,65 +172,74 @@ router.put('/universities/:id', async (req, res) => {
       res.status(500).json({ message: 'Error updating university', error });
     }
   });
-  
-  // Route to edit a campus in a university
-  router.put('/universities/:universityId/campuses/:campusIndex', async (req, res) => {
+ // Backend route to update campus
+// Updated route to use async/await
+router.put('/api/universities/:universityId/campuses/:campusId', async (req, res) => {
+  try {
+    const { universityId, campusId } = req.params;
     const { name } = req.body;
-    try {
-      const university = await University.findById(req.params.universityId);
-      if (!university) {
-        return res.status(404).json({ message: 'University not found' });
-      }
-  
-      const campusIndex = parseInt(req.params.campusIndex, 10);
-      if (campusIndex < 0 || campusIndex >= university.campuses.length) {
-        return res.status(400).json({ message: 'Invalid campus index' });
-      }
-  
-      university.campuses[campusIndex].name = name;
-      await university.save();
-      res.json(university);
-    } catch (error) {
-      res.status(500).json({ message: 'Error updating campus', error });
+
+    // Use async/await instead of callbacks
+    const university = await University.findById(universityId);
+    if (!university) {
+      return res.status(404).json({ error: 'University not found' });
     }
-  });
-  
-  // Route to edit a program in a campus of a university
-  router.put('/universities/:universityId/campuses/:campusIndex/programs/:programIndex', async (req, res) => {
-    const { name } = req.body;
-    try {
-      const university = await University.findById(req.params.universityId);
-      if (!university) {
-        return res.status(404).json({ message: 'University not found' });
-      }
-  
-      const campusIndex = parseInt(req.params.campusIndex, 10);
-      const programIndex = parseInt(req.params.programIndex, 10);
-  
-      if (
-        campusIndex < 0 ||
-        campusIndex >= university.campuses.length ||
-        programIndex < 0 ||
-        programIndex >= university.campuses[campusIndex].programs.length
-      ) {
-        return res.status(400).json({ message: 'Invalid campus or program index' });
-      }
-  
-      university.campuses[campusIndex].programs[programIndex].name = name;
-      await university.save();
-      res.json(university);
-    } catch (error) {
-      res.status(500).json({ message: 'Error updating program', error });
+
+    const campus = university.campuses.id(campusId);
+    if (!campus) {
+      return res.status(404).json({ error: 'Campus not found' });
     }
-  });
-  router.post('/uni', async (req, res) => {
-    try {
-      const newUniversity = new University(req.body);
-      const savedUniversity = await newUniversity.save();
-      res.status(201).json(savedUniversity);
-    } catch (error) {
-      res.status(400).json({ message: 'Error adding university', error });
+
+    // Update campus name
+    campus.name = name;
+    await university.save();
+
+    res.status(200).json({ message: 'Campus updated successfully' });
+  } catch (error) {
+    console.error('Backend Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Backend route to update program using async/await
+router.put('/universities/:universityId/campuses/:campusId/programs/:programId', async (req, res) => {
+  const { universityId, campusId, programId } = req.params;
+  const { name } = req.body;
+
+  try {
+    // Find the university using async/await
+    const university = await University.findById(universityId);
+    if (!university) {
+      return res.status(404).json({ error: 'University not found' });
     }
-  });
+
+    // Find the campus
+    const campus = university.campuses.id(campusId);
+    if (!campus) {
+      return res.status(404).json({ error: 'Campus not found' });
+    }
+
+    // Find the program
+    const program = campus.programs.id(programId);
+    if (!program) {
+      return res.status(404).json({ error: 'Program not found' });
+    }
+
+    // Update the program name
+    program.name = name;
+
+    // Save the updated university document
+    await university.save();
+
+    // Send a success response
+    res.status(200).json({ message: 'Program updated successfully' });
+  } catch (error) {
+    console.error('Error updating program:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
   
 export default router;

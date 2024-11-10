@@ -51,4 +51,16 @@ router.post('/registerUniAdmin', async (req, res) => {
   }
 });
 
+router.get('/Uniadmins', async (req, res) => {
+  try {
+    const Uniadmins = await UniAdminModel.find();
+    res.status(200).json(Uniadmins);
+    console.log('Uniadmins:', Uniadmins);
+
+  } catch (error) {
+    console.error('Error fetching Uniadmins:', error);
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+});
+
 export default router;

@@ -2,6 +2,7 @@
 import express from 'express';
 import StudentModel from '../models/Student.js';
 import VerifiedStudentModel from '../models/VerifiedStudent.js';
+import verifyUser from '../middleware/verifyUser.js'; // Import the middleware
 
 const router = express.Router();
 
@@ -48,13 +49,21 @@ router.post('/registerStudent', async (req, res) => {
   }
 });
 
-
 router.get('/verifiedStudents', async (req, res) => {
   try {
-    const verifiedStudents = await VerifiedStudentModel.find();
-    res.status(200).json(verifiedStudents);
-    console.log('Student verified and saved to verified collection:', verifiedStudents);
+    const query = req.query.query || ''; // Get search query from request
+    const regex = new RegExp(query, 'i'); // Create a case-insensitive regex for search
 
+    // Find students matching the search query in name or specification
+    const verifiedStudents = await VerifiedStudentModel.find({
+      $or: [
+        { name: { $regex: regex } },
+        { specification: { $regex: regex } },
+      ],
+    });
+
+    res.status(200).json(verifiedStudents);
+    console.log('Students fetched based on search query:', verifiedStudents);
   } catch (error) {
     console.error('Error fetching verified students:', error);
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -62,6 +71,82 @@ router.get('/verifiedStudents', async (req, res) => {
 });
 
 
+// Fetch the logged-in student's profile data
+router.get('/get-profile', verifyUser, async (req, res) => {
+  try {
+    // Use the email from the verified token
+    const userEmail = req.email;
+
+    // Fetch the user's data from the database
+    const student = await VerifiedStudentModel.findOne({ email: userEmail });
+
+    // Check if the student exists
+    if (!student) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Return the student data as a response
+    res.status(200).json({ 
+      success: true,
+      user: {
+        name: student.name,
+        email: student.email,
+        phone: student.phone,
+        university: student.university,
+        campus: student.campus,
+        program: student.program,
+        semester: student.semester,
+        specification: student.specification,
+        password: student.password,
+        cpassword: student.cpassword,
+      }
+    });
+  } catch (err) {
+    console.error('Error fetching profile:', err);
+    res.status(500).json({ success: false, message: 'An error occurred while fetching profile data.' });
+  }
+});
+
+router.put('/update-profile', verifyUser, async (req, res) => {
+  const { phone, campus, program, semester, specification, password, cpassword } = req.body;
+
+  try {
+    // Use the email from the verified token
+    const userEmail = req.email;
+
+    // Fetch the user's data from the VerifiedStudentModel
+    const student = await VerifiedStudentModel.findOne({ email: userEmail });
+
+    // Check if the student exists
+    if (!student) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Update fields only if they are provided in the request body
+    if (phone) student.phone = phone;
+    if (campus) student.campus = campus;
+    if (program) student.program = program;
+    if (semester) student.semester = semester;
+    if (specification) student.specification = specification;
+
+    // Update password and confirm password if both are provided
+    if (password && cpassword) {
+      if (password !== cpassword) {
+        return res.status(400).json({ success: false, message: 'Passwords do not match' });
+      }
+      student.password = password;
+      student.cpassword = cpassword;
+    }
+
+    // Save the updated student profile
+    await student.save();
+
+    res.status(200).json({ success: true, message: 'Profile updated successfully' });
+  } catch (err) {
+    console.error('Error updating profile:', err);
+    res.status(500).json({ success: false, message: 'An error occurred while updating profile.' });
+  }
+});
 
 
 

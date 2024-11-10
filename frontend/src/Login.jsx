@@ -7,12 +7,13 @@ import './Login.css';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     // Validation checks
     if (email === "") {
       toast.error("Email is required!");
@@ -25,72 +26,55 @@ function Login() {
     } else {
       // Determine database to check based on email domain
       if (email.endsWith('@admin.edu.pk')) {
-        // VerifiedUniAdmin database check
-        axios.post('http://localhost:3001/api/adminlogin', { email, password })
+        axios.post('http://localhost:3001/api/adminlogin', { email, password }, { withCredentials: true })
           .then(res => {
             if (res.data.success) {
               toast.success('University Admin login successful!');
-              setTimeout(() => {
-                navigate('/');
-              }, 1000);
-              setEmail('');
-              setPassword('');
+              setTimeout(() => navigate('/'), 1000);
             } else {
               toast.error('Login failed. ' + res.data.message);
             }
           })
           .catch(err => {
-            console.log(err);
+            console.error(err);
             toast.error('Invalid email or password!');
           });
       } else if (email.endsWith('@gmail.com')) {
-        // Superadmin database check or create if not exists
-        axios.post('http://localhost:3001/api/superadmin-check-or-create', { email, password })
+        axios.post('http://localhost:3001/api/superadmin-check-or-create', { email, password }, { withCredentials: true })
           .then(res => {
             if (res.data.created) {
               toast.success('Super Admin account created successfully!');
             } else if (res.data.success) {
               toast.success('Super Admin login successful!');
             } else {
-              toast.error('Login failed. ');
+              toast.error('Login failed.');
             }
   
-            // Navigate if the login was successful or account was created
             if (res.data.success || res.data.created) {
-              setTimeout(() => {
-                navigate('/');
-              }, 1000);
-              setEmail('');
-              setPassword('');
+              setTimeout(() => navigate('/'), 1000);
             }
           })
           .catch(err => {
-            console.log(err);
+            console.error(err);
             toast.error('Error verifying or creating Super Admin!');
           });
       } else {
-        // Student database check
         axios.post('http://localhost:3001/api/studentlogin', { email, password })
           .then(res => {
             if (res.data.success) {
               toast.success('Login successfully!');
-              setTimeout(() => {
-                navigate('/');
-              }, 1000);
-              setEmail('');
-              setPassword('');
+              setTimeout(() => navigate('/'), 1000);
             } else {
               toast.error('Login failed. ' + res.data.message);
             }
           })
           .catch(err => {
-            console.log(err);
+            console.error(err);
             toast.error('Invalid email or password!');
           });
       }
     }
   };
-  
 
   return (
     <div className="login-container">
@@ -120,14 +104,25 @@ function Login() {
           </div>
           <div className="form-group">
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          
+
+          {/* Toggle password visibility */}
+          <div className="show-password">
+            <input
+              type="checkbox"
+              id="showPassword"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+            />
+            <label htmlFor="showPassword">Show Password</label>
+          </div>
+
           {/* Forgot Password Link */}
           <div className="forgot-password">
             <Link to="/forgotpassword" className="forgot-password-link">Forgot Password?</Link>
@@ -137,7 +132,7 @@ function Login() {
         </form>
       </div>
       <Toaster position="top-center" />
-    </div> 
+    </div>
   );
 }
 
