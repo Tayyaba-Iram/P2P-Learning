@@ -81,13 +81,21 @@ router.post('/adminlogin', async (req, res) => {
 
     // Set the token in a cookie (httpOnly, secure for production)
     res.cookie('token', token, { httpOnly: true, secure: false, maxAge: 3600000 }); // 1 hour expiry time
-
+    console.log("Cookies in response: ", req.cookies);
     // Successful login
     res.json({ success: true, message: 'Login successful.' });
+    console.log("name: ", admin.name);
+     console.log("email: ", admin.email);
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
   }
+  
+});
+
+router.post('/logout', (req, res) => {
+  res.clearCookie('token'); // Replace 'token' with your cookie name
+  res.json({ success: true });
 });
 
 export default router;

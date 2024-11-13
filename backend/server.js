@@ -6,12 +6,13 @@ import auth from './routes/auth.js';
 import sessionRoutes from './routes/sessionsRoutes.js';
 import UniAdminRoutes from './routes/UniAdminRoutes.js';
 import ComplainRoutes from './routes/ComplainRoutes.js';
-import UniversityRoutes from './routes/UniversityRoutes.js';
-import SuperAdminRoutes from './routes/SuperAdminRoutes.js';
-import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js';
-import DashboardRoutes from './routes/DashboardRoutes.js';
+import UniversityRoutes from './routes/UniversityRoutes.js'
+import SuperAdminRoutes from './routes/SuperAdminRoutes.js'
+import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js'
+import DashboardRoutes from './routes/DashboardRoutes.js'
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
 import cookieParser from 'cookie-parser'; // Import cookie-parser
+
 
 const app = express();
 app.use(cookieParser());
@@ -22,12 +23,19 @@ app.use(cors({
   credentials: true
 }));
 
+
+
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/P2P-Learning')
   .then(() => {
     console.log('Connected to MongoDB');
   })
   .catch(err => console.error('Error connecting to MongoDB:', err));
+
+<<<<<<< HEAD
+// Use student routes
+=======
+  
 
 // Use routes
 app.use('/api', studentRoutes);
@@ -40,6 +48,10 @@ app.use('/api/universities', UniversityRoutes);
 app.use('/api', SuperAdminRoutes);
 app.use('/api', ResetPasswordRoutes);
 app.use('/api', verifyUser, DashboardRoutes);
+app.use('/api', chatRoutes);
+app.use('/api', loginRoutes);
+
+
 
 // Start the server
 app.listen(3001, () => {

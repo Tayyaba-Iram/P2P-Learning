@@ -35,7 +35,9 @@ function Home() {
           {error ? <p>{error}</p> : <p>Loading user data...</p>}
         </div>
       )}
-
+<Link to="/studentupdateprofile">
+        <button className="register-button">Profile Update</button>
+      </Link>
       <Link to="/chat">
         <button className="register-button">Go to Chat</button>
       </Link>

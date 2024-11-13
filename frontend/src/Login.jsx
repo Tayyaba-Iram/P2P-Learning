@@ -1,35 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import './Login.css';
+import { UserContext } from './userContext';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
-
+  const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext); // Use UserContext
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation checks
     if (email === "") {
       toast.error("Email is required!");
+      return;
     } else if (!email.includes("@")) {
       toast.warning("Email must include '@'!");
+      return;
     } else if (password === "") {
       toast.error("Password is required!");
+      return;
     } else if (password.length < 4) {
       toast.error("Password must be at least 4 characters!");
-    } else {
+      return;
+    }
+
+    try {
+      let response;
+
       // Determine database to check based on email domain
       if (email.endsWith('@admin.edu.pk')) {
         axios.post('http://localhost:3001/api/adminlogin', { email, password }, { withCredentials: true })
           .then(res => {
             if (res.data.success) {
-              localStorage.setItem("authToken", res.data.token); // Store token in localStorage
               toast.success('University Admin login successful!');
               setTimeout(() => navigate('/'), 1000);
             } else {
@@ -46,7 +55,6 @@ function Login() {
             if (res.data.created) {
               toast.success('Super Admin account created successfully!');
             } else if (res.data.success) {
-              localStorage.setItem("authToken", res.data.token); // Store token in localStorage
               toast.success('Super Admin login successful!');
             } else {
               toast.error('Login failed.');
@@ -64,7 +72,6 @@ function Login() {
         axios.post('http://localhost:3001/api/studentlogin', { email, password })
           .then(res => {
             if (res.data.success) {
-              localStorage.setItem("authToken", res.data.token); // Store token in localStorage
               toast.success('Login successfully!');
               setTimeout(() => navigate('/'), 1000);
             } else {
@@ -76,6 +83,9 @@ function Login() {
             toast.error('Invalid email or password!');
           });
       }
+    } catch (error) {
+      console.error(error);
+      toast.error('An error occurred during login');
     }
   };
 
@@ -84,9 +94,10 @@ function Login() {
       <div className="left-section">
         <img src="Logo.jpg" alt="Logo" className="login-logo" />
         <h2>Welcome</h2>
-        <p>In learning you will teach and</p>
-        <p> in teaching you will learn!</p>
-        <Link to="/register"> <button className="register-button">Register</button> </Link>
+        <p>In learning you will teach and in teaching you will learn!</p>
+        <Link to="/register">
+          <button className="register-button">Register</button>
+        </Link>
       </div>
 
       <div className="right-section">
@@ -128,7 +139,7 @@ function Login() {
 
           {/* Forgot Password Link */}
           <div className="forgot-password">
-            <Link to="/forgotpassword" className="forgot-password-link">Forgot Password?</Link>
+            <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
           </div>
 
           <button type="submit" className="login-button">Login</button>

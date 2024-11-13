@@ -7,7 +7,17 @@ const AdminDashboard = () => {
     const [complaints, setComplaints] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-
+    const [userData, setUserData] = useState(null);
+  
+    useEffect(() => {
+      axios.get('http://localhost:3001/api/admin-dashboard', { withCredentials: true })
+        .then(response => {
+          setUserData(response.data.user);
+        })
+        .catch(err => {
+          setError(err.response ? err.response.data.error : 'An error occurred');
+        });
+    }, []);
     useEffect(() => {
         const fetchComplaints = async () => {
             try {
@@ -33,6 +43,16 @@ const AdminDashboard = () => {
 
     return (
         <div className="admin-dashboard">
+             {userData ? (
+        <div className="user-info">
+          <h2>Welcome: {userData.name}!</h2>
+          <p>Email: {userData.email}</p>
+        </div>
+      ) : (
+        <div className="error-message">
+          {error ? <p>{error}</p> : <p>Loading user data...</p>}
+        </div>
+      )}
             <h2>Complaints Dashboard</h2>
             <table>
                 <thead>

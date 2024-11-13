@@ -55,7 +55,6 @@ router.get('/Uniadmins', async (req, res) => {
   try {
     const Uniadmins = await UniAdminModel.find();
     res.status(200).json(Uniadmins);
-    console.log('Uniadmins:', Uniadmins);
 
   } catch (error) {
     console.error('Error fetching Uniadmins:', error);
