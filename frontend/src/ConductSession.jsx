@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -7,23 +7,59 @@ const ConductSession = () => {
   const [isJoinEnabled, setJoinEnabled] = useState(false);
   const navigate = useNavigate();
 
+  // Effect to load Jitsi script only once when component mounts
+  useEffect(() => {
+    const loadJitsiScript = () => {
+      // Check if Jitsi script is already loaded
+      if (!window.JitsiMeetExternalAPI) {
+        const script = document.createElement("script");
+        script.src = "https://meet.jit.si/external_api.js";
+        script.async = true;
+        script.onload = () => console.log("Jitsi script loaded.");
+        script.onerror = () => console.error("Failed to load Jitsi script.");
+        document.body.appendChild(script);
+      }
+    };
+
+    loadJitsiScript();
+  }, []); // Empty array ensures this effect runs only once on mount
+
+  // Handle input change for the meeting link
   const handleMeetingLinkChange = (e) => {
     const link = e.target.value;
     setMeetingLink(link);
 
-    // Validate link format for Jitsi
-    const jitsiLinkPattern = /^https:\/\/meet\.jit\.si\/[a-zA-Z0-9-_]+$/;
-    setJoinEnabled(jitsiLinkPattern.test(link));
+    // Validate Jitsi meeting link format
+    const jitsiLinkPattern = /^https:\/\/meet\.jit\.si\/([a-zA-Z0-9-_]+)$/;
+    const isValid = jitsiLinkPattern.test(link);
+    setJoinEnabled(isValid);
   };
 
+  // Handle join session action
   const handleJoinSession = async () => {
-    const meetingID = encodeURIComponent(meetingLink.split("https://meet.jit.si/")[1] || "");
+    const meetingID = meetingLink.split("https://meet.jit.si/")[1] || "";
+
+    if (!meetingID) {
+      alert("Invalid meeting link format.");
+      return;
+    }
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      alert("No token found. Please log in first.");
+      return;
+    }
 
     try {
-      const response = await axios.get(`http://localhost:3001/api/sessions/verify/${meetingID}`);
+      // Send API request to verify session with Bearer token
+      const response = await axios.get(`http://localhost:3001/api/sessions/verify/${meetingID}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      // Check if session is verified
       if (response.data.success) {
-        // Embed the Jitsi meeting without a login prompt
         const domain = "meet.jit.si";
         const options = {
           roomName: meetingID,
@@ -31,26 +67,37 @@ const ConductSession = () => {
           height: 600,
           parentNode: document.getElementById("jitsi-container"),
           configOverwrite: {
-            disableDeepLinking: true, // Prevent Jitsi from trying to open in its own app
+            disableDeepLinking: true,
           },
           interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
-            HIDE_INVITE_MORE_HEADER: true, // Hide invite options
+            HIDE_INVITE_MORE_HEADER: true,
             TOOLBAR_BUTTONS: [
-              "microphone", "camera", "hangup", "chat", "fullscreen", "raisehand",
-              "tileview", "videobackgroundblur" // Customize buttons as needed
-            ]
-          }
+              "microphone",
+              "camera",
+              "hangup",
+              "chat",
+              "fullscreen",
+              "raisehand",
+              "tileview",
+              "videobackgroundblur",
+            ],
+          },
         };
 
-        const api = new window.JitsiMeetExternalAPI(domain, options);
+        // Check if Jitsi API is available
+        if (window.JitsiMeetExternalAPI) {
+          const api = new window.JitsiMeetExternalAPI(domain, options);
 
-        // Handle meeting end to redirect to the main page
-        api.addListener("readyToClose", () => {
-          navigate("/"); // Redirect to homepage when the meeting ends
-        });
+          api.addListener("readyToClose", () => {
+            navigate("/"); // Redirect when the meeting ends
+          });
+        } else {
+          console.error("JitsiMeetExternalAPI not loaded.");
+          alert("Failed to load Jitsi. Please refresh the page and try again.");
+        }
       } else {
-        alert("Invalid meeting link. Please enter a valid, authorized link.");
+        alert("Invalid meeting link or unauthorized access.");
       }
     } catch (error) {
       console.error("Error verifying session:", error);
@@ -88,7 +135,10 @@ const ConductSession = () => {
       >
         Join
       </button>
-      <div id="jitsi-container" style={{ marginTop: "20px", width: "100%", height: "600px" }}></div>
+      <div
+        id="jitsi-container"
+        style={{ marginTop: "20px", width: "100%", height: "600px" }}
+      ></div>
     </div>
   );
 };

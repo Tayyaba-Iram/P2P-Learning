@@ -54,6 +54,7 @@ const handleLogout = async () => {
         <div className="nav-mid-links">
           <Link to="/" className={isActive('/') ? 'active' : ''}>Home</Link>
           <Link to="/ScheduleSession" className={isActive('/ScheduleSession') ? 'active' : ''}>Schedule Session</Link>
+          <Link to="/ConductSession" className={isActive('/ConductSession') ? 'active' : ''}>Conduct Session </Link>
           <Link to="/chat" className={isActive('/chat') ? 'active' : ''}>Chat</Link>
           <Link to="/complain-form" className={isActive('/complain-form') ? 'active' : ''}>Complain Form</Link>
           <Link to="/studentupdateprofile" className={isActive('/studentupdateprofile') ? 'active' : ''}>Update Profile</Link>

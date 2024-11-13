@@ -18,7 +18,7 @@ const studentsData = [
   {
     name: 'John Doe',
     sapid: '30001',
-    email: '35722@students.riphah.edu.pk',
+    email: '35927@students.riphah.edu.pk',
     cnic: '00000-0000000-0',
     phone: '0000-0000000',
     university: 'Riphah',

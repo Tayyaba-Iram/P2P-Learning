@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const verifyUser = (req, res, next) => {
-    const token = req.cookies.token;  // Make sure you're getting the token from cookies
+    const token = req.cookies.token;  // Ensure you're getting the token from cookies
 
     if (!token) {
         return res.json("The token is missing");

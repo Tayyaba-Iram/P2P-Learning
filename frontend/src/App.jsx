@@ -6,6 +6,7 @@ import AdminNavbar from './AdminNavbar';
 import SuperAdminNavbar from './SuperAdminNavbar';
 import Home from './Student Home';
 import ScheduleSession from './ScheduleSession';
+import ConductSession from './ConductSession';
 import Register from './Register';
 import Login from './Login';
 import Dashboard from './Superadmin Dashboard';
@@ -66,6 +67,7 @@ function App() {
         {/* Protected Routes */}
 <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
 <Route path="/ScheduleSession" element={<ProtectedRoute><ScheduleSession /></ProtectedRoute>} />
+<Route path="/ConductSession" element={<ProtectedRoute><ConductSession /></ProtectedRoute>} />
 <Route path="/superdashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 <Route path="/complain-form" element={<ProtectedRoute><ComplaintForm /></ProtectedRoute>} />
 <Route path="/admindashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />

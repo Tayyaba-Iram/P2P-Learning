@@ -1,11 +1,14 @@
 import express from 'express';
-import Session from '../models/Session.js'; // Assuming your model is named 'Session'
+import Session from '../models/Session.js';
 import cors from 'cors';
+import jwt from "jsonwebtoken";
+
 
 
 
 const app = express();
 const router = express.Router();
+
 
 app.use(cors());
 app.use(express.json());
@@ -41,25 +44,54 @@ router.get('/sessions', async (req, res) => {
   }
 });
 
-// Route to verify if a session link is in the database
-router.get('/sessions/verify/:meetingID', async (req, res) => {
-  const { meetingID } = req.params;
+// Route to delete a session
+router.delete('/sessions/:sessionId', async (req, res) => {
+  const { sessionId } = req.params;
   try {
-    // Look for a session with the matching meeting ID
-    const session = await Session.findOne({ meetingLink: `https://meet.jit.si/${meetingID}` });
+    // Find and delete session using the MongoDB _id (sessionId)
+    const session = await Session.findByIdAndDelete(sessionId);
+
     if (session) {
-      return res.json({ success: true });
+      return res.json({ success: true, message: 'Session deleted successfully' });
     } else {
-      return res.json({ success: false });
+      return res.status(404).json({ success: false, message: 'Session not found' });
     }
   } catch (error) {
-    console.error('Error verifying session:', error);
+    console.error('Error deleting session:', error);
     return res.status(500).json({ message: 'Server error' });
   }
 });
 
 
 
+// Verify session API route
+router.get("/sessions/verify/:meetingID", async (req, res) => {
+  const { meetingID } = req.params;
+  const authHeader = req.headers.authorization;
 
+  // Check if authorization header is present
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ success: false, message: "Unauthorized access" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    // Verify JWT token with the secret key from .env
+    jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    // Find the session by meeting ID in the database
+    const session = await Session.findOne({ meetingLink: `https://meet.jit.si/${meetingID}` });
+
+    if (session) {
+      return res.json({ success: true, message: "Session found" });
+    } else {
+      return res.status(404).json({ success: false, message: "Session not found" });
+    }
+  } catch (error) {
+    console.error("Error verifying session:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 
 export default router;

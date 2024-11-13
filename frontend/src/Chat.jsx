@@ -3,6 +3,8 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import './Chat.css';
 
+const socket = io('http://localhost:3002');
+
 const Chat = () => {
   const [user, setUser] = useState(null);
   const [students, setStudents] = useState([]);
