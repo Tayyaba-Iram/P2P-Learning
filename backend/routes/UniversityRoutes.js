@@ -238,8 +238,16 @@ router.put('/universities/:universityId/campuses/:campusId/programs/:programId',
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+router.post('/uni', async (req, res) => {
+  try {
+    const newUniversity = new University(req.body);
+    const savedUniversity = await newUniversity.save();
+    res.status(201).json(savedUniversity);
+  } catch (error) {
+    res.status(400).json({ message: 'Error adding university', error });
 
-
+  }
+});
 
   
 export default router;

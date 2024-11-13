@@ -14,7 +14,18 @@ function Dashboard() {
   const [adminSearch, setAdminSearch] = useState('');
 
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    axios.get('http://localhost:3001/api/superadmin-dashboard', { withCredentials: true })
+      .then(response => {
+        setUserData(response.data.user);
+      })
+      .catch(err => {
+        setError(err.response ? err.response.data.error : 'An error occurred');
+      });
+  }, []);
   // Fetch data on component mount
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -81,7 +92,15 @@ function Dashboard() {
     <div className="container">
       <main className="main-content">
         <h1>Superadmin Dashboard</h1>
-
+        {userData ? (
+        <div className="user-info">
+          <p>Email: {userData.email}</p>
+        </div>
+      ) : (
+        <div className="error-message">
+          {error ? <p>{error}</p> : <p>Loading user data...</p>}
+        </div>
+      )}
         <div className="buttons-container">
           <Link to="/adduniversity">
             <button className="btn">Add University</button>

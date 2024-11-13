@@ -10,9 +10,13 @@ import UniversityRoutes from './routes/UniversityRoutes.js'
 import SuperAdminRoutes from './routes/SuperAdminRoutes.js'
 import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js'
 import DashboardRoutes from './routes/DashboardRoutes.js'
+import chatRoutes from './routes/chatRoutes.js'
+import loginRoutes from './routes/loginRoutes.js'
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
 import cookieParser from 'cookie-parser'; // Import cookie-parser
-
+import http from 'http';
+import { Server } from 'socket.io';
+import Chat from './models/Chat.js'; 
 
 const app = express();
 app.use(cookieParser());
@@ -30,7 +34,28 @@ mongoose.connect('mongodb://localhost:27017/P2P-Learning')
   })
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
-  
+
+  const server = http.createServer(app);
+  const io = new Server(server, { cors: { origin: 'http://localhost:3000' } });
+// Socket.IO setup
+io.on('connection', (socket) => {
+  console.log('New user connected');
+
+  socket.on('joinRoom', (user) => {
+    socket.join(user);
+  });
+
+  socket.on('newMessage', async (msg) => {
+    const savedMessage = await Chat.create(msg);
+    io.to(msg.receiver).emit('message', savedMessage);
+    io.to(msg.sender).emit('message', savedMessage);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
 
 // Use routes
 app.use('/api', studentRoutes);
@@ -43,6 +68,10 @@ app.use('/api/universities', UniversityRoutes);
 app.use('/api', SuperAdminRoutes);
 app.use('/api', ResetPasswordRoutes);
 app.use('/api', verifyUser, DashboardRoutes);
+app.use('/api', chatRoutes);
+app.use('/api', loginRoutes);
+
+
 
 // Start the server
 app.listen(3001, () => {

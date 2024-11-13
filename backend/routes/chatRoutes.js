@@ -1,34 +1,44 @@
 import express from 'express';
 import ChatModel from '../models/Chat.js';
+import verifyUser from '../middleware/verifyUser.js';
 
 const router = express.Router();
 
+// Route to get chat history between two users
+router.get('/chat/:receiver', verifyUser, async (req, res) => {
+  const { receiver } = req.params;
+  const user = req.name; // Use the logged-in user's name
 
-// Route to get chat history for a specific student
-router.get('/api/chats/:studentId', async (req, res) => {
   try {
-    const chat = await ChatModel.findOne({ studentId: req.params.studentId }).populate('studentId');
-    res.json(chat ? chat.messages : []);
+    const messages = await ChatModel.find({
+      $or: [
+        { sender: user, receiver },
+        { sender: receiver, receiver: user }
+      ]
+    }).sort({ timestamp: 1 });
+
+    res.status(200).json(messages);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching chat history', error });
+    res.status(500).json({ error: 'Failed to fetch chat history' });
   }
 });
 
-// Route to save a message
-router.post('/api/chats/:studentId', async (req, res) => {
-  const { sender, text } = req.body;
-  const studentId = req.params.studentId;
+// Route to save a new message
+router.post('/chat', verifyUser, async (req, res) => {
+  const { receiver, text } = req.body;
+  const sender = req.name; // Use the logged-in user's name
 
   try {
-    let chat = await ChatModel.findOne({ studentId });
-    if (!chat) {
-      chat = new chat({ studentId, messages: [] });
+    if (!sender || !receiver || !text) {
+      return res.status(400).json({ error: 'Missing required fields' });
     }
-    chat.messages.push({ sender, text });
-    await chat.save();
-    res.status(201).json(chat);
+
+    // Create a new message entry in the database
+    const message = await ChatModel.create({ sender, receiver, text });
+    res.status(201).json(message);
   } catch (error) {
-    res.status(500).json({ message: 'Error saving message', error });
+    console.error('Error saving message:', error);
+    res.status(500).json({ error: 'Failed to save message' });
   }
 });
 

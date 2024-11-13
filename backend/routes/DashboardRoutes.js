@@ -15,4 +15,29 @@ router.get('/student-dashboard', verifyUser, (req, res) => {
   });
 });
 
+
+router.get('/admin-dashboard', verifyUser, (req, res) => {
+  // If the token is verified, the username and email will be available in the request object
+  res.json({
+    success: true,
+    message: 'Welcome to your dashboard!',
+    user: {
+      name: req.name,
+      email: req.email
+    }
+  });
+});
+
+
+router.get('/superadmin-dashboard', verifyUser, (req, res) => {
+  // If the token is verified, the username and email will be available in the request object
+  res.json({
+    success: true,
+    message: 'Welcome to your dashboard!',
+    user: {
+      email: req.email
+    }
+  });
+});
+
 export default router;
