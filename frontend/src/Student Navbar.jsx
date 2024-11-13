@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { userContext } from './App';
 import { FaUser, FaCog, FaCalendarAlt, FaComment, FaQuestionCircle, FaSignOutAlt } from 'react-icons/fa';
-import './Student Navbar.css';
+import './StudentNavbar.css';
 
 function Navbar() {
     const user = useContext(userContext);
