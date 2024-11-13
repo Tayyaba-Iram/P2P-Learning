@@ -1,36 +1,41 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";  // This is used for navigation
+import { useNavigate } from "react-router-dom";
 
 const ConductSession = () => {
   const [meetingLink, setMeetingLink] = useState("");
   const [isJoinEnabled, setJoinEnabled] = useState(false);
   const navigate = useNavigate();
 
+  // Effect to load Jitsi script only once when component mounts
   useEffect(() => {
     const loadJitsiScript = () => {
+      // Check if Jitsi script is already loaded
       if (!window.JitsiMeetExternalAPI) {
         const script = document.createElement("script");
         script.src = "https://meet.jit.si/external_api.js";
         script.async = true;
-        document.body.appendChild(script);
         script.onload = () => console.log("Jitsi script loaded.");
         script.onerror = () => console.error("Failed to load Jitsi script.");
+        document.body.appendChild(script);
       }
     };
-    loadJitsiScript();
-  }, []);
 
+    loadJitsiScript();
+  }, []); // Empty array ensures this effect runs only once on mount
+
+  // Handle input change for the meeting link
   const handleMeetingLinkChange = (e) => {
     const link = e.target.value;
     setMeetingLink(link);
 
-    // Validate link format for Jitsi
+    // Validate Jitsi meeting link format
     const jitsiLinkPattern = /^https:\/\/meet\.jit\.si\/([a-zA-Z0-9-_]+)$/;
     const isValid = jitsiLinkPattern.test(link);
     setJoinEnabled(isValid);
   };
 
+  // Handle join session action
   const handleJoinSession = async () => {
     const meetingID = meetingLink.split("https://meet.jit.si/")[1] || "";
 
@@ -46,15 +51,14 @@ const ConductSession = () => {
     }
 
     try {
-      const response = await axios.get(
-        `http://localhost:3001/api/sessions/verify/${meetingID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      // Send API request to verify session with Bearer token
+      const response = await axios.get(`http://localhost:3001/api/sessions/verify/${meetingID}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      // Check if session is verified
       if (response.data.success) {
         const domain = "meet.jit.si";
         const options = {
@@ -79,18 +83,14 @@ const ConductSession = () => {
               "videobackgroundblur",
             ],
           },
-          userInfo: {
-            email: "user@example.com", 
-            displayName: "User", 
-          },
-          jwt: token, 
         };
 
+        // Check if Jitsi API is available
         if (window.JitsiMeetExternalAPI) {
           const api = new window.JitsiMeetExternalAPI(domain, options);
 
           api.addListener("readyToClose", () => {
-            navigate("/"); // Redirect to homepage when the meeting ends
+            navigate("/"); // Redirect when the meeting ends
           });
         } else {
           console.error("JitsiMeetExternalAPI not loaded.");

@@ -1,5 +1,5 @@
 import express from 'express';
-import Session from '../models/Session.js'; 
+import Session from '../models/Session.js';
 import cors from 'cors';
 import jwt from "jsonwebtoken";
 
@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 
 const app = express();
 const router = express.Router();
+
 
 app.use(cors());
 app.use(express.json());
@@ -61,10 +62,14 @@ router.delete('/sessions/:sessionId', async (req, res) => {
   }
 });
 
-router.get("/api/sessions/verify/:meetingID", async (req, res) => {
+
+
+// Verify session API route
+router.get("/sessions/verify/:meetingID", async (req, res) => {
   const { meetingID } = req.params;
   const authHeader = req.headers.authorization;
 
+  // Check if authorization header is present
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ success: false, message: "Unauthorized access" });
   }
@@ -72,11 +77,10 @@ router.get("/api/sessions/verify/:meetingID", async (req, res) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    // Verify JWT token
-    jwt.verify(token, process.env.JWT_SECRET); // Ensure JWT_SECRET is defined in your environment variables
+    // Verify JWT token with the secret key from .env
+    jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-    // Find session by meetingID
-    console.log("Verifying session for meetingID:", meetingID);
+    // Find the session by meeting ID in the database
     const session = await Session.findOne({ meetingLink: `https://meet.jit.si/${meetingID}` });
 
     if (session) {
@@ -89,7 +93,5 @@ router.get("/api/sessions/verify/:meetingID", async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
-
 
 export default router;
