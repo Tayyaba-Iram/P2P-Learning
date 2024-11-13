@@ -10,6 +10,8 @@ import UniversityRoutes from './routes/UniversityRoutes.js'
 import SuperAdminRoutes from './routes/SuperAdminRoutes.js'
 import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js'
 import DashboardRoutes from './routes/DashboardRoutes.js'
+import chatRoutes from './routes/chatRoutes.js';
+import loginRoutes from './routes/loginRoutes.js';
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
 import cookieParser from 'cookie-parser'; // Import cookie-parser
 
@@ -32,10 +34,6 @@ mongoose.connect('mongodb://localhost:27017/P2P-Learning')
   })
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
-<<<<<<< HEAD
-// Use student routes
-=======
-  
 
 // Use routes
 app.use('/api', studentRoutes);

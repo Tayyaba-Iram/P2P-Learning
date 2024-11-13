@@ -36,52 +36,52 @@ function Login() {
 
       // Determine database to check based on email domain
       if (email.endsWith('@admin.edu.pk')) {
-        axios.post('http://localhost:3001/api/adminlogin', { email, password }, { withCredentials: true })
-          .then(res => {
-            if (res.data.success) {
-              toast.success('University Admin login successful!');
-              setTimeout(() => navigate('/'), 1000);
-            } else {
-              toast.error('Login failed. ' + res.data.message);
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            toast.error('Invalid email or password!');
-          });
+        response = await axios.post(
+          'http://localhost:3001/api/adminlogin',
+          { email, password },
+          { withCredentials: true }
+        );
+
+        if (response.data.success) {
+          setUser({ name: response.data.name, role: 'admin' });
+          toast.success('University Admin login successful!');
+          navigate('/admindashboard');
+        } else {
+          toast.error(response.data.message || 'Admin login failed');
+        }
       } else if (email.endsWith('@gmail.com')) {
-        axios.post('http://localhost:3001/api/superadmin-check-or-create', { email, password }, { withCredentials: true })
-          .then(res => {
-            if (res.data.created) {
-              toast.success('Super Admin account created successfully!');
-            } else if (res.data.success) {
-              toast.success('Super Admin login successful!');
-            } else {
-              toast.error('Login failed.');
-            }
-  
-            if (res.data.success || res.data.created) {
-              setTimeout(() => navigate('/'), 1000);
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            toast.error('Error verifying or creating Super Admin!');
-          });
+        response = await axios.post(
+          'http://localhost:3001/api/superadmin-check-or-create',
+          { email, password },
+          { withCredentials: true }
+        );
+
+        if (response.data.created) {
+          toast.success('Super Admin account created successfully!');
+        } else if (response.data.success) {
+          setUser({ name: response.data.name, role: 'superadmin' });
+          toast.success('Super Admin login successful!');
+        } else {
+          toast.error(response.data.message || 'Super Admin login failed');
+        }
+
+        if (response.data.success || response.data.created) {
+          navigate('/superdashboard');
+        }
       } else {
-        axios.post('http://localhost:3001/api/studentlogin', { email, password })
-          .then(res => {
-            if (res.data.success) {
-              toast.success('Login successfully!');
-              setTimeout(() => navigate('/'), 1000);
-            } else {
-              toast.error('Login failed. ' + res.data.message);
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            toast.error('Invalid email or password!');
-          });
+        // Student login
+        response = await axios.post(
+          'http://localhost:3001/api/studentlogin',
+          { email, password },
+          { withCredentials: true }
+        );
+        if (response.data.success) {
+          setUser({ name: response.data.name, role: 'student' });
+          toast.success('Student login successfull!');
+          navigate('/');
+        } else {
+          toast.error(response.data.message || 'Student login failed');
+        }
       }
     } catch (error) {
       console.error(error);
