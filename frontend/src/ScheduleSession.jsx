@@ -15,6 +15,7 @@ const ScheduleSession = () => {
   const [agenda, setAgenda] = useState([]);
   const [copiedSessionId, setCopiedSessionId] = useState(null);
 
+  // Fetch sessions from the backend on initial load
   useEffect(() => {
     const fetchSessions = async () => {
       try {
@@ -31,14 +32,17 @@ const ScheduleSession = () => {
     fetchSessions();
   }, []);
 
+  // Handle form input changes
   const handleInputChange = (e) => {
     setSessionDetails({ ...sessionDetails, [e.target.name]: e.target.value });
   };
 
+  // Handle date picker change
   const handleDateChange = (date) => {
     setSessionDetails({ ...sessionDetails, date });
   };
 
+  // Handle adding a new session
   const handleAddSession = async () => {
     const { topic, startTime, endTime } = sessionDetails;
     if (!topic || !startTime || !endTime) {
@@ -49,10 +53,9 @@ const ScheduleSession = () => {
     const newSession = {
       ...sessionDetails,
       date: sessionDetails.date.toISOString(),
-      meetingLink: `https://meet.jit.si/${Math.floor(Math.random() * 10000)}`,  // Correct way to generate the link
+      meetingLink: `https://meet.jit.si/${Math.floor(Math.random() * 10000)}`,  // Random meeting link
       status: 'Pending',
     };
-    
 
     try {
       const response = await axios.post('http://localhost:3001/api/sessions', newSession);
@@ -65,11 +68,11 @@ const ScheduleSession = () => {
     }
   };
 
+  // Handle copying session details to clipboard
   const handleCopy = (sessionId, session) => {
     const sessionText = `Topic: ${session.topic}\nDate: ${new Date(session.date).toDateString()}\nStart Time: ${formatTime(session.startTime)}\nEnd Time: ${formatTime(session.endTime)}\nMeeting Link: ${session.meetingLink}`;
     
     navigator.clipboard.writeText(sessionText);
-    
     setCopiedSessionId(sessionId);
 
     setTimeout(() => {
@@ -77,9 +80,10 @@ const ScheduleSession = () => {
     }, 2000);
   };
 
+  // Handle deleting a session
   const handleCancel = async (sessionId) => {
     try {
-      await axios.delete(`http://localhost:3001/api/sessions/${sessionId}`);
+      await axios.delete(`http://localhost:3001/api/sessions/${sessionId}`);  // Delete session by _id
       setAgenda(prevAgenda => prevAgenda.filter((session) => session._id !== sessionId));
       alert('Session deleted');
     } catch (error) {
@@ -88,6 +92,7 @@ const ScheduleSession = () => {
     }
   };
 
+  // Format time to 12-hour AM/PM format
   const formatTime = (time) => {
     const [hour, minute] = time.split(':');
     const formattedHour = hour % 12 || 12;

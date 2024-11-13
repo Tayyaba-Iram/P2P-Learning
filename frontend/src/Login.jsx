@@ -29,6 +29,7 @@ function Login() {
         axios.post('http://localhost:3001/api/adminlogin', { email, password }, { withCredentials: true })
           .then(res => {
             if (res.data.success) {
+              localStorage.setItem("authToken", res.data.token); // Store token in localStorage
               toast.success('University Admin login successful!');
               setTimeout(() => navigate('/'), 1000);
             } else {
@@ -45,6 +46,7 @@ function Login() {
             if (res.data.created) {
               toast.success('Super Admin account created successfully!');
             } else if (res.data.success) {
+              localStorage.setItem("authToken", res.data.token); // Store token in localStorage
               toast.success('Super Admin login successful!');
             } else {
               toast.error('Login failed.');
@@ -62,6 +64,7 @@ function Login() {
         axios.post('http://localhost:3001/api/studentlogin', { email, password })
           .then(res => {
             if (res.data.success) {
+              localStorage.setItem("authToken", res.data.token); // Store token in localStorage
               toast.success('Login successfully!');
               setTimeout(() => navigate('/'), 1000);
             } else {
