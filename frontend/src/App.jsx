@@ -1,12 +1,10 @@
-import { BrowserRouter, Route, Routes, useLocation, Navigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { UserContext, UserProvider } from './userContext';
-import StudentNavbar from './StudentNavbar';
-import AdminNavbar from './AdminNavbar';
-import SuperAdminNavbar from './SuperAdminNavbar';
-import Home from './Student Home';
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import Home from "./Student Home"
+import { createContext } from "react"
+export const userContext = createContext();
+import Navbar from './Student Navbar'
 import ScheduleSession from './ScheduleSession';
-import Register from './Register';
+import Register from './Register'
 import Login from './Login';
 import Dashboard from './Superadmin Dashboard';
 import ComplaintForm from './Complain Form';
@@ -18,22 +16,7 @@ import UpdateProfile from './Student Update Profile';
 import AddUniversity from './Add University';
 import EditUniversity from './Edit University';
 import Chat from './Chat';
-import axios from 'axios';
-
-axios.defaults.withCredentials = true;
-
-// Protected Route Component
-const ProtectedRoute = ({ children }) => {
-  const { user } = useContext(UserContext);
-
-  if (!user) {
-    // If user is not logged in, redirect to the login page
-    return <Navigate to="/login" />;
-  }
-
-  return children;
-};
-
+axios.defaults.withCredentials=true;
 function App() {
   const location = useLocation();
   const { user } = useContext(UserContext);
@@ -54,39 +37,28 @@ function App() {
   };
 
   return (
-    <>
-      {renderNavbar()} {/* Render Navbar based on user role */}
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+    <BrowserRouter>
+    <Navbar/>
+    <Routes>
+      <Route path="/" element={<Home />}></Route>
+      <Route path='/ScheduleSession' element = {<ScheduleSession/>}></Route>
+      <Route path='/register' element = {<Register />}></Route>
+      <Route path='/login' element = {<Login />}></Route>
+      <Route path='/superdashboard' element = {<Dashboard />}></Route>
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/complain-form" element={<ComplaintForm />} />
+      <Route path="/admindashboard" element={<AdminDashboard />} />
+      <Route path="/adminregisteration" element={<AdminRegister />} />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/studentupdateprofile" element={<UpdateProfile />} />
+      <Route path="/adduniversity" element={<AddUniversity />} />
+      <Route path="/edituniversity" element={<EditUniversity />} />
+      <Route path="/chat" element={<Chat />} />
 
-        {/* Protected Routes */}
-        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-        <Route path="/ScheduleSession" element={<ProtectedRoute><ScheduleSession /></ProtectedRoute>} />
-        <Route path="/superdashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/complain-form" element={<ProtectedRoute><ComplaintForm /></ProtectedRoute>} />
-        <Route path="/admindashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/adminregisteration" element={<ProtectedRoute><AdminRegister /></ProtectedRoute>} />
-        <Route path="/studentupdateprofile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
-        <Route path="/adduniversity" element={<ProtectedRoute><AddUniversity /></ProtectedRoute>} />
-        <Route path="/edituniversity" element={<ProtectedRoute><EditUniversity /></ProtectedRoute>} />
-        <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
 
-       
-      </Routes>
-    </>
-  );
-}
 
-export default function Root() {
-  return (
-    <UserProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </UserProvider>
-  );
+    </Routes>
+    </BrowserRouter>
+  )
 }

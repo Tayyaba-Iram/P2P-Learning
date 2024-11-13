@@ -27,6 +27,8 @@ app.use(cors({
   credentials: true
 }));
 
+
+
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/P2P-Learning')
   .then(() => {
@@ -34,30 +36,10 @@ mongoose.connect('mongodb://localhost:27017/P2P-Learning')
   })
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
-
-  const server = http.createServer(app);
-  const io = new Server(server, { cors: { origin: 'http://localhost:3000' } });
-// Socket.IO setup
-io.on('connection', (socket) => {
-  console.log('New user connected');
-
-  socket.on('joinRoom', (user) => {
-    socket.join(user);
-  });
-
-  socket.on('newMessage', async (msg) => {
-    const savedMessage = await Chat.create(msg);
-    io.to(msg.receiver).emit('message', savedMessage);
-    io.to(msg.sender).emit('message', savedMessage);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
-  });
-});
-
+  
 
 // Use routes
+>>>>>>> b21b00e065193b7f5ec59d4067ace012d1852a29
 app.use('/api', studentRoutes);
 app.use('/api', auth);
 app.use('/api', sessionRoutes);
