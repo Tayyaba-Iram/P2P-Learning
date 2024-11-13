@@ -3,109 +3,107 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import './Chat.css';
 
-const socket = io('http://localhost:3002');
-
 const Chat = () => {
-  const [user, setUser] = useState(null);  // Store logged-in user here
+  const [user, setUser] = useState(null);
   const [students, setStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [activeStudent, setActiveStudent] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [socket, setSocket] = useState(null);
 
-  // Fetch logged-in user and students on mount
+  // Fetch logged-in user on mount
   useEffect(() => {
     const fetchLoggedInUser = async () => {
       try {
         const { data } = await axios.get('http://localhost:3001/api/getUserDetails', {
-          withCredentials: true, // Ensure the token is sent with the request
+          withCredentials: true,
         });
-        setUser(data.name);  // Set the logged-in user's name
+        setUser(data.name);
       } catch (err) {
-        console.error('Error fetching logged-in user:', err);
+        console.error('Error fetching user:', err);
       }
     };
 
     fetchLoggedInUser();
-    socket.emit('joinRoom', user);
-
-    return () => socket.disconnect();
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      const fetchStudents = async () => {
-        try {
-          const { data } = await axios.get('http://localhost:3001/api/verifiedStudents');
-          console.log("Fetched students:", data);  // Log fetched students data
-          const filteredData = data.filter(student => student.name !== user); // Exclude the logged-in user
-          setStudents(filteredData);
-        } catch (err) {
-          console.error('Error fetching students:', err);
-        }
-      };
-  
-      fetchStudents();
-    }
-  }, [user]);
-  
-
-  // Load chat history when active student changes
-  useEffect(() => {
-    const fetchMessages = async () => {
-      if (activeStudent && user) {
-        try {
-          const { data } = await axios.get(`http://localhost:3001/api/chat/${user}/${activeStudent._id}`);
-          setMessages(data);
-        } catch (err) {
-          console.error('Error loading chat history:', err);
-        }
-      }
-    };
-    fetchMessages();
-  }, [activeStudent, user]);
-
-  // Listen for incoming messages
-  useEffect(() => {
-    socket.on('message', (msg) => {
-      setMessages(prev => [...prev, msg]);
-    });
   }, []);
 
-  // Handle search query input
+  // Initialize socket connection
+  useEffect(() => {
+    if (user) {
+      const socketInstance = io('http://localhost:3001');
+      setSocket(socketInstance);
+
+      return () => {
+        socketInstance.disconnect();
+      };
+    }
+  }, [user]);
+
+  // Join a room when starting a chat
+  useEffect(() => {
+    if (user && activeStudent && socket) {
+      const roomName = [user, activeStudent._id].sort().join('-');
+      socket.emit('joinRoom', { sender: user, receiver: activeStudent._id });
+
+      // Listen for incoming messages in the room
+      socket.on('message', (msg) => {
+        if (msg.receiver === user || msg.sender === user) {
+          setMessages((prev) => [...prev, msg]);
+        }
+      });
+
+      return () => {
+        socket.emit('leaveRoom', { sender: user, receiver: activeStudent._id });
+      };
+    }
+  }, [user, activeStudent, socket]);
+
+  // Fetch students
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const { data } = await axios.get('http://localhost:3001/api/verifiedStudents');
+        const filteredData = data.filter((student) => student.name !== user);
+        setStudents(filteredData);
+      } catch (err) {
+        console.error('Error fetching students:', err);
+      }
+    };
+
+    if (user) fetchStudents();
+  }, [user]);
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
-    const filtered = students.filter(student =>
+    const filtered = students.filter((student) =>
       student.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setFilteredStudents(filtered);
-    console.log("Filtered students:", filtered);  // Log filtered students based on search query
   };
-  
 
-  const handleStartChat = (student) => setActiveStudent(student);
-
-  const handleMessageChange = (e) => setNewMessage(e.target.value);
+  const handleStartChat = (student) => {
+    if (activeStudent?._id !== student._id) {
+      setActiveStudent(student);
+      setMessages([]);
+    }
+  };
 
   const handleSendMessage = async () => {
-    if (newMessage.trim() && activeStudent) {
+    if (newMessage.trim() && activeStudent && socket) {
       const msg = {
         sender: user,
         receiver: activeStudent._id,
         text: newMessage,
       };
 
+      const roomName = [user, activeStudent._id].sort().join('-');
+      socket.emit('newMessage', { room: roomName, message: msg });
+
       try {
-        // Emit the message to the server (Socket.IO)
-        socket.emit('newMessage', msg);
-
-        // Save the message in the database
-        const { data } = await axios.post('http://localhost:3001/api/chat', msg, {
-          withCredentials: true,
-        });
-
-        setMessages(prev => [...prev, data]);
+        const { data } = await axios.post('http://localhost:3001/api/chat', msg, { withCredentials: true });
+        setMessages((prev) => [...prev, data]);
         setNewMessage('');
       } catch (err) {
         console.error('Error sending message:', err);
@@ -115,7 +113,7 @@ const Chat = () => {
 
   return (
     <div className="chat-container">
-      {/* Left Sidebar */}
+      {/* Sidebar */}
       <div className="left-sidebar">
         <input
           type="text"
@@ -123,18 +121,17 @@ const Chat = () => {
           onChange={handleSearch}
           placeholder="Search students..."
         />
-    <div className="students-list">
-  {(searchQuery ? filteredStudents : students).map(student => (
-    <div
-      key={student._id}
-      onClick={() => handleStartChat(student)}
-      className={`student-card ${activeStudent?._id === student._id ? 'active' : ''}`}
-    >
-      {student.name}
-    </div>
-  ))}
-</div>
-
+        <div className="students-list">
+          {(searchQuery ? filteredStudents : students).map((student) => (
+            <div
+              key={student._id}
+              onClick={() => handleStartChat(student)}
+              className={`student-card ${activeStudent?._id === student._id ? 'active' : ''}`}
+            >
+              {student.name}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Chat Box */}
@@ -152,7 +149,7 @@ const Chat = () => {
             <input
               type="text"
               value={newMessage}
-              onChange={handleMessageChange}
+              onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
             />
             <button onClick={handleSendMessage}>Send</button>
