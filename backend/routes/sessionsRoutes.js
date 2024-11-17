@@ -67,19 +67,8 @@ router.delete('/sessions/:sessionId', async (req, res) => {
 // Verify session API route
 router.get("/sessions/verify/:meetingID", async (req, res) => {
   const { meetingID } = req.params;
-  const authHeader = req.headers.authorization;
-
-  // Check if authorization header is present
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ success: false, message: "Unauthorized access" });
-  }
-
-  const token = authHeader.split(" ")[1];
 
   try {
-    // Verify JWT token with the secret key from .env
-    jwt.verify(token, process.env.JWT_SECRET_KEY);
-
     // Find the session by meeting ID in the database
     const session = await Session.findOne({ meetingLink: `https://meet.jit.si/${meetingID}` });
 
@@ -93,5 +82,6 @@ router.get("/sessions/verify/:meetingID", async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });
+
 
 export default router;

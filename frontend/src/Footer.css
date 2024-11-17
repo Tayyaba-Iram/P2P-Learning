@@ -1,0 +1,24 @@
+.footer-container {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    background-color: #48742F;
+    padding: 0.25cm;
+    bottom: 0;
+    width: 100%; 
+}
+
+.Right {
+    color: white;
+    font-size: 15px;
+    text-align: center;
+    margin: 0; 
+}
+  .email{
+    color: white;
+    margin-left: 0.10cm;
+    font-size: 15px;
+    padding: auto;
+  }
+  
+  

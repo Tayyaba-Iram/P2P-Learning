@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { userContext } from './App';
-import { FaUser, FaCog, FaCalendarAlt, FaComment, FaQuestionCircle, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaCog, FaComment, FaQuestionCircle, FaSignOutAlt } from 'react-icons/fa';
 import './StudentNavbar.css';
 
 function Navbar() {
@@ -13,7 +13,6 @@ function Navbar() {
     const menuItems = [
         { name: 'Edit Profile', icon: <FaUser />, path: '/edit-profile' },
         { name: 'Settings', icon: <FaCog />, path: '/settings' },
-        { name: 'Schedule Session', icon: <FaCalendarAlt />, path: '/schedule-session' },
         { name: 'Feedback', icon: <FaComment />, path: '/feedback' },
         { name: 'Help', icon: <FaQuestionCircle />, path: '/help' },
         { name: 'Logout', icon: <FaSignOutAlt />, path: '/logout' },
@@ -53,8 +52,7 @@ function Navbar() {
 
             <div className="nav-mid-links">
                 <Link to="/" className='link'>Home</Link>
-            <Link to="/ScheduleSession" className="SS">ScheduleSession</Link>
-            <Link to="/ConductSession" className="SS">ConductSession</Link>
+            <Link to="/ConductSession" className="CS">ConductSession</Link>
 
             </div>
             <div className="auth-buttons">
