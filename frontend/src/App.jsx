@@ -20,6 +20,9 @@ import EditUniversity from './Edit University';
 import Chat from './Chat';
 import axios from 'axios';
 import Footer from './Footer';
+import Complaints from './Complains';
+import StudentProfile from './Student Profile';
+import UpdatePassword from './UpdatePassword';
 
 axios.defaults.withCredentials = true;
 
@@ -75,6 +78,10 @@ function App() {
         <Route path="/adduniversity" element={<ProtectedRoute><AddUniversity /></ProtectedRoute>} />
         <Route path="/edituniversity" element={<ProtectedRoute><EditUniversity /></ProtectedRoute>} />
         <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+        <Route path="/complains" element={<ProtectedRoute><Complaints /></ProtectedRoute>} />
+        <Route path="/studentprofile" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
+        <Route path="/resetpassword" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
+
        
 
       </Routes>

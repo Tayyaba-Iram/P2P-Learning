@@ -26,7 +26,7 @@ function Login() {
     } else if (password === "") {
       toast.error("Password is required!");
       return;
-    } else if (password.length < 4) {
+    } else if (password.length < 3) {
       toast.error("Password must be at least 4 characters!");
       return;
     }

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const complaintSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // reference to the user
     name: { type: String, required: true },
     sapid: { type: String, required: true },
     email: { type: String, required: true },

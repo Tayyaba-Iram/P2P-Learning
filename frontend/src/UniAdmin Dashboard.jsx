@@ -10,7 +10,7 @@ const AdminDashboard = () => {
     const [userData, setUserData] = useState(null);
   
     useEffect(() => {
-        const token = localStorage.getItem('token');  // Get the token from localStorage
+        const token = sessionStorage.getItem('token');  // Get the token from localStorage
     
         if (token) {
           // Send the token in the Authorization header

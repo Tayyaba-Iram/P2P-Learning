@@ -4,14 +4,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const verifyUser = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const token = req.headers['authorization']?.split(' ')[1]; // Bearer token
 
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Token is missing' });
-  }
 
-  const token = authHeader.split(' ')[1]; // Extract token from "Bearer <token>"
-  
   if (!token) {
     return res.status(401).json({ message: 'Token is missing or invalid' });
   }
