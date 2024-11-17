@@ -10,15 +10,12 @@ import UniversityRoutes from './routes/UniversityRoutes.js'
 import SuperAdminRoutes from './routes/SuperAdminRoutes.js'
 import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js'
 import DashboardRoutes from './routes/DashboardRoutes.js'
-
 import loginRoutes from './routes/loginRoutes.js'
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
 import cookieParser from 'cookie-parser'; // Import cookie-parser
+import Message from './models/Message.js';
 import http from 'http';
 import { Server } from 'socket.io';
-import Message from './models/Message.js';
-
-import Chat from './models/Chat.js'; 
 
 const app = express();
 app.use(cookieParser());
@@ -29,6 +26,8 @@ app.use(cors({
   allowedHeaders: ['Authorization', 'Content-Type'],
   credentials: true
 }));
+
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
