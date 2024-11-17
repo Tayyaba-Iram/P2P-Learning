@@ -20,20 +20,42 @@ function Home() {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
+
     axios
       .get('http://localhost:3001/api/student-dashboard', { withCredentials: true })
       .then((response) => setUserData(response.data.user))
       .catch((err) => setError(err.response ? err.response.data.error : 'An error occurred'));
+    const token = sessionStorage.getItem('token');  // Get the token from localStorage
+
+    if (token) {
+      // Send the token in the Authorization header
+      axios.get('http://localhost:3001/api/student-dashboard', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then(response => {
+          setUserData(response.data.user);
+        })
+        .catch(err => {
+          setError(err.response ? err.response.data.error : 'An error occurred');
+        });
+    } else {
+      setError('Token is missing, please log in.');
+    }
+
   }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/student-dashboard', { withCredentials: true })
-      .then(response => {
-        setUserData(response.data.user);
-      })
-      .catch(err => {
-        setError(err.response ? err.response.data.error : 'An error occurred');
-      });
+    const fetchSessions = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/sessions');
+        setAgenda(response.data);
+      } catch (error) {
+        console.error('Error fetching sessions:', error);
+      }
+    };
+    fetchSessions();
   }, []);
 
   const handleInputChange = (e) => {
@@ -123,12 +145,135 @@ function Home() {
           {error ? <p>{error}</p> : <p>Loading user data...</p>}
         </div>
       )}
-<Link to="/studentupdateprofile">
+
+      <div className="schedule-session-container">
+        <h1 className="page-title">Schedule a New Session</h1>
+        <button className="schedule-btn" onClick={() => setModalOpen(true)}>
+          Schedule Session
+        </button>
+
+        {isModalOpen && (
+          <div className="form-backdrop">
+            <div className="schedule-form">
+              <h2 className="form-title">New Session Details</h2>
+              <label className="topic">Topic:</label>
+              <input
+                type="text"
+                name="topic"
+                value={sessionDetails.topic}
+                onChange={handleInputChange}
+                placeholder="Enter the session topic"
+                required
+              />
+              <label className="date">Date:</label>
+              <DatePicker
+                selected={sessionDetails.date}
+                onChange={handleDateChange}
+                className="datepicker"
+                required
+              />
+              <label>Start Time:</label>
+              <input
+                type="time"
+                name="startTime"
+                value={sessionDetails.startTime}
+                onChange={handleInputChange}
+                required
+              />
+              <label>End Time:</label>
+              <input
+                type="time"
+                name="endTime"
+                value={sessionDetails.endTime}
+                onChange={handleInputChange}
+                required
+              />
+              <div className="form-actions">
+                <button className="submit-btn" onClick={handleAddSession}>
+                  Add Session
+                </button>
+                <button className="clear-btn" onClick={() => setModalOpen(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="agenda-and-actions">
+          <div className="agenda">
+            {agenda.length > 0 && (
+              <>
+                <h3>Session Agenda</h3>
+                <table className="agenda-table">
+                  <thead>
+                    <tr>
+                      <th>Topic</th>
+                      <th>Date</th>
+                      <th>Start Time</th>
+                      <th>End Time</th>
+                      <th>Meeting Link</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayedAgenda.map((session) => (
+                      <tr key={session._id}>
+                        <td>{session.topic}</td>
+                        <td>{new Date(session.date).toDateString()}</td>
+                        <td>{formatTime(session.startTime)}</td>
+                        <td>{formatTime(session.endTime)}</td>
+                        <td>
+                          <a href={session.meetingLink} target="_blank" rel="noopener noreferrer">
+                            {session.meetingLink}
+                          </a>
+                        </td>
+                        <td>
+                          <button onClick={() => handleCopy(session._id, session)} title="Copy">
+                            <i className="fa fa-copy"></i> {copiedSessionId === session._id && 'Copied!'}
+                          </button>
+                          <button onClick={() => handleCancel(session._id)} title="Cancel">
+                            <i className="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {agenda.length > 5 && (
+                  <button className="view-all-btn" onClick={toggleShowAll}>
+                    {showAll ? 'View Less' : 'View All'}
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+
+            <div className="conduct-session-container">
+              <h2>Conduct a Session</h2>
+              <p>Start a session with your peers to collaborate and learn together!</p>
+              <Link to="/ConductSession" className="conduct-session-link">
+                Conduct Session
+              </Link>
+            </div>
+            <div className="chat-container">
+              <h2 className='c'> Chat</h2>
+               <p className='p'>Start a chat with your peers!</p>
+               <Link to="/Chat" className="chat-link">
+                Chat
+              </Link>
+             
+            </div>
+        </div>
+      </div>
+
+      <Link to="/studentupdateprofile">
         <button className="register-button">Profile Update</button>
       </Link>
       <Link to="/chat">
         <button className="register-button">Go to Chat</button>
       </Link>
+ 
     </div>
   );
 }
