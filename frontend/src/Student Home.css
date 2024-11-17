@@ -1,13 +1,17 @@
 .home-container {
   display: flex;
-  height: 100vh; /* Full height */
+  height: 100vh;
+  /* Full height */
 }
 
 .sidebar {
-  width: 200px; /* Sidebar width */
-  background-color: #f1ecec; /* Background color */
+  width: 200px;
+  /* Sidebar width */
+  background-color: #f1ecec;
+  /* Background color */
   padding: 20px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Optional shadow */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  /* Optional shadow */
 }
 
 .sidebar h2 {
@@ -15,7 +19,8 @@
 }
 
 .sidebar ul {
-  list-style-type: none; /* Remove bullets */
+  list-style-type: none;
+  /* Remove bullets */
   padding: 0;
 }
 
@@ -24,14 +29,19 @@
 }
 
 .sidebar ul li a {
-  text-decoration: none; /* Remove underline */
-  color: #333; /* Link color */
+  text-decoration: none;
+  /* Remove underline */
+  color: #333;
+  /* Link color */
 }
 
 .content {
-  flex-grow: 1; /* Takes up remaining space */
-  padding: 20px; /* Add some padding */
-  overflow-y: auto; /* Allow scrolling if content overflows */
+  flex-grow: 1;
+  /* Takes up remaining space */
+  padding: 20px;
+  /* Add some padding */
+  overflow-y: auto;
+  /* Allow scrolling if content overflows */
 }
 
 .banner {
@@ -39,16 +49,23 @@
 }
 
 .services {
-  display: grid; /* Create a grid layout */
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
-  gap: 20px; /* Space between cards */
+  display: grid;
+  /* Create a grid layout */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* Responsive grid */
+  gap: 20px;
+  /* Space between cards */
 }
 
 .service-card {
-  border: 1px solid #ccc; /* Card border */
-  border-radius: 5px; /* Rounded corners */
-  padding: 15px; /* Card padding */
-  text-align: center; /* Center text */
+  border: 1px solid #ccc;
+  /* Card border */
+  border-radius: 5px;
+  /* Rounded corners */
+  padding: 15px;
+  /* Card padding */
+  text-align: center;
+  /* Center text */
 }
 
 .search-bar {
@@ -56,16 +73,411 @@
 }
 
 .search-bar input {
-  width: 70%; /* Width of the search input */
-  padding: 10px; /* Input padding */
+  width: 70%;
+  /* Width of the search input */
+  padding: 10px;
+  /* Input padding */
 }
 
 .search-bar button {
-  padding: 10px; /* Button padding */
+  padding: 10px;
+  /* Button padding */
 }
 
 .chat-section {
-  margin-top: 20px; /* Space above chat section */
-  border: 1px solid #ccc; /* Chat section border */
-  padding: 15px; /* Chat section padding */
+  margin-top: 20px;
+  /* Space above chat section */
+  border: 1px solid #ccc;
+  /* Chat section border */
+  padding: 15px;
+  /* Chat section padding */
+}
+
+
+.schedule-session-container {
+  padding: 20px;
+}
+
+.page-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.schedule-btn {
+  background-color: #48742F;
+  /* Updated color */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.schedule-btn:hover {
+  background-color: #48742F;
+  /* Darker shade for hover effect */
+}
+
+.form-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.schedule-form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+}
+
+.form-title {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit-btn,
+.clear-btn,
+.action-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #48742F;
+
+}
+
+.submit-btn {
+  background-color: #48742F;
+  /* Updated color */
+  color: white;
+}
+
+.clear-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.action-btn {
+  background-color: #dc3545;
+  color: black;
+}
+
+.agenda-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.agenda-table th,
+.agenda-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.agenda-table th {
+  background-color: #48742F;
+  /* Updated color */
+  color: white;
+}
+
+/* Red Cancel Button */
+.cancel-btn {
+  color: red;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Confirmation Modal Styling */
+.delete-confirmation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+.delete-confirmation p {
+  margin-bottom: 20px;
+}
+
+.confirm-btn,
+.cancel-btn {
+  margin-right: 10px;
+  padding: 10px 20px;
+  background-color: #48742F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-btn {
+  background-color: #48742F;
+
+
+}
+
+.cancel-btn {
+  background-color: red;
+  padding: 10px 20px;
+
+}
+
+.view-all-btn {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background-color: #48742F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.view-all-btn:hover {
+  background-color: #48742F;
+}
+
+
+.schedule-session-container {
+  padding: 20px;
+}
+
+.page-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.schedule-btn {
+  background-color: #48742F;
+  /* Updated color */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.schedule-btn:hover {
+  background-color: #48742F;
+  /* Darker shade for hover effect */
+}
+
+.form-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.schedule-form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+}
+
+.form-title {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit-btn,
+.clear-btn,
+.action-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #48742F;
+
+}
+
+.submit-btn {
+  background-color: #48742F;
+  /* Updated color */
+  color: white;
+}
+
+.clear-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.action-btn {
+  background-color: #dc3545;
+  color: black;
+}
+
+.agenda-table {
+  width: 78%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.agenda-table th,
+.agenda-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.agenda-table th {
+  background-color: #48742F;
+  /* Updated color */
+  color: white;
+}
+
+/* Red Cancel Button */
+.cancel-btn {
+  color: red;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Confirmation Modal Styling */
+.delete-confirmation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+.delete-confirmation p {
+  margin-bottom: 20px;
+}
+
+.confirm-btn,
+.cancel-btn {
+  margin-right: 10px;
+  padding: 10px 20px;
+  background-color: #48742F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-btn {
+  background-color: #48742F;
+
+
+}
+
+.cancel-btn {
+  background-color: red;
+  padding: 10px 20px;
+
+}
+
+.view-all-btn {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background-color: #48742F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.view-all-btn:hover {
+  background-color: #48742F;
+}
+
+
+.main-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.agenda-container {
+  flex: 2;
+}
+
+.conduct-session-container {
+  flex: 1;
+  height: 6cm;
+  width: 7cm;
+  margin-top: -10.9cm;
+  border: 1px solid #ddd;
+  padding: 20px;
+  background-color: #f9f9f9;
+  margin-left: 26cm;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-container{
+
+  height: 5cm;
+  width: 7cm;
+  margin-top: 0.5cm;
+  border: 1px solid #ddd;
+  padding: 20px;
+  background-color: #f9f9f9;
+  margin-left: 26cm;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+
+}
+
+.c{
+  margin-left: 2.5cm;
+  margin-top: -0.25cm;
+}
+
+.p{
+  margin-left: -3cm;
+  margin-top: 1cm;
+  
+}
+.chat-link{
+
+  margin-top: 3cm;
+  margin-left: -cm ;
+
 }

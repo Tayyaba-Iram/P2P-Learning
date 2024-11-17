@@ -5,7 +5,6 @@ import StudentNavbar from './StudentNavbar';
 import AdminNavbar from './AdminNavbar';
 import SuperAdminNavbar from './SuperAdminNavbar';
 import Home from './Student Home';
-import ScheduleSession from './ScheduleSession';
 import ConductSession from './ConductSession';
 import Register from './Register';
 import Login from './Login';
@@ -20,6 +19,7 @@ import AddUniversity from './Add University';
 import EditUniversity from './Edit University';
 import Chat from './Chat';
 import axios from 'axios';
+import Footer from './Footer';
 
 axios.defaults.withCredentials = true;
 
@@ -65,19 +65,20 @@ function App() {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         {/* Protected Routes */}
-<Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-<Route path="/ScheduleSession" element={<ProtectedRoute><ScheduleSession /></ProtectedRoute>} />
-<Route path="/ConductSession" element={<ProtectedRoute><ConductSession /></ProtectedRoute>} />
-<Route path="/superdashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-<Route path="/complain-form" element={<ProtectedRoute><ComplaintForm /></ProtectedRoute>} />
-<Route path="/admindashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-<Route path="/adminregisteration" element={<ProtectedRoute><AdminRegister /></ProtectedRoute>} />
-<Route path="/studentupdateprofile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
-<Route path="/adduniversity" element={<ProtectedRoute><AddUniversity /></ProtectedRoute>} />
-<Route path="/edituniversity" element={<ProtectedRoute><EditUniversity /></ProtectedRoute>} />
-<Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/ConductSession" element={<ProtectedRoute><ConductSession /></ProtectedRoute>} />
+        <Route path="/superdashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/complain-form" element={<ProtectedRoute><ComplaintForm /></ProtectedRoute>} />
+        <Route path="/admindashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/adminregisteration" element={<ProtectedRoute><AdminRegister /></ProtectedRoute>} />
+        <Route path="/studentupdateprofile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
+        <Route path="/adduniversity" element={<ProtectedRoute><AddUniversity /></ProtectedRoute>} />
+        <Route path="/edituniversity" element={<ProtectedRoute><EditUniversity /></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+       
 
       </Routes>
+        <Footer />
     </>
   );
 }

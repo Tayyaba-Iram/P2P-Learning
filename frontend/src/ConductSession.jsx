@@ -10,7 +10,6 @@ const ConductSession = () => {
   // Effect to load Jitsi script only once when component mounts
   useEffect(() => {
     const loadJitsiScript = () => {
-      // Check if Jitsi script is already loaded
       if (!window.JitsiMeetExternalAPI) {
         const script = document.createElement("script");
         script.src = "https://meet.jit.si/external_api.js";
@@ -22,14 +21,13 @@ const ConductSession = () => {
     };
 
     loadJitsiScript();
-  }, []); // Empty array ensures this effect runs only once on mount
+  }, []);
 
   // Handle input change for the meeting link
   const handleMeetingLinkChange = (e) => {
     const link = e.target.value;
     setMeetingLink(link);
 
-    // Validate Jitsi meeting link format
     const jitsiLinkPattern = /^https:\/\/meet\.jit\.si\/([a-zA-Z0-9-_]+)$/;
     const isValid = jitsiLinkPattern.test(link);
     setJoinEnabled(isValid);
@@ -44,21 +42,9 @@ const ConductSession = () => {
       return;
     }
 
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      alert("No token found. Please log in first.");
-      return;
-    }
-
     try {
-      // Send API request to verify session with Bearer token
-      const response = await axios.get(`http://localhost:3001/api/sessions/verify/${meetingID}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`http://localhost:3001/api/sessions/verify/${meetingID}`);
 
-      // Check if session is verified
       if (response.data.success) {
         const domain = "meet.jit.si";
         const options = {
@@ -69,23 +55,24 @@ const ConductSession = () => {
           configOverwrite: {
             disableDeepLinking: true,
           },
-          interfaceConfigOverwrite: {
-            SHOW_JITSI_WATERMARK: false,
-            HIDE_INVITE_MORE_HEADER: true,
-            TOOLBAR_BUTTONS: [
-              "microphone",
-              "camera",
-              "hangup",
-              "chat",
-              "fullscreen",
-              "raisehand",
-              "tileview",
-              "videobackgroundblur",
-            ],
-          },
+       interfaceConfigOverwrite: {
+  SHOW_JITSI_WATERMARK: false,
+  HIDE_INVITE_MORE_HEADER: true,
+  TOOLBAR_BUTTONS: [
+    "microphone",
+    "camera",
+    "hangup",
+    "chat",
+    "fullscreen",
+    "raisehand",
+    "tileview",
+    "videobackgroundblur",
+    "desktop", // Enable screen sharing
+  ],
+},
+
         };
 
-        // Check if Jitsi API is available
         if (window.JitsiMeetExternalAPI) {
           const api = new window.JitsiMeetExternalAPI(domain, options);
 
