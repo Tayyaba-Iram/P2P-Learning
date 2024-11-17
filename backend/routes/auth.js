@@ -9,9 +9,9 @@ const router = express.Router();
 // Helper function to generate JWT token
 const generateToken = (user) => {
   return jwt.sign(
-    { email: user.email, name: user.name }, // Payload
+    { email: user.email, name: user.name,  _id: user._id }, // Payload
     process.env.JWT_SECRET_KEY, // Secret key for signing
-    { expiresIn: '1h' } // Expiration time
+    { expiresIn: '2h' } // Expiration time
   );
 };
 
@@ -38,20 +38,22 @@ router.post('/studentlogin', async (req, res) => {
     // Create JWT token for the student
     const token = generateToken(student);
 
-    // Set the token in a cookie (httpOnly, secure for production)
-    res.cookie('token', token, { httpOnly: true, secure: false, maxAge: 3600000 }); // 1 hour expiry time
-    console.log("Cookies in response: ", req.cookies);
+    // Log the token to the console (for debugging purposes)
+    console.log("Generated token:", token);
 
-
-    // Successful login
-    res.json({ success: true, message: 'Login successful.',
+    // Return the token in the response (without setting a cookie)
+    res.json({
+      success: true,
+      message: 'Login successful',
       token,
-      user: { email: student.email, name: student.name }
-     });
-     console.log("name: ", student.name);
-     console.log("email: ", student.email);
+      user: { 
+        _id: student._id,  email: student.email, name: student.name },
+    });
+    console.log("name: ", student.name);
+    console.log("email: ", student.email);
+    
   } catch (err) {
-    console.error(err);
+    console.error('Error during login:', err);
     res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
   }
 });
@@ -79,11 +81,16 @@ router.post('/adminlogin', async (req, res) => {
     // Create JWT token for the admin
     const token = generateToken(admin);
 
-    // Set the token in a cookie (httpOnly, secure for production)
-    res.cookie('token', token, { httpOnly: true, secure: false, maxAge: 3600000 }); // 1 hour expiry time
-    console.log("Cookies in response: ", req.cookies);
-    // Successful login
-    res.json({ success: true, message: 'Login successful.' });
+    // Log the token to the console (for debugging purposes)
+    console.log("Generated token:", token);
+
+    // Return the token in the response (without setting a cookie)
+    res.json({
+      success: true,
+      message: 'Login successful',
+      token,
+      user: { email: admin.email, name: admin.name },
+    });
     console.log("name: ", admin.name);
      console.log("email: ", admin.email);
   } catch (err) {
@@ -94,8 +101,8 @@ router.post('/adminlogin', async (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  res.clearCookie('token'); // Replace 'token' with your cookie name
-  res.json({ success: true });
+  // Optionally, invalidate the token on the server side (e.g., remove from a database)
+  res.json({ message: 'Successfully logged out' });
 });
 
 export default router;

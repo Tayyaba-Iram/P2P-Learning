@@ -31,14 +31,9 @@ router.post('/superadmin-check-or-create', async (req, res) => {
                 // Verify existing super admin login
                 if (password === superAdmin.password) {
                     // Create JWT token for the super admin
-                    const token = generateToken(superAdmin);
+                    const token = generateToken(superAdmin);                 
 
-                    // Set the token in a cookie (httpOnly, secure for production)
-                    res.cookie('token', token, { httpOnly: true, secure: false, maxAge: 3600000 }); // 1 hour expiry time
-                    console.log("Cookies in response: ", req.cookies);
-
-                    // Successful login response
-                    return res.json({
+                     res.json({
                         success: true,
                         created: false,
                         message: 'Login successful.',
@@ -62,13 +57,8 @@ router.post('/superadmin-check-or-create', async (req, res) => {
 
             // Create JWT token for the new super admin
             const token = generateToken(newSuperAdmin);
-
-            // Set the token in a cookie (httpOnly, secure for production)
-            res.cookie('token', token, { httpOnly: true, secure: false, maxAge: 3600000 }); // 1 hour expiry time
-            console.log("Cookies in response: ", req.cookies);
-
-            // Successful account creation
-            return res.json({
+            console.log("Generated token:", token);
+        res.json({
                 success: true,
                 created: true,
                 message: 'Super admin account created successfully.',

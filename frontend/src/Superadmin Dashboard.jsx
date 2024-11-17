@@ -18,14 +18,26 @@ function Dashboard() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/superadmin-dashboard', { withCredentials: true })
-      .then(response => {
-        setUserData(response.data.user);
+    const token = sessionStorage.getItem('token');  // Get the token from localStorage
+
+    if (token) {
+      // Send the token in the Authorization header
+      axios.get('http://localhost:3001/api/superadmin-dashboard', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       })
-      .catch(err => {
-        setError(err.response ? err.response.data.error : 'An error occurred');
-      });
+        .then(response => {
+          setUserData(response.data.user);
+        })
+        .catch(err => {
+          setError(err.response ? err.response.data.error : 'An error occurred');
+        });
+    } else {
+      setError('Token is missing, please log in.');
+    }
   }, []);
+
   // Fetch data on component mount
   useEffect(() => {
     const fetchUniversities = async () => {

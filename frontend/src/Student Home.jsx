@@ -8,13 +8,24 @@ function Home() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/student-dashboard', { withCredentials: true })
-      .then(response => {
-        setUserData(response.data.user);
+    const token = sessionStorage.getItem('token');  // Get the token from localStorage
+
+    if (token) {
+      // Send the token in the Authorization header
+      axios.get('http://localhost:3001/api/student-dashboard', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       })
-      .catch(err => {
-        setError(err.response ? err.response.data.error : 'An error occurred');
-      });
+        .then(response => {
+          setUserData(response.data.user);
+        })
+        .catch(err => {
+          setError(err.response ? err.response.data.error : 'An error occurred');
+        });
+    } else {
+      setError('Token is missing, please log in.');
+    }
   }, []);
 
   return (
@@ -35,7 +46,8 @@ function Home() {
           {error ? <p>{error}</p> : <p>Loading user data...</p>}
         </div>
       )}
-<Link to="/studentupdateprofile">
+
+      <Link to="/studentupdateprofile">
         <button className="register-button">Profile Update</button>
       </Link>
       <Link to="/chat">
