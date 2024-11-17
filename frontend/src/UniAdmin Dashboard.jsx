@@ -10,14 +10,26 @@ const AdminDashboard = () => {
     const [userData, setUserData] = useState(null);
   
     useEffect(() => {
-      axios.get('http://localhost:3001/api/admin-dashboard', { withCredentials: true })
-        .then(response => {
-          setUserData(response.data.user);
-        })
-        .catch(err => {
-          setError(err.response ? err.response.data.error : 'An error occurred');
-        });
-    }, []);
+        const token = localStorage.getItem('token');  // Get the token from localStorage
+    
+        if (token) {
+          // Send the token in the Authorization header
+          axios.get('http://localhost:3001/api/admin-dashboard', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+            .then(response => {
+              setUserData(response.data.user);
+            })
+            .catch(err => {
+              setError(err.response ? err.response.data.error : 'An error occurred');
+            });
+        } else {
+          setError('Token is missing, please log in.');
+        }
+      }, []);
+    
     useEffect(() => {
         const fetchComplaints = async () => {
             try {

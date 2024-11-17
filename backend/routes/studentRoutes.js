@@ -147,6 +147,4 @@ router.put('/update-profile', verifyUser, async (req, res) => {
   }
 });
 
-
-
 export default router;

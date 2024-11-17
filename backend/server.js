@@ -10,11 +10,15 @@ import UniversityRoutes from './routes/UniversityRoutes.js'
 import SuperAdminRoutes from './routes/SuperAdminRoutes.js'
 import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js'
 import DashboardRoutes from './routes/DashboardRoutes.js'
-import chatRoutes from './routes/chatRoutes.js';
-import loginRoutes from './routes/loginRoutes.js';
+
+import loginRoutes from './routes/loginRoutes.js'
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
 import cookieParser from 'cookie-parser'; // Import cookie-parser
+import http from 'http';
+import { Server } from 'socket.io';
+import Message from './models/Message.js';
 
+import Chat from './models/Chat.js'; 
 
 const app = express();
 app.use(cookieParser());
@@ -22,18 +26,116 @@ app.use(express.json());
 app.use(cors({
   origin: ["http://localhost:5173"],
   methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ['Authorization', 'Content-Type'],
   credentials: true
 }));
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",  // Frontend address
+    methods: ["GET", "POST"],
+    credentials: true  // Allow cookies if necessary
+  }
+});
 
+// Backend: 
+io.on('connection', (socket) => {
+  console.log(`Client ${socket.id} connected`);
+
+  socket.on('joinRoom', (roomName, callback) => {
+    try {
+      // Check if socket is already in the room
+      if (socket.rooms.has(roomName)) {
+        return callback(null); // No errors, already in room
+      }
+      socket.join(roomName);
+      console.log(`Client ${socket.id} joined room: ${roomName}`);
+      callback(null);
+    } catch (err) {
+      console.error('Error joining room:', err);
+      callback(err);
+    }
+  });
+  socket.on('newMessage', async (data) => {
+    const { room, message } = data;
+    try {
+      // Save the message to the database
+      const savedMessage = await new Message({
+        senderId: message.senderId,
+        receiverId: message.receiverId,
+        text: message.text,
+      }).save();
+  
+      // Emit the saved message to the room
+      io.to(room).emit('newMessage', savedMessage);
+      console.log(`Message sent to room ${room}: `, savedMessage);
+    } catch (err) {
+      console.error('Error saving message:', err);
+    }
+  });
+  
+
+  socket.on('disconnect', () => {
+    console.log(`Client ${socket.id} disconnected`);
+  });
+});
+
+
+// Fetch chat history with a specific student
+app.get('/api/chat/:receiverId', async (req, res) => {
+  const { receiverId } = req.params; // Receiver ID from the URL params
+  const { userId } = req.query; // Logged-in user's ID from query params
+
+  if (!userId || !receiverId) {
+    return res.status(400).json({ error: 'Missing userId or receiverId' });
+  }
+
+  try {
+    // Fetch messages where sender and receiver match either of the two conditions
+    const messages = await Message.find({
+      $or: [
+        { senderId: userId, receiverId: receiverId }, // User sending to receiver
+        { senderId: receiverId, receiverId: userId }, // Receiver sending back to user
+      ],
+    }).sort({ timestamp: 1 }); // Sort messages by timestamp (ascending)
+
+    res.json(messages);
+  } catch (err) {
+    console.error('Error fetching messages:', err);
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+});
+
+// Route to save messages
+app.post('/api/chat', async (req, res) => {
+  const { senderId, receiverId, text } = req.body;
+
+  if (!senderId || !receiverId || !text) {
+    return res.status(400).json({ error: 'Missing senderId, receiverId, or text' });
+  }
+
+  try {
+    // Create a new message document with senderId, receiverId, and the text
+    const message = new Message({
+      senderId,
+      receiverId,
+      text,
+    });
+    await message.save();
+    res.status(201).json(message); // Return the saved message in the response
+  } catch (err) {
+    console.error('Error saving message:', err);
+    res.status(500).json({ error: 'Failed to save message' });
+  }
+});
 
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/P2P-Learning')
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
+  .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
+  
 
 // Use routes
 app.use('/api', studentRoutes);
@@ -46,12 +148,9 @@ app.use('/api/universities', UniversityRoutes);
 app.use('/api', SuperAdminRoutes);
 app.use('/api', ResetPasswordRoutes);
 app.use('/api', verifyUser, DashboardRoutes);
-app.use('/api', chatRoutes);
 app.use('/api', loginRoutes);
 
-
-
 // Start the server
-app.listen(3001, () => {
+server.listen(3001, () => {  // Use server.listen instead of app.listen for Socket.io
   console.log('Server is running on port 3001');
 });

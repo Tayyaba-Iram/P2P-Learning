@@ -1,160 +1,186 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import io from 'socket.io-client';
-import './Chat.css';
-
+import { io } from 'socket.io-client';
 
 const Chat = () => {
-  const [user, setUser] = useState(null);  // Store logged-in user here
+  const [user, setUser] = useState(null);
   const [students, setStudents] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredStudents, setFilteredStudents] = useState([]);
   const [activeStudent, setActiveStudent] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const socketRef = useRef(null);
+  const endOfMessages = useRef(null);
 
-  // Fetch logged-in user and students on mount
+  // Fetch the logged-in user details
   useEffect(() => {
-    const fetchLoggedInUser = async () => {
+    const fetchUser = async () => {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        console.error('No token found. User not authenticated.');
+        return;
+      }
       try {
-        const { data } = await axios.get('http://localhost:3001/api/getUserDetails', {
-          withCredentials: true, // Ensure the token is sent with the request
+        const response = await axios.get('http://localhost:3001/api/getUserDetails', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-        setUser(data.name);  // Set the logged-in user's name
+        console.log('User data fetched:', response.data);
+        if (response.data && response.data._id) {
+          setUser(response.data);
+        } else {
+          console.error('User data is missing _id:', response.data);
+        }
       } catch (err) {
-        console.error('Error fetching logged-in user:', err);
+        console.error('Error fetching user:', err.response?.data || err.message);
       }
     };
 
-    fetchLoggedInUser();
-    socket.emit('joinRoom', user);
+    fetchUser();
+  }, []);
 
-    return () => socket.disconnect();
-  }, [user]);
-
+  // Fetch all students except the logged-in user
   useEffect(() => {
-    if (user) {
-      const fetchStudents = async () => {
+    const fetchStudents = async () => {
+      if (user) {
         try {
-          const { data } = await axios.get('http://localhost:3001/api/verifiedStudents');
-          console.log("Fetched students:", data);  // Log fetched students data
-          const filteredData = data.filter(student => student.name !== user); // Exclude the logged-in user
-          setStudents(filteredData);
+          const { data } = await axios.get('http://localhost:3001/api/verifiedStudents', { withCredentials: true });
+          setStudents(data.filter(student => student._id !== user._id));
         } catch (err) {
           console.error('Error fetching students:', err);
         }
-      };
-  
-      fetchStudents();
-    }
-  }, [user]);
-  
-
-  // Load chat history when active student changes
-  useEffect(() => {
-    const fetchMessages = async () => {
-      if (activeStudent && user) {
-        try {
-          const { data } = await axios.get(`http://localhost:3001/api/chat/${user}/${activeStudent._id}`);
-          setMessages(data);
-        } catch (err) {
-          console.error('Error loading chat history:', err);
-        }
       }
     };
-    fetchMessages();
-  }, [activeStudent, user]);
+    fetchStudents();
+  }, [user]);
+
+ // Initialize socket connection and handle incoming messages
+useEffect(() => {
+  // Check if socket is already connected to avoid re-connecting
+  if (!socketRef.current) {
+    socketRef.current = io('http://localhost:3001');
+
+    socketRef.current.on('connect', () => {
+      console.log(`Connected to socket server. Socket ID: ${socketRef.current.id}`);
+    });
+
+    socketRef.current.on('disconnect', () => {
+      console.log('Disconnected from socket server');
+    });
+  }
 
   // Listen for incoming messages
-  useEffect(() => {
-    socket.on('message', (msg) => {
-      setMessages(prev => [...prev, msg]);
-    });
-  }, []);
+  const handleIncomingMessage = (message) => {
+    console.log('Received message:', message);
+    setMessages(prevMessages => [...prevMessages, message]);
+  };
 
-  // Handle search query input
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-    const filtered = students.filter(student =>
-      student.name.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setFilteredStudents(filtered);
-    console.log("Filtered students:", filtered);  // Log filtered students based on search query
+  // Add listener if it's not already added
+  socketRef.current?.on('newMessage', handleIncomingMessage);
+
+  // Cleanup function to remove listeners and disconnect socket on component unmount
+  return () => {
+    if (socketRef.current) {
+      socketRef.current.off('newMessage', handleIncomingMessage);
+      console.log('Removed socket listeners');
+    }
+  };
+}, []);
+
+  // Fetch chat history with a specific student
+  const fetchChatHistory = async (student) => {
+    try {
+      const { data } = await axios.get(`http://localhost:3001/api/chat/${student._id}`, {
+        params: { userId: user._id },
+        withCredentials: true,
+      });
+      setMessages(data);
+    } catch (err) {
+      console.error('Error fetching chat history:', err);
+    }
+  };
+
+  // Start a new chat with a selected student
+  const handleStartChat = (student) => {
+    if (!user || !student) return;
+  
+    setActiveStudent(student);
+    setMessages([]);
+  
+    const senderId = user._id;
+    const receiverId = student._id;
+    const roomName = [senderId, receiverId].sort().join('-');
+  
+    // Check if already joined the room before trying to join again
+    if (socketRef.current) {
+      socketRef.current.emit('joinRoom', roomName, (err) => {
+        if (err) console.error('Error joining room:', err);
+        else console.log(`Joined room: ${roomName}`);
+      });
+    }
+  
+    fetchChatHistory(student);
   };
   
 
-  const handleStartChat = (student) => setActiveStudent(student);
-
-  const handleMessageChange = (e) => setNewMessage(e.target.value);
-
-  const handleSendMessage = async () => {
-    if (newMessage.trim() && activeStudent) {
-      const msg = {
-        sender: user,
-        receiver: activeStudent._id,
-        text: newMessage,
-      };
-
-      try {
-        // Emit the message to the server (Socket.IO)
-        socket.emit('newMessage', msg);
-
-        // Save the message in the database
-        const { data } = await axios.post('http://localhost:3001/api/chat', msg, {
-          withCredentials: true,
-        });
-
-        setMessages(prev => [...prev, data]);
-        setNewMessage('');
-      } catch (err) {
-        console.error('Error sending message:', err);
-      }
+  const [isSending, setIsSending] = useState(false);
+  const handleSendMessage = () => {
+    if (!newMessage.trim() || !activeStudent || !user) {
+      console.error('Missing information');
+      return;
     }
+  
+    const senderId = user._id;
+    const receiverId = activeStudent._id;
+    const roomName = [senderId, receiverId].sort().join('-');
+    const msg = { senderId, receiverId, text: newMessage };
+  
+    console.log('Sending message:', msg);
+  
+    // Emit the message to the WebSocket
+    socketRef.current?.emit('newMessage', { room: roomName, message: msg });
+  
+    // Clear the input field
+    setNewMessage('');
   };
+  
+
+  // Scroll to the bottom of the chat when messages change
+  useEffect(() => {
+    if (endOfMessages.current) {
+      endOfMessages.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
   return (
     <div className="chat-container">
-      {/* Left Sidebar */}
-      <div className="left-sidebar">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearch}
-          placeholder="Search students..."
-        />
-    <div className="students-list">
-  {(searchQuery ? filteredStudents : students).map(student => (
-    <div
-      key={student._id}
-      onClick={() => handleStartChat(student)}
-      className={`student-card ${activeStudent?._id === student._id ? 'active' : ''}`}
-    >
-      {student.name}
-    </div>
-  ))}
-</div>
-
+      <div className="sidebar">
+        {students.map(student => (
+          <div key={student._id} onClick={() => handleStartChat(student)}>
+            {student.name}
+          </div>
+        ))}
       </div>
 
-      {/* Chat Box */}
       {activeStudent && (
         <div className="chat-box">
           <h2>Chat with {activeStudent.name}</h2>
           <div className="chat-messages">
             {messages.map((msg, idx) => (
-              <div key={idx} className={`message ${msg.sender === user ? 'sent' : 'received'}`}>
-                <p>{msg.text}</p>
+              <div key={idx} className={`message ${msg.senderId === user._id ? 'sent' : 'received'}`}>
+                <strong>{msg.senderId === user._id ? 'You' : activeStudent.name}</strong>: {msg.text}
               </div>
             ))}
+            <div ref={endOfMessages}></div>
           </div>
           <div className="chat-input">
             <input
               type="text"
               value={newMessage}
-              onChange={handleMessageChange}
+              onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
             />
-            <button onClick={handleSendMessage}>Send</button>
+            <button onClick={handleSendMessage} disabled={isSending}>Send</button>
           </div>
         </div>
       )}

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
@@ -44,6 +44,10 @@ function Login() {
 
         if (response.data.success) {
           setUser({ name: response.data.name, role: 'admin' });
+          sessionStorage.setItem('token', response.data.token);  // Using sessionStorage instead of localStorage
+          sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Using sessionStorage
+          console.log(sessionStorage.getItem('token')); // Log token
+          console.log(sessionStorage.getItem('user')); // Log user data
           toast.success('University Admin login successful!');
           navigate('/admindashboard');
         } else {
@@ -60,6 +64,10 @@ function Login() {
           toast.success('Super Admin account created successfully!');
         } else if (response.data.success) {
           setUser({ name: response.data.name, role: 'superadmin' });
+          sessionStorage.setItem('token', response.data.token);  // Using sessionStorage instead of localStorage
+          sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Using sessionStorage
+          console.log(sessionStorage.getItem('token')); // Log token
+          console.log(sessionStorage.getItem('user')); // Log user data
           toast.success('Super Admin login successful!');
         } else {
           toast.error(response.data.message || 'Super Admin login failed');
@@ -70,17 +78,27 @@ function Login() {
         }
       } else {
         // Student login
-        response = await axios.post(
-          'http://localhost:3001/api/studentlogin',
-          { email, password },
-          { withCredentials: true }
-        );
-        if (response.data.success) {
-          setUser({ name: response.data.name, role: 'student' });
-          toast.success('Student login successfull!');
-          navigate('/');
-        } else {
-          toast.error(response.data.message || 'Student login failed');
+        try {
+          const response = await axios.post('http://localhost:3001/api/studentlogin', { email, password }, { withCredentials: true });
+
+          // Log the response for debugging
+          console.log('Response:', response.data);
+
+          if (response.data.success) {
+            setUser({ name: response.data.name, role: 'student' });
+            sessionStorage.setItem('token', response.data.token);  // Using sessionStorage instead of localStorage
+            sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Using sessionStorage
+            console.log(sessionStorage.getItem('token')); // Log token
+            console.log(sessionStorage.getItem('user')); // Log user data
+
+            toast.success('Student login successful!');
+            navigate('/');  // Navigate to home
+          } else {
+            toast.error(response.data.message || 'Student login failed');
+          }
+        } catch (error) {
+          console.error(error);
+          toast.error('An error occurred during login');
         }
       }
     } catch (error) {

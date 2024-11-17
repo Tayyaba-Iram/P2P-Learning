@@ -13,23 +13,19 @@ const AdminNavbar = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false); // State for the modal
 
   // Handle logout functionality
-const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/api/logout', {}, { withCredentials: true });
+      // Call the logout API endpoint to handle any server-side logic (optional)
+      await axios.post('http://localhost:3001/api/logout', {}, { withCredentials: true });
   
-      if (response.data.success) {
-        // Clear the JWT token cookie
-        Cookies.remove('token'); // Assuming your cookie is named 'token'
+      // Remove token from sessionStorage
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
   
-        toast.success('Logged out successfully');
-        setUser(null);
-        navigate('/login');
-      } else {
-        toast.error('Logout failed');
-      }
-    } catch (error) {
-      console.error('Logout Error:', error);
-      toast.error('An error occurred during logout');
+      // Optionally, clear other user-related data from sessionStorage or state
+      window.location.href = '/login'; // Redirect user to the login page
+    } catch (err) {
+      console.error('Error logging out:', err);
     }
   };
 

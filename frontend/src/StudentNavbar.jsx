@@ -13,26 +13,21 @@ function StudentNavbar() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   // Handle logout functionality
-const handleLogout = async () => {
-  try {
-    const response = await axios.post('http://localhost:3001/api/logout', {}, { withCredentials: true });
-
-    if (response.data.success) {
-      // Clear the JWT token cookie
-      Cookies.remove('token'); // Assuming your cookie is named 'token'
-
-      toast.success('Logged out successfully');
-      setUser(null);
-      navigate('/login');
-    } else {
-      toast.error('Logout failed');
+  const handleLogout = async () => {
+    try {
+      // Call the logout API endpoint to handle any server-side logic (optional)
+      await axios.post('http://localhost:3001/api/logout', {}, { withCredentials: true });
+  
+      // Remove token from sessionStorage
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+  
+      // Optionally, clear other user-related data from sessionStorage or state
+      window.location.href = '/login'; // Redirect user to the login page
+    } catch (err) {
+      console.error('Error logging out:', err);
     }
-  } catch (error) {
-    console.error('Logout Error:', error);
-    toast.error('An error occurred during logout');
-  }
-};
-
+  };
 
   // Function to check if a link is active
   const isActive = (path) => location.pathname === path;

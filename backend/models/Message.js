@@ -1,24 +1,11 @@
-// models/Message.js
 import mongoose from 'mongoose';
 
-const messageSchema = new mongoose.Schema(
-  {
-    sender: {
-      type: String, // User ID of the sender
-      required: true,
-    },
-    receiver: {
-      type: String, // User ID of the receiver
-      required: true,
-    },
-    text: {
-      type: String, // Content of the message
-      required: true,
-    },
-  },
-  { timestamps: true } // Automatically adds createdAt and updatedAt fields
-);
+const messageSchema = new mongoose.Schema({
+  senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  text: String,
+  timestamp: { type: Date, default: Date.now },
+});
 
 const Message = mongoose.model('Message', messageSchema);
-
 export default Message;
