@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './Student Home.css'; // Updated to ensure styles are combined correctly
+import './Student Home.css'; 
 
 function Home() {
   const [userData, setUserData] = useState(null);

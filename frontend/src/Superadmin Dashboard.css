@@ -27,7 +27,7 @@
 }
 
 .box {
-  background-color: #007BFF;
+  background-color: #48742F;
   color: white;
   border-radius: 8px;
   padding: 20px;
@@ -39,7 +39,7 @@
 }
 
 .box:hover {
-  background-color: #0056b3;
+  background-color:#48742F;
 }
 
 .students-table, .admins-table, .universities-table {
@@ -56,7 +56,7 @@
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   border-radius: 4px;
 }
 
@@ -68,13 +68,13 @@ table {
 
 th, td {
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid black;
   text-align: left;
 }
 
 th {
-  background-color: #007BFF;
-  color: white;
+  background-color: #48742F;
+  color: black;
 }
 
 tr:hover {
@@ -91,4 +91,10 @@ tr:hover {
       margin-bottom: 10px;
       width: 90%; /* Make boxes responsive */
   }
+ 
+}
+
+.btn{
+  background-color: #48742F;
+  margin-left: 0.5cm;
 }
