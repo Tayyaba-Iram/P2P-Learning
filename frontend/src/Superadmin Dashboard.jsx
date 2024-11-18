@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Superadmin Dashboard.css';
-import toast from 'react-hot-toast';
 
 function Dashboard() {
   const [universities, setUniversities] = useState([]);
@@ -53,7 +52,7 @@ function Dashboard() {
   // Handle university deletion
   const handleDeleteUniversity = async (universityId) => {
     try {
-      await axios.delete(`http://localhost:3001/api/universities/${universityId}`);
+      await axios.delete(http://localhost:3001/api/universities/${universityId});
       setUniversities((prev) => prev.filter((uni) => uni._id !== universityId));
       alert('University deleted successfully');
     } catch (error) {
@@ -81,45 +80,13 @@ function Dashboard() {
     uni.name.toLowerCase().includes(universitySearch.toLowerCase())
   );
 
+  const filteredStudents = students.filter((student) =>
+    student.sapid.toLowerCase().includes(studentSearch.toLowerCase())
+  );
 
-  const filteredStudents = students.filter((student) => {
-    // Convert all fields to lowercase for case-insensitive search
-    const searchQuery = studentSearch.toLowerCase();
-    return (
-      student.sapid.toLowerCase().includes(searchQuery) ||
-      typeof student.university === 'string' && student.university.toLowerCase().includes(searchQuery),
-      typeof student.campus === 'string' && student.campus.toLowerCase().includes(searchQuery),
-      typeof student.program === 'string' && student.program.toLowerCase().includes(searchQuery)
-
-
-    );
-  });
-  const filteredUniAdmins = uniadmins.filter((admin) => {
-    // Convert all fields to lowercase for case-insensitive search
-    const searchQuery = adminSearch.toLowerCase();
-    return (
-      admin.sapid.toLowerCase().includes(searchQuery) ||
-      typeof admin.university === 'string' && admin.university.toLowerCase().includes(searchQuery)
-    );
-  });
-  const handleDeleteAdmin = async (adminId) => {
-    try {
-      await axios.delete(`http://localhost:3001/api/Uniadmins/${adminId}`);
-      // Update the state by removing the deleted admin from the list
-      setUniadmins((prevAdmins) => prevAdmins.filter((admin) => admin._id !== adminId));
-      setDisplayedAdmins((prevAdmins) => prevAdmins.filter((admin) => admin._id !== adminId));
-      toast.success('Admin deleted successfully');
-    } catch (error) {
-      console.error('Error deleting admin:', error);
-    }
-  };
-
-  // Limiting displayed items
-  const displayedUniversities = showAllUniversities
-    ? filteredUniversities
-    : filteredUniversities.slice(0, 5);
-  const displayedStudents = showAllStudents ? filteredStudents : filteredStudents.slice(0, 5);
-  const displayedAdmins = showAllAdmins ? filteredUniAdmins : filteredUniAdmins.slice(0, 5);
+  const filteredUniAdmins = uniadmins.filter((admin) =>
+    admin.sapid.toLowerCase().includes(adminSearch.toLowerCase())
+  );
 
   return (
     <div className="container">
