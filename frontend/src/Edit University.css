@@ -1,67 +1,77 @@
+/* EditUniversity.css */
 .edit-university-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   
-  h1, h2, h3 {
-    font-family: 'Arial', sans-serif;
-    color: #333;
-  }
-  
-  label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-  
-  input[type="text"]:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .campus {
-    margin-bottom: 30px;
-  }
-  
-  .program {
-    margin-left: 20px;
-    margin-bottom: 10px;
-  }
-  
-  button:focus {
-    outline: none;
-  }
-  
-  button + button {
-    margin-left: 10px;
-  }
-  
+}
+
+
+
+ h4 {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #333;
+  text-align: left;
+}
+
+
+h2 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  display: inline-block;
+  font-size: 1rem;
+  width: 600px; /* Adjust width to your needs */
+}
+
+
+button {
+  padding: 10px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* Small buttons for icons */
+button i {
+  font-size: 1.25rem;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-top: 20px;
+}
+
+h4 {
+  font-size: 1.2rem;
+}
+
+.container{
+  margin-right: 25px;
+}

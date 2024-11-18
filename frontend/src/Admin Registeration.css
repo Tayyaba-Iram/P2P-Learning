@@ -1,0 +1,94 @@
+/* General Container Styles */
+.admin-registration-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }
+  
+  .admin-register-form {
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 600px;
+  }
+  
+  /* Form Heading */
+  .admin-register-form h2 {
+    text-align: center;
+    margin-top: 5%;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  /* Form Field Styles */
+  .form-field{
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .form-field label {
+    font-weight: normal; /* Ensures label text is not bold */
+    font-size: 14px;
+    color: #070707;
+  }
+  
+  .form-field input,
+  .form-field select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-field input:focus,
+  .form-field select:focus {
+    border-color: #007bff;
+  }
+  
+  .form-field input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+  }
+  
+  /* Checkbox Group Styling */
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  /* Button Styles */
+  .register-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .register-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Toast Notification */
+  .react-hot-toast {
+    font-size: 14px;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 480px) {
+    .admin-register-form {
+      width: 90%;
+      padding: 20px;
+    }
+  }
+  

@@ -146,7 +146,7 @@ function AddUniversity() {
             <div key={programIndex} className="program-section">
               
               <label>
-                Program Name:
+                Program {programIndex+1}:
                 <input
                   type="text"
                   name="program"

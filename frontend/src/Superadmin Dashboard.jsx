@@ -195,10 +195,12 @@ function Dashboard() {
                             <td>No programs</td>
                             {campusIndex === 0 && (
                               <td rowSpan={totalCampusRows}>
+                                <div className='edit-delete-buttons'>
                                 <button onClick={() => handleEditClick(university)}>Edit</button>
                                 <button onClick={() => handleDeleteUniversity(university._id)}>
                                   Delete
                                 </button>
+                                </div>
                               </td>
                             )}
                           </tr>

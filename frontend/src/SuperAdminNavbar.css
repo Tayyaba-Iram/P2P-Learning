@@ -37,6 +37,7 @@
     padding: 0.5rem 1rem;
     cursor: pointer;
     border-radius: 5px;
+    width: 80px;
   }
   
   .logout-button:hover {
