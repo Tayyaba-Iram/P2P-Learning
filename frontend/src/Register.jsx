@@ -125,10 +125,10 @@ function Register() {
           </div>
           <div className="form-group">
             <input className="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="text" placeholder="CNIC" value={cnic} onChange={(e) => setCnic(e.target.value)} />
+            <input type="text" placeholder="CNIC(00000-0000000-0)" value={cnic} onChange={(e) => setCnic(e.target.value)} />
           </div>
           <div className="form-group">
-          <input type="text" placeholder="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <input type="text" placeholder="phone(0000-0000000)" value={phone} onChange={(e) => setPhone(e.target.value)} />
             <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)}>
               <option value="" hidden>Select University</option>
               {universities.map((uni) => (

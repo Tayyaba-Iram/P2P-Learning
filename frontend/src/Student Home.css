@@ -247,15 +247,18 @@
 }
 
 .view-all-btn {
-  margin-top: 10px;
-  padding: 10px ;
+  position: absolute;
+  top: 210px; /* Screen ke upar se distance */
+  right: 350px; /* Screen ke right side se distance */
+  padding: 10px;
   background-color: #48742F;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 22.5cm;
 }
+
+
 
 .view-all-btn:hover {
   background-color: #48742F;
@@ -415,7 +418,7 @@
 }
 
 .view-all-btn {
-  margin-top: 10px;
+  margin-top: 20px;
   padding: 8px 15px;
   background-color: #48742F;
   color: white;
@@ -441,39 +444,45 @@
 }
 
 .conduct-session-container {
-  flex: 1;
+  position: absolute; 
+  top: 7.5cm; 
+  left: 27.5cm; 
   height: 6cm;
   width: 7cm;
-  margin-top: -10.9cm;
   border: 1px solid #ddd;
   padding: 20px;
   background-color: #f9f9f9;
-  margin-left: 26cm;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
 }
 
-.chat-container{
-
+.chat-container {
+  position: absolute; 
+  top: 14cm; 
+  left: 27.5cm; 
   height: 5cm;
   width: 7cm;
-  margin-top: 0.5cm;
   border: 1px solid #ddd;
   padding: 20px;
   background-color: #f9f9f9;
-  margin-left: 26cm;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  
-
+ 
 }
+.cs{
+  font-size: 23px;
+}
+
 
 .c{
   margin-left: 0.25cm;
   margin-top: -0.25cm;
+  font-size: 23px;
 }
 
 .p{
   margin-left: -0.5cm;
   margin-top: 1cm;
+  
   
 }
 .chat-link{
