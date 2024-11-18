@@ -248,12 +248,13 @@
 
 .view-all-btn {
   margin-top: 10px;
-  padding: 8px 15px;
+  padding: 10px ;
   background-color: #48742F;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-left: 22.5cm;
 }
 
 .view-all-btn:hover {
@@ -466,12 +467,12 @@
 }
 
 .c{
-  margin-left: 2.5cm;
+  margin-left: 0.25cm;
   margin-top: -0.25cm;
 }
 
 .p{
-  margin-left: -3cm;
+  margin-left: -0.5cm;
   margin-top: 1cm;
   
 }

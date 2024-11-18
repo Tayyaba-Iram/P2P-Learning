@@ -1,0 +1,162 @@
+/* Container for the entire form */
+.add-form {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Heading Styling */
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Label Styling */
+  label {
+    display: flex; /* Flexbox to align label text and input field horizontally */
+    align-items: center; /* Vertically center the items */
+    font-size: 18px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 12px;
+    margin-top: 20px;
+  }
+  
+  /* Input field Styling */
+  label input {
+    flex-grow: 1; /* Input takes remaining space */
+    margin-left: 10px; /* Space between the label and input */
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px; /* Set a specific width for the input */
+  }
+  
+  /* Button Styling */
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Disabled Button Styling */
+  .disabled-button {
+    background-color: #ccc;
+    cursor: not-allowed;
+    color: #666;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    color: #666;
+  }
+  
+  /* Campus Section Styling */
+  .campus-section {
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f1f1f1;
+  
+  }
+  
+  .campus-section h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+  }
+  
+  /* Program Section Styling */
+  .program-section {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  /* Align the program input and button horizontally */
+  .program-section label {
+    margin-right: 10px;
+  }
+  
+  .program-section input {
+    margin-right: 15px; /* Space between input field and button */
+  }
+  
+  /* Remove button and field on one line */
+  button, input {
+    margin-right: 10px;
+  }
+  
+  /* Add Campus Button Styling */
+  button.add-campus-btn {
+    background-color: #28a745;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 18px;
+    padding: 10px;
+  }
+  
+  /* Submit Button Styling */
+  button[type="button"] {
+    background-color: #28a745;
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+    margin-top: 20px;
+  }
+  .add-form {
+    padding: 20px;
+  }
+  
+  .campus-section, .program-section {
+    margin-bottom: 15px;
+  }
+  
+  .campus-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .campus-inputs label {
+    flex: 1;
+  }
+  
+  button {
+    margin-left: 10px;
+  }
+  
+  button i {
+    font-size: 18px;
+  }
+  
+  .disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  input[type="text"] {
+    padding: 8px;
+    margin: 5px;
+    width: 200px;
+  }
+  
