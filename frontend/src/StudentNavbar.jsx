@@ -1,41 +1,70 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from './userContext';
 import toast, { Toaster } from 'react-hot-toast';
+import { FaTachometerAlt, FaUser, FaLock, FaExclamationCircle, FaSignOutAlt } from 'react-icons/fa'; // Import icons from react-icons
 import './StudentNavbar.css';
-import Cookies from 'js-cookie';
 
 function StudentNavbar() {
   const { setUser } = useContext(UserContext);
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false); // State for dropdown menu
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // State for modal visibility
 
-  // Handle logout functionality
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+
+    if (token) {
+      axios.get('http://localhost:3001/api/student-dashboard', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        .then(response => setUserData(response.data.user))
+        .catch(err => setError(err.response ? err.response.data.error : 'An error occurred'));
+    } else {
+      setError('Token is missing, please log in.');
+    }
+  }, []);
+
   const handleLogout = async () => {
+    setShowLogoutModal(true); // Show confirmation modal when logout is clicked
+  };
+
+  const handleConfirmLogout = async () => {
     try {
-      // Call the logout API endpoint to handle any server-side logic (optional)
       await axios.post('http://localhost:3001/api/logout', {}, { withCredentials: true });
-  
-      // Remove token from sessionStorage
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('user');
-  
-      // Optionally, clear other user-related data from sessionStorage or state
-      window.location.href = '/login'; // Redirect user to the login page
+      window.location.href = '/login';
     } catch (err) {
       console.error('Error logging out:', err);
     }
+    setShowLogoutModal(false); // Close the modal after confirming logout
   };
 
-  // Function to check if a link is active
-  const isActive = (path) => location.pathname === path;
+  const toggleDropdown = () => setShowDropdown(!showDropdown); // Toggle dropdown visibility
+  const closeDropdown = () => setShowDropdown(false); // Close dropdown when clicking outside
 
-  // Function to confirm logout
-  const handleConfirmLogout = () => {
-    handleLogout();
-    setShowLogoutModal(false);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.profile-container')) {
+        closeDropdown();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleDropdownSelect = () => {
+    closeDropdown(); // Close dropdown after selecting an option
   };
 
   return (
@@ -46,15 +75,38 @@ function StudentNavbar() {
           <h3 className="logo-text">P2P Learning</h3>
         </div>
 
-        <div className="nav-mid-links">
-          <Link to="/" className={isActive('/') ? 'active' : ''}>Home</Link>
-          <Link to="/ScheduleSession" className={isActive('/ScheduleSession') ? 'active' : ''}>Schedule Session</Link>
-          <Link to="/ConductSession" className={isActive('/ConductSession') ? 'active' : ''}>Conduct Session </Link>
-          <Link to="/chat" className={isActive('/chat') ? 'active' : ''}>Chat</Link>
-          <Link to="/complain-form" className={isActive('/complain-form') ? 'active' : ''}>Complain Form</Link>
-          <Link to="/studentupdateprofile" className={isActive('/studentupdateprofile') ? 'active' : ''}>Update Profile</Link>
-          <button className="logout-button" onClick={() => setShowLogoutModal(true)}>Logout</button>
+        <div className="profile-container">
+          {userData ? (
+            <div className="user-profile" onClick={toggleDropdown}>
+              <h3>{userData.name}</h3>
+              <i className="triangle-icon"></i>
+            </div>
+          ) : (
+            <div className="error-message">
+              {error ? <p>{error}</p> : <p>Loading user data...</p>}
+            </div>
+          )}
+          {showDropdown && (
+            <div className="dropdown-menu">
+              <Link to="/" onClick={handleDropdownSelect}>
+                <FaTachometerAlt /> Dashboard
+              </Link>
+              <Link to="/studentprofile" onClick={handleDropdownSelect}>
+                <FaUser /> Profile
+              </Link>
+              <Link to="/resetpassword" onClick={handleDropdownSelect}>
+                <FaLock /> Reset Password
+              </Link>
+              <Link to="/complains" onClick={handleDropdownSelect}>
+                <FaExclamationCircle /> Complaints
+              </Link>
+              <button className="logout-button" onClick={handleLogout}>
+                <FaSignOutAlt /> Logout
+              </button>
+            </div>
+          )}
         </div>
+
         <Toaster position="top-center" />
       </div>
 

@@ -62,4 +62,21 @@ router.get('/Uniadmins', async (req, res) => {
   }
 });
 
+router.delete('/Uniadmins/:id', async (req, res) => {
+  try {
+    const adminId = req.params.id;
+    
+    // Find the admin by ID and delete
+    const result = await UniAdminModel.findByIdAndDelete(adminId);
+    
+    if (!result) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+    
+    res.status(200).json({ message: 'Admin deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting admin:', error);
+    res.status(500).json({ message: 'Server error while deleting admin' });
+  }
+});
 export default router;

@@ -19,32 +19,6 @@ function Home() {
   const [copiedSessionId, setCopiedSessionId] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
-  useEffect(() => {
-
-    axios
-      .get('http://localhost:3001/api/student-dashboard', { withCredentials: true })
-      .then((response) => setUserData(response.data.user))
-      .catch((err) => setError(err.response ? err.response.data.error : 'An error occurred'));
-    const token = sessionStorage.getItem('token');  // Get the token from localStorage
-
-    if (token) {
-      // Send the token in the Authorization header
-      axios.get('http://localhost:3001/api/student-dashboard', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-        .then(response => {
-          setUserData(response.data.user);
-        })
-        .catch(err => {
-          setError(err.response ? err.response.data.error : 'An error occurred');
-        });
-    } else {
-      setError('Token is missing, please log in.');
-    }
-
-  }, []);
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -129,23 +103,7 @@ function Home() {
 
   return (
     <div className="content">
-      <div className="banner">
-        <div className="text-container">
-          <h1>Welcome to Peer to Peer Learning!</h1>
-        </div>
-      </div>
-
-      {userData ? (
-        <div className="user-info">
-          <h2>Welcome: {userData.name}!</h2>
-          <p>Email: {userData.email}</p>
-        </div>
-      ) : (
-        <div className="error-message">
-          {error ? <p>{error}</p> : <p>Loading user data...</p>}
-        </div>
-      )}
-
+     
       <div className="schedule-session-container">
         <h1 className="page-title">Schedule a New Session</h1>
         <button className="schedule-btn" onClick={() => setModalOpen(true)}>
@@ -267,12 +225,6 @@ function Home() {
         </div>
       </div>
 
-      <Link to="/studentupdateprofile">
-        <button className="register-button">Profile Update</button>
-      </Link>
-      <Link to="/chat">
-        <button className="register-button">Go to Chat</button>
-      </Link>
  
     </div>
   );

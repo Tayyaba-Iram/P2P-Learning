@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Student Update Profile.css';
 
 function UpdateProfile() {
+  const navigate = useNavigate();
+
   const [profile, setProfile] = useState({
     phone: '',
     university: '',
@@ -13,20 +16,25 @@ function UpdateProfile() {
     password: '',
     cpassword: '',
   });
+
   const [loading, setLoading] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
-
   const [universities, setUniversities] = useState([]);
   const [campusOptions, setCampusOptions] = useState([]);
   const [programOptions, setProgramOptions] = useState([]);
 
-  // Fetch user profile data on component mount
+  // Fetch profile and universities on mount
   useEffect(() => {
     const fetchProfile = async () => {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        return;
+      }
+
       try {
         const response = await axios.get('http://localhost:3001/api/get-profile', {
-          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (response.data.success) {
@@ -38,11 +46,10 @@ function UpdateProfile() {
             program: userData.program || '',
             semester: userData.semester || '',
             specification: userData.specification || '',
-            password: userData.password ||'',
-            cpassword: userData.cpassword ||'',
+            password: '',
+            cpassword: '',
           });
 
-          // Fetch university data and set campus/program options
           await fetchUniversities(userData.university, userData.campus);
         }
       } catch (err) {
@@ -55,31 +62,22 @@ function UpdateProfile() {
     fetchProfile();
   }, []);
 
-  // Fetch universities and their campuses/programs
+  // Fetch universities and campuses
   const fetchUniversities = async (selectedUniversity, selectedCampus) => {
     try {
       const response = await axios.get('http://localhost:3001/api/universities');
       setUniversities(response.data);
 
-      // Set campus and program options based on the user's university and campus
       const selectedUniData = response.data.find((uni) => uni.name === selectedUniversity);
       if (selectedUniData) {
         setCampusOptions(selectedUniData.campuses);
-        
-        // Set program options based on the selected campus
+
         const selectedCampusData = selectedUniData.campuses.find(
-          (camp) => camp.name === selectedCampus
+          (campus) => campus.name === selectedCampus
         );
+
         if (selectedCampusData) {
           setProgramOptions(selectedCampusData.programs);
-          setProfile((prevProfile) => ({
-            ...prevProfile,
-            program: selectedCampusData.programs.find(
-              (program) => program.name === prevProfile.program
-            )
-              ? prevProfile.program
-              : selectedCampusData.programs[0].name, // default program if not matching
-          }));
         }
       }
     } catch (error) {
@@ -87,29 +85,48 @@ function UpdateProfile() {
     }
   };
 
+  // Handle form input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
 
-    // Reset program options if campus is changed
     if (name === 'campus') {
       const selectedCampus = campusOptions.find((camp) => camp.name === value);
       if (selectedCampus) {
         setProgramOptions(selectedCampus.programs);
-        setProfile({ ...profile, campus: value, program: selectedCampus.programs[0].name });
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          program: selectedCampus.programs[0].name,
+        }));
       }
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate passwords
+    if (profile.password !== profile.cpassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+
     try {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        alert('No token found, please login');
+        return;
+      }
+
       const response = await axios.put('http://localhost:3001/api/update-profile', profile, {
+        headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
 
       if (response.data.success) {
         alert(response.data.message);
+        navigate('/studentprofile'); // Navigate to student profile page
       } else {
         alert(response.data.message);
       }
@@ -119,72 +136,59 @@ function UpdateProfile() {
     }
   };
 
-  if (loading) return <p>Loading profile data...</p>;
-
   return (
-    <form onSubmit={handleSubmit} className="update-profile-form">
-      <div>
-        <label>Phone:</label>
-        <input type="text" name="phone" value={profile.phone} onChange={handleChange} />
-      </div>
+    <>
+      <h2>Update Profile</h2>
+      <form onSubmit={handleSubmit} className="update-profile-form">
+        {/* Phone */}
+        <div>
+          <label>Phone:</label>
+          <input type="text" name="phone" value={profile.phone} onChange={handleChange} />
+        </div>
 
-      {/* University (read-only) */}
-      <div>
-        <label>University:</label>
-        <input type="text" name="university" value={profile.university} onChange={handleChange} readOnly />
-      </div>
+        {/* University (read-only) */}
+        <div>
+          <label>University:</label>
+          <input type="text" value={profile.university} readOnly />
+        </div>
 
-      {/* Campus */}
-      <div>
-        <label>Campus:</label>
-        <select name="campus" value={profile.campus} onChange={handleChange}>
-          <option value="" hidden>Select Campus</option>
-          {campusOptions.map((campus) => (
-            <option key={campus._id} value={campus.name}>
-              {campus.name}
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* Campus */}
+        <div>
+          <label>Campus:</label>
+          <select name="campus" value={profile.campus} onChange={handleChange}>
+            <option value="" hidden>Select Campus</option>
+            {campusOptions.map((campus) => (
+              <option key={campus._id} value={campus.name}>{campus.name}</option>
+            ))}
+          </select>
+        </div>
 
-      {/* Program */}
-      <div>
-        <label>Program:</label>
-        <select name="program" value={profile.program} onChange={handleChange}>
-          <option value="" hidden>Select Program</option>
-          {programOptions.map((program) => (
-            <option key={program._id} value={program.name}>
-              {program.name}
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* Program */}
+        <div>
+          <label>Program:</label>
+          <select name="program" value={profile.program} onChange={handleChange}>
+            <option value="" hidden>Select Program</option>
+            {programOptions.map((program) => (
+              <option key={program._id} value={program.name}>{program.name}</option>
+            ))}
+          </select>
+        </div>
 
-      <div>
-        <label>Semester:</label>
-        <input type="text" name="semester" value={profile.semester} onChange={handleChange} />
-      </div>
+        {/* Semester */}
+        <div>
+          <label>Semester:</label>
+          <input type="text" name="semester" value={profile.semester} onChange={handleChange} />
+        </div>
 
-      <div>
-        <label>Specification:</label>
-        <input type="text" name="specification" value={profile.specification} onChange={handleChange} />
-      </div>
+        {/* Specification */}
+        <div>
+          <label>Specification:</label>
+          <input type="text" name="specification" value={profile.specification} onChange={handleChange} />
+        </div>
 
-      {/* Password Fields */}
-      <div>
-        <label>Password:</label>
-        <input type={showPassword ? 'text' : 'password'} name="password" value={profile.password} onChange={handleChange} />
-        <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? 'Hide' : 'Show'}</button>
-      </div>
-
-      <div>
-        <label>Confirm Password:</label>
-        <input type={showCPassword ? 'text' : 'password'} name="cpassword" value={profile.cpassword} onChange={handleChange} />
-        <button type="button" onClick={() => setShowCPassword(!showCPassword)}>{showCPassword ? 'Hide' : 'Show'}</button>
-      </div>
-
-      <button type="submit" className="update-button">Update Profile</button>
-    </form>
+        <button type="submit" className="update-button">Update Profile</button>
+      </form>
+    </>
   );
 }
 

@@ -117,55 +117,59 @@ function EditUniversity() {
 
   return (
     <div className="edit-university-container">
-      <h1>Edit University</h1>
-      
-      <label>
-        University Name:
-        <input
-          type="text"
-          value={universityName}
-          onChange={handleUniversityChange}
-        />
-      </label>
+      <div className='container'>
+    <h2>Edit University</h2>
+    <label>
+      University Name:
+      <input
+        type="text"
+        value={universityName}
+        onChange={handleUniversityChange}
+      />
+    </label>
+    
+    <h3>Campuses</h3>
+    
+    {campuses.map((campus, campusIndex) => (
+      <div key={campusIndex} className="campus">
+        <label>
+          Campus {campusIndex + 1}:
+          <input
+            type="text"
+            value={campus.name}
+            onChange={(e) => handleCampusChange(campusIndex, 'name', e.target.value)}
+          />
+        </label>
+        <button onClick={() => handleRemoveCampus(campusIndex)}>
+          <i className="fa fa-trash"></i>
+        </button>
+        <h4>Programs</h4>
+        {campus.programs.map((program, programIndex) => (
+          <div key={programIndex} className="program">
+            <label>
+              Program {programIndex+1}:
+              <input
+                type="text"
+                value={program.name}
+                onChange={(e) => handleProgramChange(campusIndex, programIndex, e.target.value)}
+              />
+            </label>
+            <button onClick={() => handleRemoveProgram(campusIndex, programIndex)}>
+              <i className="fa fa-trash"></i>
+            </button>
+          </div>
+        ))}
+        <button onClick={() => handleAddProgram(campusIndex)}>
+          <i className="fa fa-plus"></i>
+        </button>
+      </div>
+    ))}
+    <button onClick={handleAddCampus}>
+     Add Campus
+    </button>
 
-      <h2>Campuses</h2>
-      {campuses.map((campus, campusIndex) => (
-        <div key={campusIndex} className="campus">
-          <label>
-            Campus Name:
-            <input
-              type="text"
-              value={campus.name}
-              onChange={(e) => handleCampusChange(campusIndex, 'name', e.target.value)}
-            />
-          </label>
-          <button type="button" onClick={() => handleRemoveCampus(campusIndex)}>Remove Campus</button>
-
-          <h3>Programs</h3>
-          {campus.programs.map((program, programIndex) => (
-            <div key={programIndex} className="program">
-              <label>
-                Program Name:
-                <input
-                  type="text"
-                  value={program.name}
-                  onChange={(e) => handleProgramChange(campusIndex, programIndex, e.target.value)}
-                />
-              </label>
-              <button type="button" onClick={() => handleRemoveProgram(campusIndex, programIndex)}>Remove Program</button>
-            </div>
-          ))}
-
-          <button type="button" onClick={() => handleAddProgram(campusIndex)}>Add Program</button>
-        </div>
-      ))}
-
-      <button type="button" onClick={handleAddCampus}>Add Campus</button>
-
-      <button onClick={handleSave} disabled={loading}>
-        {loading ? 'Saving...' : 'Save Changes'}
-      </button>
-    </div>
+    <button onClick={handleSave}>Save Changes</button>
+  </div></div>
   );
 }
 

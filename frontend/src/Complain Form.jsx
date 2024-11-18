@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import toast, { Toaster } from 'react-hot-toast'; // Import toast and Toaster
@@ -15,6 +16,8 @@ const ComplaintForm = () => {
         category: '',
         description: '',
     });
+
+    const navigate = useNavigate(); // Initialize useNavigate hook
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,6 +36,9 @@ const ComplaintForm = () => {
             });
             toast.success(res.data.message); // Show success toast
             setFormData({ name: '', sapid: '', email: '', university: '', date: new Date(), category: '', description: '' });
+            
+            // Redirect to /complains after successful submission
+            navigate('/complains');
         } catch (error) {
             toast.error(error.response?.data?.error || 'Error submitting complaint'); // Show error toast
         }
@@ -72,6 +78,7 @@ const ComplaintForm = () => {
                     onChange={handleChange}
                     required
                 ></textarea>
+                 
                 <button type="submit">Submit Complaint</button>
             </form>
             <Toaster position="top-center" /> {/* Include Toaster here */}

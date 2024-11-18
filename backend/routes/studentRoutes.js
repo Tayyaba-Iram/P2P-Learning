@@ -70,35 +70,37 @@ router.get('/verifiedStudents', async (req, res) => {
 });
 
 
-// Fetch the logged-in student's profile data
+// Fetch profile data based on the token's email
 router.get('/get-profile', verifyUser, async (req, res) => {
   try {
-    // Use the email from the verified token
-    const userEmail = req.email;
-
-    // Fetch the user's data from the database
+    const userEmail = req.user.email;  // Extract email from token
+    console.log('Decoded email:', userEmail); 
+    // Fetch the student's data from the database using the email
     const student = await VerifiedStudentModel.findOne({ email: userEmail });
-
-    // Check if the student exists
+    if (student) {
+      console.log('Student Found:', student);
+    }
     if (!student) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    // Return the student data as a response
-    res.status(200).json({ 
+    // Return the student data in the response
+    res.status(200).json({
       success: true,
       user: {
         name: student.name,
+        sapid: student.sapid,
         email: student.email,
+        cnic: student.cnic,
         phone: student.phone,
         university: student.university,
         campus: student.campus,
         program: student.program,
         semester: student.semester,
         specification: student.specification,
-        password: student.password,
-        cpassword: student.cpassword,
-      }
+        password: student.password,  // Be cautious with passwords - consider excluding them in the response
+        cpassword: student.cpassword,  // Same for confirmation password
+      },
     });
   } catch (err) {
     console.error('Error fetching profile:', err);
@@ -107,11 +109,11 @@ router.get('/get-profile', verifyUser, async (req, res) => {
 });
 
 router.put('/update-profile', verifyUser, async (req, res) => {
-  const { phone, campus, program, semester, specification, password, cpassword } = req.body;
+  const { phone, campus, program, semester, specification} = req.body;
 
   try {
     // Use the email from the verified token
-    const userEmail = req.email;
+    const userEmail = req.user.email;
 
     // Fetch the user's data from the VerifiedStudentModel
     const student = await VerifiedStudentModel.findOne({ email: userEmail });
@@ -128,15 +130,7 @@ router.put('/update-profile', verifyUser, async (req, res) => {
     if (semester) student.semester = semester;
     if (specification) student.specification = specification;
 
-    // Update password and confirm password if both are provided
-    if (password && cpassword) {
-      if (password !== cpassword) {
-        return res.status(400).json({ success: false, message: 'Passwords do not match' });
-      }
-      student.password = password;
-      student.cpassword = cpassword;
-    }
-
+  
     // Save the updated student profile
     await student.save();
 
@@ -146,5 +140,44 @@ router.put('/update-profile', verifyUser, async (req, res) => {
     res.status(500).json({ success: false, message: 'An error occurred while updating profile.' });
   }
 });
+router.put('/update-password', verifyUser, async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+
+  // Check if all required fields are provided
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    return res.status(400).json({ success: false, message: 'Current password, new password, and confirm password are required.' });
+  }
+
+  // Ensure new password and confirm password match
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ success: false, message: 'New password and confirm password do not match.' });
+  }
+
+  try {
+    const userEmail = req.user.email;
+    const student = await VerifiedStudentModel.findOne({ email: userEmail });
+
+    if (!student) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Check if the current password is correct
+    if (currentPassword !== student.password) {
+      return res.status(400).json({ success: false, message: 'Current password is incorrect.' });
+    }
+
+    // Update the password and confirm password fields in the database
+    student.password = newPassword;
+    student.cpassword = confirmPassword; // You might need to save confirmPassword if you're using it separately
+    await student.save();
+
+    res.status(200).json({ success: true, message: 'Password updated successfully.' });
+  } catch (err) {
+    console.error('Error updating password:', err);
+    res.status(500).json({ success: false, message: 'An error occurred while updating the password.' });
+  }
+});
+
+
 
 export default router;

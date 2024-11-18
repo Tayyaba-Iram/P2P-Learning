@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import './Chat.css';
 
-const Chat = () => {
+function Chat() {
   const [user, setUser] = useState(null);
   const [students, setStudents] = useState([]);
   const [activeStudent, setActiveStudent] = useState(null);
@@ -54,38 +55,38 @@ const Chat = () => {
     fetchStudents();
   }, [user]);
 
- // Initialize socket connection and handle incoming messages
-useEffect(() => {
-  // Check if socket is already connected to avoid re-connecting
-  if (!socketRef.current) {
-    socketRef.current = io('http://localhost:3001');
+  // Initialize socket connection and handle incoming messages
+  useEffect(() => {
+    // Check if socket is already connected to avoid re-connecting
+    if (!socketRef.current) {
+      socketRef.current = io('http://localhost:3001');
 
-    socketRef.current.on('connect', () => {
-      console.log(`Connected to socket server. Socket ID: ${socketRef.current.id}`);
-    });
+      socketRef.current.on('connect', () => {
+        console.log(`Connected to socket server. Socket ID: ${socketRef.current.id}`);
+      });
 
-    socketRef.current.on('disconnect', () => {
-      console.log('Disconnected from socket server');
-    });
-  }
-
-  // Listen for incoming messages
-  const handleIncomingMessage = (message) => {
-    console.log('Received message:', message);
-    setMessages(prevMessages => [...prevMessages, message]);
-  };
-
-  // Add listener if it's not already added
-  socketRef.current?.on('newMessage', handleIncomingMessage);
-
-  // Cleanup function to remove listeners and disconnect socket on component unmount
-  return () => {
-    if (socketRef.current) {
-      socketRef.current.off('newMessage', handleIncomingMessage);
-      console.log('Removed socket listeners');
+      socketRef.current.on('disconnect', () => {
+        console.log('Disconnected from socket server');
+      });
     }
-  };
-}, []);
+
+    // Listen for incoming messages
+    const handleIncomingMessage = (message) => {
+      console.log('Received message:', message);
+      setMessages(prevMessages => [...prevMessages, message]);
+    };
+
+    // Add listener if it's not already added
+    socketRef.current?.on('newMessage', handleIncomingMessage);
+
+    // Cleanup function to remove listeners and disconnect socket on component unmount
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off('newMessage', handleIncomingMessage);
+        console.log('Removed socket listeners');
+      }
+    };
+  }, []);
 
   // Fetch chat history with a specific student
   const fetchChatHistory = async (student) => {
@@ -103,14 +104,14 @@ useEffect(() => {
   // Start a new chat with a selected student
   const handleStartChat = (student) => {
     if (!user || !student) return;
-  
+
     setActiveStudent(student);
     setMessages([]);
-  
+
     const senderId = user._id;
     const receiverId = student._id;
     const roomName = [senderId, receiverId].sort().join('-');
-  
+
     // Check if already joined the room before trying to join again
     if (socketRef.current) {
       socketRef.current.emit('joinRoom', roomName, (err) => {
@@ -118,10 +119,9 @@ useEffect(() => {
         else console.log(`Joined room: ${roomName}`);
       });
     }
-  
+
     fetchChatHistory(student);
   };
-  
 
   const [isSending, setIsSending] = useState(false);
   const handleSendMessage = () => {
@@ -129,21 +129,20 @@ useEffect(() => {
       console.error('Missing information');
       return;
     }
-  
+
     const senderId = user._id;
     const receiverId = activeStudent._id;
     const roomName = [senderId, receiverId].sort().join('-');
     const msg = { senderId, receiverId, text: newMessage };
-  
+
     console.log('Sending message:', msg);
-  
+
     // Emit the message to the WebSocket
     socketRef.current?.emit('newMessage', { room: roomName, message: msg });
-  
+
     // Clear the input field
     setNewMessage('');
   };
-  
 
   // Scroll to the bottom of the chat when messages change
   useEffect(() => {
@@ -153,7 +152,7 @@ useEffect(() => {
   }, [messages]);
 
   return (
-    <div className="chat-container">
+    <div className="Chat-container">
       <div className="sidebar">
         {students.map(student => (
           <div key={student._id} onClick={() => handleStartChat(student)}>
@@ -186,6 +185,6 @@ useEffect(() => {
       )}
     </div>
   );
-};
+}
 
 export default Chat;
