@@ -6,16 +6,38 @@ const router=express.Router();
 
 
 // POST route to submit a complaint
-router.post('/complaints', async (req, res) => {
+router.post('/complaints', verifyUser, async (req, res) => {
     try {
-        const complaint = new ComplaintModel(req.body);
-        await complaint.save();
-        res.status(200).json({ message: 'Complaint submitted successfully' });
-    } catch (error) {
-        console.error('Error submitting complaint:', error);
-        res.status(500).json({ error: 'Failed to submit complaint' });
+        const { name, sapid, email, university, date, category, description } = req.body;
+
+        // Check if any required field is missing
+        if (!name || !sapid || !email || !university || !date || !category || !description) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        // Create new complaint
+        const newComplaint = new ComplaintModel({
+            userId: req.user._id,  // Check if userId is being passed correctly
+            name,
+            sapid,
+            email,
+            university,
+            date,
+            category,
+            description
+        });
+
+        // Save the complaint
+        await newComplaint.save();
+
+        // Send success response
+        res.status(201).json({ message: 'Complaint created successfully' });
+    } catch (err) {
+        console.error('Error:', err);  // Log the full error for debugging
+        res.status(500).json({ error: 'Error creating complaint', details: err.message });
     }
 });
+
 
 router.get('/viewComplaints', async (req, res) => {
     try {
@@ -29,16 +51,28 @@ router.get('/viewComplaints', async (req, res) => {
 
 // Route to get complaints for the logged-in user
 router.get('/get-complaints', verifyUser, async (req, res) => {
+    console.log('Received request for complaints');
+    console.log('User ID from token:', req.user._id);  // Log the decoded user ID
+  
     try {
-        const userComplaints = await ComplaintModel.find({ userId: req.userId }); // Assuming the complaint schema has a `userId` field
-        if (!userComplaints) {
-            return res.status(404).json({ error: 'No complaints found for this user' });
-        }
-        res.json(userComplaints);
+      const userComplaints = await ComplaintModel.find({ userId: req.user._id });
+      console.log('Fetched complaints:', userComplaints);  // Log the fetched complaints
+  
+      if (!userComplaints || userComplaints.length === 0) {
+        return res.status(404).json({ error: 'No complaints found for this user' });
+      }
+  
+      res.json(userComplaints);
     } catch (err) {
-        res.status(500).json({ error: 'Error fetching complaints', details: err.message });
+      console.error('Error fetching complaints:', err.message);
+      res.status(500).json({ error: 'Server error', details: err.message });
     }
-});
+  });
+  
+  
+
+
+
 
 // Delete a specific complaint by its ID
 router.delete('/delete-complaint/:id', verifyUser, async (req, res) => {

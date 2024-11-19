@@ -133,7 +133,8 @@ function Dashboard() {
           value={universitySearch}
           onChange={(e) => setUniversitySearch(e.target.value)}
           className="search-bar"
-        />{filteredUniversities.length > 5 && (
+        />
+        {filteredUniversities.length > 5 && (
           <button onClick={toggleUniversities}>
             {showAllUniversities ? 'View Less' : 'View All'}
           </button>

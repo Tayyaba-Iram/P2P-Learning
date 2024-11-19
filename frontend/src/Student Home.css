@@ -4,37 +4,6 @@
   /* Full height */
 }
 
-.sidebar {
-  width: 200px;
-  /* Sidebar width */
-  background-color: #f1ecec;
-  /* Background color */
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  /* Optional shadow */
-}
-
-.sidebar h2 {
-  margin-bottom: 20px;
-}
-
-.sidebar ul {
-  list-style-type: none;
-  /* Remove bullets */
-  padding: 0;
-}
-
-.sidebar ul li {
-  margin: 15px 0;
-}
-
-.sidebar ul li a {
-  text-decoration: none;
-  /* Remove underline */
-  color: #333;
-  /* Link color */
-}
-
 .content {
   flex-grow: 1;
   /* Takes up remaining space */

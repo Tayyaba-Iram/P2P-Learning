@@ -29,20 +29,37 @@ const ComplaintForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
+        // Retrieve token from sessionStorage
+        const token = sessionStorage.getItem('token');
+    
+        if (!token) {
+            toast.error('You must be logged in to submit a complaint');
+            return;
+        }
+    
         try {
-            const res = await axios.post('http://localhost:3001/api/complaints', {
-                ...formData,
-                date: formData.date.toISOString(),
-            });
-            toast.success(res.data.message); // Show success toast
+            const res = await axios.post(
+                'http://localhost:3001/api/complaints',
+                {
+                    ...formData,
+                    date: formData.date.toISOString(),
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Add the token to the request headers
+                    },
+                }
+            );
+    
+            toast.success(res.data.message); // Success toast
             setFormData({ name: '', sapid: '', email: '', university: '', date: new Date(), category: '', description: '' });
-            
-            // Redirect to /complains after successful submission
             navigate('/complains');
         } catch (error) {
-            toast.error(error.response?.data?.error || 'Error submitting complaint'); // Show error toast
+            toast.error(error.response?.data?.error || 'Error submitting complaint');
         }
     };
+    
 
     return (
         <div className="complaint-form-container">

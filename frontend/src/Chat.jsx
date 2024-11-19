@@ -6,6 +6,7 @@ import './Chat.css';
 function Chat() {
   const [user, setUser] = useState(null);
   const [students, setStudents] = useState([]);
+  const [chattedStudents, setChattedStudents] = useState([]);
   const [activeStudent, setActiveStudent] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -26,7 +27,6 @@ function Chat() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log('User data fetched:', response.data);
         if (response.data && response.data._id) {
           setUser(response.data);
         } else {
@@ -40,13 +40,41 @@ function Chat() {
     fetchUser();
   }, []);
 
+  // Fetch chatted students
+  useEffect(() => {
+    const fetchChattedStudents = async () => {
+      try {
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+          console.error('Token is missing');
+          return;
+        }
+    
+        const response = await axios.get('http://localhost:3001/api/chattedStudents', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+    
+        console.log('Chatted students:', response.data); // Log the response
+        setChattedStudents(response.data); // Update your state with the data
+      } catch (err) {
+        console.error('Error fetching chatted students:', err.response?.data || err.message);
+      }
+    };
+    
+    
+    fetchChattedStudents();
+  }, [user]);
+
   // Fetch all students except the logged-in user
   useEffect(() => {
     const fetchStudents = async () => {
       if (user) {
         try {
           const { data } = await axios.get('http://localhost:3001/api/verifiedStudents', { withCredentials: true });
-          setStudents(data.filter(student => student._id !== user._id));
+          setStudents(data.filter(student => student._id !== user._id));  // Remove logged-in user
         } catch (err) {
           console.error('Error fetching students:', err);
         }
@@ -57,10 +85,8 @@ function Chat() {
 
   // Initialize socket connection and handle incoming messages
   useEffect(() => {
-    // Check if socket is already connected to avoid re-connecting
     if (!socketRef.current) {
       socketRef.current = io('http://localhost:3001');
-
       socketRef.current.on('connect', () => {
         console.log(`Connected to socket server. Socket ID: ${socketRef.current.id}`);
       });
@@ -70,20 +96,15 @@ function Chat() {
       });
     }
 
-    // Listen for incoming messages
     const handleIncomingMessage = (message) => {
-      console.log('Received message:', message);
       setMessages(prevMessages => [...prevMessages, message]);
     };
 
-    // Add listener if it's not already added
     socketRef.current?.on('newMessage', handleIncomingMessage);
 
-    // Cleanup function to remove listeners and disconnect socket on component unmount
     return () => {
       if (socketRef.current) {
         socketRef.current.off('newMessage', handleIncomingMessage);
-        console.log('Removed socket listeners');
       }
     };
   }, []);
@@ -112,7 +133,6 @@ function Chat() {
     const receiverId = student._id;
     const roomName = [senderId, receiverId].sort().join('-');
 
-    // Check if already joined the room before trying to join again
     if (socketRef.current) {
       socketRef.current.emit('joinRoom', roomName, (err) => {
         if (err) console.error('Error joining room:', err);
@@ -135,32 +155,64 @@ function Chat() {
     const roomName = [senderId, receiverId].sort().join('-');
     const msg = { senderId, receiverId, text: newMessage };
 
-    console.log('Sending message:', msg);
-
-    // Emit the message to the WebSocket
     socketRef.current?.emit('newMessage', { room: roomName, message: msg });
 
-    // Clear the input field
     setNewMessage('');
   };
 
-  // Scroll to the bottom of the chat when messages change
   useEffect(() => {
     if (endOfMessages.current) {
       endOfMessages.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Filter students based on search query and exclude chatted students
+  const filteredStudents = students.filter((student) =>
+    !chattedStudents.some(chattedStudent => chattedStudent._id === student._id) &&
+    (student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     student.specification.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
   return (
     <div className="Chat-container">
       <div className="sidebar">
-        {students.map(student => (
-          <div key={student._id} onClick={() => handleStartChat(student)}>
-            {student.name}
-          </div>
-        ))}
-      </div>
+   
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="Search students by name or specification..."
+        />
+       {searchQuery.trim() && (
+    filteredStudents.length > 0 ? (
+      filteredStudents.map(student => (
+        <div key={student._id} onClick={() => handleStartChat(student)}>
+          {student.name} - {student.specification}
+        </div>
+      ))
+    ) : (
+      <div>No matching students found.</div>
+    )
+  )}
+  
+      <h3>Chatted Students</h3>
+{chattedStudents.length === 0 ? (
+  <div>No chatted students found.</div>
+) : (
+  chattedStudents.map(student => (
+    <div key={student._id} onClick={() => handleStartChat(student)}>
+      {student.name} 
+    </div>
+  ))
+)}
 
+       
+      </div>
       {activeStudent && (
         <div className="chat-box">
           <h2>Chat with {activeStudent.name}</h2>
@@ -171,8 +223,7 @@ function Chat() {
               </div>
             ))}
             <div ref={endOfMessages}></div>
-          </div>
-          <div className="chat-input">
+            <div className="chat-input">
             <input
               type="text"
               value={newMessage}
@@ -181,6 +232,8 @@ function Chat() {
             />
             <button onClick={handleSendMessage} disabled={isSending}>Send</button>
           </div>
+          </div>
+          
         </div>
       )}
     </div>

@@ -72,9 +72,11 @@ function Register() {
         })
         .catch((err) => {
           if (err.response && err.response.data.error === "Email is already registered.") {
-            toast.error("Email already exists!");
+            setMessage('Email already exists');
+            
           } else {
-            toast.error("Registration failed due to incorrect data.");
+            setMessage('Registration failed due to incorrect data');
+           
           }
         });
     }

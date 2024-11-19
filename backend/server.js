@@ -16,6 +16,7 @@ import cookieParser from 'cookie-parser'; // Import cookie-parser
 import Message from './models/Message.js';
 import http from 'http';
 import { Server } from 'socket.io';
+import VerifiedStudentModel from './models/VerifiedStudent.js';
 
 const app = express();
 app.use(cookieParser());
@@ -127,6 +128,48 @@ app.post('/api/chat', async (req, res) => {
     res.status(500).json({ error: 'Failed to save message' });
   }
 });
+
+// Example route to get chatted students
+// Route to get chatted students
+app.get('/api/chattedStudents', verifyUser, async (req, res) => {
+  try {
+    const userId = req.user._id;  // Assuming you're using a middleware to authenticate the user
+    
+    // Find all the messages involving the logged-in user
+    const messages = await Message.find({
+      $or: [
+        { senderId: userId },  // Messages where the logged-in user is the sender
+        { receiverId: userId },  // Messages where the logged-in user is the receiver
+      ]
+    }).select('senderId receiverId');  // We only need the sender and receiver ids
+
+    // Extract unique participants (excluding the logged-in user)
+    const participants = new Set();
+    messages.forEach(message => {
+      if (message.senderId.toString() !== userId.toString()) {
+        participants.add(message.senderId.toString());
+      }
+      if (message.receiverId.toString() !== userId.toString()) {
+        participants.add(message.receiverId.toString());
+      }
+    });
+
+    // Convert the Set to an array of user IDs
+    const participantIds = Array.from(participants);
+
+    // Fetch the details of the participants (students who have chatted with the logged-in user)
+    const chattedStudents = await VerifiedStudentModel.find({
+      '_id': { $in: participantIds }
+    }).select('name _id');  // Select the fields you need (name and _id)
+
+    res.json(chattedStudents);  // Return the list of chatted students
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error fetching chatted students', error: err.message });
+  }
+});
+
+
 
 
 // Connect to MongoDB

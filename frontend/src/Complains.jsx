@@ -12,6 +12,7 @@ const Complaints = () => {
     const fetchComplaints = async () => {
       try {
         const token = sessionStorage.getItem('token');
+        console.log('Token:', token); // Log the token to check if it's correct
         const response = await axios.get('http://localhost:3001/api/get-complaints', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -25,6 +26,7 @@ const Complaints = () => {
     };
     fetchComplaints();
   }, []);
+  
 
   // Function to handle deleting a complaint
   const handleDelete = async (id) => {
