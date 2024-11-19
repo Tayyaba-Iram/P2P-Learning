@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './Student Home.css'; // Updated to ensure styles are combined correctly
+import './Student Home.css'; 
 
 function Home() {
   const [userData, setUserData] = useState(null);
@@ -48,10 +48,17 @@ function Home() {
     }
 
     if (endTime <= startTime) {
-      alert('End time must be after the start time.');
+      Swal.fire({
+         icon: 'error', 
+         title: 'Invalid Time Selection', 
+         text: 'End time must be after the start time.',
+         confirmButtonText: 'OK', 
+         timer: 3000, 
+         timerProgressBar: true 
+      });
       return;
-    }
-
+   }
+   
     const newSession = {
       ...sessionDetails,
       date: sessionDetails.date.toISOString(),
@@ -208,7 +215,7 @@ function Home() {
           </div>
 
             <div className="conduct-session-container">
-              <h2>Conduct a Session</h2>
+              <h2 className='cs'>Conduct a Session</h2>
               <p>Start a session with your peers to collaborate and learn together!</p>
               <Link to="/ConductSession" className="conduct-session-link">
                 Conduct Session

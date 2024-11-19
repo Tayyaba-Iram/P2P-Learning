@@ -28,6 +28,7 @@ const ConductSession = () => {
     const link = e.target.value;
     setMeetingLink(link);
 
+    // Validate the meeting link
     const jitsiLinkPattern = /^https:\/\/meet\.jit\.si\/([a-zA-Z0-9-_]+)$/;
     const isValid = jitsiLinkPattern.test(link);
     setJoinEnabled(isValid);
@@ -43,7 +44,10 @@ const ConductSession = () => {
     }
 
     try {
-      const response = await axios.get(`http://localhost:3001/api/sessions/verify/${meetingID}`);
+      // Verify session on the server
+      const response = await axios.get(
+        `http://localhost:3001/api/sessions/verify/${meetingID}`
+      );
 
       if (response.data.success) {
         const domain = "meet.jit.si";
@@ -55,27 +59,28 @@ const ConductSession = () => {
           configOverwrite: {
             disableDeepLinking: true,
           },
-       interfaceConfigOverwrite: {
-  SHOW_JITSI_WATERMARK: false,
-  HIDE_INVITE_MORE_HEADER: true,
-  TOOLBAR_BUTTONS: [
-    "microphone",
-    "camera",
-    "hangup",
-    "chat",
-    "fullscreen",
-    "raisehand",
-    "tileview",
-    "videobackgroundblur",
-    "desktop", // Enable screen sharing
-  ],
-},
-
+          interfaceConfigOverwrite: {
+            SHOW_JITSI_WATERMARK: false,
+            HIDE_INVITE_MORE_HEADER: true,
+            TOOLBAR_BUTTONS: [
+              "microphone",
+              "camera",
+              "hangup",
+              "chat",
+              "fullscreen",
+              "raisehand",
+              "tileview",
+              "videobackgroundblur",
+              "desktop", // Enable screen sharing
+            ],
+          },
         };
 
+        // Initialize Jitsi Meet API
         if (window.JitsiMeetExternalAPI) {
           const api = new window.JitsiMeetExternalAPI(domain, options);
 
+          // Redirect after meeting ends
           api.addListener("readyToClose", () => {
             navigate("/"); // Redirect when the meeting ends
           });
@@ -99,6 +104,7 @@ const ConductSession = () => {
         type="text"
         value={meetingLink}
         onChange={handleMeetingLinkChange}
+        onInput={handleMeetingLinkChange} // Ensures pasted links are handled
         placeholder="Enter meeting link"
         style={{
           padding: "10px",
