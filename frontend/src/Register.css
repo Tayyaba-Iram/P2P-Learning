@@ -1,29 +1,31 @@
 .registration-container {
     display: flex;
-    height: 90vh;
-    background:  #2c5711;
+    height: 100vh;
     color: #333;
     font-family: Arial, sans-serif;
-}
-.signup-header {
-    display: flex;
-    align-items: center; /* Align items vertically centered */
-    gap: 10px; /* Space between the logo and heading */
+    color: white;
 }
 
 .signup-logo {
-    width: 120px; /* Adjust size as needed */
+    width: 140px; /* Adjust size as needed */
     height: auto; /* Maintain aspect ratio */
     margin-bottom: 20px;
     margin-top: 0px;
     border-radius: 50%;
 }
+.signup-header {
+  width: 80%;
+    margin-bottom: 20px;
+    margin-right: 10%;
+    justify-content: center; 
+}
 
 .signup-header h1 {
-    margin: 0; /* Remove default margin from h1 for better alignment */
     color: #333; /* Set color to ensure readability */
     font-size: 1.5rem; /* Adjust font size as desired */
     margin-bottom: 20px;
+    margin-top: 30px;
+  
 }
 
 .left-section {
@@ -32,9 +34,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
     text-align: center;
     padding: 20px;
+    margin-left: 10%;
 }
 
 .left-section h2 {
@@ -50,8 +52,8 @@
 }
 
 .left-section .login-button {
-    background-color:#f4f4f5;
-    color: #48742F;
+   justify-content: center;
+    color: #f2f5f1;
     border: none;
     border-radius: 20px;
     cursor: pointer;
@@ -61,30 +63,18 @@
     margin-left: 2%;
 }
 
-.right-section {
-    width: 65%;
-    padding: 40px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    background: white;
-    border-top-left-radius: 50px;
-    border-bottom-left-radius: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-}
+
 
 .form {
-    width: 80%;
-    max-width: 600px;
-    
+   
+    margin-right: 20px;
+    margin-top: 20px;
 }
 
 .form-group {
     display: flex;
     gap: 10px;
-    margin-bottom: 7px;
+    margin-bottom: 7px;  
     color: black;
 }
 .email{
@@ -112,7 +102,8 @@
     cursor: pointer;
     font-size: 16px;
     width: 30%;
-    margin-top: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     margin-left: 35%;
     
 }

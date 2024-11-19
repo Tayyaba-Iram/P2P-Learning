@@ -9,27 +9,13 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext); // Use UserContext
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validation checks
-    if (email === "") {
-      toast.error("Email is required!");
-      return;
-    } else if (!email.includes("@")) {
-      toast.warning("Email must include '@'!");
-      return;
-    } else if (password === "") {
-      toast.error("Password is required!");
-      return;
-    } else if (password.length < 3) {
-      toast.error("Password must be at least 4 characters!");
-      return;
-    }
 
     try {
       let response;
@@ -51,7 +37,7 @@ function Login() {
           toast.success('University Admin login successful!');
           navigate('/admindashboard');
         } else {
-          toast.error(response.data.message || 'Admin login failed');
+          setMessage('Invalid Email or Password');
         }
       } else if (email.endsWith('@gmail.com')) {
         response = await axios.post(
@@ -70,7 +56,7 @@ function Login() {
           console.log(sessionStorage.getItem('user')); // Log user data
           toast.success('Super Admin login successful!');
         } else {
-          toast.error(response.data.message || 'Super Admin login failed');
+          setMessage('Invalid Email or Password');
         }
 
         if (response.data.success || response.data.created) {
@@ -94,16 +80,16 @@ function Login() {
             toast.success('Student login successful!');
             navigate('/');  // Navigate to home
           } else {
-            toast.error(response.data.message || 'Student login failed');
+            setMessage('Invalid Email or Password');
           }
         } catch (error) {
           console.error(error);
-          toast.error('An error occurred during login');
+          setMessage('Invalid Email or Password');
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error('An error occurred during login');
+      setMessage('Invalid Email or Password');
     }
   };
 
@@ -122,6 +108,7 @@ function Login() {
         <div className="login-header">
           <h1>Login to your account</h1>
         </div>
+        {message && <p style={{ color: 'red' }}>{message}</p>}
 
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-group">

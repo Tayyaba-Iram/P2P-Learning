@@ -20,7 +20,7 @@ function Register() {
   const [universities, setUniversities] = useState([]);
   const [campusOptions, setCampusOptions] = useState([]);
   const [programOptions, setProgramOptions] = useState([]);
-
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,37 +52,14 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Validation and submission logic
-    if (!name) {
-      toast.error("Name is required!");
-    } else if (!sapid) {
-      toast.error("Sap ID is required!");
-    } else if (!email) {
-      toast.error("Email is required!");
-    } else if (!email.includes("@")) {
-      toast.warning("Email must include '@'!");
-    } else if (!cnic) {
-      toast.error("CNIC is required!");
-    } else if (!university) {
-      toast.error("University is required!");
-    } else if (!campus) {
-      toast.error("Campus is required!");
-    } else if (!program) {
-      toast.error("Program is required!");
-    } else if (!semester) {
-      toast.error("Semester is required!");
-    } else if (!password) {
-      toast.error("Password is required!");
-    } else if (password.length < 4) {
-      toast.error("Password must be at least 4 characters!");
-    } else if (!cpassword) {
-      toast.error("Confirm Password is required!");
-    } else if (cpassword.length < 4) {
-      toast.error("Confirm password must be at least 4 characters!");
-    } else if (password !== cpassword) {
-      toast.error("Password and confirm password must match!");
-    } else {
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+      setMessage('Password must be 8 characters with uppercase, lowercase letter, number, and special character.');
+      return;
+    } 
+    else if(password!==cpassword) {
+      setMessage('Password and confirm password must be same.');
+      return;
+    }else {
       axios
         .post('http://localhost:3001/api/registerStudent', {
      name, sapid, email, cnic, phone, university, campus, program, semester, specification, password, cpassword
@@ -102,6 +79,55 @@ function Register() {
         });
     }
   };
+  const handleSapChange = (event) => {
+    const value = event.target.value;
+    // Allow only numbers
+    const cleanedValue = value.replace(/\D/g, '');
+    setSapid(cleanedValue); // Update the state with numeric value
+  };
+  const handlePhoneChange = (value) => {
+    // Remove any non-digit characters
+    const cleanedValue = value.replace(/\D/g, '');
+  
+    // Format as '0000-0000000'
+    if (cleanedValue.length > 4) {
+      setPhone(`${cleanedValue.slice(0, 4)}-${cleanedValue.slice(4, 11)}`);
+    } else {
+      setPhone(cleanedValue);
+    }
+  };
+  const handleCnicChange = (value) => {
+    // Remove any non-digit characters
+    const cleanedValue = value.replace(/\D/g, '');
+  
+    // Format as '00000-0000000-0'
+    let formattedValue = cleanedValue;
+  
+    if (cleanedValue.length > 5 && cleanedValue.length <= 12) {
+      formattedValue = `${cleanedValue.slice(0, 5)}-${cleanedValue.slice(5)}`;
+    } else if (cleanedValue.length > 12) {
+      formattedValue = `${cleanedValue.slice(0, 5)}-${cleanedValue.slice(5, 12)}-${cleanedValue.slice(12)}`;
+    }
+  
+    setCnic(formattedValue);
+  };
+  const handleSemesterChange = (event) => {
+    const value = event.target.value;
+    // Allow only numbers
+    const cleanedValue = value.replace(/\D/g, '');
+    setSemester(cleanedValue); // Update the state with numeric value
+  };
+  const capitalizeFullName = (fullName) => {
+    return fullName
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    setName(capitalizeFullName(value));
+  };
 
   return (
     <div className="registration-container">
@@ -109,58 +135,57 @@ function Register() {
       <div className="left-section">
         <img src="Logo.jpg" alt="Logo" className="signup-logo" />
         <h2>Welcome</h2>
-        <p>In learning you will teach and</p>
-        <p>in teaching you will learn!</p>
+        <p>In learning you will teach and in teaching you will learn!</p>
+
         <Link to="/login"><button className="login-button">Login</button></Link>
       </div>
 
-      <div className="right-section">
         <div className="signup-header">
           <h1>Create an account</h1>
-        </div>
+          {message && <p style={{ color: 'red',whiteSpace: 'pre-wrap'  }}>{message}</p>}
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-            <input type="text" placeholder="Sap ID" value={sapid} onChange={(e) => setSapid(e.target.value)} />
+          <input type="text" placeholder="Name" value={name} onChange={handleNameChange} required/>            
+          <input type="text" placeholder="Sap ID" value={sapid} onChange={handleSapChange} required/>
           </div>
           <div className="form-group">
-            <input className="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="text" placeholder="CNIC(00000-0000000-0)" value={cnic} onChange={(e) => setCnic(e.target.value)} />
+            <input className="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+            <input id="cnic" type="text" placeholder="CNIC"value={cnic}onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} required/>
           </div>
           <div className="form-group">
-          <input type="text" placeholder="phone(0000-0000000)" value={phone} onChange={(e) => setPhone(e.target.value)} />
-            <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)}>
+          <input id="phone" type="text" placeholder="Phone Number"value={phone}onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} required/> 
+            <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required>
               <option value="" hidden>Select University</option>
               {universities.map((uni) => (
-                <option key={uni._id} value={uni.name}>{uni.name}</option>
+                <option key={uni._id} value={uni.name} required>{uni.name}</option>
               ))}
             </select>
             </div>
               <div className="form-group">
             <select id="campus" value={campus} onChange={(e) => setCampus(e.target.value)} disabled={!university}>
-              <option value="" hidden>Select Campus</option>
+              <option value="" hidden required>Select Campus</option>
               {campusOptions.map((camp) => (
                 <option key={camp._id} value={camp.name}>{camp.name}</option>
               ))}
             </select>
             <select id="program" value={program} onChange={(e) => setProgram(e.target.value)} disabled={!campus}>
-              <option value="" hidden>Select Program</option>
+              <option value="" hidden required>Select Program</option>
               {programOptions.map((prog) => (
                 <option key={prog._id} value={prog.name}>{prog.name}</option>
               ))}
             </select>
           </div>
           <div className="form-group">
-            <input type="text" placeholder="Semester" value={semester} onChange={(e) => setSemester(e.target.value)} />
-            <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} />
+          <input type="text" value={semester} onChange={handleSemesterChange} placeholder="Semester" maxLength={1} required/>            
+          <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} required/>
           </div>
           <div className="form-group">
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <input type="password" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+            <input type="password" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
           </div>
           <button type="submit" className="register-button">Register</button>
         </form>
-      </div>
+        </div>
     </div>
   );
 }
