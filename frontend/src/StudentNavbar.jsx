@@ -70,6 +70,7 @@ function StudentNavbar() {
   return (
     <>
       <div className="navbar">
+      
         <div className="logo-container">
           <img src="Logo.jpg" alt="P2P Learning" className="logo-image" />
           <h3 className="logo-text">P2P Learning</h3>
