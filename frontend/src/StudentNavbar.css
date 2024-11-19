@@ -3,18 +3,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
+  background-color:#48742F;
   color: #fff;
   padding: 10px 20px;
+  
+ 
+
 }
 
 .logo-container {
-  display: flex;
+ 
   align-items: center;
+  
 }
 
 .logo-image {
-  width: 40px;
+  width: 50px;
   height: 40px;
   margin-right: 10px;
 }

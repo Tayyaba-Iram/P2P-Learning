@@ -1,17 +1,17 @@
 .home-container {
   display: flex;
   height: 100vh;
-  /* Full height */
+  background-color: white;
+ 
 }
+
 
 .sidebar {
   width: 200px;
-  /* Sidebar width */
-  background-color: #f1ecec;
-  /* Background color */
+  background-color: #ffffff;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  /* Optional shadow */
+
 }
 
 .sidebar h2 {
@@ -20,7 +20,6 @@
 
 .sidebar ul {
   list-style-type: none;
-  /* Remove bullets */
   padding: 0;
 }
 
@@ -30,18 +29,20 @@
 
 .sidebar ul li a {
   text-decoration: none;
-  /* Remove underline */
+
   color: #333;
-  /* Link color */
+ 
 }
 
 .content {
   flex-grow: 1;
-  /* Takes up remaining space */
+ 
   padding: 20px;
-  /* Add some padding */
+  
   overflow-y: auto;
-  /* Allow scrolling if content overflows */
+
+  background-color: white;
+ 
 }
 
 .banner {
@@ -50,22 +51,17 @@
 
 .services {
   display: grid;
-  /* Create a grid layout */
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  /* Responsive grid */
   gap: 20px;
-  /* Space between cards */
+
 }
 
 .service-card {
   border: 1px solid #ccc;
-  /* Card border */
   border-radius: 5px;
-  /* Rounded corners */
   padding: 15px;
-  /* Card padding */
   text-align: center;
-  /* Center text */
+
 }
 
 .search-bar {
@@ -74,23 +70,20 @@
 
 .search-bar input {
   width: 70%;
-  /* Width of the search input */
   padding: 10px;
-  /* Input padding */
+  
 }
 
 .search-bar button {
   padding: 10px;
-  /* Button padding */
+
 }
 
 .chat-section {
   margin-top: 20px;
-  /* Space above chat section */
   border: 1px solid #ccc;
-  /* Chat section border */
   padding: 15px;
-  /* Chat section padding */
+  
 }
 
 
@@ -105,7 +98,6 @@
 
 .schedule-btn {
   background-color: #48742F;
-  /* Updated color */
   color: white;
   padding: 10px 20px;
   border: none;
@@ -116,7 +108,7 @@
 
 .schedule-btn:hover {
   background-color: #48742F;
-  /* Darker shade for hover effect */
+ 
 }
 
 .form-backdrop {
@@ -150,9 +142,9 @@
   justify-content: space-between;
 }
 
-.submit-btn,
-.clear-btn,
-.action-btn {
+.submit-btn
+
+ {
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
@@ -170,6 +162,8 @@
 .clear-btn {
   background-color: #dc3545;
   color: white;
+  margin-right: 4cm;
+  width: 22%;
 }
 
 .action-btn {
@@ -177,10 +171,62 @@
   color: black;
 }
 
+
 .agenda-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+
+ 
+  
+}
+
+.agenda-table td:last-child button {
+  margin-left: 9px;
+}
+
+.agenda-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.agenda-table th,
+.agenda-table td {
+  border: 1px solid #000;
+  padding: 10px;
+  text-align: center;
+  width: 16.6%;
+}
+
+
+
+.agenda-table td button {
+  background-color: #bc7f43;
+  color: white;
+  border: none;
+  padding: 8px;
+  margin: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+
+
+
+.agenda-table td button:hover {
+  background-color: #48742F;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .agenda-table td button {
+    padding: 6px;
+    font-size: 14px;
+    margin: 6px;
+  }
 }
 
 .agenda-table th,
@@ -190,22 +236,33 @@
   text-align: left;
 }
 
+
+.agenda-table tr:nth-child(odd) {
+  background-color: white; 
+}
+
+.agenda-table tr:nth-child(even) {
+  background-color: #73B24B; 
+  
+}
+
+
 .agenda-table th {
   background-color: #48742F;
-  /* Updated color */
   color: white;
 }
 
-/* Red Cancel Button */
+
 .cancel-btn {
   color: red;
   border: none;
   background: transparent;
   font-size: 20px;
   cursor: pointer;
+  
 }
 
-/* Confirmation Modal Styling */
+
 .delete-confirmation {
   position: fixed;
   top: 50%;
@@ -240,6 +297,7 @@
 
 }
 
+
 .cancel-btn {
   background-color: red;
   padding: 10px 20px;
@@ -248,8 +306,8 @@
 
 .view-all-btn {
   position: absolute;
-  top: 210px; /* Screen ke upar se distance */
-  right: 350px; /* Screen ke right side se distance */
+  top: 210px;
+  right: 9.5cm;
   padding: 10px;
   background-color: #48742F;
   color: white;
@@ -276,7 +334,6 @@
 
 .schedule-btn {
   background-color: #48742F;
-  /* Updated color */
   color: white;
   padding: 10px 20px;
   border: none;
@@ -287,7 +344,7 @@
 
 .schedule-btn:hover {
   background-color: #48742F;
-  /* Darker shade for hover effect */
+ 
 }
 
 .form-backdrop {
@@ -363,11 +420,10 @@
 
 .agenda-table th {
   background-color: #48742F;
-  /* Updated color */
   color: white;
 }
 
-/* Red Cancel Button */
+
 .cancel-btn {
   color: red;
   border: none;
@@ -376,7 +432,7 @@
   cursor: pointer;
 }
 
-/* Confirmation Modal Styling */
+
 .delete-confirmation {
   position: fixed;
   top: 50%;
@@ -425,6 +481,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
 }
 
 .view-all-btn:hover {
@@ -444,9 +501,9 @@
 }
 
 .conduct-session-container {
-  position: absolute; 
-  top: 7.5cm; 
-  left: 27.5cm; 
+  position: absolute;
+  top: 7.5cm;
+  left: 27.5cm;
   height: 6cm;
   width: 7cm;
   border: 1px solid #ddd;
@@ -457,37 +514,43 @@
 }
 
 .chat-container {
-  position: absolute; 
-  top: 14cm; 
-  left: 27.5cm; 
+  position: absolute;
+  top: 14cm;
+  left: 27.5cm;
   height: 5cm;
   width: 7cm;
   border: 1px solid #ddd;
   padding: 20px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
- 
+
 }
-.cs{
+
+.cs {
   font-size: 23px;
 }
 
 
-.c{
+.c {
   margin-left: 0.25cm;
-  margin-top: -0.25cm;
+  margin-top: 3px;
   font-size: 23px;
 }
 
-.p{
-  margin-left: -0.5cm;
-  margin-top: 1cm;
-  
-  
+.p {
+  margin-left: 5px;
+
+
 }
-.chat-link{
+
+.chat-link {
 
   margin-top: 3cm;
-  margin-left: -cm ;
+  margin-left:95px;
 
 }
+
+.conduct-session-link{
+ margin-left:50px;
+}
+

@@ -172,7 +172,7 @@ function Home() {
                 <h3>Session Agenda</h3>
                 <table className="agenda-table">
                   <thead>
-                    <tr>
+                    <tr className='border'>
                       <th>Topic</th>
                       <th>Date</th>
                       <th>Start Time</th>
