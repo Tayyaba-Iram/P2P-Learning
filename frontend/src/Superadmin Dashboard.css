@@ -103,6 +103,13 @@ button:hover {
 button:focus {
   outline: none;
 }
+.delete-button{
+  background-color: crimson;
+}
+.edit-button{
+  width: 22%;
+  justify-content: center;
+}
 
 @media (max-width: 768px) {
   .main-content {

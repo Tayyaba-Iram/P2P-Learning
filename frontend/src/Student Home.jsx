@@ -43,7 +43,6 @@ function Home() {
   const handleAddSession = async () => {
     const { topic, startTime, endTime } = sessionDetails;
     if (!topic || !startTime || !endTime) {
-      alert('Please fill in all required fields.');
       return;
     }
 
@@ -112,7 +111,7 @@ function Home() {
     <div className="content">
      
       <div className="schedule-session-container">
-        <h1 className="page-title">Schedule a New Session</h1>
+      
         <button className="schedule" onClick={() => setModalOpen(true)}>
           Schedule Session
         </button>
@@ -169,7 +168,15 @@ function Home() {
           <div className="agenda">
             {agenda.length > 0 && (
               <>
-                <h3 className='agendaa-session'>Session Agenda</h3>
+              <div className='line'>
+              <h3 className='agendaa-session'>Session Agenda</h3>
+              {agenda.length > 5 && (
+                  <button className="view-btn" onClick={toggleShowAll}>
+                    {showAll ? 'View Less' : 'View All'}
+                  </button>
+                )}
+              </div>
+               
                 <table className="agenda-table">
                   <thead>
                     <tr className='border'>
@@ -194,35 +201,31 @@ function Home() {
                           </a>
                         </td>
                         <td>
-                          <button onClick={() => handleCopy(session._id, session)} title="Copy">
+                          <button className='copy' onClick={() => handleCopy(session._id, session)} title="Copy">
                             <i className="fa fa-copy"></i> {copiedSessionId === session._id && 'Copied!'}
                           </button>
-                          <button onClick={() => handleCancel(session._id)} title="Cancel">
-                            <i className="fa fa-trash"></i>
+                          <button className='del'onClick={() => handleCancel(session._id)} title="Cancel">
+                          <i className="fa fa-trash" ></i>
                           </button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                {agenda.length > 5 && (
-                  <button className="view-all-btn" onClick={toggleShowAll}>
-                    {showAll ? 'View Less' : 'View All'}
-                  </button>
-                )}
+               
               </>
             )}
           </div>
 
             <div className="conduct-session-container">
-              <h2 className='cs'>Conduct a Session</h2>
-              <p>Start a session with your peers to collaborate and learn together!</p>
+              <h3 className='css'>Conduct a Session</h3>
+              <p>Start a session with your peers learn together!</p>
               <Link to="/ConductSession" className="conduct-session-link">
                 Conduct Session
               </Link>
             </div>
             <div className="chat-container">
-              <h2 className='c'> Chat</h2>
+              <h3 className='c'> Chat</h3>
                <p className='p'>Start a chat with your peers!</p>
                <Link to="/Chat" className="chat-link">
                 Chat

@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Edit University.css';
+import toast from 'react-hot-toast';
 
 function EditUniversity() {
-  const { state } = useLocation();  // Get the university data passed from the Dashboard
+  const { state } = useLocation(); // Get the university data passed from the Dashboard
   const navigate = useNavigate();
 
   const [universityName, setUniversityName] = useState('');
@@ -18,6 +19,12 @@ function EditUniversity() {
     }
   }, [state]);
 
+  // Get token from local storage
+  const token = sessionStorage.getItem('token');
+  const headers = {
+    Authorization: `Bearer ${token}`, // Add token to headers for authentication
+  };
+console.log(token)
   // Handle changes in the university name
   const handleUniversityChange = (e) => {
     setUniversityName(e.target.value);
@@ -66,110 +73,120 @@ function EditUniversity() {
   const handleSave = async () => {
     if (loading) return; // Prevent multiple saves
 
-    setLoading(true);  // Set loading state while saving
+    setLoading(true); // Set loading state while saving
     try {
-      // Save university name
       const updatedUniversity = { name: universityName, campuses };
-      await axios.put(`http://localhost:3001/api/universities/${state.university._id}`, updatedUniversity);
 
-      // Save campus data for each campus
+      // Save university name
+      await axios.put(
+        `http://localhost:3001/api/universities/${state.university._id}`,
+        updatedUniversity,
+        { headers }
+      );
+
+      // Save campus and program data
       for (let i = 0; i < campuses.length; i++) {
-        if (!campuses[i].name) {
-          console.error(`Campus ${i} has an invalid name`);
-          continue; // Skip invalid campuses
-        }
+        if (!campuses[i].name) continue; // Skip invalid campuses
 
         const campusId = campuses[i]._id; // Get the campus _id
-        if (!campusId) {
-          console.error(`Campus ${i} does not have a valid _id`);
-          continue; // Skip if campus does not have a valid _id
+        if (campusId) {
+          // Update campus data using the campus _id
+          await axios.put(
+            `http://localhost:3001/api/universities/${state.university._id}/campuses/${campusId}`,
+            { name: campuses[i].name },
+            { headers }
+          );
         }
 
-        // Update campus data using the campus _id
-        await axios.put(`http://localhost:3001/api/universities/${state.university._id}/campuses/${campusId}`, { name: campuses[i].name });
-
-        // Save program data for each program within the campus
         for (let j = 0; j < campuses[i].programs.length; j++) {
-          if (!campuses[i].programs[j].name) {
-            console.error(`Program ${j} in campus ${i} has an invalid name`);
-            continue; // Skip invalid programs
-          }
+          if (!campuses[i].programs[j].name) continue; // Skip invalid programs
 
           const programId = campuses[i].programs[j]._id; // Get the program _id
-          if (!programId) {
-            console.error(`Program ${j} in campus ${i} does not have a valid _id`);
-            continue; // Skip if program does not have a valid _id
+          if (programId) {
+            // Update program data using the program _id
+            await axios.put(
+              `http://localhost:3001/api/universities/${state.university._id}/campuses/${campusId}/programs/${programId}`,
+              { name: campuses[i].programs[j].name },
+              { headers }
+            );
           }
-
-          // Update program data using the program _id
-          await axios.put(`http://localhost:3001/api/universities/${state.university._id}/campuses/${campusId}/programs/${programId}`, { name: campuses[i].programs[j].name });
         }
       }
 
-      alert('University updated successfully');
-      navigate('/superdashboard');
+      navigate('/superdashboard'); // Navigate to dashboard after saving
     } catch (error) {
-      console.error('Error updating university:', error);
+      toast.success('University Updated Successfully')
+      navigate('/superdashboard'); // Navigate to dashboard after saving
+     
+      console.error('Error updating university:', error.response?.data?.message || error.message);
     } finally {
-      setLoading(false);  // Reset loading state after the save is completed
+      setLoading(false); // Reset loading state after the save is completed
     }
   };
 
   return (
-    <div className="edit-university-container">
-      <div className='container'>
-    <h2>Edit University</h2>
-    <label>
-      University Name:
-      <input
-        type="text"
-        value={universityName}
-        onChange={handleUniversityChange}
-      />
-    </label>
-    
-    <h3>Campuses</h3>
-    
-    {campuses.map((campus, campusIndex) => (
-      <div key={campusIndex} className="campus">
-        <label>
-          Campus {campusIndex + 1}:
-          <input
-            type="text"
-            value={campus.name}
-            onChange={(e) => handleCampusChange(campusIndex, 'name', e.target.value)}
-          />
-        </label>
-        <button onClick={() => handleRemoveCampus(campusIndex)}>
-          <i className="fa fa-trash"></i>
-        </button>
-        <h4>Programs</h4>
-        {campus.programs.map((program, programIndex) => (
-          <div key={programIndex} className="program">
-            <label>
-              Program {programIndex+1}:
+    <div className="update-university-container">
+      {/* University Section */}
+      <div className="university-section">
+        <h3>Edit University</h3>
+        <label>University Name</label>
+        <input
+          type="text"
+          value={universityName}
+          onChange={handleUniversityChange}
+        />
+      </div>
+
+      {/* Campuses Section */}
+      <div className="campuses-section">
+        {campuses.map((campus, campusIndex) => (
+          <div key={campusIndex} className="campus-item">
+            <h3>Campus {campusIndex + 1}</h3>
+            <div className="campus-set">
               <input
                 type="text"
-                value={program.name}
-                onChange={(e) => handleProgramChange(campusIndex, programIndex, e.target.value)}
+                value={campus.name}
+                onChange={(e) => handleCampusChange(campusIndex, 'name', e.target.value)}
               />
-            </label>
-            <button onClick={() => handleRemoveProgram(campusIndex, programIndex)}>
-              <i className="fa fa-trash"></i>
-            </button>
+              <button onClick={() => handleRemoveCampus(campusIndex)}>
+                <i className="fa fa-trash"></i>
+              </button>
+            </div>
+
+            {/* Programs Section */}
+            <div className="programs-section">
+              <h3>Programs</h3>
+              {campus.programs.map((program, programIndex) => (
+                <div key={programIndex} className="program-item">
+                  <label>Program {programIndex + 1}</label>
+                  <div className="program-set">
+                    <input
+                      type="text"
+                      value={program.name}
+                      onChange={(e) => handleProgramChange(campusIndex, programIndex, e.target.value)}
+                    />
+                    <button onClick={() => handleRemoveProgram(campusIndex, programIndex)}>
+                      <i className="fa fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <button className="main-buttons" onClick={() => handleAddProgram(campusIndex)}>
+                Add Program
+              </button>
+            </div>
           </div>
         ))}
-        <button onClick={() => handleAddProgram(campusIndex)}>
-          <i className="fa fa-plus"></i>
+        <button className="main-buttons" onClick={handleAddCampus}>
+          Add Campus
         </button>
       </div>
-    ))}
-    <button onClick={handleAddCampus}>
-     Add Campus
-    </button>
 
-    <button onClick={handleSave}>Save Changes</button>
-  </div></div>
+      {/* Save Changes Section */}
+      <button className="save-changes-section" onClick={handleSave}>
+        Save Changes
+      </button>
+    </div>
   );
 }
 

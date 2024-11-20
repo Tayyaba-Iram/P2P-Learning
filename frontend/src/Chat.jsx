@@ -186,7 +186,7 @@ function Chat() {
           type="text"
           value={searchQuery}
           onChange={handleSearchChange}
-          placeholder="Search students by name or specification..."
+          placeholder="Search peers by name or specification..."
         />
        {searchQuery.trim() && (
     filteredStudents.length > 0 ? (

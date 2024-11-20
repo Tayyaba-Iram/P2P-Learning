@@ -23,7 +23,7 @@ html, body {
 
 /* Sidebar (left) */
 .sidebar {
-  width: 300px;
+  width: 330px;
   background-color: #dee1e7;
   color: white;
   padding: 20px;
@@ -68,8 +68,6 @@ html, body {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  height: 88vh; /* Ensure the chat box fills the remaining space */
-  overflow-y: auto; /* Allow scroll for chat messages */
 }
 
 .chat-box h2 {
@@ -83,7 +81,7 @@ html, body {
   flex: 1;
   overflow-y: auto;
   margin-bottom: 20px;
-  max-height: 65%;
+ 
 }
 
 .message {
@@ -91,67 +89,105 @@ html, body {
   border-radius: 10px;
   margin-bottom: 10px;
   display: flex;
-  max-width: 80%;
+ 
 }
 
-.sent {
-  background-color: #48742F;
-  color: white;
-  align-self: flex-end;
-  margin-left: auto;
-  width: 20%;
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px;
+  overflow-y: auto;
 }
 
-.received {
-  background-color: #e0e0e0;
-  color: black;
-  align-self: flex-start;
-  width: 20%;
-}
-
-.message strong {
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-/* Chat input */
 .chat-input {
   display: flex;
   align-items: center;
-  position: sticky;
-  margin-bottom: 10px;
-  bottom: 0;
-  padding: 10px;
-  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  width: 100%;
 }
 
 .chat-input input {
-  flex: 1;
+  flex-grow: 1; /* Make the input box flexible */
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
   font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  resize: none; /* Optional: Remove resizing behavior */
+  min-width: 150px; /* Optional: Set a minimum width */
 }
 
 .chat-input button {
   padding: 10px 20px;
-  margin-left: 10px;
-  background-color: #48742F;
-  color: white;
+  font-size: 14px;
   border: none;
+  background-color: #4CAF50;
+  color: white;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.chat-input button:hover {
-  background-color: #48742F;
 }
 
 .chat-input button:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
+  background-color: #ccc;
 }
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.message {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  max-width: 40%; /* Maximum width for the message */
+  word-wrap: break-word; /* Allow long words to break and wrap onto the next line */
+  white-space: pre-wrap; /* Ensures the line breaks are preserved */
+}
+
+.sent {
+  background-color: #4CAF50; 
+  align-self: flex-end; 
+  color: #f4f4f4;
+
+}
+
+.received {
+  background-color: #9e7608; 
+  align-self: flex-start; 
+  color: #f4f4f4;
+}
+
+
+
+
+
+.message strong {
+  margin-right: 5px;
+}
+
+
+.chat-input {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  position: sticky; /* Sticks to the bottom of the chat container */
+  bottom: 0;
+}
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full screen height */
+  width: 100%;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
 
 /* Scroll behavior */
 .chat-messages::-webkit-scrollbar {
@@ -163,87 +199,12 @@ html, body {
   border-radius: 10px;
 }
 
-.chat-messages::-webkit-scrollbar-thumb:hover {
-  background-color:#48742F;
-}
 
-/* Floating button for the search bar */
-.chat-container .sidebar input::placeholder {
-  color: #bbb;
-}
-.message {
-  margin: 10px 0;
-  padding: 10px;
-  max-width: 60%;
- 
-  border-radius: 10px;
-  
-  font-size: 14px;
-  position: relative;
-}
 
-.message.sent {
-  background: #0078d7;
-  color: white;
-  margin-left: auto;
-  text-align: left;
-}
 
-.message.sent::after {
-  content: '';
-  position: absolute;
-  top: 10px;
-  right: -10px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 5px 0 5px 10px;
-  border-color: transparent transparent transparent #0078d7;
-}
 
-.message.received {
-  background: #fff;
-  color: #333;
-  margin-right: auto;
-  text-align: left;
-  border: 1px solid #ddd;
-}
-
-.message.received::after {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: -10px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 5px 10px 5px 0;
-  border-color: transparent #ddd transparent transparent;
-}
-.chat-input {
-  display: flex;
-  padding: 10px;
-  background: #f4f4f4;
-  border-top: 1px solid #ddd;
-  position: sticky; /* Sticks to the bottom of the chat box */
-  bottom: 0;
-}
 .chat-box {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
- margin-bottom: 10px;
- height: 108vh;
-}
-.chat-messages {
-  flex-grow: 1;
-  padding: 10px;
-  overflow-y: auto; /* Enable scrolling */
-  background: #eef1f5;
-  display: flex;
-  flex-direction: column; /* Stack messages vertically */
-  justify-content: flex-end; /* Start with messages at the bottom */
-  border-bottom: 1px solid #ddd;
- 
 }
 

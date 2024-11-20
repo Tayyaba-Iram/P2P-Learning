@@ -1,10 +1,29 @@
 .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #48742F;
-    padding: 1rem 2rem;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color:#48742F;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+.logo-container {
+  align-items: center;
+  
+}
+
+.logo-image {
+  width: 50px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  font-size: 30px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 18px;
+}
   
   .nav-mid-links {
     display: flex;
@@ -39,12 +58,10 @@
     border-radius: 5px;
     width: 80px;
     height: 30px;
+    margin-bottom: 7px;
   }
   
-  .logout-button:hover {
-    background-color: #ff7875;
-  }
-  
+
   .logo-container {
     display: flex;
     align-items: center;

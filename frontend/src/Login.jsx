@@ -34,7 +34,6 @@ function Login() {
           sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Using sessionStorage
           console.log(sessionStorage.getItem('token')); // Log token
           console.log(sessionStorage.getItem('user')); // Log user data
-          toast.success('University Admin login successful!');
           navigate('/admindashboard');
         } else {
           setMessage('Invalid Email or Password');
@@ -54,7 +53,6 @@ function Login() {
           sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Using sessionStorage
           console.log(sessionStorage.getItem('token')); // Log token
           console.log(sessionStorage.getItem('user')); // Log user data
-          toast.success('Super Admin login successful!');
         } else {
           setMessage('Invalid Email or Password');
         }
@@ -76,8 +74,6 @@ function Login() {
             sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Using sessionStorage
             console.log(sessionStorage.getItem('token')); // Log token
             console.log(sessionStorage.getItem('user')); // Log user data
-
-            toast.success('Student login successful!');
             navigate('/');  // Navigate to home
           } else {
             setMessage('Invalid Email or Password');
@@ -100,12 +96,13 @@ function Login() {
         <h2>Welcome</h2>
         <p>In learning you will teach and in teaching you will learn!</p>
         <Link to="/register">
-          <button className="register-button">Register</button>
+          <button className="registerrr-button">Register</button>
         </Link>
       </div>
 
       <div className="right-section">
         <div className="login-header">
+          
           <h1>Login to your account</h1>
         </div>
         {message && <p style={{ color: 'red' }}>{message}</p>}

@@ -22,8 +22,8 @@ router.get('/admin-dashboard', verifyUser, (req, res) => {
     success: true,
     message: 'Welcome to your dashboard!',
     user: {
-      name: req.name,
-      email: req.email
+      name: req.user.name,
+      email: req.user.email
     }
   });
 });

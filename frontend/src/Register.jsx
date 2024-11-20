@@ -134,12 +134,12 @@ function Register() {
   return (
     <div className="registration-container">
       <Toaster position="top-center" />
-      <div className="left-section">
+      <div className="leftt-section">
         <img src="Logo.jpg" alt="Logo" className="signup-logo" />
         <h2>Welcome</h2>
         <p>In learning you will teach and in teaching you will learn!</p>
 
-        <Link to="/login"><button className="login-button">Login</button></Link>
+        <Link to="/login"><button className="loginn-button">Login</button></Link>
       </div>
 
         <div className="signup-header">
@@ -152,10 +152,10 @@ function Register() {
           </div>
           <div className="form-group">
             <input className="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-            <input id="cnic" type="text" placeholder="CNIC"value={cnic}onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} required/>
+            <input  type="text" placeholder="CNIC"value={cnic}onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} required/>
           </div>
           <div className="form-group">
-          <input id="phone" type="text" placeholder="Phone Number"value={phone}onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} required/> 
+          <input type="text" placeholder="Phone Number"value={phone}onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} required/> 
             <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required>
               <option value="" hidden>Select University</option>
               {universities.map((uni) => (
