@@ -59,7 +59,7 @@ function App() {
 
   return (
     <>
-      {renderNavbar()} {/* Render Navbar based on user role */}
+      {renderNavbar()} 
       <Routes>
         {/* Public Routes */}
         <Route path="/register" element={<Register />} />
@@ -80,9 +80,7 @@ function App() {
         <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
         <Route path="/complains" element={<ProtectedRoute><Complaints /></ProtectedRoute>} />
         <Route path="/studentprofile" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
-        <Route path="/resetpassword" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
-
-       
+        <Route path="/resetpassword" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />       
 
       </Routes>
         <Footer />

@@ -4,6 +4,7 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Student Home.css'; 
+import toast from 'react-hot-toast';
 
 function Home() {
   const [userData, setUserData] = useState(null);
@@ -71,7 +72,6 @@ function Home() {
       setSessionDetails({ topic: '', startTime: '', endTime: '', date: new Date() });
     } catch (error) {
       console.error('Error saving session:', error);
-      alert('Error saving session. Please try again.');
     }
   };
 
@@ -83,15 +83,14 @@ function Home() {
   };
 
   const handleCancel = async (sessionId) => {
-    if (window.confirm('Are you sure you want to delete this schedule session?')) {
       try {
         await axios.delete(`http://localhost:3001/api/sessions/${sessionId}`);
         setAgenda((prevAgenda) => prevAgenda.filter((session) => session._id !== sessionId));
+        toast.success('Session deleted successfully')
       } catch (error) {
         console.error('Error deleting session:', error);
-        alert('Error canceling session. Please try again.');
       }
-    }
+    
   };
 
   const formatTime = (time) => {

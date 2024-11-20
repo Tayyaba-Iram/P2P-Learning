@@ -41,8 +41,15 @@ input, select, textarea, .date-picker {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
+    width: 100%;
 }
-
+.date-picker {
+    width: 420px; /* Or set a specific width like 300px */
+    padding: 10px; /* Optional: Adjust padding for better usability */
+    font-size: 16px; /* Optional: Adjust font size for better readability */
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+  }
+  
 textarea {
     resize: vertical;
     min-height: 100px;
@@ -58,11 +65,6 @@ textarea {
     font-size: 16px;
 }
 
-.date-issue {
-    display: flex;
-    gap: 10px; /* Adjust gap between the two elements */
-  }
-  
   .date-picker,
   .date-issue select {
     padding: 8px; /* Adds some padding for better appearance */
