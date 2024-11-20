@@ -106,7 +106,6 @@ function Home() {
   };
 
   const displayedAgenda = showAll ? agenda : agenda.slice(0, 5);
-
   return (
     <div className="content">
      

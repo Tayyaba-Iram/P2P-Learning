@@ -72,9 +72,8 @@ html, body {
   flex-direction: column;
   padding: 20px;
 }
-
 .chat-box h2 {
-  font-size: 18px;
+ 
   color: #333;
   margin-bottom: 15px;
 }
@@ -87,27 +86,12 @@ html, body {
  
 }
 
-.message {
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  display: flex;
- 
-}
-
-.chat-messages {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 10px;
-  overflow-y: auto;
-}
 
 .chat-input {
   display: flex;
-  align-items: center;
-  margin-top: 10px;
-  width: 100%;
+  padding: 5px;
+  background-color: #fff;
+  position: sticky; /* Sticks to the bottom of the chat container */
 }
 
 .chat-input input {
@@ -124,7 +108,6 @@ html, body {
 .chat-input button {
   padding: 10px 20px;
   font-size: 14px;
-  border: none;
   background-color: #48742F;
   color: white;
   border-radius: 4px;
@@ -138,9 +121,9 @@ html, body {
 .chat-messages {
   display: flex;
   flex-direction: column;
-  height: 100%;
   padding: 10px;
   overflow-y: auto;
+  scroll-behavior: smooth; /* Enables smooth scrolling */
 }
 
 .message {
@@ -150,14 +133,18 @@ html, body {
   max-width: 40%; /* Maximum width for the message */
   word-wrap: break-word; /* Allow long words to break and wrap onto the next line */
   white-space: pre-wrap; /* Ensures the line breaks are preserved */
+
 }
 
 .sent {
-  background-color: #4CAF50; 
-  align-self: flex-end; 
+  background-color: #4CAF50;
+  align-self: flex-end;
   color: #f4f4f4;
-
+  border-radius: 8px;
+  padding: 10px;
+  margin: 5px;
 }
+
 
 .received {
   background-color: #9e7608; 
@@ -165,19 +152,6 @@ html, body {
   color: #f4f4f4;
 }
 
-.message strong {
-  margin-right: 5px;
-}
-
-
-.chat-input {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  border-top: 1px solid #ccc;
-  position: sticky; /* Sticks to the bottom of the chat container */
-  bottom: 0;
-}
 
 /* Scroll behavior */
 .chat-messages::-webkit-scrollbar {
@@ -189,8 +163,4 @@ html, body {
   border-radius: 10px;
 }
 
-.chat-box {
-  display: flex;
-  flex-direction: column;
-}
 

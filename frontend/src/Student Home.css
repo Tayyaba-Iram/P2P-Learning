@@ -146,11 +146,6 @@
 }
 
 
-.agenda-table {
-  width: 100%;
-  border-collapse: collapse;
- 
-}
 
 .agenda-table td:last-child button {
   margin-left: 9px;

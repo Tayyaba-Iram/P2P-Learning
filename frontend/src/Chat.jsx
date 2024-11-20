@@ -215,15 +215,18 @@ function Chat() {
       </div>
       {activeStudent && (
         <div className="chat-box">
-          <h2>Chat with {activeStudent.name}</h2>
+          <h2 >Chat with {activeStudent.name}</h2>
           <div className="chat-messages">
             {messages.map((msg, idx) => (
               <div key={idx} className={`message ${msg.senderId === user._id ? 'sent' : 'received'}`}>
                 <strong>{msg.senderId === user._id ? 'You' : activeStudent.name}</strong>: {msg.text}
               </div>
             ))}
-            <div ref={endOfMessages}></div>
-            <div className="chat-input">
+           <div ref={endOfMessages}></div>
+          </div>
+         
+
+          <div className="chat-input">
             <input
               type="text"
               value={newMessage}
@@ -232,8 +235,6 @@ function Chat() {
             />
             <button onClick={handleSendMessage} disabled={isSending}>Send</button>
           </div>
-          </div>
-          
         </div>
       )}
     </div>
