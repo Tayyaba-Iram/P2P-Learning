@@ -136,7 +136,7 @@ function Home() {
                 className="datepicker"
                 required
               />
-              <label>Start Time:</label>
+              <label className='st'>Start Time:</label>
               <input
                 type="time"
                 name="startTime"
@@ -144,7 +144,7 @@ function Home() {
                 onChange={handleInputChange}
                 required
               />
-              <label>End Time:</label>
+              <label className='et'>End Time:</label>
               <input
                 type="time"
                 name="endTime"
@@ -202,7 +202,7 @@ function Home() {
                         </td>
                         <td>
                           <button className='copy' onClick={() => handleCopy(session._id, session)} title="Copy">
-                            <i className="fa fa-copy"></i> {copiedSessionId === session._id && 'Copied!'}
+                            <i className="fa fa-copy"></i> {copiedSessionId === session._id && 'Copy!'}
                           </button>
                           <button className='del'onClick={() => handleCancel(session._id)} title="Cancel">
                           <i className="fa fa-trash" ></i>
