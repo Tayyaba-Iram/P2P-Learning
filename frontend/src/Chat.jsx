@@ -200,7 +200,7 @@ function Chat() {
     )
   )}
   
-      <h3>Chatted Students</h3>
+      <h3 className='catted'>Chatted Students</h3>
 {chattedStudents.length === 0 ? (
   <div>No chatted students found.</div>
 ) : (

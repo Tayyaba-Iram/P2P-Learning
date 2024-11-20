@@ -24,7 +24,8 @@ html, body {
 /* Sidebar (left) */
 .sidebar {
   width: 330px;
-  background-color: #dee1e7;
+  background-color: #ffffff;
+  border-color: #485460;
   color: white;
   padding: 20px;
   display: flex;
@@ -38,20 +39,22 @@ html, body {
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 14px; 
 }
-
+.catted{
+  text-align: left;
+}
 .sidebar div {
   padding: 10px;
   margin-bottom: 10px;
   cursor: pointer;
-  background-color: #c0c3ca;
+  background-color: #48742F;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
 
 .sidebar div:hover {
-  background-color: #485460;
+  background-color:#48742F;
 }
 
 .sidebar div.active {
@@ -122,7 +125,7 @@ html, body {
   padding: 10px 20px;
   font-size: 14px;
   border: none;
-  background-color: #4CAF50;
+  background-color: #48742F;
   color: white;
   border-radius: 4px;
   cursor: pointer;
@@ -162,10 +165,6 @@ html, body {
   color: #f4f4f4;
 }
 
-
-
-
-
 .message strong {
   margin-right: 5px;
 }
@@ -179,15 +178,6 @@ html, body {
   position: sticky; /* Sticks to the bottom of the chat container */
   bottom: 0;
 }
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Full screen height */
-  width: 100%;
-  border: 1px solid #ccc;
-  position: relative;
-}
-
 
 /* Scroll behavior */
 .chat-messages::-webkit-scrollbar {
@@ -198,10 +188,6 @@ html, body {
   background-color:#48742F;
   border-radius: 10px;
 }
-
-
-
-
 
 .chat-box {
   display: flex;
