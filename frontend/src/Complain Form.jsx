@@ -69,13 +69,13 @@ const ComplaintForm = () => {
                 <input type="text" name="sapid" placeholder="SAP ID" value={formData.sapid} onChange={handleChange} required />
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
                 <input type="text" name="university" placeholder="University" value={formData.university} onChange={handleChange} required />
-        <div className='date-issue'>    
-                     <DatePicker
+ 
+                     <DatePicker 
                     selected={formData.date}
                     onChange={handleDateChange}
                     dateFormat="yyyy-MM-dd"
                     className="date-picker"
-                />
+                />     
                 <select
                     name="category"
                     value={formData.category}
@@ -87,7 +87,7 @@ const ComplaintForm = () => {
                     <option value="Content Concern">Content Concern</option>
                     <option value="User Behavior">User Behavior</option>
                 </select>
-                </div>   
+             
                 <textarea
                     name="description"
                     placeholder="Describe your issue"

@@ -30,6 +30,7 @@
 .profile-container {
   position: relative;
   display: inline-block;
+  overflow: visible;
 }
 
 .user-profile {
@@ -47,20 +48,24 @@
 
 .triangle-icon {
   border-left: 6px solid transparent;
-  border-right: 8px solid transparent;
+  border-right: 6px solid transparent;
   border-top: 6px solid #fff;
+  margin-right: 20px;
 }
 
 /* Dropdown menu styles */
 .dropdown-menu {
   position: absolute;
-  background-color: #fff;
+ background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 10px 0;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  min-width: 200px; /* Ensure consistent width */
+  min-width: 145px; /* Ensure consistent width */
   display: none; /* Hidden by default */
+  top: 100%; /* Align dropdown below the user profile */
+  left: 0; /* Ensure it starts from the left of the parent container */
+  right: 0;
 }
 
 .dropdown-menu a,
@@ -69,7 +74,6 @@
   padding: 8px 15px;
   color: #333;
   text-decoration: none;
-  text-align: left;
   background: none;
   border: none;
   font-size: 13px;
