@@ -16,6 +16,7 @@ function AdminRegister() {
   const [cpassword, setCpassword] = useState('');
   const [universities, setUniversities] = useState([]);
   const [campusOptions, setCampusOptions] = useState([]);
+  const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -46,13 +47,14 @@ function AdminRegister() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name) toast.error("Name is required!");
-    else if (!sapid) toast.error("Sap ID is required!");
-    else if (!email || !email.includes("@") || !email.endsWith("@admin.edu.pk")) toast.error("Invalid email!");
-    else if (!cnic) toast.error("CNIC is required!");
-    else if (!university) toast.error("University is required!");
-    else if (campus.length === 0) toast.error("Select at least one campus!");
-    else if (password.length < 4 || password !== cpassword) toast.error("Passwords do not match or are too short!");
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+      setMessage('Password must be 8 characters with uppercase, lowercase letter, number, and special character.');
+      return;
+    } 
+    else if(password!==cpassword) {
+      setMessage('Password and confirm password must be same.');
+      return;
+    }
     else {
       axios.post('http://localhost:3001/api/registerUniAdmin', { name, sapid, email, cnic, phone, university, campus, password })
         .then(() => {
@@ -89,40 +91,46 @@ function AdminRegister() {
     setCnic(formattedValue);
   };
 
+  const handleSapChange = (event) => {
+    const value = event.target.value;
+    // Allow only numbers
+    const cleanedValue = value.replace(/\D/g, '');
+    setSapid(cleanedValue); // Update the state with numeric value
+  };
+
+
   return (
-    <div className="admin-registration-container">
-      <Toaster position="top-center" />
-      <div className="admin-register-form">
-        <h2>Admin Registration</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-field">
+<form className="admin-register-form"onSubmit={handleSubmit}>
+        <Toaster position="top-center" />
+        <h3>Admin Registration</h3>
+          <div className="form-fields">
             <label htmlFor="name">Name:</label>
-            <input id="name" type="text" placeholder='Enter your Full Name' value={name} onChange={(e) => setName(e.target.value)} />
+            <input id="name" type="text" placeholder='Enter Full Name' value={name} onChange={(e) => setName(e.target.value)} required/>
           </div>
           
-          <div className="form-field">
+          <div className="form-fields">
             <label htmlFor="sapid">ID:</label>
-            <input id="sapid" type="text" placeholder='Enter your ID'value={sapid} onChange={(e) => setSapid(e.target.value)} />
+          <input type="text" placeholder="Enter ID" value={sapid} onChange={handleSapChange} required/>
           </div>
           
-          <div className="form-field">
+          <div className="form-fields">
             <label htmlFor="email">Email:</label>
-            <input id="email" type="email" placeholder='Enter your Email'value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input id="email" type="email" placeholder='Enter Email'value={email} onChange={(e) => setEmail(e.target.value)} required/>
           </div>
           
-          <div className="form-field">
+          <div className="form-fields">
           <label htmlFor="phone">Phone:</label>
-          <input id="phone" type="text" placeholder="Enter your phone number"value={phone}onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} // Limits input to the correct length
+          <input id="phone" type="text" placeholder="Enter phone number"value={phone}onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} required
           /></div>
           
           <div className="form-fields">
           <label htmlFor="cnic">CNIC:</label>
-          <input id="cnic" type="text" placeholder="Enter your CNIC"value={cnic}onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} // Limits input to the correct length
+          <input id="cnic" type="text" placeholder="Enter CNIC"value={cnic}onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} required
           /></div>
 
-          <div className="form-field">
+          <div className="form-fields">
             <label htmlFor="university">University:</label>
-            <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)}>
+            <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required>
               <option value="" hidden>Select University</option>
               {universities.map(uni => (
                 <option key={uni._id} value={uni.name}>{uni.name}</option>
@@ -130,32 +138,31 @@ function AdminRegister() {
             </select>
           </div>
 
-          <div className="form-field">
+          <div className="form-fields">
             <label>Select Campus:</label>
             <div className="checkbox-group">
               {campusOptions.map(camp => (
                 <label key={camp._id}>
-                  <input type="checkbox" value={camp.name} checked={campus.includes(camp.name)} onChange={() => handleCampusChange(camp.name)} />
+                  <input type="checkbox" value={camp.name} checked={campus.includes(camp.name)} onChange={() => handleCampusChange(camp.name)} required/>
                   {camp.name}
                 </label>
               ))}
             </div>
           </div>
 
-          <div className="form-field">
+          <div className="form-fields">
             <label htmlFor="password">Password:</label>
-            <input id="password" type="password" placeholder='Enter your Password'value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input id="password" type="text" placeholder='Enter Password'value={password} onChange={(e) => setPassword(e.target.value)} required/>
           </div>
           
-          <div className="form-field">
+          <div className="form-fields">
             <label htmlFor="cpassword">Confirm Password:</label>
-            <input id="cpassword" type="password" placeholder='Enter your Confirm Password'value={cpassword} onChange={(e) => setCpassword(e.target.value)} />
+            <input id="cpassword" type="text" placeholder='Enter Confirm Password'value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
           </div>
-          
-          <button type="submit" className="register-btn">Register</button>
+          {message && <p style={{ color: 'red' }}>{message}</p>}
+          <button type="submit" className="register">Register</button>
         </form>
-      </div>
-    </div>
+   
   );
 }
 

@@ -1,23 +1,26 @@
 /* General styles for the form container */
-form {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.update-profile-form {
+  width: 500px;
+  margin: 0 auto;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  margin-top: 2%;
+  margin-bottom: 2%;
   }
   
   /* Styling for the form labels */
   form label {
     display: block;
-    font-weight: bold;
     margin-bottom: 8px;
     color: #333;
   }
   
   /* Styling for the form input fields */
-  form input {
+ .profile-data{
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -27,31 +30,29 @@ form {
     box-sizing: border-box;
     transition: border-color 0.3s ease;
   }
+  select{
+    width: 100%;
+    margin-bottom: 20px;
+  }
   
   /* Input focus effect */
   form input:focus {
-    border-color: #007bff;
+    border-color: #48742F;
     outline: none;
   }
   
   /* Styling for the button */
-  form button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
+.update-button {
+    font-size: 16px;
     color: #fff;
-    border: none;
     border-radius: 5px;
-    font-size: 18px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+    background-color:#48742F;
   }
   
-  /* Button hover effect */
-  form button:hover {
-    background-color: #0056b3;
-  }
   
   /* Loading text styling */
   p {
@@ -70,19 +71,5 @@ form {
       font-size: 16px;
     }
   }
-  .password-container {
-    position: relative;
-  }
-  
-  .eye-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-  }
-  
-  .eye-icon.visible {
-    color: #0066cc;
-  }
-  
+
+

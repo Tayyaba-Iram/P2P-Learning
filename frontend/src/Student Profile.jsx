@@ -56,8 +56,8 @@ function StudentProfile() {
   }, []);
 
   return (
-    <div className="profile-container">
-      <h2>Profile Information</h2>
+    <div className="profile-containerr">
+      <h3>Profile Information</h3>
 
       {/* Display profile data in a table */}
       <table className="profile-table">

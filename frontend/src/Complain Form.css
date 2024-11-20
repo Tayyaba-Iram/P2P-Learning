@@ -1,12 +1,18 @@
-.complaint-form-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
+.complaint-submit {
+    padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #f5f5f5;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 425px;
 }
-select {
+
+.select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -15,6 +21,7 @@ select {
     font-size: 16px;
     background-color: #fff;
     cursor: pointer;
+
 }
 
 
@@ -29,12 +36,6 @@ p {
     color: #555;
 }
 
-.complaint-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
 input, select, textarea, .date-picker {
     padding: 10px;
     border: 1px solid #ccc;
@@ -45,24 +46,32 @@ input, select, textarea, .date-picker {
 textarea {
     resize: vertical;
     min-height: 100px;
+    width: 100%;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+
+
+.submit-complain{
+    margin-top: 20px;
+    width: 100%;
+    justify-content: center;
     font-size: 16px;
 }
 
-button:hover {
-    background-color: #0056b3;
-}
-
-.message {
-    text-align: center;
-    margin-top: 20px;
-    color: green;
-}
+.date-issue {
+    display: flex;
+    gap: 10px; /* Adjust gap between the two elements */
+  }
+  
+  .date-picker,
+  .date-issue select {
+    padding: 8px; /* Adds some padding for better appearance */
+    font-size: 16px; /* Ensures consistent font size */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 40px;
+    flex: 1; /* Makes both elements take equal width */
+  }
+  
+  
+  

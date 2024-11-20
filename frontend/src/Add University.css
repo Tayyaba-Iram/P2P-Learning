@@ -1,47 +1,48 @@
 /* Container for the entire form */
 .add-form {
-    width: 100%;
-    max-width: 600px;
+    width: 500px;
     margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    padding: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    margin-top: 2%;
+    margin-bottom: 2%;
   }
   
   /* Heading Styling */
-  h2 {
+  h3 {
     text-align: center;
     margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
   }
   
   /* Label Styling */
   label {
-    display: flex; /* Flexbox to align label text and input field horizontally */
-    align-items: center; /* Vertically center the items */
-    font-size: 18px;
-    font-weight: 500;
-    color: #444;
-    margin-bottom: 12px;
-    margin-top: 20px;
+    font-weight: normal; /* Ensures label text is not bold */
+    font-size: 16px;
+    color: #070707;
+    margin-bottom: 9px;
   }
   
   /* Input field Styling */
-  label input {
-    flex-grow: 1; /* Input takes remaining space */
-    margin-left: 10px; /* Space between the label and input */
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 200px; /* Set a specific width for the input */
+  input {
+    width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: border-color 0.3s;
+ 
   }
   
   /* Button Styling */
-  button {
-    background-color: #007bff;
+  .add-campus {
+    background-color:#48742F;
     color: white;
     border: none;
     border-radius: 4px;
@@ -50,25 +51,10 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+    
   }
   
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Disabled Button Styling */
-  .disabled-button {
-    background-color: #ccc;
-    cursor: not-allowed;
-    color: #666;
-  }
-  
-  button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    color: #666;
-  }
-  
+
   /* Campus Section Styling */
   .campus-section {
     margin-bottom: 30px;
@@ -87,7 +73,6 @@
   /* Program Section Styling */
   .program-section {
     margin-bottom: 15px;
-    
     align-items: center;
     justify-content: space-between;
   }
@@ -96,31 +81,74 @@
   .program-section label {
     margin-right: 10px;
   }
-  
-  .program-section input {
-    margin-right: 15px; /* Space between input field and button */
+
+  .program{
+    display: flex;
+    
+  }
+  .campus{
+    display: flex;
+    
   }
   
   /* Remove button and field on one line */
-  button, input {
-    margin-right: 10px;
+  button {
+    margin-right: 1px;
+    margin-left: 5px;
+    height: 40px;
   }
   
   /* Add Campus Button Styling */
   button.add-campus-btn {
-    background-color: #48742F;
-    width: 100%;
-    margin-top: 20px;
-    font-size: 18px;
-    padding: 10px;
-  }
-  
-  /* Submit Button Styling */
-  button[type="button"] {
-    background-color: #48742F;
+    background-color: #f50909;
     width: 100%;
     font-size: 18px;
     padding: 10px;
-    margin-top: 20px;
+  }
+  .remove-campus-button {
+    height: 38px; /* Adjust the height as needed */
+    width: 40px;  /* Optional: Adjust width to keep it square */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #dc3545; /* Red color for delete */
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
   }
   
+  .remove-campus-button:hover {
+    background-color: #c82333;
+  }
+  
+  .remove-campus-button:disabled {
+    background-color: #dc3545;
+    cursor: not-allowed;
+  }
+  .remove-program-button {
+    height: 38px; /* Adjust the height */
+    width: 40px;  /* Optional: Adjust width for symmetry */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #dc3545; /* A lighter red for differentiation */
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px; /* Optional: Space between the input and button */
+  }
+  
+  .remove-program-button:hover {
+    background-color: #e55347;
+  }
+  
+  .remove-program-button:disabled {
+    background-color:  #dc3545;
+    cursor: not-allowed;
+  }
+  .add-uni{
+    margin-top: 20px;
+    width: 100%;
+    justify-content: center;
+  }

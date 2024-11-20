@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
-
+import './Complain.css'
 const Complaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [error, setError] = useState(null);
@@ -54,7 +54,7 @@ const Complaints = () => {
   return (
     <div className="complaints-list-container">
       <Link to="/complain-form">
-        <button className="btn">Add Complain</button>
+        <button className="complaint-add-button">Add Complain</button>
       </Link>
       <h2>Your Complaints</h2>
       {error && <p className="error-message">{error}</p>}
@@ -62,10 +62,10 @@ const Complaints = () => {
       <table className="complaints-table">
         <thead>
           <tr>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Action</th>
+            <th className='heading'>Category</th>
+            <th className='heading'>Description</th>
+            <th className='heading'>Date</th>
+            <th className='heading'>Action</th>
           </tr>
         </thead>
         <tbody>

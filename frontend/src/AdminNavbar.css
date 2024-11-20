@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #0073e6;
+    background-color:#48742F;
     padding: 1rem 2rem;
   }
   
@@ -22,12 +22,12 @@
   }
   
   .nav-mid-links a:hover {
-    background-color: #005bb5;
+    background-color: #48742F;
   }
   
   .nav-mid-links a.active {
     color: #ffeb3b; /* Highlight color for active link */
-    background-color: #004494; /* Background for active link */
+    background-color: #48742F; /* Background for active link */
   }
   
   .logout-button {
@@ -90,7 +90,7 @@
   }
   
   .confirm-button {
-    background-color: #007bff;
+    background-color:#48742F;
     color: #fff;
     border: none;
     padding: 8px 15px;
@@ -108,7 +108,7 @@
   }
   
   .confirm-button:hover {
-    background-color: #0056b3;
+    background-color: #48742F;
   }
   
   .cancel-button:hover {

@@ -12,7 +12,6 @@ import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js'
 import DashboardRoutes from './routes/DashboardRoutes.js'
 import loginRoutes from './routes/loginRoutes.js'
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
-import cookieParser from 'cookie-parser'; // Import cookie-parser
 import Message from './models/Message.js';
 import http from 'http';
 import { Server } from 'socket.io';

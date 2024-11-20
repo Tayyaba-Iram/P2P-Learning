@@ -60,7 +60,7 @@ const SuperAdminNavbar = () => {
       {showLogoutModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Confirm Logout</h2>
+            <h3>Confirm Logout</h3>
             <p>Are you sure you want to log out?</p>
             <div className="modal-buttons">
               <button className="confirm-button" onClick={handleConfirmLogout}>Yes</button>

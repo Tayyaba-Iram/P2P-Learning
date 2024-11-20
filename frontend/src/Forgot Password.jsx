@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import { Link} from 'react-router-dom';
+import './ForgotPassword.css'
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -23,9 +25,8 @@ function ForgotPassword() {
   };
 
   return (
-    <div>
-      <h1>Request Password Reset</h1>
-      <form onSubmit={handleSubmit}>
+      <form className='forgot-form' onSubmit={handleSubmit}>
+      <h3>Request Password Reset</h3>
         <input
           type="email"
           placeholder="Enter your email"
@@ -34,9 +35,11 @@ function ForgotPassword() {
           required
         />
         <button type="submit">Send Reset Link</button>
+        <Link className='back-login' to="/login" >Back to Login</Link>
+
+        <Toaster position="top-center" />
       </form>
-      <Toaster position="top-center" />
-    </div>
+     
   );
 }
 

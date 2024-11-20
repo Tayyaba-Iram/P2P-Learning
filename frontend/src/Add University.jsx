@@ -105,71 +105,67 @@ function AddUniversity() {
 
   return (
     <div className="add-form">
-      <h2>Add University</h2>
-      <label>
-        University Name:
-        <input
-          type="text"
-          name="name"
-          value={newUniversityData.name}
-          onChange={(e) => handleInputChange(e)}
-        />
-      </label>
-
-            <button onClick={handleAddCampus}>Add Campus</button>
+      <h3>Add University</h3>
+      <label  htmlFor="name"> University Name  </label>
+        <input type="text" name="name" value={newUniversityData.name} onChange={(e) => handleInputChange(e)}  />
       {newUniversityData.campuses.map((campus, campusIndex) => (
-        <div key={campusIndex} className="campus-section">
+        <div key={campusIndex} >
         
 
           <h3>Campus {campusIndex + 1}</h3>
-          <div className="campus-inputs">
+        
             <label>
-              Campus Name:
+              Campus Name </label>
+              <div className='campus'>
               <input
                 type="text"
                 name="name"
                 value={campus.name}
                 onChange={(e) => handleInputChange(e, campusIndex)}
               />
-            </label>
+           
             
-            <button
-              onClick={() => handleRemoveCampus(campusIndex)}
-              className={getDisabledClass(newUniversityData.campuses.length === 1)}
-              disabled={newUniversityData.campuses.length === 1}
-            >
-              <i className="fa fa-trash"></i>
-            </button>
-          </div>
+           <button
+  onClick={() => handleRemoveCampus(campusIndex)}
+  className={`remove-campus-button ${getDisabledClass(newUniversityData.campuses.length === 1)}`}
+  disabled={newUniversityData.campuses.length === 1}
+>
+  <i className="fa fa-trash"></i>
+</button>
 
+          </div>
+          
           {campus.programs.map((program, programIndex) => (
             <div key={programIndex} className="program-section">
               
               <label>
-                Program {programIndex+1}:
+                Program {programIndex+1}:  </label>
+                <div className='program'>
                 <input
                   type="text"
                   name="program"
                   value={program.name}
                   onChange={(e) => handleInputChange(e, campusIndex, programIndex)}
                 />
-              </label>
-              <button
-                onClick={() => handleRemoveProgram(campusIndex, programIndex)}
-                className={getDisabledClass(campus.programs.length === 1)}
-                disabled={campus.programs.length === 1}
-              >
-                <i className="fa fa-trash"></i>
-              </button>
-          
-            </div>
-          ))}  <button onClick={() => handleAddProgram(campusIndex)}>
-          Add Program
-        </button>
-        </div>
-      ))}
+            
+            <button
+  onClick={() => handleRemoveProgram(campusIndex, programIndex)}
+  className={`remove-program-button ${getDisabledClass(campus.programs.length === 1)}`}
+  disabled={campus.programs.length === 1}
+>
+  <i className="fa fa-trash"></i>
+</button>
 
-      <button onClick={handleAddUniversity}>Add University</button>
+          </div>
+            </div>
+          ))}  
+          <button className='add-campus' onClick={() => handleAddProgram(campusIndex)}> Add Program</button>
+
+        </div>
+        
+      ))}
+        <button className='add-campus' onClick={handleAddCampus}>Add Campus</button>
+      <button className='add-uni' onClick={handleAddUniversity}>Add University</button>
     </div>
   );
 }

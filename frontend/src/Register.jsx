@@ -178,7 +178,7 @@ function Register() {
             </select>
           </div>
           <div className="form-group">
-          <input type="text" value={semester} onChange={handleSemesterChange} placeholder="Semester" maxLength={1} required/>            
+          <input type="text" value={semester} onChange={handleSemesterChange} placeholder="Semester" maxLength={2} required/>            
           <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} required/>
           </div>
           <div className="form-group">

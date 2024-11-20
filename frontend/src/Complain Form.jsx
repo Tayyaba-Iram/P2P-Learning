@@ -62,15 +62,15 @@ const ComplaintForm = () => {
     
 
     return (
-        <div className="complaint-form-container">
-            <h2>Submit a Complaint</h2>
+            <form onSubmit={handleSubmit} className="complaint-submit">
+            <h3>Submit a Complaint</h3>
             <p>Please use this form to submit a complaint regarding any issue related to your experience as a student.</p>
-            <form onSubmit={handleSubmit} className="complaint-form">
                 <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
                 <input type="text" name="sapid" placeholder="SAP ID" value={formData.sapid} onChange={handleChange} required />
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
                 <input type="text" name="university" placeholder="University" value={formData.university} onChange={handleChange} required />
-                <DatePicker
+        <div className='date-issue'>    
+                     <DatePicker
                     selected={formData.date}
                     onChange={handleDateChange}
                     dateFormat="yyyy-MM-dd"
@@ -87,7 +87,7 @@ const ComplaintForm = () => {
                     <option value="Content Concern">Content Concern</option>
                     <option value="User Behavior">User Behavior</option>
                 </select>
-
+                </div>   
                 <textarea
                     name="description"
                     placeholder="Describe your issue"
@@ -96,10 +96,11 @@ const ComplaintForm = () => {
                     required
                 ></textarea>
                  
-                <button type="submit">Submit Complaint</button>
+                <button className='submit-complain' type="submit">Submit Complaint</button>
+                <Toaster position="top-center" /> {/* Include Toaster here */}
             </form>
-            <Toaster position="top-center" /> {/* Include Toaster here */}
-        </div>
+          
+      
     );
 };
 

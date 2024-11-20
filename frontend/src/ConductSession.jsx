@@ -114,12 +114,12 @@ const ConductSession = () => {
         }}
       />
       <br />
-      <button
+      <button className="join"
         onClick={handleJoinSession}
         disabled={!isJoinEnabled}
         style={{
           padding: "10px 20px",
-          backgroundColor: isJoinEnabled ? "blue" : "gray",
+          backgroundColor: isJoinEnabled ? "#48742F" : "gray",
           color: "white",
           cursor: isJoinEnabled ? "pointer" : "not-allowed",
           border: "none",

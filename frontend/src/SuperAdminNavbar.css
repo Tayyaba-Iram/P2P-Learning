@@ -22,12 +22,12 @@
   }
   
   .nav-mid-links a:hover {
-    background-color: #005bb5;
+    background-color: #48742F;
   }
   
   .nav-mid-links a.active {
     color: #ffeb3b; /* Highlight color for active link */
-    background-color: #004494; /* Background for active link */
+    background-color: #48742F; /* Background for active link */
   }
   
   .logout-button {
@@ -38,6 +38,7 @@
     cursor: pointer;
     border-radius: 5px;
     width: 80px;
+    height: 30px;
   }
   
   .logout-button:hover {
@@ -93,7 +94,7 @@
   }
   
   .confirm-button {
-    background-color: #007bff;
+    background-color: #48742F;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -111,7 +112,7 @@
   }
   
   .confirm-button:hover {
-    background-color: #0056b3;
+    background-color:#253b18;
   }
   
   .cancel-button:hover {

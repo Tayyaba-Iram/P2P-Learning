@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import './Reset Password.css'
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -13,7 +13,11 @@ const ResetPassword = () => {
     e.preventDefault();
 
     // Check if passwords match
-    if (newPassword !== confirmPassword) {
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(newPassword)) {
+      setMessage('Password must be 8 characters with uppercase, lowercase letter, number, and special character.');
+      return;
+    } 
+    else if (newPassword !== confirmPassword) {
       setMessage('Passwords do not match');
       return;
     }
@@ -37,13 +41,13 @@ const ResetPassword = () => {
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      <form onSubmit={handlePasswordReset}>
+   
+      <form className='Reset-form' onSubmit={handlePasswordReset}>
+      <h3>Reset Password</h3>
         <div>
           <label>New Password:</label>
           <input
-            type="password"
+            type="text"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
@@ -52,16 +56,15 @@ const ResetPassword = () => {
         <div>
           <label>Confirm Password:</label>
           <input
-            type="password"
+            type="text"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
+        {message &&  <p className="error-message" style={{ color: 'red' }}>{message}</p>}
         </div>
-        <button type="submit">Reset Password</button>
+        <button className='reset-button' type="submit">Reset Password</button>
       </form>
-      {message && <p>{message}</p>}
-    </div>
   );
 };
 

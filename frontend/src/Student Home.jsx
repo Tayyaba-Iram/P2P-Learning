@@ -113,7 +113,7 @@ function Home() {
      
       <div className="schedule-session-container">
         <h1 className="page-title">Schedule a New Session</h1>
-        <button className="schedule-btn" onClick={() => setModalOpen(true)}>
+        <button className="schedule" onClick={() => setModalOpen(true)}>
           Schedule Session
         </button>
 
@@ -169,7 +169,7 @@ function Home() {
           <div className="agenda">
             {agenda.length > 0 && (
               <>
-                <h3>Session Agenda</h3>
+                <h3 className='agendaa-session'>Session Agenda</h3>
                 <table className="agenda-table">
                   <thead>
                     <tr className='border'>

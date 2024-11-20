@@ -18,7 +18,7 @@
   background-color: #000;
   color: white;
   padding: 20px;
-  border-bottom: 5px solid #007bff; /* A highlight color for the video area */
+  border-bottom: 5px solid#48742F; /* A highlight color for the video area */
 }
 
 .video-feed {
@@ -35,7 +35,7 @@
   display: flex;
   justify-content: space-around;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #48742F;
   width: 100%;
 }
 
@@ -43,7 +43,7 @@
   padding: 10px 15px;
   font-size: 16px;
   color: white;
-  background-color: #0056b3;
+  background-color:#48742F;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -51,10 +51,13 @@
 }
 
 .footer-button:hover {
-  background-color: #004494; /* Darker shade on hover */
+  background-color: #48742F; /* Darker shade on hover */
 }
 
 .footer-button:disabled {
   background-color: #999; /* Gray out the button if disabled */
   cursor: not-allowed;
+}
+.join{
+  background-color: #48742F;
 }
