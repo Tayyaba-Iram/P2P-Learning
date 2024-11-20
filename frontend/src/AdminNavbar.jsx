@@ -4,7 +4,7 @@ import axios from 'axios';
 import { UserContext } from './userContext';
 import toast, { Toaster } from 'react-hot-toast';
 import './AdminNavbar.css';
-import Cookies from 'js-cookie';
+
 
 const AdminNavbar = () => {
   const { setUser } = useContext(UserContext);
