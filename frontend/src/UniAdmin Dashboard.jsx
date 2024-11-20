@@ -1,35 +1,37 @@
-// src/components/AdminDashboard.js
-import React, { useEffect, useState } from 'react';
+import React, { useContext,useEffect, useState } from 'react';
 import axios from 'axios';
-import './UniAdmin Dashboard.css'; // Import your CSS file for styling
+import './UniAdmin Dashboard.css';
+import { UserContext } from './userContext';
+
 
 const AdminDashboard = () => {
+  const { setUser } = useContext(UserContext);
     const [complaints, setComplaints] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [userData, setUserData] = useState(null);
   
     useEffect(() => {
-        const token = sessionStorage.getItem('token');  // Get the token from localStorage
-    
-        if (token) {
-          // Send the token in the Authorization header
-          axios.get('http://localhost:3001/api/admin-dashboard', {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          })
-            .then(response => {
-              setUserData(response.data.user);
-            })
-            .catch(err => {
-              setError(err.response ? err.response.data.error : 'An error occurred');
-            });
-        } else {
-          setError('Token is missing, please log in.');
-        }
-      }, []);
-    
+      const token = sessionStorage.getItem('token');  
+   
+      if (token) {
+        axios.get('http://localhost:3001/api/admin-dashboard', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+          .then(response => {
+            console.log(response.data);  // Check the structure of the response
+            setUserData(response.data.user);
+        })
+          .catch(err => {
+            setError(err.response ? err.response.data.error : 'An error occurred');
+          });
+      } else {
+        setError('Token is missing, please log in.');
+      }
+    }, []);
+  
     useEffect(() => {
         const fetchComplaints = async () => {
             try {
@@ -45,27 +47,19 @@ const AdminDashboard = () => {
         fetchComplaints();
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-
+  
     return (
         <div className="admin-dashboard">
              {userData ? (
         <div className="user-info">
           <h2>Welcome: {userData.name}!</h2>
-          <p>Email: {userData.email}</p>
         </div>
       ) : (
         <div className="error-message">
           {error ? <p>{error}</p> : <p>Loading user data...</p>}
         </div>
       )}
-            <h2>Complaints Dashboard</h2>
+            <h3>Complaints Dashboard</h3>
             <table>
                 <thead>
                     <tr>

@@ -47,39 +47,6 @@
  
 }
 
-.banner {
-  margin-bottom: 20px;
-}
-
-.services {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-
-}
-
-.service-card {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 15px;
-  text-align: center;
-
-}
-
-.search-bar {
-  margin: 20px 0;
-}
-
-.search-bar input {
-  width: 70%;
-  padding: 10px;
-  
-}
-
-.search-bar button {
-  padding: 10px;
-
-}
 
 .chat-section {
   margin-top: 20px;
@@ -98,7 +65,7 @@
   margin-bottom: 20px;
 }
 
-.schedule-btn {
+.schedule{
   background-color: #48742F;
   color: white;
   padding: 10px 20px;
@@ -106,13 +73,17 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-bottom: 20px;
 }
 
 .schedule-btn:hover {
   background-color: #48742F;
  
 }
+.view-all-btn{
+  margin-bottom: 1000px;
 
+}
 .form-backdrop {
   position: fixed;
   top: 0;
@@ -125,6 +96,7 @@
   align-items: center;
   z-index: 1000;
 }
+
 
 .schedule-form {
   background: white;
@@ -177,10 +149,7 @@
 .agenda-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-
  
-  
 }
 
 .agenda-table td:last-child button {
@@ -200,11 +169,13 @@
   text-align: center;
   width: 16.6%;
 }
-
+.agendaa-session{
+  margin-right: 1070px;
+}
 
 
 .agenda-table td button {
-  background-color: #bc7f43;
+ 
   color: white;
   border: none;
   padding: 8px;
@@ -215,12 +186,37 @@
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-
-
-.agenda-table td button:hover {
-  background-color: #48742F;
-  transform: scale(1.05);
+.copy{
+  background-color:  #48742F;
 }
+.del{
+  background-color: crimson;
+}
+.conduct-session-container{
+  margin-bottom: 10px;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between; /* Add space between the heading and button */
+}
+
+.agendaa-session {
+  margin: 0; /* Remove default margins */
+  font-weight: bold;
+}
+
+.view-btn {
+  background-color: #48742F; /* Button background color */
+  color: white; /* Text color */
+  border-radius: 5px; /* Rounded corners */
+  padding: 5px 10px; /* Padding for button size */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 14px; /* Adjust button font size */
+  margin-right: 27%;
+  
+}
+
 
 @media (max-width: 768px) {
   .agenda-table td button {
@@ -503,12 +499,12 @@
 
 .conduct-session-container {
   position: absolute;
-  top: 7.5cm;
+  top: 6.8cm;
   left: 27.5cm;
-  height: 6cm;
+  height: 200px;
   width: 7cm;
   border: 1px solid #ddd;
-  padding: 20px;
+  padding: 15px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
@@ -516,33 +512,18 @@
 
 .chat-container {
   position: absolute;
-  top: 14cm;
+  top: 13cm;
   left: 27.5cm;
-  height: 5cm;
+  height: 200px;
   width: 7cm;
   border: 1px solid #ddd;
-  padding: 20px;
+  padding: 15px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
 }
 
-.cs {
-  font-size: 23px;
-}
 
-
-.c {
-  margin-left: 0.25cm;
-  margin-top: 3px;
-  font-size: 23px;
-}
-
-.p {
-  margin-left: 5px;
-
-
-}
 
 .chat-link {
 

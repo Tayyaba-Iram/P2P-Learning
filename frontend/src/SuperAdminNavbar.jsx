@@ -1,14 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from './userContext';
-import toast, { Toaster } from 'react-hot-toast';
 import './SuperAdminNavbar.css';
-import Cookies from 'js-cookie';
 
 const SuperAdminNavbar = () => {
   const { setUser } = useContext(UserContext);
-  const navigate = useNavigate();
   const location = useLocation();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
@@ -53,7 +50,6 @@ const SuperAdminNavbar = () => {
           <Link to="/adduniversity" className={isActive('/adduniversity') ? 'active' : ''}>Add University</Link>
           <button className="logout-button" onClick={() => setShowLogoutModal(true)}>Logout</button>
         </div>
-        <Toaster position="top-center" />
       </div>
 
       {/* Modal for logout confirmation */}

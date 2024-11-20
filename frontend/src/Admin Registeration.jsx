@@ -56,7 +56,7 @@ function AdminRegister() {
       return;
     }
     else {
-      axios.post('http://localhost:3001/api/registerUniAdmin', { name, sapid, email, cnic, phone, university, campus, password })
+      axios.post('http://localhost:3001/api/registerUniAdmin', { name, sapid, email, cnic, phone, university, campus, password,cpassword })
         .then(() => {
           toast.success("Registration Successful!");
           setTimeout(() => navigate('/superdashboard'), 2000);
@@ -143,7 +143,7 @@ function AdminRegister() {
             <div className="checkbox-group">
               {campusOptions.map(camp => (
                 <label key={camp._id}>
-                  <input type="checkbox" value={camp.name} checked={campus.includes(camp.name)} onChange={() => handleCampusChange(camp.name)} required/>
+                  <input type="checkbox" value={camp.name} checked={campus.includes(camp.name)} onChange={() => handleCampusChange(camp.name)} />
                   {camp.name}
                 </label>
               ))}

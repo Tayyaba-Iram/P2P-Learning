@@ -101,6 +101,7 @@ function StudentNavbar() {
               <Link to="/complains" onClick={handleDropdownSelect}>
                 <FaExclamationCircle /> Complaints
               </Link>
+              
               <button className="logout-button-student" onClick={handleLogout}>
                 <FaSignOutAlt /> Logout
               </button>

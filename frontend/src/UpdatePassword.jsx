@@ -89,7 +89,7 @@ function ResetPassword() {
       <h3>Reset Password</h3>
         {/* Current Password */}
         <div>
-          <label>Current Password:</label>
+          <label>Current Password</label>
           <input
             type='text'
             name="currentPassword"
@@ -102,7 +102,7 @@ function ResetPassword() {
 
         {/* New Password */}
         <div>
-          <label>New Password:</label>
+          <label>New Password</label>
           <input
             type='text' 
             name="newPassword"
@@ -114,7 +114,7 @@ function ResetPassword() {
 
         {/* Confirm New Password */}
         <div>
-          <label>Confirm New Password:</label>
+          <label>Confirm New Password</label>
           <input
             type= 'text' 
             name="confirmPassword"

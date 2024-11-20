@@ -55,7 +55,7 @@ function Dashboard() {
     try {
       await axios.delete(`http://localhost:3001/api/universities/${universityId}`);
       setUniversities((prev) => prev.filter((uni) => uni._id !== universityId));
-      alert('University deleted successfully');
+      toast.success('University deleted successfully');
     } catch (error) {
       console.error('Error deleting university:', error);
     }
@@ -124,7 +124,6 @@ function Dashboard() {
   return (
     <div className="container">
       <main className="main-content">
-        <h1>Superadmin Dashboard</h1>
         {/* Universities Table */}
         <h2>Universities</h2>
         <input
@@ -178,8 +177,8 @@ function Dashboard() {
                               {/* Actions - only once per university */}
                               {campusIndex === 0 && programIndex === 0 && (
                                 <td rowSpan={totalCampusRows}>
-                                  <button onClick={() => handleEditClick(university)}>Edit</button>
-                                  <button onClick={() => handleDeleteUniversity(university._id)}>
+                                  <button className = 'edit-button'onClick={() => handleEditClick(university)}>Edit</button>
+                                  <button className='delete-button'onClick={() => handleDeleteUniversity(university._id)}>
                                     Delete
                                   </button>
                                 </td>
@@ -254,7 +253,7 @@ function Dashboard() {
                 <td>{admin.campus}</td>
                 <td>
                   {/* Delete button */}
-                  <button onClick={() => handleDeleteAdmin(admin._id)}>Delete</button>
+                  <button  className='delete-button'onClick={() => handleDeleteAdmin(admin._id)}>Delete</button>
                 </td>
               </tr>
             ))}

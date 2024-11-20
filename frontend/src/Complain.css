@@ -7,3 +7,6 @@
 .complaint-add-button{
 justify-content: center;
 }
+.delete-button{
+    background-color: crimson;
+}

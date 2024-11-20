@@ -13,6 +13,7 @@ import DashboardRoutes from './routes/DashboardRoutes.js'
 import loginRoutes from './routes/loginRoutes.js'
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
 import Message from './models/Message.js';
+import cookieParser from 'cookie-parser';
 import http from 'http';
 import { Server } from 'socket.io';
 import VerifiedStudentModel from './models/VerifiedStudent.js';
@@ -22,7 +23,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
   origin: ["http://localhost:5173"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE","OPTIONS"],
   allowedHeaders: ['Authorization', 'Content-Type'],
   credentials: true
 }));

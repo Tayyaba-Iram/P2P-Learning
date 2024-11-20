@@ -3,7 +3,7 @@
     height: 88vh;
     color: #333;
     font-family: Arial, sans-serif;
-    color: white;
+    background-color: white;
 }
 .login-header {
     display: flex;
@@ -13,7 +13,7 @@
 }
 
 .login-logo {
-    width: 120px; /* Adjust size as needed */
+    width: 150px; /* Adjust size as needed */
     height: auto; /* Maintain aspect ratio */
     margin-bottom: 20px;
     margin-top: 0px;
@@ -26,15 +26,24 @@
     font-size: 1.5rem; /* Adjust font size as desired */
     margin-bottom: 20px;
 }
+.login-header p{
+    margin: 0; /* Remove default margin from h1 for better alignment */
+    color: #333; /* Set color to ensure readability */
+    font-size: 1.5rem; /* Adjust font size as desired */
+    margin-bottom: 20px;
+}
 
 .left-section {
-    width: 35%;
+    width: 45%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: rgb(226, 220, 220);
     text-align: center;
+    margin-left: 7%;
+    margin-right: 7%;
+    margin-bottom: 70px;
 }
 
 .left-section h2 {
@@ -47,13 +56,13 @@
     margin: 10px 0;
     font-style: italic;
     margin-bottom: 0%;
+    color: black;
 }
 
-.left-section .register-button {
+.left-section .registerrr-button {
     color:#f4f4f5;
     background-color: #48742F;
     border: none;
-    border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
     margin-top: 20px;
@@ -63,27 +72,25 @@
 }
 
 .right-section {
-    width: 65%;
+    width: 45%;
     padding: 40px;
-    margin-top: 5px;
-    background: white;
+    margin-top: 40px;
+    margin-bottom: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 10%;
+    margin-right: 7%;
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
 }
+
 
 .form {
     width: 80%;
     max-width: 600px;
 }
 
-.form-group {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 7px;
-    color: black;
-}
 .email{
     margin-top: 5px;
     margin-bottom: 15px;
@@ -91,39 +98,46 @@
 
 
 .login-button {
-    background-color:#48742F;
-    color: white;
+    color:#f4f4f5;
+    background-color: #48742F;
     border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
-    width: 30%;
-    margin-top: 10px;
-    margin-left: 35%;
-    
+    margin-top: 20px;
+    width: 160px;
+    margin-left: 2%;
+    justify-content: center;
+    align-items: center;
+    margin-left: 135px;
 }
 
-.role-toggle label {
-    padding: 20px; /* Add padding for better appearance */
-    text-align: center; /* Center the text inside each label */
-    cursor: pointer; /* Change cursor to pointer for clickability */
-}
+
 .forgot-password {
     margin-top: 0px; /* Add some space above the link */
     text-align: right;
+   
   }
   
   .forgot-password-link {
     color: #070707; /* Link color */
     text-decoration: none; /* Remove underline */
-    font-size: 13px;
+    font-size: 14px;
   }
   
-  .forgot-password-link:hover {
-    text-decoration: underline; /* Underline on hover */
-  }
-  
-.showPassword{
+  .show-password {
     display: flex;
+    gap: 5px; /* Space between the checkbox and label */
+    color: #333; /* Label text color */
+}
+
+.show-password input[type="checkbox"] {
+    margin: 0; /* Remove default margin for better alignment */
+    width: 16px; /* Adjust size of the checkbox */
+    height: 16px; /* Adjust size of the checkbox */
+    cursor: pointer; /* Pointer cursor for better UX */
+}
+
+.show-password label {
+    font-size: 14px !important; /* Force label font size */
+    cursor: pointer; /* Pointer cursor when hovering over the label */
 }

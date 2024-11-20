@@ -1,33 +1,25 @@
 /* EditUniversity.css */
-.edit-university-container {
-  max-width: 800px;
-  margin: 0 auto;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding: 20px;
-  background-color: #f5f5f5;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+.update-university-container {
+  width: 500px;
+    margin: 0 auto;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    margin-top: 2%;
+    margin-bottom: 2%;
   
 }
 
- h4 {
-  margin-top: 20px;
-  font-size: 20px;
-  color: #333;
-  text-align: left;
-}
-
-
-h2 {
-  font-size: 2rem;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
 label {
-  display: inline-block;
-  font-size: 1rem;
-  width: 600px; /* Adjust width to your needs */
+  width: 650px; /* Adjust width to your needs */
+  
+}
+input, button{
+  margin-top: 10px;
+ 
 }
 
 
@@ -61,15 +53,21 @@ button {
   align-items: center;
 }
 
-h3 {
-  font-size: 1.5rem;
-  margin-top: 20px;
+.campuses{
+  display: flex;
 }
-
-h4 {
-  font-size: 1.2rem;
+.campus-set{
+  display: flex;
 }
-
-.container{
-  margin-right: 25px;
+.program-set{
+  display: flex;
+}
+.main-buttons{
+  margin-bottom: 10px;
+  width: 130px;
+  justify-content: center;
+}
+.save-changes-section{
+  width: 100%;
+  justify-content: center;
 }

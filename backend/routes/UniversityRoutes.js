@@ -1,5 +1,6 @@
 import express from 'express';
 import University from '../models/University.js'; // Note the .js extension
+import verifyUser from '../middleware/verifyUser.js';  // Import the middleware
 
 const router = express.Router();
 
@@ -156,7 +157,7 @@ router.delete('/universities/:universityId/campuses/:campusId/programs/:programI
 });
 
 // Route to edit a university's name
-router.put('/api/universities/:universityId', async (req, res) => {
+router.put('/api/universities/:universityId', verifyUser,async (req, res) => {
     const { name } = req.body;
     try {
       const updatedUniversity = await University.findByIdAndUpdate(
@@ -184,7 +185,7 @@ router.put('/api/universities/:universityId/campuses/:campusId', async (req, res
     if (!university) {
       return res.status(404).json({ error: 'University not found' });
     }
-
+console.log(university)
     const campus = university.campuses.id(campusId);
     if (!campus) {
       return res.status(404).json({ error: 'Campus not found' });
@@ -193,7 +194,7 @@ router.put('/api/universities/:universityId/campuses/:campusId', async (req, res
     // Update campus name
     campus.name = name;
     await university.save();
-
+console.log(campus)
     res.status(200).json({ message: 'Campus updated successfully' });
   } catch (error) {
     console.error('Backend Error:', error);
@@ -202,7 +203,7 @@ router.put('/api/universities/:universityId/campuses/:campusId', async (req, res
 });
 
 // Backend route to update program using async/await
-router.put('/universities/:universityId/campuses/:campusId/programs/:programId', async (req, res) => {
+router.put('/universities/:universityId/campuses/:campusId/programs/:programId',async (req, res) => {
   const { universityId, campusId, programId } = req.params;
   const { name } = req.body;
 

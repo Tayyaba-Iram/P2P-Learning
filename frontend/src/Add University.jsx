@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Add University.css';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
 
 function AddUniversity() {
   const [newUniversityData, setNewUniversityData] = useState({
@@ -28,19 +30,18 @@ function AddUniversity() {
   const handleAddUniversity = async () => {
     try {
       if (!newUniversityData.name) {
-        alert('Please enter a university name');
-        return;
+                return;
       }
       await axios.post('http://localhost:3001/api/uni', newUniversityData);
-      alert('University added successfully');
+      toast.success('University added Successfully')
       setNewUniversityData({
         name: '',
         campuses: [{ name: '', programs: [{ name: '' }] }],
       });
+     
       navigate('/superdashboard');
     } catch (error) {
       console.error('Error adding university:', error);
-      alert('Failed to add university');
     }
   };
 
@@ -56,8 +57,6 @@ function AddUniversity() {
           campuses: [...prevData.campuses, { name: '', programs: [{ name: '' }] }],
         };
       } else {
-        // Optionally, you can add a message here or alert
-        alert('Please fill in the last campus name before adding a new one.');
         return prevData; // Return without adding a new campus
       }
     });
@@ -67,7 +66,6 @@ function AddUniversity() {
   const handleRemoveCampus = (campusIndex) => {
     setNewUniversityData((prevData) => {
       if (prevData.campuses.length === 1) {
-        alert('You must have at least one campus.');
         return prevData;
       }
       const updatedCampuses = prevData.campuses.filter((_, index) => index !== campusIndex);

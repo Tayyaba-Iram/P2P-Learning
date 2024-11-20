@@ -9,7 +9,6 @@
 }
 
 .logo-container {
- 
   align-items: center;
   
 }
@@ -22,16 +21,10 @@
 
 .logo-text {
   font-size: 30px;
-  font-weight: bold;
   color: #fff;
-  margin-bottom: 18px;
+  margin-top: 20px;
 }
 
-.nav-mid-links a {
-  margin: 0 10px;
-  color: #fff;
-  text-decoration: none;
-}
 
 /* User profile section */
 .profile-container {
@@ -54,7 +47,7 @@
 
 .triangle-icon {
   border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
+  border-right: 8px solid transparent;
   border-top: 6px solid #fff;
 }
 
@@ -66,8 +59,7 @@
   border-radius: 4px;
   padding: 10px 0;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  min-width: 150px; /* Ensure consistent width */
-  z-index: 1000; /* Ensure it appears above other elements */
+  min-width: 200px; /* Ensure consistent width */
   display: none; /* Hidden by default */
 }
 
@@ -80,13 +72,12 @@
   text-align: left;
   background: none;
   border: none;
-  font-size: 14px;
-  width: 110%;
+  font-size: 13px;
+  width: 150%;
   cursor: pointer;
 }
 
-.dropdown-menu a:hover,
-.dropdown-menu button:hover {
+.dropdown-menu a:hover {
   color:#48742F;
 }
 
@@ -99,19 +90,19 @@
 }
 
 /* Logout button styles */
-/* Logout button styles */
 .logout-button-student {
   font-size: 14px;
   padding: 8px 15px;
   cursor: pointer;
   text-align: left;
   width: 100%;
-  color: #48742F; /* Default text color */
   background: none; /* Ensure no background */
   border: none; /* No border */
 }
 
-
+.logout-button-student:hover {
+  color: red;
+}
 
 /* Modal overlay styles */
 .modal-overlay {
