@@ -74,7 +74,15 @@
   
     .btn {
       padding: 8px 16px;
-      font-size: 14px;
+      font-size: 
+      14px;
     }
   }
-  
+
+  .st {
+    margin-left: 0;
+    text-align: left;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 4px;
+  }
