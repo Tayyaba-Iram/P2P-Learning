@@ -13,9 +13,11 @@ import DashboardRoutes from './routes/DashboardRoutes.js'
 import loginRoutes from './routes/loginRoutes.js'
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
 import Message from './models/Message.js';
+import cookieParser from 'cookie-parser';
 import http from 'http';
 import { Server } from 'socket.io';
 import VerifiedStudentModel from './models/VerifiedStudent.js';
+
 
 const app = express();
 app.use(cookieParser());
