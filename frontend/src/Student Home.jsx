@@ -10,6 +10,7 @@ function Home() {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [message, setMessage] = useState('');
   const [sessionDetails, setSessionDetails] = useState({
     topic: '',
     startTime: '',
@@ -44,6 +45,7 @@ function Home() {
   const handleAddSession = async () => {
     const { topic, startTime, endTime } = sessionDetails;
     if (!topic || !startTime || !endTime) {
+      setMessage('Please fill all the fields')
       return;
     }
 
@@ -69,6 +71,7 @@ function Home() {
       const response = await axios.post('http://localhost:3001/api/sessions', newSession);
       setAgenda((prevAgenda) => [...prevAgenda, response.data]);
       setModalOpen(false);
+      toast.success('Session added successfully')
       setSessionDetails({ topic: '', startTime: '', endTime: '', date: new Date() });
     } catch (error) {
       console.error('Error saving session:', error);
@@ -118,6 +121,7 @@ function Home() {
           <div className="form-backdrop">
             <div className="schedule-form">
               <h2 className="form-title">New Session Details</h2>
+              {message && <p style={{ color: 'red' }}>{message}</p>}
               <label className="topic">Topic:</label>
               <input
                 type="text"

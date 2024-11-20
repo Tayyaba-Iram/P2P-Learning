@@ -59,14 +59,19 @@ const ComplaintForm = () => {
             toast.error(error.response?.data?.error || 'Error submitting complaint');
         }
     };
+    const handleSapChange = (event) => {
+        const value = event.target.value;
+        // Allow only numbers
+        const cleanedValue = value.replace(/\D/g, ''); // Remove non-numeric characters
+        setFormData({ ...formData, sapid: cleanedValue }); // Update state with the cleaned value
+    };
     
-
     return (
             <form onSubmit={handleSubmit} className="complaint-submit">
             <h3>Submit a Complaint</h3>
             <p>Please use this form to submit a complaint regarding any issue related to your experience as a student.</p>
                 <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
-                <input type="text" name="sapid" placeholder="SAP ID" value={formData.sapid} onChange={handleChange} required />
+                <input type="text" name="sapid" placeholder='ID' value={formData.sapid} onChange={handleSapChange} required/>
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
                 <input type="text" name="university" placeholder="University" value={formData.university} onChange={handleChange} required />
  
