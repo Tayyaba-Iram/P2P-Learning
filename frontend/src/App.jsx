@@ -81,9 +81,6 @@ function App() {
         <Route path="/complains" element={<ProtectedRoute><Complaints /></ProtectedRoute>} />
         <Route path="/studentprofile" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
         <Route path="/resetpassword" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
-
-       
-
       </Routes>
       
         <Footer />
