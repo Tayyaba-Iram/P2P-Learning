@@ -21,7 +21,7 @@ const Complaints = () => {
         setComplaints(response.data);
       } catch (error) {
         setError(error.response?.data?.error || 'Error fetching complaints');
-        toast.error(error.response?.data?.error || 'Error fetching complaints');
+      
       }
     };
     fetchComplaints();

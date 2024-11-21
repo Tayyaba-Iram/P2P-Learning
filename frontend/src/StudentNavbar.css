@@ -59,12 +59,11 @@
  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 10px 0;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  min-width: 145px; /* Ensure consistent width */
+  min-width: 180px; /* Ensure consistent width */
   display: none; /* Hidden by default */
   top: 100%; /* Align dropdown below the user profile */
-  left: 0; /* Ensure it starts from the left of the parent container */
+  left: 0; 
   right: 0;
 }
 

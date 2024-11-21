@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 import './Reset Password.css'
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -29,7 +30,7 @@ const ResetPassword = () => {
       });
 
       if (response.data.success) {
-        setMessage('Password reset successfully');
+        toast.success('Password reset successfully');
         setTimeout(() => navigate('/login'), 3000); // Redirect to login after 3 seconds
       } else {
         setMessage(response.data.message || 'Password reset failed');

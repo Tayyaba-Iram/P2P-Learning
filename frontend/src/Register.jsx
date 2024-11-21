@@ -182,8 +182,8 @@ function Register() {
           <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} required/>
           </div>
           <div className="form-group">
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-            <input type="password" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
+            <input type="text" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+            <input type="text" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
           </div>
           <button type="submit" className="register-button">Register</button>
         </form>
