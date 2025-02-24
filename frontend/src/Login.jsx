@@ -91,21 +91,16 @@ function Login() {
 
   return (
     <div className="login-container">
-      <div className="left-section">
         <img src="Logo.jpg" alt="Logo" className="login-logo" />
         <h2>Welcome</h2>
         <p>In learning you will teach and in teaching you will learn!</p>
-        <Link to="/register">
-          <button className="registerrr-button">Register</button>
-        </Link>
-      </div>
-
-      <div className="right-section">
+        
+      <div className="login-section">
         <div className="login-header">
           
-          <h1>Login to your account</h1>
+          <h2>Login to your account</h2>
         </div>
-        {message && <p style={{ color: 'red' }}>{message}</p>}
+        {message && <p style={{ color: 'red', marginTop:"20px"}}>{message}</p>}
 
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-group">
@@ -144,7 +139,10 @@ function Login() {
             <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
           </div>
 
-          <button type="submit" className="login-button">Login</button>
+          <button type="submit" className="login-button" >Login</button>
+          <p className="signup-text">
+        Don't have an account? <Link to="/register" className="signup-link">Sign Up</Link>
+      </p>
         </form>
       </div>
       <Toaster position="top-center" />

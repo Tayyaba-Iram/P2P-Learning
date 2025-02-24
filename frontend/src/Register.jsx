@@ -134,27 +134,17 @@ function Register() {
   return (
     <div className="registration-container">
       <Toaster position="top-center" />
-      <div className="leftt-section">
-        <img src="Logo.jpg" alt="Logo" className="signup-logo" />
-        <h2>Welcome</h2>
-        <p>In learning you will teach and in teaching you will learn!</p>
-
-        <Link to="/login"><button className="loginn-button">Login</button></Link>
-      </div>
 
         <div className="signup-header">
-          <h1>Create an account</h1>
+          <h1>Sign Up</h1>
           {message && <p style={{ color: 'red',whiteSpace: 'pre-wrap'  }}>{message}</p>}
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-group">
-          <input type="text" placeholder="Name" value={name} onChange={handleNameChange} required/>            
-          <input type="text" placeholder="Sap ID" value={sapid} onChange={handleSapChange} required/>
-          </div>
-          <div className="form-group">
+          <input className="name" type="text" placeholder="Name" value={name} onChange={handleNameChange} required/>            
             <input className="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
             <input  type="text" placeholder="CNIC"value={cnic}onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} required/>
-          </div>
-          <div className="form-group">
+          
+
           <input type="text" placeholder="Phone Number"value={phone}onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} required/> 
             <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required>
               <option value="" hidden>Select University</option>
@@ -162,8 +152,7 @@ function Register() {
                 <option key={uni._id} value={uni.name} required>{uni.name}</option>
               ))}
             </select>
-            </div>
-              <div className="form-group">
+          
             <select id="campus" value={campus} onChange={(e) => setCampus(e.target.value)} disabled={!university}>
               <option value="" hidden required>Select Campus</option>
               {campusOptions.map((camp) => (
@@ -176,16 +165,18 @@ function Register() {
                 <option key={prog._id} value={prog.name}>{prog.name}</option>
               ))}
             </select>
-          </div>
-          <div className="form-group">
+            <input type="text" placeholder="Student ID" value={sapid} onChange={handleSapChange} required/>
+
           <input type="text" value={semester} onChange={handleSemesterChange} placeholder="Semester" maxLength={2} required/>            
           <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} required/>
-          </div>
-          <div className="form-group">
+         
             <input type="text" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
             <input type="text" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
           </div>
-          <button type="submit" className="register-button">Register</button>
+          <button type="submit" className="register-button">Submit</button>
+          <p className="signup-text">
+        Already have an account? <Link to="/login" className="signup-link">Login</Link>
+      </p>
         </form>
         </div>
     </div>
