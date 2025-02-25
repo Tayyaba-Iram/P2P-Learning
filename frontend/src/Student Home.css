@@ -2,7 +2,7 @@
   display: flex;
   height: 100vh;
   background-color: white;
- 
+
 }
 
 .sidebar {
@@ -38,13 +38,13 @@
 
 .content {
   flex-grow: 1;
- 
+
   padding: 20px;
-  
+
   overflow-y: auto;
 
   background-color: white;
- 
+
 }
 
 
@@ -52,7 +52,7 @@
   margin-top: 20px;
   border: 1px solid #ccc;
   padding: 15px;
-  
+
 }
 
 
@@ -65,7 +65,7 @@
   margin-bottom: 20px;
 }
 
-.schedule{
+.schedule {
   background-color: #48742F;
   color: white;
   padding: 10px 20px;
@@ -78,7 +78,7 @@
 
 .schedule-btn:hover {
   background-color: #48742F;
- 
+
 }
 
 .form-backdrop {
@@ -113,9 +113,7 @@
   justify-content: space-between;
 }
 
-.submit-btn
-
- {
+.submit-btn {
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
@@ -161,13 +159,14 @@
   text-align: center;
   width: 16.6%;
 }
-.agendaa-session{
+
+.agendaa-session {
   margin-right: 1070px;
 }
 
 
 .agenda-table td button {
- 
+
   color: white;
   border: none;
   padding: 8px;
@@ -178,35 +177,45 @@
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.copy{
-  background-color:  #48742F;
+.copy {
+  background-color: #48742F;
 }
-.del{
+
+.del {
   background-color: crimson;
 }
-.conduct-session-container{
+
+.conduct-session-container {
   margin-bottom: 10px;
 }
 
 .line {
   display: flex;
-  justify-content: space-between; /* Add space between the heading and button */
+  justify-content: space-between;
+  /* Add space between the heading and button */
 }
 
 .agendaa-session {
-  margin: 0; /* Remove default margins */
+  margin: 0;
+  /* Remove default margins */
   font-weight: bold;
 }
 
 .view-btn {
-  background-color: #48742F; /* Button background color */
-  color: white; /* Text color */
-  border-radius: 5px; /* Rounded corners */
-  padding: 5px 10px; /* Padding for button size */
-  cursor: pointer; /* Pointer cursor on hover */
-  font-size: 14px; /* Adjust button font size */
+  background-color: #48742F;
+  /* Button background color */
+  color: white;
+  /* Text color */
+  border-radius: 5px;
+  /* Rounded corners */
+  padding: 5px 10px;
+  /* Padding for button size */
+  cursor: pointer;
+  /* Pointer cursor on hover */
+  font-size: 14px;
+  /* Adjust button font size */
   margin-right: 27%;
-  
+
 }
 
 
@@ -227,12 +236,12 @@
 
 
 .agenda-table tr:nth-child(odd) {
-  background-color: white; 
+  background-color: white;
 }
 
 .agenda-table tr:nth-child(even) {
-  background-color: #73B24B; 
-  
+  background-color: #73B24B;
+
 }
 
 
@@ -248,7 +257,7 @@
   background: transparent;
   font-size: 20px;
   cursor: pointer;
-  
+
 }
 
 
@@ -269,6 +278,7 @@
   margin-bottom: 20px;
 }
 
+
 .confirm-btn,
 .cancel-btn {
   margin-right: 10px;
@@ -278,6 +288,14 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.del i {
+  transition: color 0.3s ease;
+}
+
+.del:hover i {
+  color: red;
 }
 
 .confirm-btn {
@@ -315,7 +333,7 @@
 
 .schedule-btn:hover {
   background-color: #48742F;
- 
+
 }
 
 .form-backdrop {
@@ -362,7 +380,7 @@
 
 .submit-btn {
   background-color: #48742F;
-  /* Updated color */
+
   color: white;
 }
 
@@ -487,14 +505,64 @@
 .chat-link {
 
   margin-top: 3cm;
-  margin-left:95px;
+  margin-left: 95px;
 
 }
 
-.conduct-session-link{
- margin-left:50px;
+.conduct-session-link {
+  margin-left: 50px;
 }
 
+.conduct-session-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #48742F;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  margin-left: 1cm;
 
+}
 
+.chat-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #48742F;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  margin-left: 2cm;
+}
 
+.copy {
+  position: relative;
+}
+
+.copy::after {
+  content: "Your text is copied!";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #814d1d;
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.copy.active::after {
+  opacity: 1;
+}
