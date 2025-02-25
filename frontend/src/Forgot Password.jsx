@@ -34,7 +34,7 @@ function ForgotPassword() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <button type="submit">Send Reset Link</button>
+        <button className='submit-reset-buttonnnnn' type="submit">Send Reset Link</button>
         <Link className='back-login' to="/login" >Back to Login</Link>
 
         <Toaster position="top-center" />

@@ -6,7 +6,11 @@
 }
 .complaint-add-button{
 justify-content: center;
+text-align: center;
 }
 .delete-button{
     background-color: crimson;
+}
+.complaintss{
+    text-align: center;
 }

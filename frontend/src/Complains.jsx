@@ -21,7 +21,7 @@ const Complaints = () => {
         setComplaints(response.data);
       } catch (error) {
         setError(error.response?.data?.error || 'Error fetching complaints');
-        toast.error(error.response?.data?.error || 'Error fetching complaints');
+      
       }
     };
     fetchComplaints();
@@ -56,7 +56,7 @@ const Complaints = () => {
       <Link to="/complain-form">
         <button className="complaint-add-button">Add Complain</button>
       </Link>
-      <h2>Your Complaints</h2>
+      <h2 className='complaintss'>Your Complaints</h2>
       {error && <p className="error-message">{error}</p>}
 
       <table className="complaints-table">
