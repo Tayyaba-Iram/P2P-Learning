@@ -2,10 +2,6 @@ import express from 'express';
 import Session from '../models/Session.js';
 import cors from 'cors';
 
-
-
-
-
 const app = express();
 const router = express.Router();
 

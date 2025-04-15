@@ -163,4 +163,42 @@ html, body {
   border-radius: 10px;
 }
 
+.green-dot {
+  width: 10px;
+  height: 10px;
+  background-color: rgb(183, 245, 12);
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 5px;
+}
+.heart-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 18px;
+}
 
+.heart-icon.active {
+  color: red;
+}
+
+.chatted-student {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+.chat-messages {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.chat-input {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chat-input input {
+  width: 85%;
+}
