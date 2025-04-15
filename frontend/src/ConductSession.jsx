@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 const ConductSession = () => {
   const [meetingLink, setMeetingLink] = useState("");
   const [isJoinEnabled, setJoinEnabled] = useState(false);
+  const [isJoining, setIsJoining] = useState(false); // New state for disabling the button
   const navigate = useNavigate();
 
-  // Effect to load Jitsi script only once when component mounts
   useEffect(() => {
     const loadJitsiScript = () => {
       if (!window.JitsiMeetExternalAPI) {
@@ -19,32 +19,29 @@ const ConductSession = () => {
         document.body.appendChild(script);
       }
     };
-
     loadJitsiScript();
   }, []);
 
-  // Handle input change for the meeting link
   const handleMeetingLinkChange = (e) => {
     const link = e.target.value;
     setMeetingLink(link);
 
-    // Validate the meeting link
     const jitsiLinkPattern = /^https:\/\/meet\.jit\.si\/([a-zA-Z0-9-_]+)$/;
-    const isValid = jitsiLinkPattern.test(link);
-    setJoinEnabled(isValid);
+    setJoinEnabled(jitsiLinkPattern.test(link));
   };
 
-  // Handle join session action
   const handleJoinSession = async () => {
+    setIsJoining(true); // Disable the button immediately after clicking
+
     const meetingID = meetingLink.split("https://meet.jit.si/")[1] || "";
 
     if (!meetingID) {
       alert("Invalid meeting link format.");
+      setIsJoining(false); // Re-enable the button if an error occurs
       return;
     }
 
     try {
-      // Verify session on the server
       const response = await axios.get(
         `http://localhost:3001/api/sessions/verify/${meetingID}`
       );
@@ -71,29 +68,31 @@ const ConductSession = () => {
               "raisehand",
               "tileview",
               "videobackgroundblur",
-              "desktop", // Enable screen sharing
+              "desktop",
             ],
           },
         };
 
-        // Initialize Jitsi Meet API
         if (window.JitsiMeetExternalAPI) {
           const api = new window.JitsiMeetExternalAPI(domain, options);
 
-          // Redirect after meeting ends
           api.addListener("readyToClose", () => {
-            navigate("/"); // Redirect when the meeting ends
+            navigate("/");
+            setIsJoining(false); // Re-enable the button when meeting ends
           });
         } else {
           console.error("JitsiMeetExternalAPI not loaded.");
           alert("Failed to load Jitsi. Please refresh the page and try again.");
+          setIsJoining(false);
         }
       } else {
         alert("Invalid meeting link or unauthorized access.");
+        setIsJoining(false);
       }
     } catch (error) {
       console.error("Error verifying session:", error);
       alert("Error verifying the session. Please try again later.");
+      setIsJoining(false);
     }
   };
 
@@ -104,7 +103,6 @@ const ConductSession = () => {
         type="text"
         value={meetingLink}
         onChange={handleMeetingLinkChange}
-        onInput={handleMeetingLinkChange} // Ensures pasted links are handled
         placeholder="Enter meeting link"
         style={{
           padding: "10px",
@@ -114,19 +112,20 @@ const ConductSession = () => {
         }}
       />
       <br />
-      <button className="join"
+      <button
+        className="join"
         onClick={handleJoinSession}
-        disabled={!isJoinEnabled}
+        disabled={!isJoinEnabled || isJoining} // Button disables after clicking
         style={{
           padding: "10px 20px",
-          backgroundColor: isJoinEnabled ? "#48742F" : "gray",
+          backgroundColor: isJoinEnabled && !isJoining ? "#48742F" : "gray",
           color: "white",
-          cursor: isJoinEnabled ? "pointer" : "not-allowed",
+          cursor: isJoinEnabled && !isJoining ? "pointer" : "not-allowed",
           border: "none",
           borderRadius: "5px",
         }}
       >
-        Join
+        {isJoining ? "Join" : "Join"} {/* Button text changes when clicked */}
       </button>
       <div
         id="jitsi-container"

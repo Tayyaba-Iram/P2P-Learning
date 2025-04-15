@@ -1,92 +1,91 @@
-.home-container {
-  display: flex;
-  height: 100vh;
-  background-color: white;
- 
-}
+/* ======================================
+   General Container Layouts
+====================================== */
 
-.sidebar {
-  width: 200px;
-  /* Sidebar width */
-  background-color: #f1ecec;
-  /* Background color */
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  /* Optional shadow */
-}
-
-.sidebar h2 {
-  margin-bottom: 20px;
-}
-
-.sidebar ul {
-  list-style-type: none;
-  /* Remove bullets */
+* {
+  box-sizing: border-box; /* Include padding and border in element's total width/height */
+  margin: 0;
   padding: 0;
 }
 
-.sidebar ul li {
-  margin: 15px 0;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
 }
 
-.sidebar ul li a {
-  text-decoration: none;
-  /* Remove underline */
-  color: #333;
-  /* Link color */
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 20px;
 }
 
-.content {
-  flex-grow: 1;
- 
+.calendar-container {
+  flex: 3; /* Calendar takes more space */
+  background-color: #ffffff;
   padding: 20px;
-  
-  overflow-y: auto;
-
-  background-color: white;
- 
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Prevent overflow */
 }
 
+.side-container {
+  flex: 1; /* Chat, Conduct Session, and Schedule Session blocks */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-.chat-section {
-  margin-top: 20px;
-  border: 1px solid #ccc;
+.side-container .conduct-session-container,
+.side-container .chat-container,
+.side-container .schedule-session-container {
+  background-color: #ffffff;
   padding: 15px;
-  
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
+/* ======================================
+   Side Panel Components
+====================================== */
 
-.schedule-session-container {
-  padding: 20px;
+.conduct-session-container h3,
+.chat-container h3,
+.schedule-session-container h3 {
+  margin-bottom: 10px;
+  color: #48742F;
 }
 
-.page-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.schedule{
+.conduct-session-button,
+.chat-button,
+.schedule-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
   background-color: #48742F;
   color: white;
-  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-bottom: 20px;
 }
 
+.conduct-session-button:hover,
+.chat-button:hover,
 .schedule-btn:hover {
-  background-color: #48742F;
- 
+  background-color: #3a5c23;
 }
+
+/* ======================================
+   Modal Styles
+====================================== */
 
 .form-backdrop {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -94,407 +93,190 @@
   z-index: 1000;
 }
 
-
 .schedule-form {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 400px;
+  background-color: #ffffff;
+  padding: 15px 10px; 
+  padding-left: 1cm;
+  padding-right: 3cm; 
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
 }
+
 
 .form-title {
-  margin-bottom: 20px;
-  font-size: 20px;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-}
-
-.submit-btn
-
- {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #48742F;
-
-}
-
-.submit-btn {
-  background-color: #48742F;
-  /* Updated color */
-  color: white;
-}
-
-.clear-btn {
-  background-color: #dc3545;
-  color: white;
-  margin-right: 4cm;
-  width: 22%;
-}
-
-.action-btn {
-  background-color: #dc3545;
-  color: black;
-}
-
-
-
-.agenda-table td:last-child button {
-  margin-left: 9px;
-}
-
-.agenda-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-.agenda-table th,
-.agenda-table td {
-  border: 1px solid #000;
-  padding: 10px;
+  font-size: 1.5rem;
+  color: #48742F;
+  margin-bottom: 15px;
   text-align: center;
-  width: 16.6%;
-}
-.agendaa-session{
-  margin-right: 1070px;
 }
 
-
-.agenda-table td button {
- 
-  color: white;
-  border: none;
-  padding: 8px;
-  margin: 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 8px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.copy{
-  background-color:  #48742F;
-}
-.del{
-  background-color: crimson;
-}
-.conduct-session-container{
-  margin-bottom: 10px;
-}
-
-.line {
-  display: flex;
-  justify-content: space-between; /* Add space between the heading and button */
-}
-
-.agendaa-session {
-  margin: 0; /* Remove default margins */
-  font-weight: bold;
-}
-
-.view-btn {
-  background-color: #48742F; /* Button background color */
-  color: white; /* Text color */
-  border-radius: 5px; /* Rounded corners */
-  padding: 5px 10px; /* Padding for button size */
-  cursor: pointer; /* Pointer cursor on hover */
-  font-size: 14px; /* Adjust button font size */
-  margin-right: 27%;
-  
-}
-
-
-@media (max-width: 768px) {
-  .agenda-table td button {
-    padding: 6px;
-    font-size: 14px;
-    margin: 6px;
-  }
-}
-
-.agenda-table th,
-.agenda-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.form-group {
+  margin-bottom: 15px;
   text-align: left;
 }
 
-
-.agenda-table tr:nth-child(odd) {
-  background-color: white; 
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333333;
 }
 
-.agenda-table tr:nth-child(even) {
-  background-color: #73B24B; 
-  
+.form-group input {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
-
-.agenda-table th {
-  background-color: #48742F;
-  color: white;
+.schedule-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
 }
 
-
-.cancel-btn {
-  color: red;
-  border: none;
-  background: transparent;
-  font-size: 20px;
-  cursor: pointer;
-  
-}
-
-
-.delete-confirmation {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 999;
-}
-
-.delete-confirmation p {
-  margin-bottom: 20px;
-}
-
-.confirm-btn,
-.cancel-btn {
-  margin-right: 10px;
-  padding: 10px 20px;
-  background-color: #48742F;
+.clear-btn {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f44336;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.confirm-btn {
-  background-color: #48742F;
-
-
+.clear-btn:hover {
+  background-color: #d32f2f;
 }
 
+/* ======================================
+   Responsiveness
+====================================== */
 
-.cancel-btn {
-  background-color: red;
-  padding: 10px 20px;
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
 
-}
+  .calendar-container,
+  .side-container {
+    width: 100%;
+  }
 
+  .schedule-form {
+    width: 95%;
+  }
 
-.schedule-session-container {
+  .side-container {
+    gap: 15px; /* Slightly reduce gap in smaller screens */
+  }
+
+  /* Ensure buttons are sized appropriately for mobile screens */
+  .conduct-session-button,
+  .chat-button,
+  .schedule-btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
+  /* ======================================
+   Modal Styles - Schedule Session
+====================================== */
+
+.schedule-form {
+  background-color: #ffffff;
   padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px; /* Limit the width of the modal */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow: auto; /* Ensure content is scrollable if it exceeds the container */
+  max-height: 80vh; /* Prevent the modal from getting too tall */
 }
 
-.page-title {
-  font-size: 24px;
-  margin-bottom: 20px;
+/* Add overflow for content */
+.form-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Ensure modal content does not overflow */
+.schedule-form::-webkit-scrollbar {
+  width: 10px;
+}
+
+.schedule-form::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+.schedule-form::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Adjusted Form Inputs */
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+}
+
+/* ======================================
+   Buttons Styling
+====================================== */
+.schedule-btn,
+.clear-btn {
+  padding: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
 }
 
 .schedule-btn {
   background-color: #48742F;
   color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.schedule-btn:hover {
-  background-color: #48742F;
- 
-}
-
-.form-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.schedule-form {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 400px;
-}
-
-.form-title {
-  margin-bottom: 20px;
-  font-size: 20px;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-}
-
-.submit-btn,
-.clear-btn,
-.action-btn {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #48742F;
-
-}
-
-.submit-btn {
-  background-color: #48742F;
-  /* Updated color */
-  color: white;
 }
 
 .clear-btn {
-  background-color: #dc3545;
+  background-color: #f44336;
   color: white;
 }
 
-.action-btn {
-  background-color: #dc3545;
-  color: black;
+.schedule-btn:hover {
+  background-color: #3a5c23;
 }
 
-.agenda-table {
-  width: 78%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.agenda-table th,
-.agenda-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.agenda-table th {
-  background-color: #48742F;
-  color: white;
-}
-
-
-.cancel-btn {
-  color: red;
-  border: none;
-  background: transparent;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-
-.delete-confirmation {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 999;
-}
-
-.delete-confirmation p {
-  margin-bottom: 20px;
-}
-
-.confirm-btn,
-.cancel-btn {
-  margin-right: 10px;
-  padding: 10px 20px;
-  background-color: #48742F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.confirm-btn {
-  background-color: #48742F;
-
-
-}
-
-.cancel-btn {
-  background-color: red;
-  padding: 10px 20px;
-
-}
-
-
-.main-layout {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.agenda-container {
-  flex: 2;
-}
-
-.conduct-session-container {
-  position: absolute;
-  top: 6.8cm;
-  left: 27.5cm;
-  height: 200px;
-  width: 7cm;
-  border: 1px solid #ddd;
-  padding: 15px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-}
-
-.chat-container {
-  position: absolute;
-  top: 13cm;
-  left: 27.5cm;
-  height: 200px;
-  width: 7cm;
-  border: 1px solid #ddd;
-  padding: 15px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
+.clear-btn:hover {
+  background-color: #d32f2f;
 }
 
 
 
-.chat-link {
-
-  margin-top: 3cm;
-  margin-left:95px;
-
+/* ======================================
+   Responsive Styling for Modal
+====================================== */
+@media (max-width: 768px) {
+  .schedule-form {
+    width: 90%;
+  }
 }
 
-.conduct-session-link{
- margin-left:50px;
 }
-
-
-
-

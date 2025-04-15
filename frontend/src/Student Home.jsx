@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './Student Home.css'; 
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import './Student Home.css';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+
+const localizer = momentLocalizer(moment);
 
 function Home() {
-  const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [agenda, setAgenda] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false); // For adding a new session
+  const [isDetailsModalOpen, setDetailsModalOpen] = useState(false); // For viewing session details
   const [message, setMessage] = useState('');
   const [sessionDetails, setSessionDetails] = useState({
     topic: '',
@@ -17,10 +23,7 @@ function Home() {
     endTime: '',
     date: new Date(),
   });
-  const [agenda, setAgenda] = useState([]);
-  const [copiedSessionId, setCopiedSessionId] = useState(null);
-  const [showAll, setShowAll] = useState(false);
-
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -39,205 +42,248 @@ function Home() {
   };
 
   const handleDateChange = (date) => {
+    if (date < new Date()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid Date',
+        text: 'Date must be today or a future date.',
+        confirmButtonText: 'OK',
+        timer: 3000,
+      });
+      return;
+    }
     setSessionDetails({ ...sessionDetails, date });
   };
 
   const handleAddSession = async () => {
     const { topic, startTime, endTime } = sessionDetails;
     if (!topic || !startTime || !endTime) {
-      setMessage('Please fill all the fields')
+      setMessage('Please fill all the fields');
       return;
     }
-
     if (endTime <= startTime) {
       Swal.fire({
-         icon: 'error', 
-         title: 'Invalid Time Selection', 
-         text: 'End time must be after the start time.',
-         confirmButtonText: 'OK', 
-         timer: 3000, 
-         timerProgressBar: true 
+        icon: 'error',
+        title: 'Invalid Time Selection',
+        text: 'End time must be after the start time.',
+        confirmButtonText: 'OK',
+        timer: 3000,
       });
       return;
-   }
-   
+    }
     const newSession = {
       ...sessionDetails,
       date: sessionDetails.date.toISOString(),
       meetingLink: `https://meet.jit.si/${Math.floor(Math.random() * 10000)}`,
     };
-
     try {
       const response = await axios.post('http://localhost:3001/api/sessions', newSession);
       setAgenda((prevAgenda) => [...prevAgenda, response.data]);
       setModalOpen(false);
-      toast.success('Session added successfully')
+      toast.success('Session added successfully');
       setSessionDetails({ topic: '', startTime: '', endTime: '', date: new Date() });
     } catch (error) {
       console.error('Error saving session:', error);
     }
   };
 
-  const handleCopy = (sessionId, session) => {
-    const sessionText = `Topic: ${session.topic}\nDate: ${new Date(session.date).toDateString()}\nStart Time: ${formatTime(session.startTime)}\nEnd Time: ${formatTime(session.endTime)}\nMeeting Link: ${session.meetingLink}`;
-    navigator.clipboard.writeText(sessionText);
-    setCopiedSessionId(sessionId);
-    setTimeout(() => setCopiedSessionId(null), 2000);
+  const handleEventSelect = (event) => {
+    const session = agenda.find((s) => s._id === event.id);
+    if (session) {
+      setSessionDetails({
+        topic: session.topic,
+        startTime: session.startTime,
+        endTime: session.endTime,
+        date: new Date(session.date),
+        meetingLink: session.meetingLink,
+      });
+      setSelectedEvent(session);
+      setDetailsModalOpen(true);
+    }
   };
 
-  const handleCancel = async (sessionId) => {
+  const handleDeleteSession = async () => {
+    const confirmDelete = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'This session will be permanently deleted.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+    });
+
+    if (confirmDelete.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:3001/api/sessions/${sessionId}`);
-        setAgenda((prevAgenda) => prevAgenda.filter((session) => session._id !== sessionId));
-        toast.success('Session deleted successfully')
+        await axios.delete(`http://localhost:3001/api/sessions/${selectedEvent._id}`);
+        setAgenda(agenda.filter((session) => session._id !== selectedEvent._id));
+        setDetailsModalOpen(false);
+        toast.success('Session deleted successfully');
       } catch (error) {
         console.error('Error deleting session:', error);
       }
-    
+    }
   };
 
-  const formatTime = (time) => {
-    const [hour, minute] = time.split(':');
-    const formattedHour = hour % 12 || 12;
-    const ampm = hour < 12 ? 'AM' : 'PM';
-    return `${formattedHour}:${minute} ${ampm}`;
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(sessionDetails.meetingLink);
+    toast.success('Link copied to clipboard');
   };
 
-  const toggleShowAll = () => {
-    setShowAll((prevState) => !prevState);
-  };
+  const events = agenda.map((session) => ({
+    id: session._id,
+    title: session.topic,
+    start: new Date(session.date.split('T')[0] + 'T' + session.startTime),
+    end: new Date(session.date.split('T')[0] + 'T' + session.endTime),
+  }));
 
-  const displayedAgenda = showAll ? agenda : agenda.slice(0, 5);
   return (
-    <div className="content">
-     
-      <div className="schedule-session-container">
-      
-        <button className="schedule" onClick={() => setModalOpen(true)}>
-          Schedule Session
-        </button>
+    <div className="main-container">
+      {/* Calendar Section */}
+      <div className="calendar-container">
+        <h3 className="calendar-title">Session Calendar</h3>
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 500 }}
+          onSelectEvent={handleEventSelect}
+        />
+      </div>
 
-        {isModalOpen && (
-          <div className="form-backdrop">
-            <div className="schedule-form">
-              <h2 className="form-title">New Session Details</h2>
-              {message && <p style={{ color: 'red' }}>{message}</p>}
-              <label className="topic">Topic:</label>
+      {/* Side Container */}
+      <div className="side-container">
+        <div className="schedule-session-container">
+          <h3>Schedule a Session</h3>
+          <p>Plan a session and manage your learning schedule.</p>
+          <button className="schedule-btn" onClick={() => setModalOpen(true)}>
+            Schedule Session
+          </button>
+        </div>
+        <div className="chat-container">
+          <h3>Chat</h3>
+          <p>Start a chat with your peers!</p>
+          <Link to="/Chat" className="chat-button">
+            Chat
+          </Link>
+        </div>
+        <div className="conduct-session-container">
+          <h3>Conduct a Session</h3>
+          <p>Start a session with your peers and learn together!</p>
+          <Link to="/ConductSession" className="conduct-session-button">
+            Conduct Session
+          </Link>
+        </div>
+      </div>
+
+      {/* Schedule Session Modal */}
+      {isModalOpen && (
+        <div className="form-backdrop" onClick={() => setModalOpen(false)}>
+          <div className="schedule-form" onClick={(e) => e.stopPropagation()}>
+            <h3 className="form-title">Schedule a New Session</h3>
+            <div className="form-group">
+              <label>Topic</label>
               <input
                 type="text"
                 name="topic"
                 value={sessionDetails.topic}
                 onChange={handleInputChange}
-                placeholder="Enter the session topic"
-                required
+                placeholder="Enter session topic"
               />
-              <label className="date">Date:</label>
+            </div>
+            <div className="form-group">
+              <label>Date</label>
               <DatePicker
                 selected={sessionDetails.date}
                 onChange={handleDateChange}
-                className="datepicker"
-                required
+                dateFormat="yyyy-MM-dd"
               />
-              <label className='st'>Start Time:</label>
+            </div>
+            <div className="form-group">
+              <label>Start Time</label>
               <input
                 type="time"
                 name="startTime"
                 value={sessionDetails.startTime}
                 onChange={handleInputChange}
-                required
               />
-              <label className='et'>End Time:</label>
+            </div>
+            <div className="form-group">
+              <label>End Time</label>
               <input
                 type="time"
                 name="endTime"
                 value={sessionDetails.endTime}
                 onChange={handleInputChange}
-                required
               />
-              <div className="form-actions">
-                <button className="submit-btn" onClick={handleAddSession}>
-                  Add Session
-                </button>
-                <button className="clear-btn" onClick={() => setModalOpen(false)}>
-                  Cancel
-                </button>
-              </div>
+            </div>
+            <div className="form-actions">
+              <button className="schedule-btn" onClick={handleAddSession}>
+                Add Session
+              </button>
+              <button className="clear-btn" onClick={() => setModalOpen(false)}>
+                Cancel
+              </button>
             </div>
           </div>
-        )}
-
-        <div className="agenda-and-actions">
-          <div className="agenda">
-            {agenda.length > 0 && (
-              <>
-              <div className='line'>
-              <h3 className='agendaa-session'>Session Agenda</h3>
-              {agenda.length > 5 && (
-                  <button className="view-btn" onClick={toggleShowAll}>
-                    {showAll ? 'View Less' : 'View All'}
-                  </button>
-                )}
-              </div>
-               
-                <table className="agenda-table">
-                  <thead>
-                    <tr className='border'>
-                      <th>Topic</th>
-                      <th>Date</th>
-                      <th>Start Time</th>
-                      <th>End Time</th>
-                      <th>Meeting Link</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {displayedAgenda.map((session) => (
-                      <tr key={session._id}>
-                        <td>{session.topic}</td>
-                        <td>{new Date(session.date).toDateString()}</td>
-                        <td>{formatTime(session.startTime)}</td>
-                        <td>{formatTime(session.endTime)}</td>
-                        <td>
-                          <a href={session.meetingLink} target="_blank" rel="noopener noreferrer">
-                            {session.meetingLink}
-                          </a>
-                        </td>
-                        <td>
-                          <button className='copy' onClick={() => handleCopy(session._id, session)} title="Copy">
-                            <i className="fa fa-copy"></i> {copiedSessionId === session._id && 'Copy!'}
-                          </button>
-                          <button className='del'onClick={() => handleCancel(session._id)} title="Cancel">
-                          <i className="fa fa-trash" ></i>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-               
-              </>
-            )}
-          </div>
-
-            <div className="conduct-session-container">
-              <h3 className='css'>Conduct a Session</h3>
-              <p>Start a session with your peers learn together!</p>
-              <Link to="/ConductSession" className="conduct-session-link">
-                Conduct Session
-              </Link>
-            </div>
-            <div className="chat-container">
-              <h3 className='c'> Chat</h3>
-               <p className='p'>Start a chat with your peers!</p>
-               <Link to="/Chat" className="chat-link">
-                Chat
-              </Link>
-             
-            </div>
         </div>
-      </div>
+      )}
 
- 
+      {/* Session Details Modal */}
+      {isDetailsModalOpen && (
+        <div className="form-backdrop" onClick={() => setDetailsModalOpen(false)}>
+          <div className="schedule-form" onClick={(e) => e.stopPropagation()}>
+            <h3 className="form-title">Session Details</h3>
+            <div className="form-group">
+              <label>Topic</label>
+              <input type="text" value={sessionDetails.topic} readOnly />
+            </div>
+            <div className="form-group">
+              <label>Date</label>
+              <input
+                type="text"
+                value={sessionDetails.date.toLocaleDateString()}
+                readOnly
+              />
+            </div>
+            <div className="form-group">
+              <label>Start Time</label>
+              <input type="text" value={sessionDetails.startTime} readOnly />
+            </div>
+            <div className="form-group">
+              <label>End Time</label>
+              <input type="text" value={sessionDetails.endTime} readOnly />
+            </div>
+            <div className="form-group">
+              <label>Meeting Link</label>
+              <a
+                href={sessionDetails.meetingLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {sessionDetails.meetingLink}
+              </a>
+              <button className="copy-btn" onClick={handleCopyLink}>
+                Copy Link
+              </button>
+            </div>
+            <div className="form-actions">
+              <button
+                className="delete-btn"
+                onClick={handleDeleteSession}
+              >
+                Delete Session
+              </button>
+              <button
+                className="clear-btn"
+                onClick={() => setDetailsModalOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
