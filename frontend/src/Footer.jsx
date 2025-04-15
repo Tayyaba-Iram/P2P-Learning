@@ -6,7 +6,7 @@ const Footer = () => {
         <footer className="footer-container">
             <div >
                 <p className='email'>Contact: pplearning03@gmail.com</p>
-                <p className='Right' >&copy; 2024 P2P Learning | All Rights Reserved</p>
+                <p className='Right' >&copy; 2025 P2P Learning | All Rights Reserved</p>
 
             </div>
 
