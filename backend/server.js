@@ -13,6 +13,7 @@ import DashboardRoutes from './routes/DashboardRoutes.js'
 import loginRoutes from './routes/loginRoutes.js'
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
 import Message from './models/Message.js';
+import favStudentRoutes from './routes/favStudentRoutes.js';
 import cookieParser from 'cookie-parser';
 import http from 'http';
 import { Server } from 'socket.io';
@@ -192,6 +193,7 @@ app.use('/api', SuperAdminRoutes);
 app.use('/api', ResetPasswordRoutes);
 app.use('/api', verifyUser, DashboardRoutes);
 app.use('/api', loginRoutes);
+app.use('/api', favStudentRoutes);
 
 // Start the server
 server.listen(3001, () => {  // Use server.listen instead of app.listen for Socket.io

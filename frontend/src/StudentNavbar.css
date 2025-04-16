@@ -6,6 +6,7 @@
   background-color:#48742F;
   color: #fff;
   padding: 10px 20px;
+  
 }
 
 .logo-container {
@@ -61,7 +62,6 @@
   border-radius: 4px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   min-width: 180px; /* Ensure consistent width */
-  display: none; /* Hidden by default */
   top: 100%; /* Align dropdown below the user profile */
   left: 0; 
   right: 0;

@@ -23,6 +23,7 @@ import Footer from './Footer';
 import Complaints from './Complains';
 import StudentProfile from './Student Profile';
 import UpdatePassword from './UpdatePassword';
+import Repository from './Repository';
 
 axios.defaults.withCredentials = true;
 
@@ -81,6 +82,8 @@ function App() {
         <Route path="/complains" element={<ProtectedRoute><Complaints /></ProtectedRoute>} />
         <Route path="/studentprofile" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
         <Route path="/resetpassword" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
+        <Route path="/repository" element={<ProtectedRoute><Repository /></ProtectedRoute>} />
+
       </Routes>
       
         <Footer />
