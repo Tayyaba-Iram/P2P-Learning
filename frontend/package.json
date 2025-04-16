@@ -22,19 +22,18 @@
     "react-router-dom": "^6.28.0",
     "react-toastify": "^10.0.5",
     "socket.io-client": "^4.8.1",
-    "sweetalert2": "^11.17.2",
+    "sweetalert2": "^11.19.1",
     "webrtc-adapter": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
-    "@vitejs/plugin-legacy": "^5.4.3",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "vite": "^4.0.0",
+    "vite": "^4.5.13",
     "vite-plugin-rewrite-all": "^1.0.2"
   }
 }

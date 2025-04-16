@@ -1,10 +1,10 @@
 import express from 'express';
-import FavoriteStudent from '../models/FavoriteStudent.js';
+//import FavoriteStudent from '../models/FavoriteStudent.js';
 
 const router = express.Router();
 
 // Add to favorites
-router.post('/add', async (req, res) => {
+/*router.post('/add', async (req, res) => {
   const { userId, favoriteStudentId } = req.body;
 
   try {
@@ -39,6 +39,6 @@ router.get('/:userId', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Error fetching favorites' });
   }
-});
+});*/
 
 export default router;
