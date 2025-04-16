@@ -156,9 +156,9 @@ function Home() {
         <div className="schedule-session-container">
           <h3>Schedule a Session</h3>
           <p>Plan a session and manage your learning schedule.</p>
-          <button className="schedule-btn" onClick={() => setModalOpen(true)}>
+          <Link to="#" className="schedule-btn" onClick={() => setModalOpen(true)}>
             Schedule Session
-          </button>
+          </Link>
         </div>
         <div className="chat-container">
           <h3>Chat</h3>
@@ -235,17 +235,40 @@ function Home() {
           <div className="schedule-form" onClick={(e) => e.stopPropagation()}>
             <h3 className="form-title">Session Details</h3>
             <div className="form-group">
-              <label>Topic</label>
-              <input type="text" value={sessionDetails.topic} readOnly />
-            </div>
-            <div className="form-group">
-              <label>Date</label>
-              <input
-                type="text"
-                value={sessionDetails.date.toLocaleDateString()}
-                readOnly
-              />
-            </div>
+  <label>
+    <i className="fas fa-edit" style={{ marginRight: "8px", color: "#48742F" }}></i> 
+    Topic
+  </label>
+  <input 
+    type="text" 
+    value={sessionDetails.topic} 
+    readOnly 
+    style={{
+      border: "1px solid #ddd",
+      borderRadius: "5px",
+      padding: "10px",
+      width: "100%",
+    }}
+  />
+</div>
+<div className="form-group">
+  <label>
+    <i className="fas fa-calendar-alt" style={{ marginRight: "8px", color: "#48742F" }}></i> 
+    Date
+  </label>
+  <input
+    type="text"
+    value={sessionDetails.date.toLocaleDateString()}
+    readOnly
+    style={{
+      border: "1px solid #ddd",
+      borderRadius: "5px",
+      padding: "10px",
+      width: "100%",
+    }}
+  />
+</div>
+
             <div className="form-group">
               <label>Start Time</label>
               <input type="text" value={sessionDetails.startTime} readOnly />
