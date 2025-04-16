@@ -1,6 +1,4 @@
-/* ======================================
-   General Container Layouts
-====================================== */
+
 
 * {
   box-sizing: border-box; /* Include padding and border in element's total width/height */
@@ -50,12 +48,52 @@ body {
    Side Panel Components
 ====================================== */
 
+/* Header Styling for all containers */
 .conduct-session-container h3,
 .chat-container h3,
 .schedule-session-container h3 {
   margin-bottom: 10px;
+  margin-top: 30px;
   color: #48742F;
+  text-align: center; /* Center text for uniform appearance */
 }
+
+/* Container Styles for Buttons */
+.conduct-session-container,
+.chat-container,
+.schedule-session-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Button Styles */
+.conduct-session-button,
+.chat-button,
+.schedule-btn {
+  width: 100%;   /* Makes buttons take full width of their container */
+  padding: 15px;  /* Adjust padding to make buttons have equal height */
+  font-size: 1rem;
+  background-color: #48742F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s;
+  display: inline-block; /* Ensures the button behaves like a block element */
+  margin-top: 20px; /* Adjust space between buttons */
+}
+
+/* Button Hover Effect */
+.conduct-session-button:hover,
+.chat-button:hover,
+.schedule-btn:hover {
+  background-color: #3a5c23;
+}
+
+
 
 .conduct-session-button,
 .chat-button,
@@ -137,6 +175,67 @@ body {
   font-size: 1rem;
 }
 
+.calendar-container {
+  margin: 20px auto;
+  margin-bottom: 10px;
+  margin-top: 1px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 900px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  background-color: #f7f7f7;
+}
+
+.rbc-calendar {
+  background-color: white;
+}
+
+.rbc-toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.rbc-toolbar button {
+  background-color: #3a5c23;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.rbc-toolbar button:hover {
+  background-color: #3a5c23;
+}
+
+.rbc-event {
+  background-color: #3a5c23;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.rbc-today {
+  background-color: #ffffff;
+}
+
+.rbc-day-bg:hover {
+  background-color: #f0f8ff;
+}
+
+
 .clear-btn {
   margin-top: 10px;
   padding: 10px;
@@ -151,6 +250,28 @@ body {
 .clear-btn:hover {
   background-color: #d32f2f;
 }
+
+.form-group .react-datepicker-wrapper {
+    width: 110%; 
+  }
+  
+  .form-group .react-datepicker__input-container input {
+    width: 100%;
+    padding: 12px; 
+    border-radius: 5px; 
+    border: 1px solid #ddd; 
+    transition: border-color 0.3s;
+  }
+  
+  .form-group .react-datepicker__input-container input:focus {
+    border-color: #48742F; /* Change border color on focus for better UX */
+    box-shadow: 0 0 4px rgba(72, 116, 47, 0.5); /* Add subtle shadow on focus */
+  }
+  
+
+
+
+
 
 /* ======================================
    Responsiveness
