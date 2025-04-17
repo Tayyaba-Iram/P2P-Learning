@@ -1,6 +1,7 @@
 import express from 'express';
 import FavoriteStudent from '../models/FavoriteStudent.js';
 
+
 const router = express.Router();
 
 // Add to favorites

@@ -66,13 +66,14 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+ 
 }
 
 /* Button Styles */
 .conduct-session-button,
 .chat-button,
-.schedule-btn {
-  width: 100%;   /* Makes buttons take full width of their container */
+.schedule-btn{
+     /* Makes buttons take full width of their container */
   padding: 15px;  /* Adjust padding to make buttons have equal height */
   font-size: 1rem;
   background-color: #48742F;
@@ -84,6 +85,8 @@ body {
   transition: background-color 0.3s;
   display: inline-block; /* Ensures the button behaves like a block element */
   margin-top: 20px; /* Adjust space between buttons */
+  width: 40%;
+  
 }
 
 /* Button Hover Effect */
