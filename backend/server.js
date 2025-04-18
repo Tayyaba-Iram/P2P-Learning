@@ -17,18 +17,24 @@ import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js';
 import DashboardRoutes from './routes/DashboardRoutes.js';
 import loginRoutes from './routes/loginRoutes.js';
 import favStudentRoutes from './routes/favStudentRoutes.js';
-import broadcastRequestRoutes from './routes/broadcastRequestRoutes.js';
+import cookieParser from 'cookie-parser';
+import http from 'http';
+import { Server } from 'socket.io';
+import VerifiedStudentModel from './models/VerifiedStudent.js';
 
-// Import models and middleware
-import Message from './models/Message.js';
-import BroadcastRequest from './models/BroadcastRequest.js'; 
-import VerifiedStudentModel from './models/VerifiedStudent.js'; // Using the VerifiedStudent model
-import verifyUser from './middleware/verifyUser.js';
 
 // Initialize express app
 const app = express();
+app.use(cookieParser());
+app.use(express.json());
+app.use(cors({
+  origin: ["http://localhost:5173"],
+  methods: ["GET", "POST", "PUT", "DELETE","OPTIONS"],
+  allowedHeaders: ['Authorization', 'Content-Type'],
+  credentials: true
+}));
 
-// Socket.io setup
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -94,6 +100,8 @@ app.use('/api', ResetPasswordRoutes);
 app.use('/api', verifyUser, DashboardRoutes);
 app.use('/api', loginRoutes);
 app.use('/api', favStudentRoutes);
+app.use('/uploads', express.static('uploads'));
+app.use('/api', RepositoryRoutes)
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/P2P-Learning')

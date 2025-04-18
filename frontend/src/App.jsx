@@ -24,8 +24,6 @@ import Complaints from './Complains';
 import StudentProfile from './Student Profile';
 import UpdatePassword from './UpdatePassword';
 import Repository from './Repository';
-import BroadcastRequest from './Broadcast Request';
-import RequestTable from './RequestTable';
 
 axios.defaults.withCredentials = true;
 
@@ -85,10 +83,6 @@ function App() {
         <Route path="/studentprofile" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
         <Route path="/resetpassword" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
         <Route path="/repository" element={<ProtectedRoute><Repository /></ProtectedRoute>} />
-        <Route path="/BroadcastRequest" element={<ProtectedRoute><BroadcastRequest /></ProtectedRoute>} />
-        <Route path="/RequestTable" element={<ProtectedRoute><RequestTable /></ProtectedRoute>} />
-        
-     
 
       </Routes>
       
