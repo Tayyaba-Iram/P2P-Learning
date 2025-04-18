@@ -199,17 +199,90 @@ function Chat() {
     (student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
      student.specification.toLowerCase().includes(searchQuery.toLowerCase()))
   );
-
-  const toggleFavorite = (studentId) => {
-    setFavoriteStudents((prev) => {
-      if (prev.includes(studentId)) {
-        return prev.filter((id) => id !== studentId); // remove from fav
+ 
+  const toggleFavorite = async (studentId) => {
+    try {
+      // Check if the student is already in favorites
+      if (favoriteStudents.includes(studentId)) {
+        // Remove from favorites
+        setFavoriteStudents((prev) => prev.filter((id) => id !== studentId));
       } else {
-        return [...prev, studentId]; // add to fav
+        // Add to favorites
+        setFavoriteStudents((prev) => [...prev, studentId]);
+  
+        // Send POST request to backend to save the favorite
+        const token = sessionStorage.getItem('token'); // Get the token
+        if (!token) {
+          console.error('User is not authenticated');
+          return;
+        }
+  
+        const response = await axios.post(
+          `http://localhost:3001/api/favoriteStudent/${studentId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        console.log(response.data.message); // Show success message from backend
       }
-    });
+    } catch (error) {
+      console.error('Error favoriting student:', error.response?.data || error.message);
+    }
   };
+  const unfavoriteStudent = async (favoriteStudentId) => {
+    try {
+      const token = sessionStorage.getItem('token'); // Get the token
+      if (!token) {
+        console.error('User is not authenticated');
+        return;
+      }
+  
+      // Send DELETE request to remove the student from favorites
+      const response = await axios.delete(
+        `http://localhost:3001/api/unfavoriteStudent/${favoriteStudentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data.message); // Show success message from backend
+  
+      // Remove from the favoriteStudents list in state
+      setFavoriteStudents((prev) => prev.filter((id) => id !== favoriteStudentId));
+    } catch (error) {
+      console.error('Error unfavoriting student:', error.response?.data || error.message);
+    }
+  };
+  const token = sessionStorage.getItem('token'); 
+ 
+  const fetchFavorites = async () => {
+    if (!token) {
+      console.log('User is not logged in');
+      return;
+    }
 
+    try {
+      const response = await axios.get('http://localhost:3001/api/favoriteStudents', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const favoriteStudentIds = response.data.map(fav => fav.favoriteStudentId._id);
+      setFavoriteStudents(favoriteStudentIds);
+    } catch (error) {
+      console.error('Error fetching favorite students:', error);
+    }
+  };
+  useEffect(() => {
+    if (token) {
+      fetchFavorites();
+    }
+  }, [token]);
+  
   // Filter favorite students
   const favoriteStudentsList = chattedStudents.filter(student => favoriteStudents.includes(student._id));
 
@@ -239,6 +312,7 @@ function Chat() {
           )
         )}
         
+       
         <h3 className="catted">Chats</h3>
         {chattedStudents.length === 0 ? (
           <div>No chatted students found.</div>
@@ -246,7 +320,17 @@ function Chat() {
           sortedChattedStudents.map(student => (
             <div key={student._id} onClick={() => handleStartChat(student)}>
               <span>{student.name}</span>
-              <span onClick={() => toggleFavorite(student._id)} style={{ marginLeft: '10px', cursor: 'pointer' }}>
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (favoriteStudents.includes(student._id)) {
+                    unfavoriteStudent(student._id);
+                  } else {
+                    toggleFavorite(student._id);
+                  }
+                }}
+                style={{ marginLeft: '10px', cursor: 'pointer' }}
+              >
                 {favoriteStudents.includes(student._id) ? '❤️' : '🤍'}
               </span>
               {unreadMessages[student._id] && (
