@@ -1,0 +1,194 @@
+/* Container for the broadcast form */
+.broadcast-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  border: 1px solid #48742F;
+}
+
+/* Title of the form */
+.broadcast-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 26px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Form styling */
+.broadcast-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.broadcast-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+}
+
+.broadcast-form input[type="text"],
+.broadcast-form select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border 0.2s ease;
+}
+
+.broadcast-form input[type="text"]:focus,
+.broadcast-form select:focus {
+  border-color: #48742F;
+  outline: none;
+}
+
+/* Dropdown styling */
+.broadcast-form select {
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 8px;
+}
+
+/* Checkbox styling */
+.program-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.program-checkboxes label {
+  display: flex;
+  align-items: flex-start; /* aligns text to top */
+  gap: 10px;
+  font-weight: 500;
+  color: #333;
+  font-size: 15px;
+  line-height: 2;
+}
+
+.program-checkboxes input[type="checkbox"] {
+  accent-color: #48742F;
+  width: 16px;
+  height: 15px;
+  cursor: pointer;
+}
+
+/* Submit button */
+.submit-btn {
+  display: block;
+  width: 30%;
+  margin: 2rem auto 0;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #48742F;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #365c24;
+}
+
+/* Table styling */
+.requests-table {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.requests-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.requests-table th,
+.requests-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.requests-table th {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.requests-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.requests-table p {
+  text-align: center;
+  font-style: italic;
+}
+
+/* Success popup styles */
+.popup-message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 1000;
+  opacity: 0;
+  animation: popupAnim 1s forwards;
+}
+.broadcast-form input[type="text"],
+.broadcast-form select {
+  width: 100%;
+  max-width: 100%;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Dropdown specifically */
+.broadcast-form select {
+  height: 44px;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+  padding-right: 40px; /* space for the icon */
+}
+
+
+/* Popup animation */
+@keyframes popupAnim {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

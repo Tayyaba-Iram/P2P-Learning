@@ -1,0 +1,50 @@
+.request-table-container {
+    margin-top: 200px;
+    padding: 24px;
+    background: #f9fcf7;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 128, 0, 0.1);
+    border: 1px solid #e0f2e9;
+  }
+  
+  .request-table-container h3 {
+    color: black;
+    margin-bottom: 16px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .request-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .request-table th,
+  .request-table td {
+    padding: 14px 18px;
+    border: 1px solid #c8e6c9;
+    text-align: left;
+    transition: background-color 0.3s ease;
+  }
+  
+  .request-table th {
+    background-color: #48742F;
+    color: white;
+    font-weight: 600;
+  }
+  
+  .request-table td {
+    background-color: #ffffff;
+    color: black;
+  }
+  
+  .request-table tbody tr:hover {
+    background-color: #e8f5e9;
+    cursor: pointer;
+  }
+  
+  .request-table td:first-child {
+    font-weight: bold;
+  }
+  
