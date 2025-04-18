@@ -9,7 +9,9 @@ const repositorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'VerifiedStudent', // or 'VerifiedStudent' if that’s your user model
     required: true
-  }
+  },
+  uploadedByEmail: { type: String, required: true },
+  uploadedByStudent: { type: String, required: true },
   
 });
 

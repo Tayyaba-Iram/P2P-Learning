@@ -25,6 +25,7 @@ import StudentProfile from './Student Profile';
 import UpdatePassword from './UpdatePassword';
 import Repository from './Repository';
 import EditRepository from './EditRepository'
+import Directory from './Directory';
 axios.defaults.withCredentials = true;
 
 // Protected Route Component
@@ -84,6 +85,8 @@ function App() {
         <Route path="/resetpassword" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
         <Route path="/repository" element={<ProtectedRoute><Repository /></ProtectedRoute>} />
         <Route path="/editRepository/:repoId" element={<ProtectedRoute><EditRepository /></ProtectedRoute>} />
+        <Route path="/directory" element={<ProtectedRoute><Directory /></ProtectedRoute>} />
+
 
 
       </Routes>

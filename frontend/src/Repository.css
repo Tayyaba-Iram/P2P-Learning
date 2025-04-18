@@ -176,4 +176,11 @@
   cursor: pointer;
 }
 
- 
+.search-bar {
+  justify-content: center; /* Centers horizontally */
+  width: 70%;
+  border: none;
+  border-radius: 8px;
+  
+}
+

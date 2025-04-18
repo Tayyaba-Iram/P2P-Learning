@@ -16,6 +16,9 @@ const Repository = () => {
     file: null,
     fileLink: ''
   });
+  
+  // State for search term
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchRepositories();
@@ -30,14 +33,13 @@ const Repository = () => {
         },
       });
       if (res.data && Array.isArray(res.data)) {
-        setRepositories(res.data);  // This now only contains the logged-in user's repositories
+        setRepositories(res.data);
       } else {
         console.warn("Unexpected data format received:", res.data);
         setRepositories([]);
       }
     } catch (err) {
       console.error(err);
-     
     } finally {
       setLoading(false);
     }
@@ -106,7 +108,6 @@ const Repository = () => {
       } else {
         alert('Failed to upload repository');
         toast.error('Error to add repository!');
-
       }
     } catch (err) {
       console.error('Error uploading repository:', err);
@@ -135,15 +136,12 @@ const Repository = () => {
 
       setRepositories(repositories.filter((_, index) => index !== confirmDeleteIndex));
       setConfirmDeleteIndex(null);
-        toast.success('Repository deleted successfully!');
-      
+      toast.success('Repository deleted successfully!');
     } catch (err) {
       console.error('Error deleting repository:', err);
       toast.error('Repository deleted unsuccessfully!');
-
       if (err.response && err.response.status === 401) {
         alert('Unauthorized! Please login again.');
-        // Optionally, redirect to login page
         window.location.href = '/login';
       } else {
         alert('Failed to delete repository');
@@ -154,17 +152,42 @@ const Repository = () => {
   const handleDeleteCancel = () => {
     setConfirmDeleteIndex(null);
   };
-  const navigate = useNavigate();
 
- 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredRepositories = repositories.filter((repo) =>
+    repo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    repo.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="repository-container">
-      
+      {/* Search bar */}
+     
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+  <input
+    className="directory-search"
+    type="text"
+    placeholder="Search by Title, or Description..."
+    value={searchTerm}
+    onChange={handleSearchChange}
+    style={{
+      padding: '10px',
+      width: '60%',
+      marginBottom: '20px',
+      borderRadius: '8px',
+      border: '1px solid #ccc',
+    }}
+  />
+</div>
+
       <button className="add-button" onClick={handleAddClick}>Add Repository</button>
 
       {loading ? (
         <div className="loading">Loading repositories...</div>
-      ) :  repositories.length === 0 ? (
+      ) : filteredRepositories.length === 0 ? (
         <div className="empty-state">No repository files uploaded yet.</div>
       ) : (
         <table className="repository-table">
@@ -178,51 +201,42 @@ const Repository = () => {
             </tr>
           </thead>
           <tbody>
-            {repositories.map((repo, index) => (
+            {filteredRepositories.map((repo, index) => (
               <tr key={repo._id}>
                 <td>{repo.title}</td>
                 <td>{repo.description}</td>
                 <td>
-  {repo.file ? (
-    <a
-      href={`http://localhost:3001/uploads/${repo.file}`} // 3001 is your backend port
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {repo.file}
-    </a>
-  ) : (
-    <span>No file uploaded</span>  // Fallback message if file is not uploaded
-  )}
-</td>
-<td>
-  {repo.fileLink ? (
-    <a href={repo.fileLink} target="_blank" rel="noopener noreferrer">
-      {repo.fileLink}
-    </a>
-  ) : (
-    <span>No file link uploaded</span>  // Fallback message if file link is not uploaded
-  )}
-</td>
-
-
+                  {repo.file ? (
+                    <a href={`http://localhost:3001/uploads/${repo.file}`} target="_blank" rel="noopener noreferrer">
+                      {repo.file}
+                    </a>
+                  ) : (
+                    <span>No file uploaded</span>
+                  )}
+                </td>
                 <td>
-                <Link to={`/editRepository/${repo._id}`}>
-  <button className="edit-btn">
-    Edit
-  </button>
-</Link>
-
-  <button className="delete-btn" onClick={() => handleDeleteRequest(index)}>Delete</button>
-                
+                  {repo.fileLink ? (
+                    <a href={repo.fileLink} target="_blank" rel="noopener noreferrer">
+                      {repo.fileLink}
+                    </a>
+                  ) : (
+                    <span>No file link uploaded</span>
+                  )}
+                </td>
+                <td>
+                  <Link to={`/editRepository/${repo._id}`}>
+                    <button className="edit-btn">Edit</button>
+                  </Link>
+                  <button className="delete-btn" onClick={() => handleDeleteRequest(index)}>Delete</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-  {/* Add Modal */}
-  {showModal && (
+
+      {/* Add Modal */}
+      {showModal && (
         <div className="modaal">
           <div className="modaal-content">
             <h3>Add Repository</h3>
@@ -255,7 +269,7 @@ const Repository = () => {
         </div>
       )}
 
-       <Toaster position="top-center" />
+      <Toaster position="top-center" />
     </div>
   );
 };
