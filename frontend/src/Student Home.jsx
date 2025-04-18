@@ -9,6 +9,8 @@ import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import BroadcastRequest from './Broadcast Request';
+
 
 const localizer = momentLocalizer(moment);
 
@@ -23,6 +25,7 @@ function Home() {
     endTime: '',
     date: new Date(),
   });
+
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
@@ -175,6 +178,8 @@ function Home() {
           </Link>
         </div>
       </div>
+      <RequestTable myRequests={myRequests} />
+
 
       {/* Schedule Session Modal */}
       {isModalOpen && (
@@ -235,39 +240,33 @@ function Home() {
           <div className="schedule-form" onClick={(e) => e.stopPropagation()}>
             <h3 className="form-title">Session Details</h3>
             <div className="form-group">
-  <label>
-    <i className="fas fa-edit" style={{ marginRight: "8px", color: "#48742F" }}></i> 
-    Topic
-  </label>
-  <input 
-    type="text" 
-    value={sessionDetails.topic} 
-    readOnly 
-    style={{
-      border: "1px solid #ddd",
-      borderRadius: "5px",
-      padding: "10px",
-      width: "100%",
-    }}
-  />
-</div>
-<div className="form-group">
-  <label>
-    <i className="fas fa-calendar-alt" style={{ marginRight: "8px", color: "#48742F" }}></i> 
-    Date
-  </label>
-  <input
-    type="text"
-    value={sessionDetails.date.toLocaleDateString()}
-    readOnly
-    style={{
-      border: "1px solid #ddd",
-      borderRadius: "5px",
-      padding: "10px",
-      width: "100%",
-    }}
-  />
-</div>
+              <label>Topic</label>
+              <input
+                type="text"
+                value={sessionDetails.topic}
+                readOnly
+                style={{
+                  border: '1px solid #ddd',
+                  borderRadius: '5px',
+                  padding: '10px',
+                  width: '100%',
+                }}
+              />
+            </div>
+            <div className="form-group">
+              <label>Date</label>
+              <input
+                type="text"
+                value={sessionDetails.date.toLocaleDateString()}
+                readOnly
+                style={{
+                  border: '1px solid #ddd',
+                  borderRadius: '5px',
+                  padding: '10px',
+                  width: '100%',
+                }}
+              />
+            </div>
 
             <div className="form-group">
               <label>Start Time</label>
