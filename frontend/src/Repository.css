@@ -1,0 +1,179 @@
+.repository-container {
+    padding: 20px;
+  }
+  
+  .repository-heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .add-button {
+    padding: 10px;
+    background-color: #48742F;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    width: 12%;
+    justify-content: center;
+  }
+  
+ 
+  .empty-state {
+    font-size: 18px;
+    color: #777;
+  }
+  
+  .repository-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    overflow: hidden;
+  }
+  
+  .repository-table th,
+  .repository-table td {
+    text-align: left;
+    padding: 10px;
+    word-wrap: break-word;
+    max-width: 200px;
+  }
+  
+  .repository-table th {
+    background-color: #48742F; /* Set heading row color */
+    color: white; /* Ensure text color is readable */
+  }
+  
+  .repository-table td {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .repository-table .edit-btn,
+  .repository-table .delete-btn {
+    background-color: #48742F;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 5px;
+    width: 40%;
+    justify-content: center;
+  }
+  
+  
+  .repository-table .delete-btn {
+    background-color: #dc3545;
+  }
+  
+ 
+  .modaal {
+    position: fixed;
+    top: 0;
+    left: 0;
+   width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* dark background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .modaal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    width: 900%;
+    max-width: 500px;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.8);
+    position: relative;
+  }
+  
+
+
+  
+  .modal-buttons button {
+    padding: 10px 20px;
+    background-color: #48742F;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+    justify-content: center;
+    font-size: 40px;
+  }
+  
+  
+  .confirmation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  }
+  
+  .confirmation-dialog {
+    background-color: white;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    border-radius: 8px;
+  }
+  
+  .confirmation-dialog p {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .confirmation-dialog button {
+    padding: 8px 16px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+
+  }
+  /* Delete confirmation modal */
+.delete-confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.delete-modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.delete-modal-content p {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.modal-buttons button {
+  margin: 0 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+ 

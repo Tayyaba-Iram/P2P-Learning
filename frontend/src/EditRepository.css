@@ -1,0 +1,73 @@
+
+ 
+  .editcontainer {
+    width: 40%;
+    align-items: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    margin-left: 30%;
+  }
+  
+  h2 {
+    margin-top: 3%;
+    text-align: center;
+    margin-bottom: 3%;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  /* Input field styles */
+  label {
+    font-size: 16px;
+    margin-top: 15px;
+    color: #000000;
+  
+  }
+  
+  input[type="text"],
+  input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  
+
+  /* Current file display styles */
+  div p {
+  padding: 10px;
+    font-size: 14px;
+    color: #555;
+    margin-left: 10px;
+  }
+  
+  
+  input[type="file"]::file-selector-button {
+    cursor: pointer;
+  }
+  
+ 
+  /* Submit button styles */
+  .update-btn {
+    width: 98%;
+    padding: 12px;
+    background-color: #48742F;
+    color: white;
+    border: none;
+    text-align: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+ 
+  

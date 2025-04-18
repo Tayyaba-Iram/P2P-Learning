@@ -14,11 +14,13 @@ import loginRoutes from './routes/loginRoutes.js'
 import verifyUser from './middleware/verifyUser.js'; // Import the middleware
 import Message from './models/Message.js';
 import favStudentRoutes from './routes/favStudentRoutes.js';
+import RepositoryRoutes from './routes/RepositoryRoutes.js';
 import cookieParser from 'cookie-parser';
 import http from 'http';
 import { Server } from 'socket.io';
 import VerifiedStudentModel from './models/VerifiedStudent.js';
-
+import path from 'path'; 
+import { fileURLToPath } from 'url'; 
 
 const app = express();
 app.use(cookieParser());
@@ -30,7 +32,11 @@ app.use(cors({
   credentials: true
 }));
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -194,6 +200,8 @@ app.use('/api', ResetPasswordRoutes);
 app.use('/api', verifyUser, DashboardRoutes);
 app.use('/api', loginRoutes);
 app.use('/api', favStudentRoutes);
+app.use('/uploads', express.static('uploads'));
+app.use('/api', RepositoryRoutes)
 
 // Start the server
 server.listen(3001, () => {  // Use server.listen instead of app.listen for Socket.io
