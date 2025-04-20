@@ -132,4 +132,72 @@
   .cancel-button:hover {
     background-color: #999;
   }
+  .simple-dashboard {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .simple-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .e-icon {
+    font-size: 24px;
+    font-weight: bold;
+    color: green;
+  }
+  
+  .brand-name {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  
+  .header-icons span {
+    margin-left: 10px;
+    font-size: 18px;
+  }
+  
+  .account-info {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .account-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .sign-in-btn {
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .service-menu {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  .service-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
   

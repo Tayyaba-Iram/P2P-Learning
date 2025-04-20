@@ -45,21 +45,22 @@ router.delete('/unfavoriteStudent/:favoriteStudentId', verifyUser, async (req, r
     res.status(500).json({ error: 'Failed to unfavorite student' });
   }
 });
+
+// Route to get all favorite students of a user
 router.get('/favoriteStudents', verifyUser, async (req, res) => {
   try {
     const userId = req.user._id;
-    console.log('Logged-in userId:', userId);
 
+    // Get all the students favorited by the logged-in user
     const favorites = await FavoriteStudents.find({ userId })
-      .populate('favoriteStudentId', 'name email');
-
-    console.log('Fetched favorites:', favorites);
+      .populate('favoriteStudentId', 'name email');  // Populate the favoriteStudentId with student data
+    
+    console.log('Favorite Students:', favorites);
     res.status(200).json(favorites);
   } catch (error) {
     console.error('Error fetching favorite students:', error);
     res.status(500).json({ error: 'Failed to fetch favorite students' });
   }
 });
-
 
 export default router;

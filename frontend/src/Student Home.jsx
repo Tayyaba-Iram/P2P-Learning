@@ -27,11 +27,15 @@ function Home() {
   });
 
   const [selectedEvent, setSelectedEvent] = useState(null);
-
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/sessions');
+        const token = sessionStorage.getItem('token'); // Get token from local storage
+        const response = await axios.get('http://localhost:3001/api/sessions', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setAgenda(response.data);
       } catch (error) {
         console.error('Error fetching sessions:', error);
@@ -39,56 +43,7 @@ function Home() {
     };
     fetchSessions();
   }, []);
-
-  const handleInputChange = (e) => {
-    setSessionDetails({ ...sessionDetails, [e.target.name]: e.target.value });
-  };
-
-  const handleDateChange = (date) => {
-    if (date < new Date()) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Date',
-        text: 'Date must be today or a future date.',
-        confirmButtonText: 'OK',
-        timer: 3000,
-      });
-      return;
-    }
-    setSessionDetails({ ...sessionDetails, date });
-  };
-
-  const handleAddSession = async () => {
-    const { topic, startTime, endTime } = sessionDetails;
-    if (!topic || !startTime || !endTime) {
-      setMessage('Please fill all the fields');
-      return;
-    }
-    if (endTime <= startTime) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Time Selection',
-        text: 'End time must be after the start time.',
-        confirmButtonText: 'OK',
-        timer: 3000,
-      });
-      return;
-    }
-    const newSession = {
-      ...sessionDetails,
-      date: sessionDetails.date.toISOString(),
-      meetingLink: `https://meet.jit.si/${Math.floor(Math.random() * 10000)}`,
-    };
-    try {
-      const response = await axios.post('http://localhost:3001/api/sessions', newSession);
-      setAgenda((prevAgenda) => [...prevAgenda, response.data]);
-      setModalOpen(false);
-      toast.success('Session added successfully');
-      setSessionDetails({ topic: '', startTime: '', endTime: '', date: new Date() });
-    } catch (error) {
-      console.error('Error saving session:', error);
-    }
-  };
+  
 
   const handleEventSelect = (event) => {
     const session = agenda.find((s) => s._id === event.id);
@@ -159,7 +114,7 @@ function Home() {
         <div className="schedule-session-container">
           <h3>Schedule a Session</h3>
           <p>Plan a session and manage your learning schedule.</p>
-          <Link to="#" className="schedule-btn" onClick={() => setModalOpen(true)}>
+          <Link to="/session" className="schedule-btn">
             Schedule Session
           </Link>
         </div>
@@ -178,61 +133,7 @@ function Home() {
           </Link>
         </div>
       </div>
-      <RequestTable myRequests={myRequests} />
 
-
-      {/* Schedule Session Modal */}
-      {isModalOpen && (
-        <div className="form-backdrop" onClick={() => setModalOpen(false)}>
-          <div className="schedule-form" onClick={(e) => e.stopPropagation()}>
-            <h3 className="form-title">Schedule a New Session</h3>
-            <div className="form-group">
-              <label>Topic</label>
-              <input
-                type="text"
-                name="topic"
-                value={sessionDetails.topic}
-                onChange={handleInputChange}
-                placeholder="Enter session topic"
-              />
-            </div>
-            <div className="form-group">
-              <label>Date</label>
-              <DatePicker
-                selected={sessionDetails.date}
-                onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-              />
-            </div>
-            <div className="form-group">
-              <label>Start Time</label>
-              <input
-                type="time"
-                name="startTime"
-                value={sessionDetails.startTime}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>End Time</label>
-              <input
-                type="time"
-                name="endTime"
-                value={sessionDetails.endTime}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-actions">
-              <button className="schedule-btn" onClick={handleAddSession}>
-                Add Session
-              </button>
-              <button className="clear-btn" onClick={() => setModalOpen(false)}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Session Details Modal */}
       {isDetailsModalOpen && (

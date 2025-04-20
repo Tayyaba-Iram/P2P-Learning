@@ -24,6 +24,10 @@ import Complaints from './Complains';
 import StudentProfile from './Student Profile';
 import UpdatePassword from './UpdatePassword';
 import Repository from './Repository';
+import BroadcastRequest from './Broadcast Request';
+import Directory from './Directory';
+import SuperAdminPayments from './SuperAdmin Payments';
+import SessionSchedule from './Session Schedule';
 
 axios.defaults.withCredentials = true;
 
@@ -83,7 +87,13 @@ function App() {
         <Route path="/studentprofile" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
         <Route path="/resetpassword" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
         <Route path="/repository" element={<ProtectedRoute><Repository /></ProtectedRoute>} />
+        <Route path="/directory" element={<ProtectedRoute><Directory /></ProtectedRoute>} />
+        <Route path="/broadcastRequest" element={<ProtectedRoute><BroadcastRequest /></ProtectedRoute>} />
+        <Route path="/super-payments" element={<ProtectedRoute><SuperAdminPayments/></ProtectedRoute>} />
+        <Route path="/session" element={<ProtectedRoute><SessionSchedule/></ProtectedRoute>} />
 
+
+        
       </Routes>
       
         <Footer />

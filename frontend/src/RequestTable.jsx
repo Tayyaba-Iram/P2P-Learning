@@ -1,4 +1,4 @@
-const RequestTable = ({ myRequests }) => {
+/*const RequestTable = ({ myRequests }) => {
   if (!myRequests || myRequests.length === 0) {
     return <p>No requests available.</p>;
   }
@@ -29,3 +29,4 @@ const RequestTable = ({ myRequests }) => {
     </div>
   );
 };
+*/

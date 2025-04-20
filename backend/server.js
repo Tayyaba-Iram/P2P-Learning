@@ -4,40 +4,28 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import http from 'http';
 import { Server } from 'socket.io';
-
-// Import routes
 import studentRoutes from './routes/studentRoutes.js';
 import auth from './routes/auth.js';
 import sessionRoutes from './routes/sessionsRoutes.js';
 import UniAdminRoutes from './routes/UniAdminRoutes.js';
 import ComplainRoutes from './routes/ComplainRoutes.js';
-import UniversityRoutes from './routes/UniversityRoutes.js'
-import SuperAdminRoutes from './routes/SuperAdminRoutes.js'
-import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js'
-import DashboardRoutes from './routes/DashboardRoutes.js'
-import loginRoutes from './routes/loginRoutes.js'
-import verifyUser from './middleware/verifyUser.js'; // Import the middleware
-import Message from './models/Message.js';
+import UniversityRoutes from './routes/UniversityRoutes.js';
+import SuperAdminRoutes from './routes/SuperAdminRoutes.js';
+import ResetPasswordRoutes from './routes/ResetPasswordRoutes.js';
+import DashboardRoutes from './routes/DashboardRoutes.js';
+import loginRoutes from './routes/loginRoutes.js';
 import favStudentRoutes from './routes/favStudentRoutes.js';
-import cookieParser from 'cookie-parser';
-import http from 'http';
-import { Server } from 'socket.io';
+import broadcastRequestRoutes from './routes/broadcastRequestRoutes.js'; 
+import Message from './models/Message.js';
 import VerifiedStudentModel from './models/VerifiedStudent.js';
-
+import verifyUser from './middleware/verifyUser.js';
+import SuperPaymentRoutes from './routes/SuperPaymentRoutes.js';
 
 // Initialize express app
 const app = express();
-app.use(cookieParser());
-app.use(express.json());
-app.use(cors({
-  origin: ["http://localhost:5173"],
-  methods: ["GET", "POST", "PUT", "DELETE","OPTIONS"],
-  allowedHeaders: ['Authorization', 'Content-Type'],
-  credentials: true
-}));
-
-
 const server = http.createServer(app);
+
+// Socket.io setup
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -46,9 +34,9 @@ const io = new Server(server, {
   }
 });
 
-// Middleware setup
+// Middleware
 app.use(cors({
-  origin: ["http://localhost:5173"],  // Adjust to match your frontend URL
+  origin: ["http://localhost:5173"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ['Authorization', 'Content-Type'],
   credentials: true
@@ -56,15 +44,13 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
-// Socket.io events
-io.on('connection', socket => {
+// Socket.io Events
+io.on('connection', (socket) => {
   console.log(`Client ${socket.id} connected`);
 
   socket.on('joinRoom', (roomName, callback) => {
-    if (!socket.rooms.has(roomName)) {
-      socket.join(roomName);
-      console.log(`Client ${socket.id} joined room: ${roomName}`);
-    }
+    socket.join(roomName);
+    console.log(`Client ${socket.id} joined room: ${roomName}`);
     callback(null);
   });
 
@@ -81,16 +67,69 @@ io.on('connection', socket => {
       console.error('Error saving message:', err);
     }
   });
-
-  socket.on('disconnect', () => {
-    console.log(`Client ${socket.id} disconnected`);
-  });
 });
 
-// Broadcast Request Routes (Make sure to use correct path)
-app.use('/api/broadcastRequest', broadcastRequestRoutes);  // Mount the broadcastRequestRoutes here
+// Chat Routes
+app.get('/api/chat/:receiverId', async (req, res) => {
+  const { receiverId } = req.params;
+  const { userId } = req.query;
+  if (!userId || !receiverId) {
+    return res.status(400).json({ error: 'Missing userId or receiverId' });
+  }
 
-// Main Routes
+  try {
+    const messages = await Message.find({
+      $or: [
+        { senderId: userId, receiverId },
+        { senderId: receiverId, receiverId: userId },
+      ],
+    }).sort({ timestamp: 1 });
+
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+});
+
+app.post('/api/chat', async (req, res) => {
+  const { senderId, receiverId, text } = req.body;
+  if (!senderId || !receiverId || !text) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const message = new Message({ senderId, receiverId, text });
+    await message.save();
+    res.status(201).json(message);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save message' });
+  }
+});
+
+app.get('/api/chattedStudents', verifyUser, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const messages = await Message.find({
+      $or: [{ senderId: userId }, { receiverId: userId }]
+    }).select('senderId receiverId');
+
+    const participants = new Set();
+    messages.forEach(msg => {
+      if (msg.senderId.toString() !== userId.toString()) participants.add(msg.senderId.toString());
+      if (msg.receiverId.toString() !== userId.toString()) participants.add(msg.receiverId.toString());
+    });
+
+    const chattedStudents = await VerifiedStudentModel.find({
+      '_id': { $in: Array.from(participants) }
+    }).select('name _id');
+
+    res.json(chattedStudents);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching chatted students', error: err.message });
+  }
+});
+
+// API Routes
 app.use('/api', studentRoutes);
 app.use('/api', auth);
 app.use('/api', sessionRoutes);
@@ -101,17 +140,16 @@ app.use('/api', SuperAdminRoutes);
 app.use('/api', ResetPasswordRoutes);
 app.use('/api', verifyUser, DashboardRoutes);
 app.use('/api', loginRoutes);
-app.use('/uploads', express.static('uploads'));
-app.use('/api', RepositoryRoutes);
 app.use('/api', favStudentRoutes);
+app.use('/api', broadcastRequestRoutes);
+app.use('/api', SuperPaymentRoutes);
 
-
-// MongoDB connection
+// MongoDB Connection
 mongoose.connect('mongodb://localhost:27017/P2P-Learning')
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// Start server
+// Start Server
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

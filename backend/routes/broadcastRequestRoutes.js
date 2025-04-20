@@ -1,11 +1,12 @@
 import express from 'express';
 import BroadcastRequest from '../models/BroadcastRequest.js';
 import VerifiedStudentModel from '../models/VerifiedStudent.js';  // Use the correct model
+import verifyUser from '../middleware/verifyUser.js';  // Import the middleware
 
 const router = express.Router();
 
 // POST route to handle broadcast request submission
-router.post('/', async (req, res) => {
+router.post('/broadcastRequest', verifyUser, async (req, res) => {
   try {
     const { topic, subtopic, urgency, programs, userId } = req.body;
 
@@ -36,6 +37,18 @@ router.post('/', async (req, res) => {
     res.status(201).json(newRequest);
   } catch (error) {
     console.error(' Error in broadcast request:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+// GET route to fetch all broadcast requests for a specific user
+router.get('/broadcastRequest/:userId', verifyUser, async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const requests = await BroadcastRequest.find({ userId });
+    res.status(200).json(requests);
+  } catch (error) {
+    console.error('Error fetching requests:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

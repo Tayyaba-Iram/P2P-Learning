@@ -69,9 +69,6 @@ router.get('/get-complaints', verifyUser, async (req, res) => {
     }
   });
   
-  
-
-
 
 
 // Delete a specific complaint by its ID

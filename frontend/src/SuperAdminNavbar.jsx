@@ -48,6 +48,7 @@ const SuperAdminNavbar = () => {
           <Link to="/superdashboard" className={isActive('/superdashboard') ? 'active' : ''}>Home</Link>
           <Link to="/adminregisteration" className={isActive('/adminregisteration') ? 'active' : ''}>Register Admin</Link>
           <Link to="/adduniversity" className={isActive('/adduniversity') ? 'active' : ''}>Add University</Link>
+          <Link to="/super-payments" className={isActive('/super-payments') ? 'active' : ''}>Payments</Link>
           <button className="logout-button" onClick={() => setShowLogoutModal(true)}>Logout</button>
         </div>
       </div>
