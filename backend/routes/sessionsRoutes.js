@@ -137,7 +137,7 @@ router.get("/sessions/verify/:meetingID", async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
+/*
 // Route to get all sessions
 router.get('/sessions', verifyUser, async (req, res) => {
   try {
@@ -147,6 +147,21 @@ router.get('/sessions', verifyUser, async (req, res) => {
     console.error(error); // Log error for debugging
     res.status(500).json({ message: error.message });
   }
+});*/
+
+router.get('/sessions', verifyUser, async (req, res) => {
+  try {
+    const userEmail = req.user.email; // Get the email from the verified token
+    console.log("Logged-in user's email:", userEmail);
+
+    const sessions = await SessionModel.find({ userEmail }); // Filter by email
+
+    res.json(sessions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
 });
+
 
 export default router;

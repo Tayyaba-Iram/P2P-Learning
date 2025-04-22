@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { Rating } from "@smastrom/react-rating";
+import "@smastrom/react-rating/style.css";
 
 const ConductSession = () => {
   const [meetingLink, setMeetingLink] = useState("");
   const [isJoinEnabled, setJoinEnabled] = useState(false);
-  const [isJoining, setIsJoining] = useState(false); // New state for disabling the button
+  const [isJoining, setIsJoining] = useState(false);
+  const [apiInstance, setApiInstance] = useState(null);
+  const [isSessionEnded, setIsSessionEnded] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,19 +33,17 @@ const ConductSession = () => {
   const handleMeetingLinkChange = (e) => {
     const link = e.target.value;
     setMeetingLink(link);
-
     const jitsiLinkPattern = /^https:\/\/meet\.jit\.si\/([a-zA-Z0-9-_]+)$/;
     setJoinEnabled(jitsiLinkPattern.test(link));
   };
 
   const handleJoinSession = async () => {
-    setIsJoining(true); // Disable the button immediately after clicking
-
+    setIsJoining(true);
     const meetingID = meetingLink.split("https://meet.jit.si/")[1] || "";
 
     if (!meetingID) {
       alert("Invalid meeting link format.");
-      setIsJoining(false); // Re-enable the button if an error occurs
+      setIsJoining(false);
       return;
     }
 
@@ -53,35 +59,26 @@ const ConductSession = () => {
           width: "100%",
           height: 600,
           parentNode: document.getElementById("jitsi-container"),
-          configOverwrite: {
-            disableDeepLinking: true,
-          },
+          configOverwrite: { disableDeepLinking: true },
           interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
             HIDE_INVITE_MORE_HEADER: true,
             TOOLBAR_BUTTONS: [
-              "microphone",
-              "camera",
-              "hangup",
-              "chat",
-              "fullscreen",
-              "raisehand",
-              "tileview",
-              "videobackgroundblur",
-              "desktop",
+              "microphone", "camera", "hangup", "chat", "fullscreen",
+              "raisehand", "tileview", "videobackgroundblur", "desktop",
             ],
           },
         };
 
         if (window.JitsiMeetExternalAPI) {
           const api = new window.JitsiMeetExternalAPI(domain, options);
+          setApiInstance(api);
 
           api.addListener("readyToClose", () => {
-            navigate("/");
-            setIsJoining(false); // Re-enable the button when meeting ends
+            setIsJoining(false);
+            setIsSessionEnded(true);
           });
         } else {
-          console.error("JitsiMeetExternalAPI not loaded.");
           alert("Failed to load Jitsi. Please refresh the page and try again.");
           setIsJoining(false);
         }
@@ -94,6 +91,34 @@ const ConductSession = () => {
       alert("Error verifying the session. Please try again later.");
       setIsJoining(false);
     }
+  };
+
+  const handleEndSession = async () => {
+    const confirmDelete = await Swal.fire({
+      title: "End Session?",
+      text: "Are you sure you want to end this session?",
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonText: "End Session",
+      cancelButtonText: "Cancel",
+    });
+
+    if (confirmDelete.isConfirmed) {
+      if (apiInstance) {
+        apiInstance.dispose();
+        setIsSessionEnded(true);
+        setIsJoining(false);
+        setMeetingLink("");  // Reset the meeting link
+      }
+    }
+  };
+
+  const handleRatingSubmit = () => {
+    // You can send the rating to your backend here
+    console.log("User rated:", rating);
+    Swal.fire("Thank you!", "Your rating has been submitted.", "success");
+    setIsRatingSubmitted(true);
+    navigate("/"); // Redirect if needed
   };
 
   return (
@@ -110,27 +135,69 @@ const ConductSession = () => {
           maxWidth: "300px",
           marginBottom: "20px",
         }}
+        disabled={isSessionEnded} // Disable input after session ends
       />
       <br />
       <button
-        className="join"
         onClick={handleJoinSession}
-        disabled={!isJoinEnabled || isJoining} // Button disables after clicking
+        disabled={!isJoinEnabled || isJoining || isSessionEnded} // Disable button after session ends
         style={{
           padding: "10px 20px",
-          backgroundColor: isJoinEnabled && !isJoining ? "#48742F" : "gray",
+          backgroundColor: isJoinEnabled && !isJoining && !isSessionEnded ? "#48742F" : "gray",
           color: "white",
-          cursor: isJoinEnabled && !isJoining ? "pointer" : "not-allowed",
+          cursor: isJoinEnabled && !isJoining && !isSessionEnded ? "pointer" : "not-allowed",
           border: "none",
           borderRadius: "5px",
         }}
       >
-        {isJoining ? "Join" : "Join"} {/* Button text changes when clicked */}
+        {isJoining ? "Joining..." : "Join"}
       </button>
-      <div
-        id="jitsi-container"
-        style={{ marginTop: "20px", width: "100%", height: "600px" }}
-      ></div>
+
+      {/* Rating section moved here directly below the Join button */}
+      {isSessionEnded && !isRatingSubmitted && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Rate this session</h3>
+          <Rating
+            style={{ maxWidth: 250, margin: "auto" }}
+            value={rating}
+            onChange={setRating}
+          />
+          <button
+            onClick={handleRatingSubmit}
+            style={{
+              marginTop: "20px",
+              padding: "10px 20px",
+              backgroundColor: "#3B82F6",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Submit Rating
+          </button>
+        </div>
+      )}
+
+      {apiInstance && !isSessionEnded && (
+        <button
+          onClick={handleEndSession}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#FF4C4C",
+            color: "white",
+            cursor: "pointer",
+            border: "none",
+            borderRadius: "5px",
+            marginTop: "20px",
+            marginLeft: "10px",
+          }}
+        >
+          End Session
+        </button>
+      )}
+
+      <div id="jitsi-container" style={{ marginTop: "20px", width: "100%", height: "600px" }}></div>
     </div>
   );
 };

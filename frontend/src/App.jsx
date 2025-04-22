@@ -28,6 +28,8 @@ import BroadcastRequest from './Broadcast Request';
 import Directory from './Directory';
 import SuperAdminPayments from './SuperAdmin Payments';
 import SessionSchedule from './Session Schedule';
+import EditRepository from './EditRepository';
+
 
 axios.defaults.withCredentials = true;
 
@@ -91,6 +93,8 @@ function App() {
         <Route path="/broadcastRequest" element={<ProtectedRoute><BroadcastRequest /></ProtectedRoute>} />
         <Route path="/super-payments" element={<ProtectedRoute><SuperAdminPayments/></ProtectedRoute>} />
         <Route path="/session" element={<ProtectedRoute><SessionSchedule/></ProtectedRoute>} />
+        <Route path="/editRepository/:repoId" element={<ProtectedRoute><EditRepository/></ProtectedRoute>} />
+
 
 
         

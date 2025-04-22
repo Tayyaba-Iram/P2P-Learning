@@ -20,6 +20,8 @@ import Message from './models/Message.js';
 import VerifiedStudentModel from './models/VerifiedStudent.js';
 import verifyUser from './middleware/verifyUser.js';
 import SuperPaymentRoutes from './routes/SuperPaymentRoutes.js';
+import RepositoryRoutes from './routes/RepositoryRoutes.js';
+
 
 // Initialize express app
 const app = express();
@@ -143,6 +145,8 @@ app.use('/api', loginRoutes);
 app.use('/api', favStudentRoutes);
 app.use('/api', broadcastRequestRoutes);
 app.use('/api', SuperPaymentRoutes);
+app.use('/api', RepositoryRoutes);
+
 
 // MongoDB Connection
 mongoose.connect('mongodb://localhost:27017/P2P-Learning')

@@ -135,6 +135,18 @@ router.delete('/repositories/:id', verifyUser, async (req, res) => {
   });
   
   
+  router.get('/repositoryInfo/:repoId', async (req, res) => {
+    const repoId = req.params.repoId;
+    try {
+      const repository = await Repository.findById(repoId);
+      if (!repository) {
+        return res.status(404).json({ success: false, message: 'Repository not found' });
+      }
+      res.json({ success: true, repository });
+    } catch (err) {
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+  });
   
 
 export default router;

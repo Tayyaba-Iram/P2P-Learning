@@ -6,7 +6,22 @@ const SuperAdminPayments = () => {
     const [accountData, setAccountData] = useState(null);
     const [sessions, setSessions] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [searchQuery, setSearchQuery] = useState('');
+    const filteredSessions = sessions.filter((session) => {
+        const query = searchQuery.toLowerCase();
+        return (
+            session.studentName?.toLowerCase().includes(query) ||
+            session.userEmail?.toLowerCase().includes(query) ||
+            session.university?.toLowerCase().includes(query) ||
+            session.program?.toLowerCase().includes(query) ||
+            session.phoneNumber?.toLowerCase().includes(query) ||
+            session.instructorName?.toLowerCase().includes(query) ||
+            session.instructorHolder?.toLowerCase().includes(query) ||
+            session.instructorNumber?.toLowerCase().includes(query) ||
+            session.topic?.toLowerCase().includes(query)
+        );
+    });
+    
     const token = sessionStorage.getItem('token');
 
     useEffect(() => {
@@ -31,7 +46,12 @@ const SuperAdminPayments = () => {
                 });
 
                 const fetchedSessions = sessionRes.data.sessions || [];
+
+                // Reverse the array to show latest sessions first (based on insertion order)
+                fetchedSessions.reverse();
+
                 setSessions(fetchedSessions);
+
 
                 // Step 3: Calculate 10% from all payments
                 const total10PercentAmount = fetchedSessions.reduce((acc, session) => {
@@ -65,6 +85,7 @@ const SuperAdminPayments = () => {
         };
 
         initializeAccount();
+
     }, [token]);
 
     return (
@@ -92,9 +113,18 @@ const SuperAdminPayments = () => {
                     </div>
                 </div>
             </div>
+            <div className="search-bar-container">
+    <input
+        type="text"
+        placeholder="Search sessions..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="session-search-input"
+    />
+</div>
 
             <div className="session-table-container">
-                <h3>Session Payments Summary</h3>
+                <h2>Session Payments History</h2>
                 {loading ? (
                     <p>Loading sessions...</p>
                 ) : sessions.length > 0 ? (
@@ -118,7 +148,8 @@ const SuperAdminPayments = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {sessions.map((session, index) => {
+                        {filteredSessions.map((session, index) => {
+
                                 const payment = session.amount;
                                 const deductedAmount = payment * 0.10;
                                 const amountAfterDeduction = payment - deductedAmount;
