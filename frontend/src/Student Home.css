@@ -1,7 +1,6 @@
-
-
 * {
-  box-sizing: border-box; /* Include padding and border in element's total width/height */
+  box-sizing: border-box;
+  /* Include padding and border in element's total width/height */
   margin: 0;
   padding: 0;
 }
@@ -19,16 +18,19 @@ body {
 }
 
 .calendar-container {
-  flex: 3; /* Calendar takes more space */
+  flex: 3;
+  /* Calendar takes more space */
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* Prevent overflow */
+  overflow: hidden;
+  /* Prevent overflow */
 }
 
 .side-container {
-  flex: 1; /* Chat, Conduct Session, and Schedule Session blocks */
+  flex: 1;
+  /* Chat, Conduct Session, and Schedule Session blocks */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -55,7 +57,8 @@ body {
   margin-bottom: 10px;
   margin-top: 30px;
   color: #48742F;
-  text-align: center; /* Center text for uniform appearance */
+  text-align: center;
+  /* Center text for uniform appearance */
 }
 
 /* Container Styles for Buttons */
@@ -66,15 +69,16 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
- 
+
 }
 
 /* Button Styles */
 .conduct-session-button,
 .chat-button,
-.schedule-btn{
-     /* Makes buttons take full width of their container */
-  padding: 15px;  /* Adjust padding to make buttons have equal height */
+.schedule-btn {
+  /* Makes buttons take full width of their container */
+  padding: 15px;
+  /* Adjust padding to make buttons have equal height */
   font-size: 1rem;
   background-color: #48742F;
   color: white;
@@ -83,18 +87,14 @@ body {
   cursor: pointer;
   text-align: center;
   transition: background-color 0.3s;
-  display: inline-block; /* Ensures the button behaves like a block element */
-  margin-top: 20px; /* Adjust space between buttons */
+  display: inline-block;
+  /* Ensures the button behaves like a block element */
+  margin-top: 20px;
+  /* Adjust space between buttons */
   width: 40%;
-  
+
 }
 
-/* Button Hover Effect */
-.conduct-session-button:hover,
-.chat-button:hover,
-.schedule-btn:hover {
-  background-color: #3a5c23;
-}
 
 
 
@@ -111,11 +111,7 @@ body {
   transition: background-color 0.3s;
 }
 
-.conduct-session-button:hover,
-.chat-button:hover,
-.schedule-btn:hover {
-  background-color: #3a5c23;
-}
+
 
 /* ======================================
    Modal Styles
@@ -136,9 +132,9 @@ body {
 
 .schedule-form {
   background-color: #ffffff;
-  padding: 15px 10px; 
+  padding: 15px 10px;
   padding-left: 1cm;
-  padding-right: 3cm; 
+  padding-right: 3cm;
   border-radius: 10px;
   width: 90%;
   max-width: 500px;
@@ -242,35 +238,42 @@ body {
 .clear-btn {
   margin-top: 10px;
   padding: 10px;
-  background-color: #f44336;
+  width: 120px;
+  background-color: #48742F;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
+
 
 .clear-btn:hover {
   background-color: #d32f2f;
 }
 
 .form-group .react-datepicker-wrapper {
-    width: 110%; 
-  }
-  
-  .form-group .react-datepicker__input-container input {
-    width: 100%;
-    padding: 12px; 
-    border-radius: 5px; 
-    border: 1px solid #ddd; 
-    transition: border-color 0.3s;
-  }
-  
-  .form-group .react-datepicker__input-container input:focus {
-    border-color: #48742F; /* Change border color on focus for better UX */
-    box-shadow: 0 0 4px rgba(72, 116, 47, 0.5); /* Add subtle shadow on focus */
-  }
-  
+  width: 110%;
+}
+
+.form-group .react-datepicker__input-container input {
+  width: 123%;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s;
+}
+
+.form-group .react-datepicker__input-container input:focus {
+  border-color: #48742F;
+  /* Change border color on focus for better UX */
+  box-shadow: 0 0 4px rgba(72, 116, 47, 0.5);
+  /* Add subtle shadow on focus */
+}
+
 
 
 
@@ -295,7 +298,8 @@ body {
   }
 
   .side-container {
-    gap: 15px; /* Slightly reduce gap in smaller screens */
+    gap: 15px;
+    /* Slightly reduce gap in smaller screens */
   }
 
   /* Ensure buttons are sized appropriately for mobile screens */
@@ -305,115 +309,119 @@ body {
     width: 100%;
     padding: 12px 20px;
   }
+
   /* ======================================
    Modal Styles - Schedule Session
 ====================================== */
 
-.schedule-form {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 500px; /* Limit the width of the modal */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  overflow: auto; /* Ensure content is scrollable if it exceeds the container */
-  max-height: 80vh; /* Prevent the modal from getting too tall */
-}
+  .schedule-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    /* Limit the width of the modal */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow: auto;
+    /* Ensure content is scrollable if it exceeds the container */
+    max-height: 80vh;
+    /* Prevent the modal from getting too tall */
+  }
 
-/* Add overflow for content */
-.form-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+  /* Add overflow for content */
+  .form-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
 
-/* Ensure modal content does not overflow */
-.schedule-form::-webkit-scrollbar {
-  width: 10px;
-}
+  /* Ensure modal content does not overflow */
+  .schedule-form::-webkit-scrollbar {
+    width: 10px;
+  }
 
-.schedule-form::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
-}
+  .schedule-form::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
 
-.schedule-form::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
+  .schedule-form::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
-/* Adjusted Form Inputs */
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  margin-top: 5px;
-}
+  /* Adjusted Form Inputs */
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-top: 5px;
+  }
 
-/* ======================================
+  /* ======================================
    Buttons Styling
 ====================================== */
-.schedule-btn,
-.clear-btn {
-  padding: 12px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 5px;
-  border: none;
-}
+  .schedule-btn,
+  .clear-btn {
+    padding: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+  }
 
-.schedule-btn {
-  background-color: #48742F;
-  color: white;
-}
+  .schedule-btn {
+    background-color: #48742F;
+    color: white;
+  }
 
-.clear-btn {
-  background-color: #f44336;
-  color: white;
-}
+  .clear-btn {
+    background-color: #f44336;
+    color: white;
+  }
 
-.schedule-btn:hover {
-  background-color: #3a5c23;
-}
+  .schedule-btn:hover {
+    background-color: #3a5c23;
+  }
 
-.clear-btn:hover {
-  background-color: #d32f2f;
-}
+  .clear-btn:hover {
+    background-color: #d32f2f;
+  }
 
-.status-btn.pending {
-  background-color: #e9f7ef;
-  color: #2e7d32;
-  border: 1px solid #2e7d32;
-}
+  .status-btn.pending {
+    background-color: #e9f7ef;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+  }
 
-.status-btn.cancelled {
-  background-color: #fdecea;
-  color: #c62828;
-  border: 1px solid #c62828;
-}
-
-
+  .status-btn.cancelled {
+    background-color: #fdecea;
+    color: #c62828;
+    border: 1px solid #c62828;
+  }
 
 
-/* ======================================
+
+
+  /* ======================================
    Responsive Styling for Modal
 ====================================== */
-@media (max-width: 768px) {
-  .schedule-form {
-    width: 90%;
+  @media (max-width: 768px) {
+    .schedule-form {
+      width: 90%;
+    }
   }
-}
 
 }

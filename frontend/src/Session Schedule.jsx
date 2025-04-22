@@ -265,10 +265,11 @@ function SessionSchedule() {
                     </div>
 
                     <div className="form-actions">
-                        <button className="schedule-btn" onClick={handleNext}>
+                        <button type="button" className="schedule-btn" onClick={handleNext}>
                             Next
                         </button>
                     </div>
+
                 </>
             )}
 
