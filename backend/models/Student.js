@@ -94,8 +94,8 @@ const studentsData = [
   },
   {
     name: 'Alishba Anjum',
-    sapid: '35927',
-    email: '35927@students.riphah.edu.pk',
+    sapid: '35928',
+    email: '35928@students.riphah.edu.pk',
     cnic: '77777-7777777-7',
     phone: '7777-7777777',
     university: 'Riphah',

@@ -26,7 +26,7 @@
 }
 
 .form {
-    width: 130%;
+    width: 1000%;
     max-width: 390px;
     margin-left: 5%;
     margin-top: 15px;
@@ -45,6 +45,7 @@
     border-radius: 5px;
     outline: none;
     transition: 0.3s ease-in-out;
+    width: 135%;
 }
 
 .form-group input:focus {
