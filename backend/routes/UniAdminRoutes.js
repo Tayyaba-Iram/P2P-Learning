@@ -1,11 +1,12 @@
 // routes/register.js
 import express from 'express';
 import UniAdminModel from '../models/UniAdmin.js';
+import verifyUser from '../middleware/verifyUser.js';
 
 const router = express.Router();
 
 // Registration endpoint
-router.post('/registerUniAdmin', async (req, res) => {
+router.post('/registerUniAdmin',verifyUser, async (req, res) => {
   const { name, sapid, email, cnic, phone, university, campus, password, cpassword } = req.body;
 
   console.log('Received data:', {

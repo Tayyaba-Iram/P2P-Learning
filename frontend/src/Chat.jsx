@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import './Chat.css';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 function Chat() {
   const [user, setUser] = useState(null);
@@ -12,10 +15,31 @@ function Chat() {
   const [newMessage, setNewMessage] = useState('');
   const [unreadMessages, setUnreadMessages] = useState({});
   const [favoriteStudents, setFavoriteStudents] = useState([]);
-
   const socketRef = useRef(null);
   const chatContainerRef = useRef(null);
 
+  const { studentId } = useParams();
+  const [student, setStudent] = useState(null);
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        console.error('No token found. User not authenticated.');
+        return;
+      }
+      try {
+        const response = await axios.get(`http://localhost:3001/api/verifiedStudents/${studentId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setStudent(response.data);
+      } catch (err) {
+        console.error('Error fetching student details:', err.response?.data || err.message);
+      }
+    };
+
+    fetchStudent();
+  }, [studentId]);
   // Fetch the logged-in user details
   useEffect(() => {
     const fetchUser = async () => {
@@ -122,31 +146,37 @@ function Chat() {
       }
     };
   }, [activeStudent]);
-
-  // Fetch chat history with a specific student
   const fetchChatHistory = async (student) => {
     try {
+      const token = sessionStorage.getItem('token'); // Or wherever you store the auth token
+  
       const { data } = await axios.get(`http://localhost:3001/api/chat/${student._id}`, {
         params: { userId: user._id },
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+  
       setMessages(data);
     } catch (err) {
       console.error('Error fetching chat history:', err);
     }
   };
-
+  
   // Start a new chat with a selected student
   const handleStartChat = (student) => {
     if (!user || !student) return;
-
     setActiveStudent(student);
     setMessages([]); // Clear previous chat history
 
     const senderId = user._id;
     const receiverId = student._id;
     const roomName = [senderId, receiverId].sort().join('-');
-
+    setChattedStudents((prev) => {
+      const exists = prev.some((s) => s._id === student._id);
+      return exists ? prev : [...prev, student];
+    });
+    
     if (socketRef.current) {
       socketRef.current.emit('joinRoom', roomName, (err) => {
         if (err) console.error('Error joining room:', err);
@@ -290,7 +320,44 @@ function Chat() {
   const nonFavoriteStudentsList = chattedStudents.filter(student => !favoriteStudents.includes(student._id));
 
   const sortedChattedStudents = [...favoriteStudentsList, ...nonFavoriteStudentsList];
-
+  useEffect(() => {
+    const fetchStudentAndStartChat = async () => {
+      if (!studentId || !user) return; // <- wait for both studentId AND user
+  
+      const token = sessionStorage.getItem('token');
+  
+      try {
+        const res = await axios.get(`http://localhost:3001/api/verifiedStudents/${studentId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        const student = res.data;
+        setActiveStudent(student);
+  
+        const senderId = user._id;
+        const receiverId = student._id;
+        const roomName = [senderId, receiverId].sort().join('-');
+  
+        socketRef.current?.emit('joinRoom', roomName, (err) => {
+          if (err) console.error("Socket join error:", err);
+          else console.log("Joined room:", roomName);
+        });
+  
+        const msgRes = await axios.get(`http://localhost:3001/api/chat/${student._id}`, {
+          params: { userId: user._id, peerId: student._id },
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        setMessages(msgRes.data);
+      } catch (error) {
+        console.error("Error loading student/chat:", error);
+      }
+    };
+  
+    fetchStudentAndStartChat();
+  }, [studentId, user]); // <- add user to dependencies
+  
+    
   return (
     <div className="Chat-container">
       <div className="sidebar">

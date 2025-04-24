@@ -42,7 +42,7 @@ function Login() {
         response = await axios.post(
           'http://localhost:3001/api/superadmin-check-or-create',
           { email, password },
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         if (response.data.created) {

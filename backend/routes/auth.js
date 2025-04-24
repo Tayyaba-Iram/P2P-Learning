@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'; // Importing JWT
 import dotenv from 'dotenv';
 import VerifiedStudentModel from '../models/VerifiedStudent.js';
 import UniAdminModel from '../models/UniAdmin.js';
+import verifyUser from '../middleware/verifyUser.js';
 dotenv.config();
 const router = express.Router();
 
@@ -59,7 +60,7 @@ router.post('/studentlogin', async (req, res) => {
 });
 
 // Admin login route
-router.post('/adminlogin', async (req, res) => {
+router.post('/adminlogin',async (req, res) => {
   const { email, password } = req.body;
 
   console.log('Received data:', { email, password });

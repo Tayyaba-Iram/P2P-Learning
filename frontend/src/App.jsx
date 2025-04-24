@@ -94,7 +94,7 @@ function App() {
         <Route path="/super-payments" element={<ProtectedRoute><SuperAdminPayments/></ProtectedRoute>} />
         <Route path="/session" element={<ProtectedRoute><SessionSchedule/></ProtectedRoute>} />
         <Route path="/editRepository/:repoId" element={<ProtectedRoute><EditRepository/></ProtectedRoute>} />
-
+        <Route path="/chat/:studentId" element={<Chat/>} />
 
 
         

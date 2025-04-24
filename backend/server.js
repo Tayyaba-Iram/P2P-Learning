@@ -21,6 +21,8 @@ import VerifiedStudentModel from './models/VerifiedStudent.js';
 import verifyUser from './middleware/verifyUser.js';
 import SuperPaymentRoutes from './routes/SuperPaymentRoutes.js';
 import RepositoryRoutes from './routes/RepositoryRoutes.js';
+import SuspensionRoutes from './routes/SuspensionRoutes.js';
+import ratingRoutes from './routes/ratingRoutes.js';
 
 
 // Initialize express app
@@ -131,6 +133,7 @@ app.get('/api/chattedStudents', verifyUser, async (req, res) => {
   }
 });
 
+
 // API Routes
 app.use('/api', studentRoutes);
 app.use('/api', auth);
@@ -146,6 +149,9 @@ app.use('/api', favStudentRoutes);
 app.use('/api', broadcastRequestRoutes);
 app.use('/api', SuperPaymentRoutes);
 app.use('/api', RepositoryRoutes);
+app.use('/api', SuspensionRoutes);
+app.use('/api', ratingRoutes);
+
 
 
 // MongoDB Connection
