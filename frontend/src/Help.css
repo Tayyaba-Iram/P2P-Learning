@@ -1,0 +1,36 @@
+.help-main-div{
+    padding: 30px;
+    line-height: 1.4;
+    text-align: justify;
+    font-size: 18px;
+  }
+  
+  .help-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .guide {
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding-left: 23px;
+
+  }
+  
+  .ordered-list {
+    padding-left: 40px;
+    margin-top: 10px;
+  }
+  
+  .ordered-list li {
+    margin-bottom: 8px;
+  }
+  
+  .help-main-div p {
+    text-align: justify;
+    font-size: 18px !important;
+    color: black !important;
+  }

@@ -39,6 +39,7 @@ body {
 .side-container .chat-container,
 .side-container .schedule-session-container {
   background-color: #ffffff;
+  color: black;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -93,8 +94,19 @@ body {
   width: 40%;
 
 }
+.schedule-session-container p{
+  color: black;
+  font-size: medium;
+}
 
-
+.chat-container p{
+  color: black;
+  font-size: medium;
+}
+.conduct-session-container p{
+  color: black;
+  font-size: medium;
+}
 
 
 .conduct-session-button,
