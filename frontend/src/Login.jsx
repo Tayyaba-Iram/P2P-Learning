@@ -36,17 +36,18 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       let response;
-
+  
+      // Check if the email belongs to an admin
       if (email.endsWith('@admin.edu.pk')) {
         response = await axios.post(
           'http://localhost:3001/api/adminlogin',
           { email, password },
           { withCredentials: true }
         );
-
+  
         if (response.data.success) {
           setUser({ name: response.data.name, role: 'admin' });
           sessionStorage.setItem('token', response.data.token);
@@ -55,13 +56,15 @@ function Login() {
         } else {
           setMessage('Invalid Email or Password');
         }
+  
+      // Check if the email belongs to a superadmin
       } else if (email.endsWith('@gmail.com')) {
         response = await axios.post(
           'http://localhost:3001/api/superadmin-check-or-create',
           { email, password },
-          { withCredentials: true },
+          { withCredentials: true }
         );
-
+  
         if (response.data.created) {
           toast.success('Super Admin account created successfully!');
         } else if (response.data.success) {
@@ -69,54 +72,47 @@ function Login() {
           sessionStorage.setItem('token', response.data.token);
           sessionStorage.setItem('user', JSON.stringify(response.data.user));
         }
-
+  
         if (response.data.success || response.data.created) {
           navigate('/superdashboard');
         } else {
           setMessage('Invalid Email or Password');
         }
+  
+      // Student login
       } else {
         // Student login
-        try {
-          const response = await axios.post('http://localhost:3001/api/studentlogin', { email, password }, { withCredentials: true });
-        
-          // Log the response for debugging
-          console.log('Response:', response.data);
-        
-          if (response.data.success) {
-            setUser({ name: response.data.user.name, role: 'student' });
-            sessionStorage.setItem('token', response.data.token);  // Using sessionStorage instead of localStorage
-            sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Using sessionStorage
-            console.log(sessionStorage.getItem('token')); // Log token
-            console.log(sessionStorage.getItem('user')); // Log user data
-            navigate('/');  // Navigate to home
+        response = await axios.post('http://localhost:3001/api/studentlogin', { email, password }, { withCredentials: true });
+  
+        // Log the response for debugging
+        console.log('Response:', response.data);
+  
+        if (response.data.success) {
+          setUser({ name: response.data.user.name, role: 'student' });
+          sessionStorage.setItem('token', response.data.token);  // Store token in sessionStorage
+          sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Store user in sessionStorage
+          console.log(sessionStorage.getItem('token')); // Log token
+          console.log(sessionStorage.getItem('user')); // Log user data
+          navigate('/');  // Navigate to home
+        } else {
+          if (response.data.message === 'Your account is suspended and blocked. Please contact support.') {
+            setMessage('Your account is suspended. Please contact support.');
           } else {
-            if (response.data.message === 'Your account is suspended and blocked. Please contact support.') {
-              // If the account is suspended, set a specific message
-              setMessage('Your account is suspended. Please contact support.');
-            } else {
-              // If credentials are incorrect, set the usual invalid email/password message
-              setMessage('Invalid Email or Password');
-            }
-          }
-        } catch (error) {
-          console.error(error);
-        
-          if (error.response && error.response.data && error.response.data.message) {
-            // Show specific error message from the server
-            setMessage(error.response.data.message);
-          } else {
-            // If no specific message from server, show a generic message
             setMessage('Invalid Email or Password');
           }
         }
-        
       }
     } catch (error) {
-      console.error(error);
-      setMessage('Invalid Email or Password');
+      console.error('Login error:', error);
+  
+      if (error.response && error.response.data && error.response.data.message) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage('Invalid Email or Password');
+      }
     }
   };
+  
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     const user = sessionStorage.getItem('user');
