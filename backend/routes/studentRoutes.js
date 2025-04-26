@@ -181,7 +181,8 @@ router.put('/update-password', verifyUser, async (req, res) => {
 // Assuming you're using Express.js
 router.get('/verifiedStudents/:studentId', async (req, res) => {
   const { studentId } = req.params;
-  
+  console.log('Fetching student details for studentId:', studentId);
+
   try {
     const student = await VerifiedStudentModel.findById(studentId);
     if (!student) {

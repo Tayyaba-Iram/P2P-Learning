@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import http from 'http';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { Server } from 'socket.io';
 import studentRoutes from './routes/studentRoutes.js';
 import auth from './routes/auth.js';
@@ -23,7 +25,8 @@ import SuperPaymentRoutes from './routes/SuperPaymentRoutes.js';
 import RepositoryRoutes from './routes/RepositoryRoutes.js';
 import SuspensionRoutes from './routes/SuspensionRoutes.js';
 import ratingRoutes from './routes/ratingRoutes.js';
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Initialize express app
 const app = express();
@@ -133,7 +136,8 @@ app.get('/api/chattedStudents', verifyUser, async (req, res) => {
   }
 });
 
-
+// Serve static files from the Complains folder
+app.use('/complains', express.static(path.join(__dirname, 'Complains')));
 // API Routes
 app.use('/api', studentRoutes);
 app.use('/api', auth);
@@ -151,8 +155,8 @@ app.use('/api', SuperPaymentRoutes);
 app.use('/api', RepositoryRoutes);
 app.use('/api', SuspensionRoutes);
 app.use('/api', ratingRoutes);
-
-
+app.use('/complains', express.static(path.join(__dirname, 'Complains')));
+app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
 
 // MongoDB Connection
 mongoose.connect('mongodb://localhost:27017/P2P-Learning')

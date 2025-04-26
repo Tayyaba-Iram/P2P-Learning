@@ -64,24 +64,38 @@ function Login() {
         // Student login
         try {
           const response = await axios.post('http://localhost:3001/api/studentlogin', { email, password }, { withCredentials: true });
-
+        
           // Log the response for debugging
           console.log('Response:', response.data);
-
+        
           if (response.data.success) {
-            setUser({ name: response.data.name, role: 'student' });
+            setUser({ name: response.data.user.name, role: 'student' });
             sessionStorage.setItem('token', response.data.token);  // Using sessionStorage instead of localStorage
             sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Using sessionStorage
             console.log(sessionStorage.getItem('token')); // Log token
             console.log(sessionStorage.getItem('user')); // Log user data
             navigate('/');  // Navigate to home
           } else {
-            setMessage('Invalid Email or Password');
+            if (response.data.message === 'Your account is suspended and blocked. Please contact support.') {
+              // If the account is suspended, set a specific message
+              setMessage('Your account is suspended. Please contact support.');
+            } else {
+              // If credentials are incorrect, set the usual invalid email/password message
+              setMessage('Invalid Email or Password');
+            }
           }
         } catch (error) {
           console.error(error);
-          setMessage('Invalid Email or Password');
+        
+          if (error.response && error.response.data && error.response.data.message) {
+            // Show specific error message from the server
+            setMessage(error.response.data.message);
+          } else {
+            // If no specific message from server, show a generic message
+            setMessage('Invalid Email or Password');
+          }
         }
+        
       }
     } catch (error) {
       console.error(error);

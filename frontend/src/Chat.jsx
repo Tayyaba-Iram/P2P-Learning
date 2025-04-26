@@ -121,7 +121,6 @@ function Chat() {
         console.log('Disconnected from socket server');
       });
     }
-
     const handleIncomingMessage = (message) => {
       if (
         activeStudent &&
@@ -133,10 +132,11 @@ function Chat() {
         // Message is from another student — show green dot
         setUnreadMessages((prevUnread) => ({
           ...prevUnread,
-          [message.senderId]: true,
+          [message.senderId]: true, // You can add more logic if needed
         }));
       }
     };
+    
 
     socketRef.current?.on('newMessage', handleIncomingMessage);
 

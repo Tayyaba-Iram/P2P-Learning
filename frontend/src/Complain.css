@@ -14,3 +14,21 @@ text-align: center;
 .complaintss{
     text-align: center;
 }
+
+.complaints-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    table-layout: fixed;
+  }
+
+  .complaints-table th,
+.complaints-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  word-wrap: break-word; /* Wraps text to next line if content exceeds cell width */
+  max-width: 200px; /* You can adjust the width as per your requirement */
+}
+

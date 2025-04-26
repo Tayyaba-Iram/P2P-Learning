@@ -15,7 +15,6 @@ const generateToken = (user) => {
     { expiresIn: '2h' } // Expiration time
   );
 };
-
 // Student login route
 router.post('/studentlogin', async (req, res) => {
   const { email, password } = req.body;
@@ -29,6 +28,11 @@ router.post('/studentlogin', async (req, res) => {
     // Check if student exists
     if (!student) {
       return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+    }
+
+    // Check if the account is suspended or blocked
+    if (student.blocked) {
+      return res.status(403).json({ success: false, message: 'Your account is suspended and blocked. Please contact support.' });
     }
 
     // Check if the provided password matches the stored password
@@ -48,7 +52,10 @@ router.post('/studentlogin', async (req, res) => {
       message: 'Login successful',
       token,
       user: { 
-        _id: student._id,  email: student.email, name: student.name },
+        _id: student._id,  
+        email: student.email, 
+        name: student.name 
+      },
     });
     console.log("name: ", student.name);
     console.log("email: ", student.email);
@@ -58,6 +65,7 @@ router.post('/studentlogin', async (req, res) => {
     res.status(500).json({ success: false, message: 'An error occurred. Please try again.' });
   }
 });
+
 
 // Admin login route
 router.post('/adminlogin',async (req, res) => {

@@ -1,60 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 import './Broadcast Request.css';
 
 const BroadcastRequest = () => {
+  const [programs, setPrograms] = useState([]); // To store fetched programs
   const [formData, setFormData] = useState({
     topic: '',
     subtopic: '',
     urgency: 'Low',
     programs: [],
   });
-
-  const [myRequests, setMyRequests] = useState([]);
+  const [myRequests, setMyRequests] = useState([]); // To store the user's previous requests
   const [statusMessage, setStatusMessage] = useState('');
   const [showPopup, setShowPopup] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const programsList = [
-    "BS Software Engineering",
-    "BS Computer Science",
-    "BS Cyber Security",
-    "BS Electrical Engineering",
-    "BS Physics",
-    "MBBS"
-  ];
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/fetchPrograms', {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        });
+  
+        // Assuming the API now returns an array of program names
+        setPrograms(response.data);  // Store fetched program names
+  
+      } catch (error) {
+        console.error('Error fetching programs:', error);
+      }
+    };
+  
+    fetchPrograms();
+  }, []);
+  
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === 'programs') {
-      setFormData((prev) => {
-        const updatedPrograms = prev.programs.includes(value)
-          ? prev.programs.filter((p) => p !== value)
-          : [...prev.programs, value];
-        return { ...prev, programs: updatedPrograms };
-      });
+  // Handle checkbox selection
+  const handleProgramChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setFormData((prev) => ({ ...prev, programs: [...prev.programs, value] }));
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, programs: prev.programs.filter((program) => program !== value) }));
     }
   };
 
-  useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    const userId = sessionStorage.getItem('userId');
-    if (!userId) return;
-
-    axios.get(`http://localhost:3001/api/broadcastRequest/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        setMyRequests(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching requests:", error);
-      });
-  }, []);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,8 +58,6 @@ const BroadcastRequest = () => {
       setStatusMessage('Please select at least one program.');
       return;
     }
-
-    setLoading(true);
 
     const userId = sessionStorage.getItem('userId');
     const newRequest = {
@@ -77,7 +70,6 @@ const BroadcastRequest = () => {
 
     try {
       const token = sessionStorage.getItem('token');
-
       const response = await axios.post('http://localhost:3001/api/broadcastRequest', newRequest, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,23 +78,14 @@ const BroadcastRequest = () => {
       });
 
       if (response.status === 201) {
-        const newReqData = response.data;
-        sessionStorage.setItem('lastBroadcastRequest', JSON.stringify(newReqData));
-        sessionStorage.setItem('broadcastSubmitted', 'true');
-
-        setMyRequests((prev) => [...prev, newReqData]);
-        setStatusMessage('Your request has been successfully submitted!');
-        setShowPopup(true);
-
-        setTimeout(() => setShowPopup(false), 3000);
+        setMyRequests((prev) => [...prev, response.data]);
+        toast.success('Your request has been successfully submitted!');
 
         setFormData({ topic: '', subtopic: '', urgency: 'Low', programs: [] });
       }
     } catch (err) {
       console.error('Error submitting request:', err);
       setStatusMessage(`Error: ${err.response ? err.response.data : err.message}`);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -141,29 +124,27 @@ const BroadcastRequest = () => {
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Programs</label>
-          <div className="program-checkboxes">
-            {programsList.map((program) => (
-              <label key={program}>
-                <input
-                  type="checkbox"
-                  name="programs"
-                  value={program}
-                  checked={formData.programs.includes(program)}
-                  onChange={handleChange}
-                /> {program}
-              </label>
-            ))}
-          </div>
-        </div>
+        {programs.length > 0 ? (
+  programs.map((program) => (
+    <div key={program}>  {/* Use program name as the key */}
+      <input
+        type="checkbox"
+        value={program}
+        onChange={handleProgramChange}
+      />
+      <label>{program}</label>
+    </div>
+  ))
+) : (
+  <p>No programs available</p>
+)}
 
-        <button type="submit" className="submit-btn" disabled={loading}>
-          {loading ? 'Submitting...' : 'Submit Request'}
+
+        <button type="submit" className="submit-btn">
+          Submit Request
         </button>
       </form>
-
-      {showPopup && <div className="popup-message">{statusMessage}</div>}
+      <Toaster position="top-center" />
     </div>
   );
 };
