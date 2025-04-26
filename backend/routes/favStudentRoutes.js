@@ -55,7 +55,6 @@ router.get('/favoriteStudents', verifyUser, async (req, res) => {
     const favorites = await FavoriteStudents.find({ userId })
       .populate('favoriteStudentId', 'name email');  // Populate the favoriteStudentId with student data
     
-    console.log('Favorite Students:', favorites);
     res.status(200).json(favorites);
   } catch (error) {
     console.error('Error fetching favorite students:', error);

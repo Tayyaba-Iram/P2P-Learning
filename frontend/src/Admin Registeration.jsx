@@ -19,6 +19,7 @@ function AdminRegister() {
   const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
+  const token = sessionStorage.getItem('token'); // Or localStorage.getItem('token')
 
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -56,12 +57,15 @@ function AdminRegister() {
       return;
     }
     else {
-      axios.post('http://localhost:3001/api/registerUniAdmin', { name, sapid, email, cnic, phone, university, campus, password,cpassword })
-        .then(() => {
-          toast.success("Registration Successful!");
-          setTimeout(() => navigate('/superdashboard'), 2000);
-        })
-        .catch(err => toast.error(err.response?.data?.error || "Registration failed"));
+      axios.post(
+        'http://localhost:3001/api/registerUniAdmin',
+        { name, sapid, email, cnic, phone, university, campus, password, cpassword },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      )
     }
   };
   const handlePhoneChange = (value) => {

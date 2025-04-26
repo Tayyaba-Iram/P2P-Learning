@@ -14,6 +14,14 @@ const verifiedStudentSchema = new mongoose.Schema({
   password: { type: String, required: true },
   cpassword: { type: String, required: true },
   verifiedAt: { type: Date, default: Date.now },  
+  accountStatus: {
+    type: String,
+    default: 'Active',  // Default to 'Active', can be 'Suspended'
+  },
+  blocked: {
+    type: Boolean,
+    default: false,  // Flag to mark if the account is blocked
+  },
 });
 
 const VerifiedStudentModel = mongoose.model('VerifiedStudent', verifiedStudentSchema);

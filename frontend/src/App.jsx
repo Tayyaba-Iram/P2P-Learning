@@ -29,7 +29,8 @@ import Directory from './Directory';
 import SuperAdminPayments from './SuperAdmin Payments';
 import SessionSchedule from './Session Schedule';
 import EditRepository from './EditRepository';
-
+import Help from './Help';
+import PrivacyPolicy from './PrivacyPolicy';
 
 axios.defaults.withCredentials = true;
 
@@ -94,7 +95,9 @@ function App() {
         <Route path="/super-payments" element={<ProtectedRoute><SuperAdminPayments/></ProtectedRoute>} />
         <Route path="/session" element={<ProtectedRoute><SessionSchedule/></ProtectedRoute>} />
         <Route path="/editRepository/:repoId" element={<ProtectedRoute><EditRepository/></ProtectedRoute>} />
-
+        <Route path="/chat/:studentId" element={<ProtectedRoute><Chat/></ProtectedRoute>} />
+        <Route path="/help" element={<ProtectedRoute><Help/></ProtectedRoute>} />
+        <Route path="/privacy" element={<ProtectedRoute><PrivacyPolicy/></ProtectedRoute>} />
 
 
         

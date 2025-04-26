@@ -108,19 +108,38 @@ const ConductSession = () => {
         apiInstance.dispose();
         setIsSessionEnded(true);
         setIsJoining(false);
-        setMeetingLink("");  // Reset the meeting link
       }
     }
   };
 
-  const handleRatingSubmit = () => {
-    // You can send the rating to your backend here
-    console.log("User rated:", rating);
-    Swal.fire("Thank you!", "Your rating has been submitted.", "success");
-    setIsRatingSubmitted(true);
-    navigate("/"); // Redirect if needed
+  const handleRatingSubmit = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const sessionId = meetingLink?.replace("https://meet.jit.si/", "") || "";
+  
+      console.log("Token:", token);
+      console.log("Full Meeting Link:", meetingLink);
+      console.log("Session ID:", sessionId);
+      console.log("Rating:", rating);
+  
+      await axios.post("http://localhost:3001/api/submits", {
+        sessionId,
+        rating,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      Swal.fire("Thank you!", "Your rating has been submitted.", "success");
+      setIsRatingSubmitted(true);
+      navigate("/");
+    } catch (err) {
+      console.error("Rating submission failed:", err);
+      Swal.fire("Error", "Failed to submit rating. Please try again.", "error");
+    }
   };
-
+  
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h2>Conduct Session</h2>

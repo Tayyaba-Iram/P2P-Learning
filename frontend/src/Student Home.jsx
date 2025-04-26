@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -13,6 +13,7 @@ import moment from 'moment';
 const localizer = momentLocalizer(moment);
 
 function Home() {
+  const navigate = useNavigate();
   const [agenda, setAgenda] = useState([]);
   const [isDetailsModalOpen, setDetailsModalOpen] = useState(false); // For viewing session details
   const [message, setMessage] = useState('');
@@ -188,14 +189,99 @@ function Home() {
     };
 
     fetchRequests();
-  /*  const intervalId = setInterval(() => {
-      fetchRequests();  // Re-fetch data every 10 seconds
-    }, 1000);  // 10000ms = 10 seconds
-
-    // Cleanup on component unmount
-    return () => clearInterval(intervalId);*/
-  }, []);  // Call the fetchRequests function when the component mounts
+    /*  const intervalId = setInterval(() => {
+        fetchRequests();  // Re-fetch data every 10 seconds
+      }, 1000);  // 10000ms = 10 seconds
   
+      // Cleanup on component unmount
+      return () => clearInterval(intervalId);*/
+  }, []);  // Call the fetchRequests function when the component mounts
+  // Fetch the logged-in user details
+  const [user, setUser] = useState(null);
+  const [verifiedStudents, setVerifiedStudents] = useState([]);
+  const [activeStudent, setActiveStudent] = useState(null);
+
+  // Fetch user details from the server (keep token logic intact)
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        console.error('No token found. User not authenticated.');
+        return;
+      }
+      try {
+        const response = await axios.get('http://localhost:3001/api/getUserDetails', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.data && response.data._id) {
+          setUser(response.data);
+        } else {
+          console.error('User data is missing _id:', response.data);
+        }
+      } catch (err) {
+        console.error('Error fetching user:', err.response?.data || err.message);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // Fetch verified students list from the server (with token)
+  useEffect(() => {
+    const fetchVerifiedStudents = async () => {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        console.error('No token found. User not authenticated.');
+        return;
+      }
+      try {
+        const response = await axios.get('http://localhost:3001/api/verifiedStudents', {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token here for authentication
+          },
+        });
+        if (response.data && Array.isArray(response.data)) {
+          setVerifiedStudents(response.data);
+        } else {
+          console.error('Verified students data is invalid:', response.data);
+        }
+      } catch (err) {
+        console.error('Error fetching verified students:', err.response?.data || err.message);
+      }
+    };
+
+    fetchVerifiedStudents();
+  }, []);
+
+  const handleStartChat = (student) => {
+    setActiveStudent(student);
+  };
+
+  const handleChatClick = (request) => {
+    console.log("🔍 Full request object received:", request);
+    console.log("🧾 Keys in request:", Object.keys(request));
+
+    const studentId = request.userId; // Extract userId for matching
+    console.log("📌 Extracted studentId:", studentId);
+
+    // 🧠 Add this line to debug all verified student IDs
+    console.log("🧠 All verified student IDs:", verifiedStudents.map(s => s._id));
+
+    const matchedStudent = verifiedStudents.find(
+      (student) => student._id.toString() === studentId?.toString()
+    );
+
+    if (matchedStudent) {
+      console.log("✅ Matched student:", matchedStudent);
+      handleStartChat(matchedStudent);
+    } else {
+      console.error("❌ No matching student found for the request with ID:", studentId);
+    }
+    navigate(`/chat/${studentId}`);
+  };
+
 
 
   return (
@@ -315,75 +401,81 @@ function Home() {
 
       </div>
       <div style={{ marginTop: '40px' }}>
-  {broadcastRequests.length === 0 ? (
-    <p></p>
-  ) : (
-    <div className="broadcast-requests-table">
-      <h3>Broadcast Requests</h3>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th>Topic</th>
-            <th>Subtopic</th>
-            <th>Urgency</th>
-            <th>Programs</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {broadcastRequests.map((request, index) => (
-            <tr key={index}>
-              <td>{request.topic}</td>
-              <td>{request.subtopic}</td>
-              <td>{request.urgency}</td>
-              <td>{request.programs?.join(', ')}</td>
-              <td>
-                <button
-                  onClick={() => handleDeleteBroadcastRequest(request._id)}
-                  style={{ backgroundColor: 'green', color: 'white' }}
-                >
-                  Resolved
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )}
-</div>
+        {broadcastRequests.length === 0 ? (
+          <p></p>
+        ) : (
+          <div className="broadcast-requests-table">
+            <h3>Broadcast Requests</h3>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th>Topic</th>
+                  <th>Subtopic</th>
+                  <th>Urgency</th>
+                  <th>Programs</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {broadcastRequests.map((request, index) => (
+                  <tr key={index}>
+                    <td>{request.topic}</td>
+                    <td>{request.subtopic}</td>
+                    <td>{request.urgency}</td>
+                    <td>{request.programs?.join(', ')}</td>
+                    <td>
+                      <button
+                        onClick={() => handleDeleteBroadcastRequest(request._id)}
+                        style={{ backgroundColor: 'green', color: 'white' }}
+                      >
+                        Resolved
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+      <div>
+        {requests.length === 0 ? (
+          <p></p>
+        ) : (
+          <div>
+            <h2>Broadcast Requests</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Topic</th>
+                  <th>Subtopic</th>
+                  <th>Urgency</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {requests.map((req) => (
+                  <tr key={req._id}>
+                    <td>{req.name}</td>
+                    <td>{req.email}</td>
+                    <td>{req.topic}</td>
+                    <td>{req.subtopic}</td>
+                    <td>{req.urgency}</td>
+                    <td>
+                      <button onClick={() => handleChatClick(req)}>
+                        Chat
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
 
-<div>
-  {requests.length === 0 ? (
-    <p></p>
-  ) : (
-    <div>
-      <h2>Broadcast Requests</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Topic</th>
-            <th>Subtopic</th>
-            <th>Urgency</th>
-          </tr>
-        </thead>
-        <tbody>
-          {requests.map((req) => (
-            <tr key={req._id}>
-              <td>{req.name}</td>
-              <td>{req.email}</td>
-              <td>{req.topic}</td>
-              <td>{req.subtopic}</td>
-              <td>{req.urgency}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )}
-</div>
 
 
     </>

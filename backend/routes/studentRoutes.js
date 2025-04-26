@@ -178,6 +178,20 @@ router.put('/update-password', verifyUser, async (req, res) => {
   }
 });
 
+// Assuming you're using Express.js
+router.get('/verifiedStudents/:studentId', async (req, res) => {
+  const { studentId } = req.params;
+  
+  try {
+    const student = await VerifiedStudentModel.findById(studentId);
+    if (!student) {
+      return res.status(404).send('Student not found');
+    }
+    res.json(student);
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+});
 
 
 export default router;

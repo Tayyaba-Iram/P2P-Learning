@@ -3,6 +3,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Superadmin Dashboard.css';
 import toast from 'react-hot-toast';
+import { Pie, Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement,Tooltip,Legend,CategoryScale,LinearScale,BarElement,Title,} from 'chart.js';
+
+// Register all necessary chart components at once
+ChartJS.register(
+  CategoryScale, 
+  LinearScale, 
+  BarElement, 
+  Title, 
+  ArcElement, 
+  Tooltip, 
+  Legend
+);
 
 function Dashboard() {
   const [universities, setUniversities] = useState([]);
@@ -14,6 +27,12 @@ function Dashboard() {
   const [studentSearch, setStudentSearch] = useState('');
   const [adminSearch, setAdminSearch] = useState('');
 
+
+const [ratingsData, setRatingsData] = useState([]);
+ const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  
   const navigate = useNavigate();
 
   // Fetch data on component mount
@@ -121,8 +140,145 @@ function Dashboard() {
   const displayedStudents = showAllStudents ? filteredStudents : filteredStudents.slice(0, 5);
   const displayedAdmins = showAllAdmins ? filteredUniAdmins : filteredUniAdmins.slice(0, 5);
 
+  useEffect(() => {
+    // Function to fetch the ratings data from the backend with the Bearer token
+    const fetchRatings = async () => {
+      const token = sessionStorage.getItem('token'); // Assuming you stored the token in sessionStorage
+
+      if (!token) {
+        setError('No authentication token found');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3001/api/ratings-by-strenth', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include the Bearer token in the Authorization header
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch ratings data');
+        }
+
+        const data = await response.json(); // Parse the JSON response
+        setRatingsData(data.datasets[0].data); // Set the ratings data in state
+        setLoading(false); // Set loading to false once the data is fetched
+      } catch (err) {
+        setError('Error fetching data: ' + err.message); // Handle any errors
+        setLoading(false);
+      }
+    };
+
+    fetchRatings(); // Call the fetchRatings function on component mount
+  }, []);
+
+  // Prepare chart data for rendering
+  const chartData = {
+    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'], // Labels for each section (now with 5 stars)
+    datasets: [{
+      data: ratingsData, // Data fetched from the backend
+      backgroundColor: ['#FF5733', '#FF8D1A', '#FFD700', '#32CD32', '#4CAF50'], // Custom colors for each section
+    }],
+  };
+
+
+  const [data, setData] = useState(null); // Renaming chartData to data to avoid conflicts
+
+  useEffect(() => {
+    const fetchChartData = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/ratings-per-university-program', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        });
+        const chartsData = await response.json();
+        setData(chartsData); // Store the data in state
+      } catch (error) {
+        console.error('Error fetching chart data:', error);
+      }
+    };
+
+    fetchChartData();
+  }, []);
+
+  // If data is still loading, show a loading message
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
+  // Chart options
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+      },
+      legend: {
+        position: 'top',
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
+  };
+// Step 1: Filter out undefined or empty program labels
+const filteredLabels = data.labels.filter(label => label && label !== 'undefined' && label.trim() !== '');
+
+// Step 2: Clean and align datasets with filtered labels
+const cleanedDatasets = data.datasets
+  .filter(dataset => dataset.label && dataset.label !== 'undefined') // Remove undefined university names
+  .map((dataset, index) => {
+    // Align dataset data with filtered labels
+    const cleanedData = filteredLabels.map(label => {
+      const labelIndex = data.labels.indexOf(label);
+      return dataset.data[labelIndex] || 0; // Use 0 if index not found
+    });
+
+    return {
+      ...dataset,
+      data: cleanedData,
+      backgroundColor: `hsl(${(index * 360) / data.datasets.length}, 70%, 60%)`, // Unique color
+    };
+  });
+
+// Final chart data
+const chartsData = {
+  labels: filteredLabels,
+  datasets: cleanedDatasets,
+};
+
+
   return (
     <div className="container">
+       <div className='ratings'>
+     
+      <div>
+      {loading && <p>Loading...</p>}  {/* Show loading message while fetching */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}  {/* Show error message if there's an issue */}
+      
+      {!loading && !error && (
+        <div className="chart-container">
+           <h2>University Ratings Distribution</h2>
+          <Pie data={chartData} options={{ responsive: true }} /> {/* Render the pie chart */}
+        </div>
+      )}
+    </div>
+    <div className="bar-container">
+    <h2>Feedback Sessions per Program per University</h2>
+      <Bar data={chartsData} options={chartOptions} />
+    </div>
+    </div>
       <main className="main-content">
         {/* Universities Table */}
         <h2>Universities</h2>

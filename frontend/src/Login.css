@@ -107,7 +107,7 @@
     text-decoration: underline;
 }
 .login-button {
-    width: 130%; /* Set button width to 120% */
+    width: 125%; /* Set button width to 120% */
     padding: 10px; /* Same padding as input fields */
     font-size: 16px;
     color: #fff;
