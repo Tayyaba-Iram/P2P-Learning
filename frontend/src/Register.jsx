@@ -133,9 +133,11 @@ function Register() {
 
   return (
     <div className="registration-container">
+        
       <Toaster position="top-center" />
 
         <div className="signup-header">
+        <img src="Logo.jpg" alt="Logo" className="Register-logo" />
           <h1>Sign Up</h1>
           {message && <p style={{ color: 'red',whiteSpace: 'pre-wrap'  }}>{message}</p>}
         <form className="form" onSubmit={handleSubmit}>
