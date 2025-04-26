@@ -389,7 +389,7 @@ function SessionSchedule() {
                         />
                     </div>
                     <div className="message-optional">
-                        <label className="optional-label">💬 Add a Message (Optional)</label>
+                        <label className="optional-label"> Add a Message (Optional)</label>
                         <input
                             type="text"
                             className="optional-input"

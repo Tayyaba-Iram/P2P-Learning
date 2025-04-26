@@ -1,12 +1,16 @@
 .footer-container {
-    display: flex;
-    align-items: center; 
-    justify-content: center;
-    background-color: #48742F;
-    padding: 0.25cm;
-    bottom: 0;
-    width: 100%; 
+  background-color: #48742F;
+  padding: 12px 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto; /* This pushes footer to the bottom */
+  margin-bottom: auto;
+  min-height: -100vh;
 }
+
 
 .Right {
     color: white;

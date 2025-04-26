@@ -16,7 +16,7 @@
     width: 120px; /* Adjust size as needed */
     height: auto;
     border-radius: 50%;
-    margin-bottom: 20px;
+    margin-bottom: -20px;
 }
 
 .login-header h1 {
@@ -26,18 +26,13 @@
 }
 
 .form {
-    width: 1000%;
+   
     max-width: 390px;
     margin-left: 5%;
     margin-top: 15px;
 }
 
-.form-group {
-    width: 115%;
-    margin-bottom: 5px;
-    align-items: center;
 
-}
 
 .form-group input {
     font-size: 16px;
@@ -45,26 +40,36 @@
     border-radius: 5px;
     outline: none;
     transition: 0.3s ease-in-out;
-    width: 135%;
+    width: 170%;
 }
 
 .form-group input:focus {
     border-color: #48742F;
 }
 
-.show-password {
-    display: flex;
-   text-align: left;
-    font-size: 14px;
-    color: #333;
+.form-group input[type="password"],
+.form-group input[type="text"] {
+ 
+  padding: 12px 18px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #333;
+  height: 42px;
+  width: 170%;
+  margin-bottom: 15px;
+  transition: border 0.3s ease;
 }
 
-.show-password input {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    margin-right: 5px;
+.form-group input[type="password"]:focus,
+.form-group input[type="text"]:focus {
+  border-color: #6c63ff;
+  outline: none;
 }
+
+
 
 .forgot-password {
     font-size: 14px;
@@ -77,25 +82,32 @@
 .show-password label {
     font-size: 14px !important; /* Force label font size */
     cursor: pointer; /* Pointer cursor when hovering over the label */
+    margin-left: -250px;
+    margin-bottom: -3px;
+    margin-top: -37px;
+    color: black;
 
 }
 .show-password input[type="checkbox"] {
-    margin: 0; /* Remove default margin for better alignment */
-    width: 16px; /* Adjust size of the checkbox */
-    height: 16px; /* Adjust size of the checkbox */
+   
+    width: 18px; /* Adjust size of the checkbox */
+    height: 18px; /* Adjust size of the checkbox */
     cursor: pointer; /* Pointer cursor for better UX */
-    margin-right: 2%;
+   
+
+    margin-left: -370px;
 }
 .forgot-password-link {
     color: #070707;
     text-decoration: none;
+    margin-top: -12px;
 }
 
 .forgot-password-link:hover {
     text-decoration: underline;
 }
 .login-button {
-    width: 125%; /* Set button width to 120% */
+    width: 130%; /* Set button width to 120% */
     padding: 10px; /* Same padding as input fields */
     font-size: 16px;
     color: #fff;
@@ -103,7 +115,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 15px;
+    margin-top: 45px;
     text-align: center;
     display: block;
     margin-left: -1%; /* Shift left to keep it aligned */
