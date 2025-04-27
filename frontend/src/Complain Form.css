@@ -44,10 +44,10 @@ input, select, textarea, .date-picker {
     width: 100%;
 }
 .date-picker {
-    width: 420px; /* Or set a specific width like 300px */
-    padding: 10px; /* Optional: Adjust padding for better usability */
-    font-size: 16px; /* Optional: Adjust font size for better readability */
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    width: 420px; 
+    padding: 10px; 
+    font-size: 16px;
+    box-sizing: border-box; 
   }
   
 textarea {
@@ -67,12 +67,12 @@ textarea {
 
   .date-picker,
   .date-issue select {
-    padding: 8px; /* Adds some padding for better appearance */
-    font-size: 16px; /* Ensures consistent font size */
+    padding: 8px; 
+    font-size: 16px; 
     border: 1px solid #ccc;
     border-radius: 5px;
     height: 40px;
-    flex: 1; /* Makes both elements take equal width */
+    flex: 1; 
   }
   
   
