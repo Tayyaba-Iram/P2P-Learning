@@ -26,8 +26,8 @@
   }
   
   .nav-mid-links a.active {
-    color: #ffeb3b; /* Highlight color for active link */
-    background-color: #48742F; /* Background for active link */
+    color: #ffeb3b; 
+    background-color: #48742F; 
   }
   
   .logout-button {

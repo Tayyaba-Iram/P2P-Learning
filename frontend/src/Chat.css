@@ -1,4 +1,4 @@
-/* Global styles */
+
 * {
   margin: 0;
   padding: 0;
@@ -14,14 +14,14 @@ html, body {
   flex-direction: column;
 }
 
-/* Main container */
+
 .Chat-container {
   display: flex;
   height: 75vh;
   width: 100vw;
 }
 
-/* Sidebar (left) */
+
 .sidebar {
   width: 330px;
   background-color: #ffffff;
@@ -31,7 +31,7 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow-y: auto; /* Enable scrolling for the sidebar if needed */
+  overflow-y: auto; 
 }
 
 .sidebar input {
@@ -65,7 +65,7 @@ html, body {
   background-color: #1a232e;
 }
 
-/* Chat box (right) */
+
 .chat-box {
   flex: 1;
   display: flex;
@@ -78,7 +78,7 @@ html, body {
   margin-bottom: 15px;
 }
 
-/* Chat messages */
+
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -91,18 +91,18 @@ html, body {
   display: flex;
   padding: 5px;
   background-color: #fff;
-  position: sticky; /* Sticks to the bottom of the chat container */
+  position: sticky; 
 }
 
 .chat-input input {
-  flex-grow: 1; /* Make the input box flexible */
+  flex-grow: 1; 
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-right: 10px;
-  resize: none; /* Optional: Remove resizing behavior */
-  min-width: 150px; /* Optional: Set a minimum width */
+  resize: none; 
+  min-width: 150px; 
 }
 
 .chat-input button {
@@ -123,16 +123,16 @@ html, body {
   flex-direction: column;
   padding: 10px;
   overflow-y: auto;
-  scroll-behavior: smooth; /* Enables smooth scrolling */
+  scroll-behavior: smooth; 
 }
 
 .message {
   padding: 10px;
   margin: 5px;
   border-radius: 8px;
-  max-width: 40%; /* Maximum width for the message */
-  word-wrap: break-word; /* Allow long words to break and wrap onto the next line */
-  white-space: pre-wrap; /* Ensures the line breaks are preserved */
+  max-width: 40%; 
+  word-wrap: break-word; 
+  white-space: pre-wrap; 
 
 }
 
@@ -153,7 +153,7 @@ html, body {
 }
 
 
-/* Scroll behavior */
+
 .chat-messages::-webkit-scrollbar {
   width: 6px;
 }

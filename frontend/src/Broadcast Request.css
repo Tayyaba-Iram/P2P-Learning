@@ -1,4 +1,4 @@
-/* Container for the broadcast form */
+
 .broadcast-container {
   max-width: 600px;
   margin: 0 auto;
@@ -8,7 +8,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Title of the form */
+
 .broadcast-title {
   text-align: center;
   font-size: 24px;
@@ -16,7 +16,7 @@
   color: #333;
 }
 
-/* Style for form elements */
+
 .broadcast-form {
   display: flex;
   flex-direction: column;
@@ -24,14 +24,14 @@
 }
 
 
-/* Label styling */
+
 .broadcast-form label {
   font-size: 16px;
   margin-bottom: 5px;
   color: #444;
 }
 
-/* Input field styling */
+
 .broadcast-form input[type="text"], select {
   padding: 10px;
   font-size: 16px;
@@ -41,7 +41,7 @@
   box-sizing: border-box;
 }
 
-/* Styling for checkboxes */
+
 .broadcast-form div > div {
   display: flex;
   align-items: center;
@@ -52,7 +52,7 @@ input[type="checkbox"] {
   margin-right: 8px;
 }
 
-/* Submit button */
+
 .broadcast-form .submit-btn {
   padding: 12px 20px;
   font-size: 16px;
@@ -73,7 +73,7 @@ input[type="checkbox"] {
   cursor: not-allowed;
 }
 
-/* Popup message */
+
 .popup-message {
   margin-top: 20px;
   padding: 10px;
@@ -84,7 +84,7 @@ input[type="checkbox"] {
   font-size: 16px;
 }
 
-/* Styling when no programs are available */
+
 .broadcast-form p {
   color: #888;
   text-align: center;
