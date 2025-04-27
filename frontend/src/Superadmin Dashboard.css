@@ -1,4 +1,4 @@
-/* Superadmin Dashboard Styles */
+
 .container {
   padding: 20px;
   background-color: #f8f9fa;
@@ -59,7 +59,7 @@ h1 {
   color: #6c757d;
 }
 
-/* Table Styles */
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -127,7 +127,7 @@ button:focus {
 
   .box {
       margin-bottom: 10px;
-      width: 90%; /* Make boxes responsive */
+      width: 90%; 
   }
 }
 .bar-container {

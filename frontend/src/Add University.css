@@ -1,4 +1,4 @@
-/* Container for the entire form */
+
 .add-form {
     width: 500px;
     margin: 0 auto;
@@ -12,21 +12,20 @@
     margin-bottom: 2%;
   }
   
-  /* Heading Styling */
+
   h3 {
     text-align: center;
     margin-bottom: 20px;
   }
-  
-  /* Label Styling */
+ 
   label {
-    font-weight: normal; /* Ensures label text is not bold */
+    font-weight: normal; 
     font-size: 16px;
     color: #070707;
     margin-bottom: 9px;
   }
   
-  /* Input field Styling */
+
   input {
     width: 100%;
   padding: 10px;
@@ -39,8 +38,7 @@
   transition: border-color 0.3s;
  
   }
-  
-  /* Button Styling */
+
   .add-campus {
     background-color:#48742F;
     color: white;
@@ -55,7 +53,7 @@
   }
   
 
-  /* Campus Section Styling */
+ 
   .campus-section {
     margin-bottom: 30px;
     border: 1px solid #ddd;
@@ -70,14 +68,14 @@
     font-size: 20px;
   }
   
-  /* Program Section Styling */
+  
   .program-section {
     margin-bottom: 15px;
     align-items: center;
     justify-content: space-between;
   }
   
-  /* Align the program input and button horizontally */
+ 
   .program-section label {
     margin-right: 10px;
   }
@@ -91,14 +89,14 @@
     
   }
   
-  /* Remove button and field on one line */
+ 
   button {
     margin-right: 1px;
     margin-left: 5px;
     height: 40px;
   }
   
-  /* Add Campus Button Styling */
+ 
   button.add-campus-btn {
     background-color: #f50909;
     width: 100%;
@@ -106,12 +104,12 @@
     padding: 10px;
   }
   .remove-campus-button {
-    height: 38px; /* Adjust the height as needed */
-    width: 40px;  /* Optional: Adjust width to keep it square */
+    height: 38px; 
+    width: 40px;  
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #dc3545; /* Red color for delete */
+    background-color: #dc3545; 
     border: none;
     color: white;
     cursor: pointer;
@@ -127,16 +125,16 @@
     cursor: not-allowed;
   }
   .remove-program-button {
-    height: 38px; /* Adjust the height */
-    width: 40px;  /* Optional: Adjust width for symmetry */
+    height: 38px;
+    width: 40px;  
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #dc3545; /* A lighter red for differentiation */
+    background-color: #dc3545; 
     border: none;
     color: white;
     cursor: pointer;
-    margin-left: 10px; /* Optional: Space between the input and button */
+    margin-left: 10px; 
   }
   
   .remove-program-button:hover {
