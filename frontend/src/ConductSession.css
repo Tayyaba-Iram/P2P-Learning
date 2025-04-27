@@ -1,4 +1,4 @@
-/* src/components/MeetingRoom.css */
+
 .meeting-room {
   display: flex;
   flex-direction: column;
@@ -18,14 +18,14 @@
   background-color: #000;
   color: white;
   padding: 20px;
-  border-bottom: 5px solid#48742F; /* A highlight color for the video area */
+  border-bottom: 5px solid#48742F; 
 }
 
 .video-feed {
   width: 100%;
-  height: 300px; /* Example height for the video area */
+  height: 300px; 
   border: 1px solid #ccc;
-  background-color: #333; /* Dark background for video feed */
+  background-color: #333; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,11 +51,11 @@
 }
 
 .footer-button:hover {
-  background-color: #48742F; /* Darker shade on hover */
+  background-color: #48742F;
 }
 
 .footer-button:disabled {
-  background-color: #999; /* Gray out the button if disabled */
+  background-color: #999; 
   cursor: not-allowed;
 }
 .join{
