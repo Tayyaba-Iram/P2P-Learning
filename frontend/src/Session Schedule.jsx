@@ -165,6 +165,13 @@ function SessionSchedule() {
             setStep((prev) => prev + 1); // move to next step in general
         }
     };
+
+    const handleBack = () => {
+        if (step > 1) {
+            setStep(step - 1);
+        }
+    };
+
     const confirmpayment = () => {
         if (step === 5 && sessionDetails.paymentMethod === "cash") {
             setStep(7); // move from cash step 4 to cash step 5
@@ -224,7 +231,7 @@ function SessionSchedule() {
 
             {step === 1 && (
                 <>
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Topic</label>
                         <input
                             type="text"
@@ -235,7 +242,7 @@ function SessionSchedule() {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-groupd">
                         <label>Date</label>
                         <DatePicker
                             selected={sessionDetails.date}
@@ -244,8 +251,8 @@ function SessionSchedule() {
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label>Start Time</label>
+                    <div className="form-group1">
+                        <label >Start Time</label>
                         <input
                             type="time"
                             name="startTime"
@@ -254,7 +261,7 @@ function SessionSchedule() {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>End Time</label>
                         <input
                             type="time"
@@ -265,6 +272,7 @@ function SessionSchedule() {
                     </div>
 
                     <div className="form-actions">
+
                         <button type="button" className="schedule-btn" onClick={handleNext}>
                             Next
                         </button>
@@ -275,7 +283,7 @@ function SessionSchedule() {
 
             {step === 2 && (
                 <>
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Payment Method</label>
                         <select
                             name="paymentMethod"
@@ -289,6 +297,9 @@ function SessionSchedule() {
                     </div>
 
                     <div className="form-actions">
+                        <button type="button" className="schedule-btn" onClick={handleBack}>
+                            Back
+                        </button>
                         <button className="schedule-btn" onClick={handleNext}>
                             Next
                         </button>
@@ -298,7 +309,7 @@ function SessionSchedule() {
 
             {step === 3 && sessionDetails.paymentMethod === "cash" && (
                 <>
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Instructor Name</label>
                         <input
                             type="text"
@@ -309,7 +320,7 @@ function SessionSchedule() {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Instructor Title</label>
                         <input
                             type="text"
@@ -320,7 +331,7 @@ function SessionSchedule() {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Instructor Contact Number</label>
                         <input
                             type="text"
@@ -331,6 +342,9 @@ function SessionSchedule() {
                         />
                     </div>
                     <div className="form-actions">
+                        <button type="button" className="schedule-btn" onClick={handleBack}>
+                            Back
+                        </button>
                         <button className="schedule-btn" onClick={handleNext}>
                             Next
                         </button>
@@ -340,7 +354,7 @@ function SessionSchedule() {
             )}
             {step === 4 && sessionDetails.paymentMethod === 'cash' && (
                 <>
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Receiver's Account Title</label>
                         <input
                             type="text"
@@ -352,7 +366,7 @@ function SessionSchedule() {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Receiver's Account Number</label>
                         <input
                             type="text"
@@ -365,6 +379,9 @@ function SessionSchedule() {
                     </div>
 
                     <div className="form-actions">
+                        <button type="button" className="schedule-btn" onClick={handleBack}>
+                            Back
+                        </button>
                         <button className="schedule-btn" onClick={handleNextStep} disabled={loadingAccount}>
                             {loadingAccount ? 'Loading...' : 'Next'}
                         </button>
@@ -400,6 +417,9 @@ function SessionSchedule() {
                             }
                         />
                     </div>
+                    <button type="button" className="schedule-btn" onClick={handleBack}>
+                        Back
+                    </button>
                     <button className="schedule-btn" onClick={confirmpayment}>
                         Send Payment
                     </button>
@@ -414,6 +434,7 @@ function SessionSchedule() {
                     <p><strong>Amount:</strong> Rs. {sessionDetails.amount}</p>
 
                     <div className="form-actions">
+
                         <button className="schedule-btn" onClick={confirmsession}>
                             Next
                         </button>
@@ -425,7 +446,7 @@ function SessionSchedule() {
                 <div className="step-container">
                     <h3 className="step-title">Food Payment Details</h3>
 
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Food Brand Name</label>
                         <input
                             type="text"
@@ -436,7 +457,7 @@ function SessionSchedule() {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Food Item</label>
                         <input
                             type="text"
@@ -447,7 +468,7 @@ function SessionSchedule() {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group1">
                         <label>Upload Bill (optional)</label>
                         <input
                             type="file"
@@ -457,6 +478,7 @@ function SessionSchedule() {
                             }
                         />
                     </div>
+
 
                     <button className="schedule-btn" onClick={confirmfood}>
                         Confirm & Submit
@@ -483,6 +505,9 @@ function SessionSchedule() {
                     <p style={{ color: 'green', fontWeight: 'bold' }}>Transaction Successful ✅</p>
 
                     <div className="form-actions">
+                        <button type="button" className="schedule-btn" onClick={handleBack}>
+                            Back
+                        </button>
                         <button className="schedule-btn" onClick={handleAddSession}>
                             Finish & Add Session
                         </button>

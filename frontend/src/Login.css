@@ -1,7 +1,7 @@
 .login-container {
     width: 120%;
     max-width: 600px;
-    margin: 50px auto; 
+    margin: 50px auto; /* Center the container */
     padding: 20px;
     background-color: white;
     font-family: Arial, sans-serif;
@@ -13,7 +13,7 @@
 }
 
 .login-logo {
-    width: 120px; 
+    width: 120px; /* Adjust size as needed */
     height: auto;
     border-radius: 50%;
     margin-bottom: -20px;
@@ -80,8 +80,8 @@
 }
 
 .show-password label {
-    font-size: 14px !important; 
-    cursor: pointer; 
+    font-size: 14px !important; /* Force label font size */
+    cursor: pointer; /* Pointer cursor when hovering over the label */
     margin-left: -250px;
     margin-bottom: -3px;
     margin-top: -37px;
@@ -90,9 +90,9 @@
 }
 .show-password input[type="checkbox"] {
    
-    width: 18px; 
-    height: 18px; 
-    cursor: pointer; 
+    width: 18px; /* Adjust size of the checkbox */
+    height: 18px; /* Adjust size of the checkbox */
+    cursor: pointer; /* Pointer cursor for better UX */
    
 
     margin-left: -370px;
@@ -107,8 +107,8 @@
     text-decoration: underline;
 }
 .login-button {
-    width: 125%; 
-    padding: 10px; 
+    width: 130%; /* Set button width to 120% */
+    padding: 10px; /* Same padding as input fields */
     font-size: 16px;
     color: #fff;
     background-color: #48742F;
@@ -118,7 +118,7 @@
     margin-top: 45px;
     text-align: center;
     display: block;
-    margin-left: -1%; 
+    margin-left: -1%; /* Shift left to keep it aligned */
 }
 
 .login-button:hover {
@@ -140,3 +140,4 @@ margin-left: 90px;}
 .signup-link:hover {
     text-decoration: underline;
 }
+

@@ -260,24 +260,24 @@ function Home() {
   };
 
   const handleChatClick = (request) => {
-    console.log("🔍 Full request object received:", request);
-    console.log("🧾 Keys in request:", Object.keys(request));
+    console.log(" Full request object received:", request);
+    console.log(" Keys in request:", Object.keys(request));
 
     const studentId = request.userId; // Extract userId for matching
-    console.log("📌 Extracted studentId:", studentId);
+    console.log(" Extracted studentId:", studentId);
 
-    // 🧠 Add this line to debug all verified student IDs
-    console.log("🧠 All verified student IDs:", verifiedStudents.map(s => s._id));
+    //  Add this line to debug all verified student IDs
+    console.log(" All verified student IDs:", verifiedStudents.map(s => s._id));
 
     const matchedStudent = verifiedStudents.find(
       (student) => student._id.toString() === studentId?.toString()
     );
 
     if (matchedStudent) {
-      console.log("✅ Matched student:", matchedStudent);
+      console.log(" Matched student:", matchedStudent);
       handleStartChat(matchedStudent);
     } else {
-      console.error("❌ No matching student found for the request with ID:", studentId);
+      console.error(" No matching student found for the request with ID:", studentId);
     }
     navigate(`/chat/${studentId}`);
   };
@@ -305,25 +305,28 @@ function Home() {
           <div className="schedule-session-container">
             <h3>Schedule a Session</h3>
             <p>Plan a session and manage your learning schedule.</p>
-            <Link to="/session" className="schedule-btn">
+            <Link to="/session" className="btn">
               Schedule Session
             </Link>
           </div>
+
           <div className="chat-container">
             <h3>Chat</h3>
             <p>Start a chat with your peers!</p>
-            <Link to="/Chat" className="chat-button">
+            <Link to="/Chat" className="btn">
               Chat
             </Link>
           </div>
+
           <div className="conduct-session-container">
             <h3>Conduct a Session</h3>
             <p>Start a session with your peers and learn together!</p>
-            <Link to="/ConductSession" className="conduct-session-button">
+            <Link to="/ConductSession" className="btn">
               Conduct Session
             </Link>
           </div>
         </div>
+
 
 
         {/* Session Details Modal */}

@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
- 
+
   margin: 0;
   padding: 0;
 }
@@ -18,18 +18,18 @@ body {
 }
 
 .calendar-container {
-  flex: 3; 
+  flex: 3;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  
+
 }
 
 .side-container {
   flex: 1;
- 
+
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -58,7 +58,7 @@ body {
   margin-top: 30px;
   color: #48742F;
   text-align: center;
-  
+
 }
 
 
@@ -76,9 +76,9 @@ body {
 .conduct-session-button,
 .chat-button,
 .schedule-btn {
-  
+
   padding: 15px;
- 
+
   font-size: 1rem;
   background-color: #48742F;
   color: white;
@@ -88,22 +88,24 @@ body {
   text-align: center;
   transition: background-color 0.3s;
   display: inline-block;
- 
+
   margin-top: 20px;
- 
+
   width: 40%;
 
 }
-.schedule-session-container p{
+
+.schedule-session-container p {
   color: black;
   font-size: medium;
 }
 
-.chat-container p{
+.chat-container p {
   color: black;
   font-size: medium;
 }
-.conduct-session-container p{
+
+.conduct-session-container p {
   color: black;
   font-size: medium;
 }
@@ -195,6 +197,17 @@ body {
   max-width: 900px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.btn {
+  background-color: #3a5c23;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-top: 10px;
+ 
+
+}
+
 
 .calendar-title {
   font-size: 1.5rem;
@@ -310,7 +323,7 @@ body {
 
   .side-container {
     gap: 15px;
- 
+
   }
 
   /* Ensure buttons are sized appropriately for mobile screens */
@@ -331,7 +344,7 @@ body {
     border-radius: 10px;
     width: 100%;
     max-width: 500px;
-   
+
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
@@ -339,7 +352,7 @@ body {
     overflow: auto;
 
     max-height: 80vh;
- 
+
   }
 
 

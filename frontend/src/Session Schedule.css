@@ -1,4 +1,4 @@
-
+/* SessionSchedule.css */
 
 .simple-session-scheduler {
     max-width: 500px;
@@ -19,11 +19,37 @@
     margin-bottom: 16px;
     width: 75%;
   }
+
+
+
+  .form-group1{
+    width: 450px;
+    margin-block: 20px;
+  }
+
+  
+  .form-groupd {
+    width: 200px; 
+  }
+  
+  .form-groupd label {
+    width: 200px;
+  }
+  
+  
+  .form-group2 input {
+    width: 160px;  
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  
   
   .form-group label {
     font-weight: 500;
     margin-bottom: 6px;
     color: #555;
+    
   }
   
 
