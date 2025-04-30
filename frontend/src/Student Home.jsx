@@ -344,7 +344,7 @@ function Home() {
                     border: '1px solid #ddd',
                     borderRadius: '5px',
                     padding: '10px',
-                    width: '100%',
+                    width: '170%',
                   }}
                 />
               </div>
@@ -358,7 +358,7 @@ function Home() {
                     border: '1px solid #ddd',
                     borderRadius: '5px',
                     padding: '10px',
-                    width: '100%',
+                    width: '170%',
                   }}
                 />
               </div>

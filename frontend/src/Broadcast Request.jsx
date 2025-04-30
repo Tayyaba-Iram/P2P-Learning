@@ -23,18 +23,18 @@ const BroadcastRequest = () => {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         });
-  
+
         // Assuming the API now returns an array of program names
         setPrograms(response.data);  // Store fetched program names
-  
+
       } catch (error) {
         console.error('Error fetching programs:', error);
       }
     };
-  
+
     fetchPrograms();
   }, []);
-  
+
 
   // Handle checkbox selection
   const handleProgramChange = (e) => {
@@ -93,7 +93,7 @@ const BroadcastRequest = () => {
     <div className="broadcast-container">
       <h2 className="broadcast-title">Broadcast a Learning Request</h2>
       <form onSubmit={handleSubmit} className="broadcast-form">
-        <div className="form-group">
+        <div className="form-groupb">
           <label>Topic</label>
           <input
             type="text"
@@ -104,7 +104,7 @@ const BroadcastRequest = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-groupb">
           <label>Subtopic</label>
           <input
             type="text"
@@ -115,7 +115,7 @@ const BroadcastRequest = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-groupb">
           <label>Urgency</label>
           <select name="urgency" value={formData.urgency} onChange={handleChange}>
             <option value="Low">Low</option>
@@ -125,19 +125,20 @@ const BroadcastRequest = () => {
         </div>
 
         {programs.length > 0 ? (
-  programs.map((program) => (
-    <div key={program}>  {/* Use program name as the key */}
-      <input
-        type="checkbox"
-        value={program}
-        onChange={handleProgramChange}
-      />
-      <label>{program}</label>
-    </div>
-  ))
-) : (
-  <p>No programs available</p>
-)}
+          programs.map((program) => (
+            <div key={program} className="checkbox-container">
+              <input
+                type="checkbox"
+                value={program}
+                onChange={handleProgramChange}
+              />
+              <label>{program}</label>
+            </div>
+
+          ))
+        ) : (
+          <p>No programs available</p>
+        )}
 
 
         <button type="submit" className="submit-btn">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { FaCalendarAlt, FaPen } from "react-icons/fa";
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import './Session Schedule.css';
@@ -233,22 +234,29 @@ function SessionSchedule() {
                 <>
                     <div className="form-group1">
                         <label>Topic</label>
-                        <input
-                            type="text"
-                            name="topic"
-                            value={sessionDetails.topic}
-                            onChange={handleInputChange}
-                            placeholder="Enter session topic"
-                        />
+                        <div className="input-with-icon">
+                            <FaPen className="input-icon" />
+                            <input
+                                type="text"
+                                name="topic"
+                                value={sessionDetails.topic}
+                                onChange={handleInputChange}
+                                placeholder="Enter session topic"
+                            />
+                        </div>
                     </div>
 
                     <div className="form-groupd">
                         <label>Date</label>
-                        <DatePicker
-                            selected={sessionDetails.date}
-                            onChange={handleDateChange}
-                            dateFormat="yyyy-MM-dd"
-                        />
+                        <div className="datepicker-with-icon">
+                            <DatePicker
+                                selected={sessionDetails.date}
+                                onChange={handleDateChange}
+                                dateFormat="yyyy-MM-dd"
+                                className="custom-datepicker"
+                            />
+                            <FaCalendarAlt className="calendar-icon" />
+                        </div>
                     </div>
 
                     <div className="form-group1">

@@ -22,8 +22,6 @@ body {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
 
 }
 
@@ -39,7 +37,6 @@ body {
 .side-container .chat-container,
 .side-container .schedule-session-container {
   background-color: #ffffff;
-  color: black;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -50,7 +47,7 @@ body {
    Side Panel Components
 ====================================== */
 
-
+/* Header Styling for all containers */
 .conduct-session-container h3,
 .chat-container h3,
 .schedule-session-container h3 {
@@ -58,10 +55,10 @@ body {
   margin-top: 30px;
   color: #48742F;
   text-align: center;
-
+  /* Center text for uniform appearance */
 }
 
-
+/* Container Styles for Buttons */
 .conduct-session-container,
 .chat-container,
 .schedule-session-container {
@@ -73,56 +70,9 @@ body {
 }
 
 
-.conduct-session-button,
-.chat-button,
-.schedule-btn {
-
-  padding: 15px;
-
-  font-size: 1rem;
-  background-color: #48742F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
-  transition: background-color 0.3s;
-  display: inline-block;
-
-  margin-top: 20px;
-
-  width: 40%;
-
-}
-
-.schedule-session-container p {
-  color: black;
-  font-size: medium;
-}
-
-.chat-container p {
-  color: black;
-  font-size: medium;
-}
-
-.conduct-session-container p {
-  color: black;
-  font-size: medium;
-}
 
 
-.conduct-session-button,
-.chat-button,
-.schedule-btn {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #48742F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+
 
 
 
@@ -198,17 +148,6 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.btn {
-  background-color: #3a5c23;
-  color: white;
-  font-size: 16px;
-  border-radius: 5px;
-  margin-top: 10px;
- 
-
-}
-
-
 .calendar-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -216,6 +155,19 @@ body {
   padding: 10px;
   background-color: #f7f7f7;
 }
+.rbc-event {
+  background-color: #3a5c23; 
+  border: none;
+  color: white;
+}
+
+.rbc-event:focus, 
+.rbc-event.rbc-selected {
+  background-color: #3a5c23; 
+  box-shadow: none;
+  outline: none;
+}
+
 
 .rbc-calendar {
   background-color: white;
@@ -250,13 +202,7 @@ body {
   font-size: 0.9rem;
 }
 
-.rbc-today {
-  background-color: #ffffff;
-}
 
-.rbc-day-bg:hover {
-  background-color: #f0f8ff;
-}
 
 
 .clear-btn {
@@ -279,8 +225,8 @@ body {
   background-color: #d32f2f;
 }
 
-.form-group .react-datepicker-wrapper {
-  width: 110%;
+.form-groupd .react-datepicker-wrapper {
+  width: 100%;
 }
 
 .form-group .react-datepicker__input-container input {
@@ -293,10 +239,22 @@ body {
 
 .form-group .react-datepicker__input-container input:focus {
   border-color: #48742F;
+ 
+ 
+}
 
-  box-shadow: 0 0 4px rgba(72, 116, 47, 0.5);
+.side-container .btn {
+  background-color: #3a5c23;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 50%;
+
 
 }
+
+
 
 
 
@@ -323,7 +281,7 @@ body {
 
   .side-container {
     gap: 15px;
-
+    /* Slightly reduce gap in smaller screens */
   }
 
   /* Ensure buttons are sized appropriately for mobile screens */
@@ -344,18 +302,18 @@ body {
     border-radius: 10px;
     width: 100%;
     max-width: 500px;
-
+    /* Limit the width of the modal */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     gap: 15px;
     overflow: auto;
-
+    /* Ensure content is scrollable if it exceeds the container */
     max-height: 80vh;
-
+    /* Prevent the modal from getting too tall */
   }
 
-
+  /* Add overflow for content */
   .form-backdrop {
     position: fixed;
     top: 0;
@@ -369,7 +327,7 @@ body {
     z-index: 1000;
   }
 
-
+  /* Ensure modal content does not overflow */
   .schedule-form::-webkit-scrollbar {
     width: 10px;
   }
@@ -383,7 +341,7 @@ body {
     background: #555;
   }
 
-
+  /* Adjusted Form Inputs */
   .form-group input,
   .form-group select {
     width: 100%;
