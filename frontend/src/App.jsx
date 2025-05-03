@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, useLocation, Navigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { UserContext, UserProvider } from './userContext';
+import { useNavigate } from 'react-router-dom';
 import StudentNavbar from './StudentNavbar';
 import AdminNavbar from './AdminNavbar';
 import SuperAdminNavbar from './SuperAdminNavbar';
@@ -32,6 +33,8 @@ import EditRepository from './EditRepository';
 import Help from './Help';
 import PrivacyPolicy from './PrivacyPolicy';
 import ComplainAction from './Complain Action';
+import RepositoryForm from './Repository Form';
+import ResourceRequest from './Resource Request';
 
 axios.defaults.withCredentials = true;
 
@@ -48,8 +51,29 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
-  const location = useLocation();
   const { user } = useContext(UserContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+   // 🔄 Save last visited path (except login, register, etc.)
+   useEffect(() => {
+    const publicPaths = ['/login', '/register', '/forgot-password', '/reset-password'];
+    if (!publicPaths.includes(location.pathname)) {
+      // Save the last visited page in sessionStorage
+      sessionStorage.setItem('lastVisitedPage', location.pathname);
+    }
+  }, [location]);
+   // ⏪ Restore last visited page on reload
+   useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    const lastVisited = sessionStorage.getItem('lastVisitedPage');
+
+    if (token && user && location.pathname === '/' && lastVisited) {
+      // Redirect to the last visited page if logged in and lastVisitedPage is stored
+      navigate(lastVisited);
+    }
+  }, [user, location.pathname, navigate]);
+  
 
   // Conditionally render the navbar based on the user's role
   const renderNavbar = () => {
@@ -68,7 +92,7 @@ function App() {
 
   return (
     <>
-      {renderNavbar()} 
+      {renderNavbar()}
       <Routes>
         {/* Public Routes */}
         <Route path="/register" element={<Register />} />
@@ -100,12 +124,10 @@ function App() {
         <Route path="/help" element={<ProtectedRoute><Help/></ProtectedRoute>} />
         <Route path="/privacy" element={<ProtectedRoute><PrivacyPolicy/></ProtectedRoute>} />
         <Route path="/complain-action/:complaintId" element={<ProtectedRoute><ComplainAction/></ProtectedRoute>} />
-
-
-        
+        <Route path="/addRepository" element={<ProtectedRoute><RepositoryForm/></ProtectedRoute>} />
+        <Route path="/resourceRequest" element={<ProtectedRoute><ResourceRequest /></ProtectedRoute>} />
       </Routes>
-      
-        <Footer />
+      <Footer />
     </>
   );
 }

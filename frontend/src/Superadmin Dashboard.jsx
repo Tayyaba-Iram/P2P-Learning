@@ -26,7 +26,11 @@ function Dashboard() {
   const [universitySearch, setUniversitySearch] = useState('');
   const [studentSearch, setStudentSearch] = useState('');
   const [adminSearch, setAdminSearch] = useState('');
-
+  const [deleteTarget, setDeleteTarget] = useState(null); // { type: 'admin' | 'university', id: string }
+  const confirmDelete = (type, id) => {
+    setDeleteTarget({ type, id });
+  };
+  
 
 const [ratingsData, setRatingsData] = useState([]);
  const [loading, setLoading] = useState(true);
@@ -34,7 +38,8 @@ const [ratingsData, setRatingsData] = useState([]);
 
   
   const navigate = useNavigate();
-
+ 
+  
   // Fetch data on component mount
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -69,16 +74,6 @@ const [ratingsData, setRatingsData] = useState([]);
     fetchUniAdmins();
   }, []);
 
-  // Handle university deletion
-  const handleDeleteUniversity = async (universityId) => {
-    try {
-      await axios.delete(`http://localhost:3001/api/universities/${universityId}`);
-      setUniversities((prev) => prev.filter((uni) => uni._id !== universityId));
-      toast.success('University deleted successfully');
-    } catch (error) {
-      console.error('Error deleting university:', error);
-    }
-  };
 
   const handleEditClick = (university) => {
     navigate('/edituniversity', { state: { university } });
@@ -121,17 +116,8 @@ const [ratingsData, setRatingsData] = useState([]);
       typeof admin.university === 'string' && admin.university.toLowerCase().includes(searchQuery)
     );
   });
-  const handleDeleteAdmin = async (adminId) => {
-    try {
-      await axios.delete(`http://localhost:3001/api/Uniadmins/${adminId}`);
-      // Update the state by removing the deleted admin from the list
-      setUniadmins((prevAdmins) => prevAdmins.filter((admin) => admin._id !== adminId));
-      setDisplayedAdmins((prevAdmins) => prevAdmins.filter((admin) => admin._id !== adminId));
-      toast.success('Admin deleted successfully');
-    } catch (error) {
-      console.error('Error deleting admin:', error);
-    }
-  };
+
+  
 
   // Limiting displayed items
   const displayedUniversities = showAllUniversities
@@ -258,11 +244,39 @@ const chartsData = {
   datasets: cleanedDatasets,
 };
 
+const handleDeleteConfirm = async () => {
+  if (!deleteTarget) return;
+
+  const { type, id } = deleteTarget;
+
+  try {
+    if (type === 'university') {
+      await axios.delete(`http://localhost:3001/api/universities/${id}`);
+      setUniversities((prev) => prev.filter((uni) => uni._id !== id));
+      toast.success('University deleted successfully');
+    } else if (type === 'admin') {
+      await axios.delete(`http://localhost:3001/api/Uniadmins/${id}`);
+      setUniadmins((prev) => prev.filter((admin) => admin._id !== id));
+      setDisplayedAdmins((prev) => prev.filter((admin) => admin._id !== id));
+      toast.success('Admin deleted successfully');
+    }
+  } catch (error) {
+    console.error('Error deleting:', error);
+    toast.error('Deletion failed');
+  }
+
+  setDeleteTarget(null);
+};
+
+const handleDeleteCancel = () => {
+  setDeleteTarget(null);
+};
 
   return (
     <div className="container">
+        <h2 className='Academic-Analytics'>Academic Analytics</h2>
        <div className='ratings'>
-     
+   
       <div>
       {loading && <p>Loading...</p>}  {/* Show loading message while fetching */}
       {error && <p style={{ color: 'red' }}>{error}</p>}  {/* Show error message if there's an issue */}
@@ -275,7 +289,7 @@ const chartsData = {
       )}
     </div>
     <div className="bar-container">
-    <h2>Feedback Sessions per Program per University</h2>
+    <h2>Programs Ranking by Session Count</h2>
       <Bar data={chartsData} options={chartOptions} />
     </div>
     </div>
@@ -284,7 +298,7 @@ const chartsData = {
         <h2>Universities</h2>
         <input
           type="text"
-          placeholder="Search universities..."
+          placeholder="🔍︎ Search universities..."
           value={universitySearch}
           onChange={(e) => setUniversitySearch(e.target.value)}
           className="search-bar"
@@ -332,12 +346,14 @@ const chartsData = {
                               <td>{program.name}</td>
                               {/* Actions - only once per university */}
                               {campusIndex === 0 && programIndex === 0 && (
-                                <td rowSpan={totalCampusRows}>
-                                  <button className = 'edit-button'onClick={() => handleEditClick(university)}>Edit</button>
-                                  <button className='delete-button'onClick={() => handleDeleteUniversity(university._id)}>
-                                    Delete
-                                  </button>
-                                </td>
+                           <td rowSpan={totalCampusRows}>
+                           <div className="button-wrapper">
+                             <button className="edit-button" onClick={() => handleEditClick(university)}>Edit</button>
+                             <button className="delete-button" onClick={() => confirmDelete('university', university._id)}>Delete</button>
+                             </div>
+                         </td>
+                         
+                          
                               )}
                             </tr>
                           ))
@@ -353,9 +369,8 @@ const chartsData = {
                               <td rowSpan={totalCampusRows}>
                                 <div className='edit-delete-buttons'>
                                 <button onClick={() => handleEditClick(university)}>Edit</button>
-                                <button onClick={() => handleDeleteUniversity(university._id)}>
-                                  Delete
-                                </button>
+                                <button className="delete-button" onClick={() => confirmDelete('university', university._id)}>Delete</button>
+
                                 </div>
                               </td>
                             )}
@@ -376,7 +391,7 @@ const chartsData = {
         <h2>University Admins</h2>
         <input
           type="text"
-          placeholder="Search by SAP ID, University..."
+          placeholder="🔍︎ Search by Admin ID, University..."
           value={adminSearch}
           onChange={(e) => setAdminSearch(e.target.value)}
           className="search-bar"
@@ -390,7 +405,7 @@ const chartsData = {
           <thead>
             <tr>
               <th>Name</th>
-              <th>SAP ID</th>
+              <th>Admin ID</th>
               <th>Email</th>
               <th>Phone</th>
               <th>University</th>
@@ -409,8 +424,8 @@ const chartsData = {
                 <td>{admin.campus}</td>
                 <td>
                   {/* Delete button */}
-                  <button  className='delete-button'onClick={() => handleDeleteAdmin(admin._id)}>Delete</button>
-                </td>
+                  <button className="delete-button" onClick={() => confirmDelete('admin', admin._id)}>Delete</button>
+                  </td>
               </tr>
             ))}
           </tbody>
@@ -419,10 +434,10 @@ const chartsData = {
 
 
         {/* Verified Students Table */}
-        <h2>Verified Students</h2>
+        <h2>Registered Students</h2>
         <input
           type="text"
-          placeholder="Search by SAP ID, University, Campus, Program..."
+          placeholder="🔍︎ Search by Student ID, University, Campus, Program..."
           value={studentSearch}
           onChange={(e) => setStudentSearch(e.target.value)}
           className="search-bar"
@@ -436,7 +451,7 @@ const chartsData = {
           <thead>
             <tr>
               <th>Name</th>
-              <th>SAP ID</th>
+              <th>Student ID</th>
               <th>Email</th>
               <th>Phone</th>
               <th>University</th>
@@ -461,6 +476,20 @@ const chartsData = {
 
 
       </main>
+        {/* Delete Confirmation Modal */}
+        {deleteTarget && (
+  <div className="delete-confirmation-modal">
+    <div className="delete-modal-content">
+      <p>Are you sure you want to delete this {deleteTarget.type}?</p>
+      <div className="modal-buttons">
+        <button className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
+        <button className="modal-button cancel" onClick={handleDeleteCancel}>No</button>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 }

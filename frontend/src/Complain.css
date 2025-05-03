@@ -1,18 +1,32 @@
 .complaints-list-container{
     padding: 30px;
 }
-.heading{
+.heading {
     font-size: 16px;
-}
+  }
+  
+  
 .complaint-add-button{
 justify-content: center;
 text-align: center;
+width: 150px;
 }
-.delete-button{
-    background-color: crimson;
-}
+.delete-button {
+    padding: 8px 16px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    display: block;
+    margin: auto; 
+    width: 110px;
+  }
+  
 .complaintss{
     text-align: center;
+    margin-bottom: 10px;
+    
 }
 
 .complaints-table {

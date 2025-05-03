@@ -50,11 +50,17 @@ function Help() {
           <strong>Reset Password:</strong> Change your password by entering a new one.
         </li>
         <li>
-          <strong>Repository:</strong> Upload study content to help other users.
+          <strong>Repository:</strong> Upload study content to help other users. You can set your repository as <em>public</em>, <em>private</em>, or share it with specific peer of your choice.
+        </li>
+
+        <li>
+          <strong>Directory:</strong> Browse and learn from study materials uploaded by others. If a repository is restricted or hidden, you can send an access request to the uploader through the directory.
         </li>
         <li>
-          <strong>Directory:</strong> Browse and learn from study materials uploaded by others.
+          <strong>Resource Request:</strong> View all incoming requests from peers who want access to your restricted repositories. You can accept or reject each request based on your discretion.
         </li>
+
+
         <li>
           <strong>Complain:</strong> Report any issues to the admin via a complaint form.
         </li>

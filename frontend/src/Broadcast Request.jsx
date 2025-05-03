@@ -126,7 +126,7 @@ const BroadcastRequest = () => {
 
         {programs.length > 0 ? (
           programs.map((program) => (
-            <div key={program} className="checkbox-container">
+            <div key={program}>  {/* Use program name as the key */}
               <input
                 type="checkbox"
                 value={program}
@@ -134,7 +134,6 @@ const BroadcastRequest = () => {
               />
               <label>{program}</label>
             </div>
-
           ))
         ) : (
           <p>No programs available</p>

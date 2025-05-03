@@ -41,7 +41,7 @@ function AdminRegister() {
   }, [university, universities]);
 
   const handleCampusChange = (campusName) => {
-    setCampus(prev => 
+    setCampus(prev =>
       prev.includes(campusName) ? prev.filter(c => c !== campusName) : [...prev, campusName]
     );
   };
@@ -51,8 +51,8 @@ function AdminRegister() {
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
       setMessage('Password must be 8 characters with uppercase, lowercase letter, number, and special character.');
       return;
-    } 
-    else if(password!==cpassword) {
+    }
+    else if (password !== cpassword) {
       setMessage('Password and confirm password must be same.');
       return;
     }
@@ -71,7 +71,7 @@ function AdminRegister() {
   const handlePhoneChange = (value) => {
     // Remove any non-digit characters
     const cleanedValue = value.replace(/\D/g, '');
-  
+
     // Format as '0000-0000000'
     if (cleanedValue.length > 4) {
       setPhone(`${cleanedValue.slice(0, 4)}-${cleanedValue.slice(4, 11)}`);
@@ -82,16 +82,16 @@ function AdminRegister() {
   const handleCnicChange = (value) => {
     // Remove any non-digit characters
     const cleanedValue = value.replace(/\D/g, '');
-  
+
     // Format as '00000-0000000-0'
     let formattedValue = cleanedValue;
-  
+
     if (cleanedValue.length > 5 && cleanedValue.length <= 12) {
       formattedValue = `${cleanedValue.slice(0, 5)}-${cleanedValue.slice(5)}`;
     } else if (cleanedValue.length > 12) {
       formattedValue = `${cleanedValue.slice(0, 5)}-${cleanedValue.slice(5, 12)}-${cleanedValue.slice(12)}`;
     }
-  
+
     setCnic(formattedValue);
   };
 
@@ -104,69 +104,80 @@ function AdminRegister() {
 
 
   return (
-<form className="admin-register-form"onSubmit={handleSubmit}>
-        <Toaster position="top-center" />
-        <h3>Admin Registration</h3>
-          <div className="form-fields">
-            <label htmlFor="name">Name:</label>
-            <input id="name" type="text" placeholder='Enter Full Name' value={name} onChange={(e) => setName(e.target.value)} required/>
-          </div>
-          
-          <div className="form-fields">
-            <label htmlFor="sapid">ID:</label>
-          <input type="text" placeholder="Enter ID" value={sapid} onChange={handleSapChange} required/>
-          </div>
-          
-          <div className="form-fields">
-            <label htmlFor="email">Email:</label>
-            <input id="email" type="email" placeholder='Enter Email'value={email} onChange={(e) => setEmail(e.target.value)} required/>
-          </div>
-          
-          <div className="form-fields">
-          <label htmlFor="phone">Phone:</label>
-          <input id="phone" type="text" placeholder="Enter phone number"value={phone}onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} required
-          /></div>
-          
-          <div className="form-fields">
-          <label htmlFor="cnic">CNIC:</label>
-          <input id="cnic" type="text" placeholder="Enter CNIC"value={cnic}onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} required
-          /></div>
+    <form className="admin-register-form" onSubmit={handleSubmit}>
+      <Toaster position="top-center" />
+      <h3>Admin Registration</h3>
+      <div className="form-fields">
+        <label htmlFor="name">Name:</label>
+        <input
+          id="name"
+          type="text"
+          placeholder="Enter Full Name"
+          value={name}
+          onChange={(e) => {
+            const value = e.target.value;
+            const filteredValue = value.replace(/[^A-Za-z\s]/g, '');
+            setName(filteredValue);
+          }}
+          required
+        />
+      </div>
 
-          <div className="form-fields">
-            <label htmlFor="university">University:</label>
-            <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required>
-              <option value="" hidden>Select University</option>
-              {universities.map(uni => (
-                <option key={uni._id} value={uni.name}>{uni.name}</option>
-              ))}
-            </select>
-          </div>
+      <div className="form-fields">
+        <label htmlFor="sapid">ID:</label>
+        <input type="text" placeholder="Enter ID" value={sapid} onChange={handleSapChange} required />
+      </div>
 
-          <div className="form-fields">
-            <label>Select Campus:</label>
-            <div className="checkbox-group">
-              {campusOptions.map(camp => (
-                <label key={camp._id}>
-                  <input type="checkbox" value={camp.name} checked={campus.includes(camp.name)} onChange={() => handleCampusChange(camp.name)} />
-                  {camp.name}
-                </label>
-              ))}
-            </div>
-          </div>
+      <div className="form-fields">
+        <label htmlFor="email">Email:</label>
+        <input id="email" type="email" placeholder='Enter Email' value={email} onChange={(e) => setEmail(e.target.value)} required />
+      </div>
 
-          <div className="form-fields">
-            <label htmlFor="password">Password:</label>
-            <input id="password" type="text" placeholder='Enter Password'value={password} onChange={(e) => setPassword(e.target.value)} required/>
-          </div>
-          
-          <div className="form-fields">
-            <label htmlFor="cpassword">Confirm Password:</label>
-            <input id="cpassword" type="text" placeholder='Enter Confirm Password'value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
-          </div>
-          {message && <p style={{ color: 'red' }}>{message}</p>}
-          <button type="submit" className="register">Register</button>
-        </form>
-   
+      <div className="form-fields">
+        <label htmlFor="phone">Phone:</label>
+        <input id="phone" type="text" placeholder="Enter phone number" value={phone} onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} required
+        /></div>
+
+      <div className="form-fields">
+        <label htmlFor="cnic">CNIC:</label>
+        <input id="cnic" type="text" placeholder="Enter CNIC" value={cnic} onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} required
+        /></div>
+
+      <div className="form-fields">
+        <label htmlFor="university">University:</label>
+        <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required>
+          <option value="" hidden>Select University</option>
+          {universities.map(uni => (
+            <option key={uni._id} value={uni.name}>{uni.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="form-fields">
+        <label>Select Campus:</label>
+        <div className="checkbox-group">
+          {campusOptions.map(camp => (
+            <label key={camp._id}>
+              <input type="checkbox" value={camp.name} checked={campus.includes(camp.name)} onChange={() => handleCampusChange(camp.name)} />
+              {camp.name}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="form-fields">
+        <label htmlFor="password">Password:</label>
+        <input id="password" type="text" placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+      </div>
+
+      <div className="form-fields">
+        <label htmlFor="cpassword">Confirm Password:</label>
+        <input id="cpassword" type="text" placeholder='Enter Confirm Password' value={cpassword} onChange={(e) => setCpassword(e.target.value)} required />
+      </div>
+      {message && <p style={{ color: 'red' }}>{message}</p>}
+      <button type="submit" className="register">Register</button>
+    </form>
+
   );
 }
 

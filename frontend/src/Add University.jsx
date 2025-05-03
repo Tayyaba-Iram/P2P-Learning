@@ -14,6 +14,10 @@ function AddUniversity() {
 
   const handleInputChange = (e, campusIndex = null, programIndex = null) => {
     const { name, value } = e.target;
+  
+    // Allow only alphabets and spaces
+    if (!/^[a-zA-Z\s]*$/.test(value)) return;
+  
     setNewUniversityData((prevData) => {
       const updatedData = { ...prevData };
       if (campusIndex === null) {
@@ -26,6 +30,7 @@ function AddUniversity() {
       return updatedData;
     });
   };
+  
 
   const handleAddUniversity = async () => {
     try {
@@ -103,7 +108,7 @@ function AddUniversity() {
 
   return (
     <div className="add-form">
-      <h3>Add University</h3>
+      <h2>Add University</h2>
       <label  htmlFor="name"> University Name  </label>
         <input type="text" name="name" value={newUniversityData.name} onChange={(e) => handleInputChange(e)}  />
       {newUniversityData.campuses.map((campus, campusIndex) => (

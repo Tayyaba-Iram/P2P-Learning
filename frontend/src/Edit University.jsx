@@ -148,8 +148,9 @@ console.log(token)
                 value={campus.name}
                 onChange={(e) => handleCampusChange(campusIndex, 'name', e.target.value)}
               />
-              <button onClick={() => handleRemoveCampus(campusIndex)}>
-                <i className="fa fa-trash"></i>
+              <button className="trash-basket" onClick={() => handleRemoveCampus(campusIndex)}>
+              <i className="fa fa-trash"></i>
+
               </button>
             </div>
 
@@ -165,7 +166,7 @@ console.log(token)
                       value={program.name}
                       onChange={(e) => handleProgramChange(campusIndex, programIndex, e.target.value)}
                     />
-                    <button onClick={() => handleRemoveProgram(campusIndex, programIndex)}>
+                    <button className="trash-basket"  onClick={() => handleRemoveProgram(campusIndex, programIndex)}>
                       <i className="fa fa-trash"></i>
                     </button>
                   </div>

@@ -116,10 +116,7 @@
     margin-left: 10px;
   }
   
-  .remove-campus-button:hover {
-    background-color: #c82333;
-  }
-  
+
   .remove-campus-button:disabled {
     background-color: #dc3545;
     cursor: not-allowed;
@@ -137,10 +134,7 @@
     margin-left: 10px; 
   }
   
-  .remove-program-button:hover {
-    background-color: #e55347;
-  }
-  
+
   .remove-program-button:disabled {
     background-color:  #dc3545;
     cursor: not-allowed;

@@ -68,7 +68,7 @@ router.get('/get-complaints', verifyUser, async (req, res) => {
     const userComplaints = await ComplaintModel.find({ userId: req.user._id });
 
     if (!userComplaints || userComplaints.length === 0) {
-      return res.status(404).json({ error: 'No complaints found for this user' });
+      return res.status(200).json({ error: 'No complaints found for this user' });
     }
 
     res.json(userComplaints);

@@ -14,31 +14,14 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+.main-content h2 {
   text-align: center;
   color: #343a40;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
-.box {
-  background-color:#48742F;
-  color: white;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  flex: 1;
-  margin: 0 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
 
-.box:hover {
-  background-color: #48742F;
-}
 
-.students-table, .admins-table, .universities-table {
-  margin-top: 20px;
-}
 
 .students-table h3,
 .admins-table h3,
@@ -72,22 +55,12 @@ table thead th {
   padding: 12px;
   text-align: left;
   font-weight: 600;
+  font-size: 16px;
 }
 
-table tbody tr {
-  background-color: #ffffff;
-  border-bottom: 1px solid #dee2e6;
-}
-
-table tbody tr:nth-child(even) {
-  background-color: #f1f3f5;
-}
 
 table th,
 table td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
   font-size: 14px;
 }
 
@@ -96,62 +69,96 @@ th {
   color: white;
 }
 
-button:hover {
-  background-color: #48742F;
+
+.button-wrapper {
+  justify-content: center;
+  gap: 10px; /* Adds spacing between the buttons */
 }
 
-button:focus {
-  outline: none;
+
+.edit-button {
+  background-color: #48742F;
+  width: 110px;
+  cursor: pointer;
+  text-align: center;
+  margin: 0 auto 10px; /* centers the button horizontally */
+  display: block; /* ensures it takes up full line */
 }
-.delete-button{
-  background-color: crimson;
-}
-.edit-button{
-  width: 22%;
+
+.delete-button {
+  background-color: #f44336;
+  width: 110px;
+  cursor: pointer; 
+  text-align: center;
   justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .main-content {
-    padding: 15px;
-  }
 
-  table thead {
-    display: none;
-  }
-
-  table, table tbody, table tr, table td {
-    display: block;
-    width: 100%;
-  }
-
-  .box {
-      margin-bottom: 10px;
-      width: 90%; 
-  }
-}
 .bar-container {
-  width: 600px;
-  height: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  text-align: center;
+padding-left: 40px;
+width: 580px;
 }
 
 
 .chart-container {
-  width: 400px;
-  height: 400px;
-  margin: 0 auto;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  width: 450px;
+  padding-right: 70px;
 }
 
 .ratings{
   display: flex;
+  padding: 50px;
+  padding-left: 100px;
+  padding-right: 100px;
+    box-shadow: 0 8px 20px rgba(15, 15, 15, 0.08);
+    border-radius: 10px;
+  background: #fff;
+  max-width: 1200px;
+  margin: 10px auto;
+  
+}
+
+.Academic-Analytics{
+  text-align: center;
+  margin-top: 20px;
+}
+
+.delete-confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.delete-modal-content {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.modal-buttons {
+  margin-top: 15px;
+}
+
+.modal-button {
+  margin: 0 10px;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-button.confirm {
+  background-color: #e53935;
+  color: white;
+}
+
+.modal-button.cancel {
+  background-color: #48742F;
 }
