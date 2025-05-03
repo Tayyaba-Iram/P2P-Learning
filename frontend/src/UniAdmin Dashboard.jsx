@@ -143,7 +143,7 @@ const AdminDashboard = () => {
     <div className="admin-dashboard">
       {userData ? (
         <div className="user-info">
-          <h1>Welcome {userData.name}!</h1>
+          <h2>Welcome {userData.name}!</h2>
         </div>
       ) : (
         <div className="error-message">
