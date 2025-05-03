@@ -26,15 +26,18 @@ router.post('/suspend-account/:email', verifyUser, async (req, res) => {
     user.blocked = true;
     await user.save();
 
-    return res.json({ message: `Account with email ${email} has been suspended.` });
-  } catch (error) {
+    return res.json({
+      message: `Account with email ${email} has been suspended.`,
+      user: user // Send the updated user back in the response
+    });
+    } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Failed to suspend account.' });
   }
 });
 
 
-router.post('/unsuspend-account/:email', async (req, res) => {
+router.post('/unsuspend-account/:email',verifyUser, async (req, res) => {
   const email = req.params.email.trim(); // TRIM ADDED
   console.log(`Received request to unsuspend account with email: ${email}`);
 
@@ -49,10 +52,30 @@ router.post('/unsuspend-account/:email', async (req, res) => {
     user.blocked = false;
     await user.save();
 
-    return res.json({ message: `Account with email ${email} has been unsuspended.` });
-  } catch (error) {
+    return res.json({
+      message: `Account with email ${email} has been unsuspended.`,
+      user: user // Send the updated user back in the response
+    });
+    } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Failed to unsuspend account.' });
+  }
+});
+
+router.get('/user-status/:email', verifyUser,async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const user = await VerifiedStudentModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    return res.json({ accountStatus: user.accountStatus });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Failed to fetch user status.' });
   }
 });
 

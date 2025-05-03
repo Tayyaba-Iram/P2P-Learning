@@ -137,17 +137,6 @@ router.get("/sessions/verify/:meetingID", async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });
-/*
-// Route to get all sessions
-router.get('/sessions', verifyUser, async (req, res) => {
-  try {
-    const sessions = await SessionModel.find();
-    res.json(sessions);
-  } catch (error) {
-    console.error(error); // Log error for debugging
-    res.status(500).json({ message: error.message });
-  }
-});*/
 
 router.get('/sessions', verifyUser, async (req, res) => {
   try {

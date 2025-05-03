@@ -111,47 +111,32 @@ button:focus {
   justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .main-content {
-    padding: 15px;
-  }
 
-  table thead {
-    display: none;
-  }
-
-  table, table tbody, table tr, table td {
-    display: block;
-    width: 100%;
-  }
-
-  .box {
-      margin-bottom: 10px;
-      width: 90%; /* Make boxes responsive */
-  }
-}
 .bar-container {
-  width: 600px;
-  height: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  text-align: center;
+padding-left: 40px;
+width: 580px;
 }
 
 
 .chart-container {
-  width: 400px;
-  height: 400px;
-  margin: 0 auto;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  width: 450px;
+  padding-right: 70px;
 }
 
 .ratings{
   display: flex;
+  padding: 50px;
+  padding-left: 100px;
+  padding-right: 100px;
+    box-shadow: 0 8px 20px rgba(15, 15, 15, 0.08);
+    border-radius: 10px;
+  background: #fff;
+  max-width: 1200px;
+  margin: 10px auto;
+  
+}
+
+.Academic-Analytics{
+  text-align: center;
+  margin-top: 20px;
 }

@@ -69,7 +69,7 @@ const AdminDashboard = () => {
     fetchChartData();
   }, []);
 
- 
+
 
   if (!data) {
     return <div>Loading...</div>;
@@ -126,7 +126,7 @@ const AdminDashboard = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       toast.success(response.data.message);
-  
+
       // Update the complaints list by marking the resolved one
       setComplaints(prevComplaints =>
         prevComplaints.map(complaint =>
@@ -138,7 +138,7 @@ const AdminDashboard = () => {
       toast.error('Failed to resolve complaint.');
     }
   };
-  
+
   return (
     <div className="admin-dashboard">
       {userData ? (
@@ -152,18 +152,19 @@ const AdminDashboard = () => {
       )}
 
       <div className="bar-container">
-        <h2>Feedback Sessions per Program per University</h2>
+        <h2>Top Programs by Session Count </h2>
+
         <Bar data={chartsData} options={chartOptions} />
       </div>
 
-      <h3>Complaints Dashboard</h3>
+      <h2>Complaints Dashboard</h2>
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Category</th>
-            <th>Actions</th>
+            <th className='heading'>Name</th>
+            <th className='heading'>Email</th>
+            <th className='heading'>Category</th>
+            <th className='heading'>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -177,23 +178,23 @@ const AdminDashboard = () => {
               <td>{complaint.useremail}</td>
               <td>{complaint.category}</td>
               <td>
-              <button
-  onClick={(e) => {
-    e.stopPropagation(); // Prevent table row click (navigation)
-    handleResolve(complaint._id);
-  }}
-  disabled={complaint.status === 'Resolved'}
-  style={{
-    backgroundColor: complaint.status === 'Resolved' ? 'gray' : 'green',
-    color: 'white',
-    border: 'none',
-    padding: '6px 12px',
-    borderRadius: '5px',
-    cursor: complaint.status === 'Resolved' ? 'not-allowed' : 'pointer'
-  }}
->
-  {complaint.status === 'Resolved' ? 'Resolved' : 'Resolve'}
-</button>
+                <button className='admin-resolve-button'
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent table row click (navigation)
+                    handleResolve(complaint._id);
+                  }}
+                  disabled={complaint.status === 'Resolved'}
+                  style={{
+                    backgroundColor: complaint.status === 'Resolved' ? 'gray' : 'green',
+                    color: 'white',
+                    border: 'none',
+                    padding: '6px 12px',
+                    borderRadius: '5px',
+                    cursor: complaint.status === 'Resolved' ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  {complaint.status === 'Resolved' ? 'Resolved' : 'Resolve'}
+                </button>
 
               </td>
             </tr>

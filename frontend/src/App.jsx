@@ -32,6 +32,8 @@ import EditRepository from './EditRepository';
 import Help from './Help';
 import PrivacyPolicy from './PrivacyPolicy';
 import ComplainAction from './Complain Action';
+import RepositoryForm from './Repository Form';
+import ResourceRequest from './Resource Request';
 
 axios.defaults.withCredentials = true;
 
@@ -100,6 +102,8 @@ function App() {
         <Route path="/help" element={<ProtectedRoute><Help/></ProtectedRoute>} />
         <Route path="/privacy" element={<ProtectedRoute><PrivacyPolicy/></ProtectedRoute>} />
         <Route path="/complain-action/:complaintId" element={<ProtectedRoute><ComplainAction/></ProtectedRoute>} />
+        <Route path="/addRepository" element={<ProtectedRoute><RepositoryForm/></ProtectedRoute>} />
+        <Route path="/resourceRequest" element={<ProtectedRoute><ResourceRequest /></ProtectedRoute>} />
 
 
         

@@ -11,6 +11,7 @@
     margin-top: 2%;
     margin-bottom: 2%;
   }
+ 
   
   h3 {
     text-align: center;
@@ -63,7 +64,7 @@
   /* Buttons (Suspend / Unsuspend) */
   .suspend-btn, .unsuspend-btn {
     display: inline-block;
-    margin-top: 10px;
+    margin-bottom: 7px;
     padding: 8px 16px;
     font-size: 14px;
     color: #fff;
@@ -73,20 +74,16 @@
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
+    width: 120px;
   }
   
   .unsuspend-btn {
-    background-color: #2ecc71; /* Green for unsuspend */
+    background-color:  #48742F; /* Green for unsuspend */
+    width: 120px;
+
   }
   
-  .suspend-btn:hover {
-    background-color: #c0392b;
-  }
-  
-  .unsuspend-btn:hover {
-    background-color: #27ae60;
-  }
-  
+ 
   @media (max-width: 768px) {
     .complain-dashboard {
       padding: 20px;

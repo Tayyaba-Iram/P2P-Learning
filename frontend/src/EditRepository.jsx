@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Select from 'react-select'; // Import Select for dropdown
 import './EditRepository.css'
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -10,9 +11,13 @@ export default function EditRepository() {
   const [repo, setRepo] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [fileLink, setFileLink] = useState('');  // Store the file link (it should not change unless the file is uploaded)
-  const [fileName, setFileName] = useState('');  // Store the current file name
-  const [newFile, setNewFile] = useState(null);  // To hold the new file if chosen
+  const [fileLink, setFileLink] = useState('');
+  const [fileName, setFileName] = useState('');
+  const [newFile, setNewFile] = useState(null);
+  const [accessType, setAccessType] = useState('public');  // To track selected access type
+  const [students, setStudents] = useState([]);  // To hold list of students
+  const [studentOptions, setStudentOptions] = useState([]); // For populating Select dropdown
+  const [allowedStudent, setAllowedStudent] = useState([]); // For storing selected students
   const token = sessionStorage.getItem('token');
   const navigate = useNavigate();
 
@@ -34,8 +39,10 @@ export default function EditRepository() {
           setRepo(response.data.repository);
           setTitle(response.data.repository.title);
           setDescription(response.data.repository.description);
-          setFileLink(response.data.repository.fileLink || '');  // Set file link from the API
-          setFileName(response.data.repository.file || ''); // Set current file name
+          setFileLink(response.data.repository.fileLink || '');
+          setFileName(response.data.repository.file || '');
+          setAccessType(response.data.repository.accessType || 'public');
+          setAllowedStudent(response.data.repository.allowedStudent || []); // Set allowed students from API
         } else {
           console.error('Error:', response.data.message);
         }
@@ -47,27 +54,52 @@ export default function EditRepository() {
     fetchRepo();
   }, [repoId, token]);
 
+  // Fetch the list of students for "specific" access
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/repo-verifiedStudents', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const studentData = response.data;
+        setStudents(studentData);
+        // Prepare student options for Select dropdown
+        const options = studentData.map(student => ({
+          value: student.email,
+          label: `${student.name} (${student.email})`,
+        }));
+        setStudentOptions(options);
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      }
+    };
+    
+    fetchStudents();
+  }, [token]);
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setNewFile(file); // Set the new file selected by the user
-    setFileName(file.name); // Display the new file name in the input field
+    setNewFile(file);
+    setFileName(file.name);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
-    formData.append('title', title);  // Append title
-    formData.append('description', description);  // Append description
-  
-    // If a new file is selected, append it to FormData
+    formData.append('title', title);
+    formData.append('description', description);
+
     if (newFile) {
       formData.append('file', newFile);
     }
-  
-    // Append the current fileLink if it exists (e.g., if no new file is uploaded)
+
     formData.append('fileLink', fileLink);
-  
+    formData.append('accessType', accessType);
+    formData.append('allowedStudent', JSON.stringify(allowedStudent)); // Pass allowed students as JSON string
+
     try {
       const response = await axios.put(
         `http://localhost:3001/api/updateRepository/${repoId}`,
@@ -75,28 +107,25 @@ export default function EditRepository() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',  // Important for file uploads
+            'Content-Type': 'multipart/form-data',
           },
         }
       );
-  
+
       if (response.data.success) {
-        setFileLink(response.data.repository.fileLink);  // Update the file link in the state after update if file is uploaded
         toast.success('Repository updated successfully!');
         navigate('/repository');
       } else {
-        console.error('Error:', response.data.message);
+        toast.error('Failed to update repository');
       }
     } catch (err) {
-        console.error('Error:', response.data.message);
-        toast.error('Failed to update repository');
+      toast.error('Failed to update repository');
     }
   };
 
   return (
-      
-<div className='editcontainer'>
-<h2>Edit Repository</h2>
+    <div className='editcontainer'>
+      <h2>Edit Repository</h2>
       <label>Title:</label>
       <input
         type="text"
@@ -114,44 +143,93 @@ export default function EditRepository() {
       <label>File Link:</label>
       <input
         type="text"
-        value={fileLink || ''}  // If fileLink is empty, use empty string (""), otherwise use fileLink
-        placeholder={fileLink ? '' : 'No file uploaded'}  // Show placeholder when no fileLink exists
-        onChange={(e) => setFileLink(e.target.value)} // Update fileLink when user changes the input
+        value={fileLink || ''}
+        placeholder={fileLink ? '' : 'No file uploaded'}
+        onChange={(e) => setFileLink(e.target.value)}
       />
 
-      {/* Display Current File Name and allow user to select a new file */}
       <label>Current File:</label>
       <div>
-      {fileName ? (
-  <div>
-    <input
-      type="text"
-      value={fileName}
-      readOnly
-      className="file-name-input"
-    />
-  </div>
-) : (
-  <input
-    type="text"
-    value="No file chosen"
-    readOnly
-    className="file-name-input"
-  />
-)}
-
-        {/* Input for selecting a file */}
+        {fileName ? (
+          <input
+            type="text"
+            value={fileName}
+            readOnly
+            className="file-name-input"
+          />
+        ) : (
+          <input
+            type="text"
+            value="No file chosen"
+            readOnly
+            className="file-name-input"
+          />
+        )}
         <label>New File:</label>
         <input
           type="file"
           onChange={handleFileChange}
-          accept=".pdf,.docx,.txt" // You can add more file types as needed
+          accept=".pdf,.docx,.txt"
         />
       </div>
 
+      <label>Access Type:</label>
+      <div>
+        <input
+          type="radio"
+          id="public"
+          name="accessType"
+          value="public"
+          checked={accessType === 'public'}
+          onChange={() => setAccessType('public')}
+        />
+        <label htmlFor="public">Public</label>
+
+        <input
+          type="radio"
+          id="private"
+          name="accessType"
+          value="private"
+          checked={accessType === 'private'}
+          onChange={() => setAccessType('private')}
+        />
+        <label htmlFor="private">Private</label>
+
+        <input
+          type="radio"
+          id="specific"
+          name="accessType"
+          value="specific"
+          checked={accessType === 'specific'}
+          onChange={() => setAccessType('specific')}
+        />
+        <label htmlFor="specific">Specific</label>
+      </div>
+
+      {accessType === 'specific' && (
+        <>
+          <label>Select Students:</label>
+          <Select
+            isMulti
+            options={studentOptions}
+            value={studentOptions.filter((option) =>
+              allowedStudent.some(student => student.email === option.value)
+            )}
+            onChange={(selectedOptions) => {
+              const selectedStudents = selectedOptions
+                ? selectedOptions.map((opt) => ({ name: opt.label.split(' (')[0], email: opt.value }))
+                : [];
+              setAllowedStudent(selectedStudents);
+            }}
+            placeholder="Search and select students..."
+            isClearable
+          />
+        </>
+      )}
+
       <br />
       <button className="update-btn" onClick={handleSubmit}>Update Repository</button>
-       <Toaster position="top-center" />
+      <Toaster position="top-center" />
     </div>
   );
 }

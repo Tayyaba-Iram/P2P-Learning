@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const messageSchema = new mongoose.Schema({
-  senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'VerifiedStudent', required: true },
+  receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'VerifiedStudent', required: true },
   text: String,
   timestamp: { type: Date, default: Date.now },
 });

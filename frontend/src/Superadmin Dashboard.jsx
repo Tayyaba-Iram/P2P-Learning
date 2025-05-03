@@ -261,8 +261,9 @@ const chartsData = {
 
   return (
     <div className="container">
+        <h1 className='Academic-Analytics'>Academic Analytics</h1>
        <div className='ratings'>
-     
+   
       <div>
       {loading && <p>Loading...</p>}  {/* Show loading message while fetching */}
       {error && <p style={{ color: 'red' }}>{error}</p>}  {/* Show error message if there's an issue */}
@@ -275,7 +276,7 @@ const chartsData = {
       )}
     </div>
     <div className="bar-container">
-    <h2>Feedback Sessions per Program per University</h2>
+    <h2>Top Programs by Session Count</h2>
       <Bar data={chartsData} options={chartOptions} />
     </div>
     </div>

@@ -6,7 +6,6 @@ import './Complain.css';
 
 const Complaints = () => {
   const [complaints, setComplaints] = useState([]);
-  const [error, setError] = useState(null);
   const [confirmDeleteIndex, setConfirmDeleteIndex] = useState(null); // Track which complaint is selected for deletion
 
   // Fetch complaints on component mount
@@ -66,8 +65,7 @@ const Complaints = () => {
       <Link to="/complain-form">
         <button className="complaint-add-button">Add Complain</button>
       </Link>
-      <h2 className='complaintss'>Your Complaints</h2>
-      {error && <p className="error-message">{error}</p>}
+      <h2 className='complaintss'>Submitted Complaints</h2>
 
       <table className="complaints-table">
         <thead>

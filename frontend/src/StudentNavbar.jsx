@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from './userContext';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaShieldAlt   ,FaQuestionCircle  ,FaTachometerAlt, FaUser, FaLock, FaExclamationCircle, FaSignOutAlt , FaFolder, FaFolderOpen,FaBullhorn} from 'react-icons/fa'; // Import icons from react-icons
+import { FaClipboardList,FaShieldAlt   ,FaQuestionCircle  ,FaTachometerAlt, FaUser, FaLock, FaExclamationCircle, FaSignOutAlt , FaFolder, FaFolderOpen,FaBullhorn} from 'react-icons/fa'; // Import icons from react-icons
 import './StudentNavbar.css';
 
 function StudentNavbar() {
@@ -103,6 +103,10 @@ function StudentNavbar() {
               </Link>
               <Link to="/directory" onClick={handleDropdownSelect}>
               <FaFolderOpen /> Directory
+              </Link>
+              <Link to="/resourceRequest" onClick={handleDropdownSelect}>
+                <FaClipboardList style={{ marginRight: '4px' }} />
+                Resource Requests
               </Link>
               <Link to="/complains" onClick={handleDropdownSelect}>
                 <FaExclamationCircle /> Complaints

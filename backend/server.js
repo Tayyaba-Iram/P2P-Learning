@@ -23,8 +23,11 @@ import VerifiedStudentModel from './models/VerifiedStudent.js';
 import verifyUser from './middleware/verifyUser.js';
 import SuperPaymentRoutes from './routes/SuperPaymentRoutes.js';
 import RepositoryRoutes from './routes/RepositoryRoutes.js';
+import DirectoryRoutes from './routes/DirectoryRoutes.js';
 import SuspensionRoutes from './routes/SuspensionRoutes.js';
 import ratingRoutes from './routes/ratingRoutes.js';
+import RequestRoutes from './routes/RequestRoutes.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -137,6 +140,8 @@ app.get('/api/chattedStudents', verifyUser, async (req, res) => {
   }
 });
 
+
+
 // Serve static files from the Complains folder
 app.use('/complains', express.static(path.join(__dirname, 'Complains')));
 // API Routes
@@ -154,8 +159,10 @@ app.use('/api', favStudentRoutes);
 app.use('/api', broadcastRequestRoutes);
 app.use('/api', SuperPaymentRoutes);
 app.use('/api', RepositoryRoutes);
+app.use('/api', DirectoryRoutes);
 app.use('/api', SuspensionRoutes);
 app.use('/api', ratingRoutes);
+app.use('/api', RequestRoutes);
 app.use('/complains', express.static(path.join(__dirname, 'Complains')));
 app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
 

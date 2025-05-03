@@ -28,4 +28,23 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-  
+.heading {
+    font-size: 16px;
+  }
+
+  .admin-resolve-button{
+    width: 150px;
+    padding: 8px 16px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    display: block;
+    margin: auto; 
+    width: 110px;
+    background-color: #48742F;
+  }
+
+  .bar-container{
+    margin-bottom: 80px;
+  }
