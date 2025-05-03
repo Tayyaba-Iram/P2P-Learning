@@ -1,4 +1,4 @@
-/* EditUniversity.css */
+
 .update-university-container {
   width: 500px;
     margin: 0 auto;
@@ -14,7 +14,7 @@
 }
 
 label {
-  width: 650px; /* Adjust width to your needs */
+  width: 650px;
   
 }
 input, button{
@@ -43,7 +43,7 @@ button:hover:not(:disabled) {
   background-color:#48742F;
 }
 
-/* Small buttons for icons */
+
 button i {
   font-size: 1.25rem;
 }

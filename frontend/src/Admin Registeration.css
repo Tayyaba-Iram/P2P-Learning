@@ -1,4 +1,4 @@
-/* General Container Styles */
+
 
   
   .admin-register-form {
@@ -14,7 +14,7 @@
     margin-bottom: 2%;
   }
   
-  /* Form Heading */
+  
   .admin-register-form h3 {
     text-align: center;
     margin-top: 5%;
@@ -22,14 +22,14 @@
     color: #333;
   }
   
-  /* Form Field Styles */
+  
   .form-fields{
     flex-direction: column;
     margin-bottom: 15px;
   }
   
   .form-fields label {
-    font-weight: normal; /* Ensures label text is not bold */
+    font-weight: normal;
     font-size: 16px;
     color: #070707;
   }
@@ -54,13 +54,13 @@
     margin-right: 8px;
   }
   
-  /* Checkbox Group Styling */
+  
   .checkbox-group {
     display: flex;
     gap: 20px;
   }
 
-  /* Button Styles */
+ 
   .register {
     width: 100%;
     padding: 12px;
@@ -74,12 +74,12 @@
    
   }
   
-  /* Toast Notification */
+  
   .react-hot-toast {
     font-size: 14px;
   }
   
-  /* Media Queries for Responsiveness */
+ 
   @media (max-width: 480px) {
     .admin-register-form {
       width: 90%;

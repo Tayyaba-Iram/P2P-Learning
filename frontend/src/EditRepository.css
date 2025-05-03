@@ -20,7 +20,7 @@
     color: #333;
   }
   
-  /* Input field styles */
+
   label {
     font-size: 16px;
     margin-top: 15px;
@@ -41,7 +41,7 @@
   }
   
 
-  /* Current file display styles */
+ 
   div p {
   padding: 10px;
     font-size: 14px;
@@ -55,7 +55,7 @@
   }
   
  
-  /* Submit button styles */
+  
   .update-btn {
     width: 98%;
     padding: 12px;

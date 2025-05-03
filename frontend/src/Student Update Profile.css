@@ -1,4 +1,4 @@
-/* General styles for the form container */
+
 .update-profile-form {
   width: 500px;
   margin: 0 auto;
@@ -12,14 +12,14 @@
   margin-bottom: 2%;
   }
   
-  /* Styling for the form labels */
+  
   form label {
     display: block;
     margin-bottom: 8px;
     color: #333;
   }
   
-  /* Styling for the form input fields */
+ 
  .profile-data{
     width: 100%;
     padding: 10px;
@@ -35,13 +35,13 @@
     margin-bottom: 20px;
   }
   
-  /* Input focus effect */
+ 
   form input:focus {
     border-color: #48742F;
     outline: none;
   }
   
-  /* Styling for the button */
+  
 .update-button {
     font-size: 16px;
     color: #fff;
@@ -54,14 +54,14 @@
   }
   
   
-  /* Loading text styling */
+ 
   p {
     text-align: center;
     font-size: 18px;
     color: #555;
   }
   
-  /* Media query for responsive design */
+ 
   @media (max-width: 600px) {
     form {
       padding: 15px;

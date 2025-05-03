@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: #f5f5f5;
+    background-color: white;
     margin-top: 2%;
     margin-bottom: 2%;
     margin-left: 425px;
@@ -36,44 +36,45 @@ p {
     color: #555;
 }
 
-input, select, textarea, .date-picker {
+input,
+select,
+textarea,
+.date-picker {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
     width: 100%;
 }
-.date-picker {
-    width: 420px; /* Or set a specific width like 300px */
-    padding: 10px; /* Optional: Adjust padding for better usability */
-    font-size: 16px; /* Optional: Adjust font size for better readability */
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
-  }
-  
+
 textarea {
     resize: vertical;
     min-height: 100px;
     width: 100%;
 }
 
+.date-picker {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
 
 
-.submit-complain{
+
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.submit-complain {
     margin-top: 20px;
     width: 100%;
     justify-content: center;
     font-size: 16px;
 }
-
-  .date-picker,
-  .date-issue select {
-    padding: 8px; /* Adds some padding for better appearance */
-    font-size: 16px; /* Ensures consistent font size */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    height: 40px;
-    flex: 1; /* Makes both elements take equal width */
-  }
-  
-  
-  

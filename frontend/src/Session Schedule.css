@@ -1,54 +1,116 @@
 /* SessionSchedule.css */
 
 .simple-session-scheduler {
-    max-width: 500px;
-    margin: 40px auto;
-    padding: 24px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .simple-session-scheduler h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .form-group {
-    margin-bottom: 16px;
-    width: 75%;
-  }
-  
-  .form-group label {
-    font-weight: 500;
-    margin-bottom: 6px;
-    color: #555;
-  }
-  
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-  .form-actions {
-    text-align: center;
-  }
-  
-  .schedule-btn {
-    background-color: #48742F;
-    color: white;
-    padding: 10px 18px;
-    font-size: 15px;
-    width: 40%;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .schedule-btn:hover {
-    background-color: #48742F;
-  }
-  
-  p {
-    text-align: center;
-    margin-bottom: 10px;
-  }
+.simple-session-scheduler h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
 
+.form-group {
+  margin-bottom: 16px;
+  width: 75%;
+}
+
+.schedule-btn{
+ justify-content: center;
+}
+
+.form-group1 {
+  width: 450px;
+  margin-block: 20px;
+}
+
+.input-with-icon {
+  position: relative;
+  width: 100%;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 420px;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+.form-groupd .react-datepicker-wrapper {
+  width: 100% !important;
+}
+
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #555;
+
+}
+
+
+.form-actions {
+  text-align: center;
+}
+
+.schedule-btn {
+  background-color: #48742F;
+  color: white;
+  padding: 10px 18px;
+  font-size: 15px;
+  width: 40%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.schedule-btn:hover {
+  background-color: #48742F;
+}
+
+p {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.datepicker-with-icon {
+  position: relative;
+ 
+}
+
+.custom-datepicker {
+  width: 100%; /* Force full width */
+  box-sizing: border-box; /* Include padding and border in width */
+  padding: 10px 12px 10px 36px; /* Left space for icon */
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  display: block;
+}
+
+
+
+.calendar-icon {
+  position: absolute;
+  top: 50%;
+  left: 420px;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}

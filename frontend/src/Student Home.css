@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  /* Include padding and border in element's total width/height */
+
   margin: 0;
   padding: 0;
 }
@@ -18,18 +18,16 @@ body {
 }
 
 .calendar-container {
-  flex: 3; /* Calendar takes more space */
+  flex: 3;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  /* Prevent overflow */
+
 }
 
 .side-container {
   flex: 1;
-  /* Chat, Conduct Session, and Schedule Session blocks */
+
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -39,7 +37,6 @@ body {
 .side-container .chat-container,
 .side-container .schedule-session-container {
   background-color: #ffffff;
-  color: black;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -72,55 +69,10 @@ body {
 
 }
 
-/* Button Styles */
-.conduct-session-button,
-.chat-button,
-.schedule-btn {
-  /* Makes buttons take full width of their container */
-  padding: 15px;
-  /* Adjust padding to make buttons have equal height */
-  font-size: 1rem;
-  background-color: #48742F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
-  transition: background-color 0.3s;
-  display: inline-block;
-  /* Ensures the button behaves like a block element */
-  margin-top: 20px;
-  /* Adjust space between buttons */
-  width: 40%;
-
-}
-.schedule-session-container p{
-  color: black;
-  font-size: medium;
-}
-
-.chat-container p{
-  color: black;
-  font-size: medium;
-}
-.conduct-session-container p{
-  color: black;
-  font-size: medium;
-}
 
 
-.conduct-session-button,
-.chat-button,
-.schedule-btn {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #48742F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+
+
 
 
 
@@ -203,6 +155,19 @@ body {
   padding: 10px;
   background-color: #f7f7f7;
 }
+.rbc-event {
+  background-color: #3a5c23; 
+  border: none;
+  color: white;
+}
+
+.rbc-event:focus, 
+.rbc-event.rbc-selected {
+  background-color: #3a5c23; 
+  box-shadow: none;
+  outline: none;
+}
+
 
 .rbc-calendar {
   background-color: white;
@@ -237,13 +202,7 @@ body {
   font-size: 0.9rem;
 }
 
-.rbc-today {
-  background-color: #ffffff;
-}
 
-.rbc-day-bg:hover {
-  background-color: #f0f8ff;
-}
 
 
 .clear-btn {
@@ -266,8 +225,8 @@ body {
   background-color: #d32f2f;
 }
 
-.form-group .react-datepicker-wrapper {
-  width: 110%;
+.form-groupd .react-datepicker-wrapper {
+  width: 100%;
 }
 
 .form-group .react-datepicker__input-container input {
@@ -280,10 +239,22 @@ body {
 
 .form-group .react-datepicker__input-container input:focus {
   border-color: #48742F;
-  /* Change border color on focus for better UX */
-  box-shadow: 0 0 4px rgba(72, 116, 47, 0.5);
-  /* Add subtle shadow on focus */
+ 
+ 
 }
+
+.side-container .btn {
+  background-color: #3a5c23;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 50%;
+
+
+}
+
+
 
 
 
