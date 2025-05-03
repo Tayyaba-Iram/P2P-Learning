@@ -112,7 +112,7 @@ const ComplaintForm = () => {
                 selected={formData.date}
                 onChange={handleDateChange}
                 dateFormat="yyyy-MM-dd"
-                className="date-picker"
+                className="date-pickerc"
             />
 
             <select
