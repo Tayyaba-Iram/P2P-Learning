@@ -93,7 +93,7 @@ const Repository = () => {
         <input
           className="directory-search"
           type="text"
-          placeholder="Search by Title, or Description..."
+          placeholder="🔍︎ Search by Title, or Description..."
           value={searchTerm}
           onChange={handleSearchChange}
           style={{
@@ -166,9 +166,11 @@ const Repository = () => {
                     <div>
                       {repo.allowedStudent && repo.allowedStudent.length > 0 ? (
                         repo.allowedStudent.map((student, index) => (
-                          <div key={index}>
-                            <strong>{student.name}</strong> ({student.email})
-                          </div>
+                          <div key={index} className="student-info">
+                          <strong>{student.name}</strong> 
+                          <p>{student.email}</p>
+                        </div>
+                        
                         ))
                       ) : (
                         <span>No specific students allowed</span>
@@ -179,10 +181,12 @@ const Repository = () => {
                   )}
                 </td>
                 <td>
+                  <div className='repo-buttons'>
                   <Link to={`/editRepository/${repo._id}`}>
-                    <button className="edit-btn">Edit</button>
+                    <button className="edit-repo">Edit</button>
                   </Link>
-                  <button className="delete-btn" onClick={() => handleDeleteRequest(index)}>Delete</button>
+                  <button className="delete-repo" onClick={() => handleDeleteRequest(index)}>Delete</button>
+                  </div>
                 </td>
               </tr>
             ))}

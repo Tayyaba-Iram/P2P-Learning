@@ -2,16 +2,27 @@
     width: 100%;
     padding: 12px 16px;
     font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
     outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 20px;
-    box-sizing: border-box;
+  
   }
   
-  .directory-search:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-  }
-  
+.directory-container h2{
+  margin-bottom: 18px;
+}
+
+.no-repo{
+  font-size: 18px;
+}
+
+.request-resource {
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  justify-content: center;
+  background-color: #48742F;
+  width: 140px !important;
+  border-radius: 4px; 
+  font-size: 16px; 
+  margin-bottom: 10px;
+}

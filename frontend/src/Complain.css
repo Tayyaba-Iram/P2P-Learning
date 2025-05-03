@@ -10,6 +10,7 @@
 justify-content: center;
 text-align: center;
 width: 150px;
+margin-bottom: 20px;
 }
 .delete-button {
     padding: 8px 16px;
@@ -46,3 +47,7 @@ width: 150px;
   max-width: 200px; 
 }
 
+.no-complaints-msg{
+    margin-top: 20px;
+    font-size: 18px;
+}

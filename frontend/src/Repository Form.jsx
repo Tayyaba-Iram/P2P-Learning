@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import './Repository Form.css';
@@ -10,12 +11,13 @@ const RepositoryForm = () => {
     description: '',
     file: null,
     fileLink: '',
-    accessType: 'private',
+    accessType: '',
     allowedStudent: [],
   });
-
+  const [message, setMessage] = useState('');
   const [students, setStudents] = useState([]);
-  const fileInputRef = useRef(); // ✅ Ref to reset file input
+  const fileInputRef = useRef();
+   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,16 +66,19 @@ const RepositoryForm = () => {
     e.preventDefault();
     console.log('Form Data:', formData);
 
-    if (!formData.title || !formData.description || (!formData.file && formData.fileLink.trim() === '')) {
-      toast.error('Please fill all required fields');
+    if ( (!formData.file && formData.fileLink.trim() === '')) {
+      setMessage('Please upload a file, provide a file link, or both.');
       return;
     }
 
     if (formData.file && !isValidFile(formData.file)) {
-      toast.error('Invalid file type');
+      setMessage('Invalid file type');
       return;
     }
-
+    if (formData.fileLink && !/^https?:\/\//i.test(formData.fileLink)) {
+      setMessage('File link must start with http:// or https://');
+      return;
+    }
     try {
       const token = sessionStorage.getItem('token');
       const payload = new FormData();
@@ -89,7 +94,7 @@ const RepositoryForm = () => {
       } else {
         payload.append('file', ''); // Send an empty value if no file
       }
-      
+
 
       const response = await axios.post(
         'http://localhost:3001/api/uploadRepositories',
@@ -103,6 +108,8 @@ const RepositoryForm = () => {
       );
 
       if (response.status === 200) {
+        setMessage('');
+        navigate('/repository');
         toast.success('Repository uploaded successfully!');
         setFormData({
           title: '',
@@ -118,11 +125,13 @@ const RepositoryForm = () => {
           fileInputRef.current.value = '';
         }
       } else {
-        toast.error('Upload failed');
+        
+          toast.error('Failed to update repository');
+        
       }
     } catch (err) {
       console.error(err);
-      toast.error('Server error');
+      
     }
   };
 
@@ -131,15 +140,21 @@ const RepositoryForm = () => {
     label: `${student.name} (${student.email})`,
   }));
 
+  setTimeout(() => {
+    setMessage('');
+  }, 15000);
+
   return (
     <div className="repository-form-container">
       <h2>Add Repository</h2>
+      {message && <p style={{ color: 'red', marginTop: "20px", fontSize: "16px" }}>{message}</p>}
+
       <form onSubmit={handleSubmit}>
         <label>Title:</label>
-        <input type="text" name="title" value={formData.title} onChange={handleInputChange} />
+        <input type="text" name="title" value={formData.title} onChange={handleInputChange} required/>
 
         <label>Description:</label>
-        <input type="text" name="description" value={formData.description} onChange={handleInputChange} />
+        <input type="text" name="description" value={formData.description} onChange={handleInputChange} required/>
 
         <label>File:</label>
         <input type="file" onChange={handleFileChange} ref={fileInputRef} />
@@ -148,41 +163,51 @@ const RepositoryForm = () => {
         <input type="text" name="fileLink" value={formData.fileLink} onChange={handleInputChange} />
 
         <label>Access Type:</label>
-        <div className="access-options">
-          <label>
+        <div className="radioo-group">
+         <div className="radio-repo-container">
             <input
               type="radio"
-              name="accessType"
-              value="public"
-              checked={formData.accessType === 'public'}
-              onChange={handleAccessTypeChange}
-            />
-            Public
-          </label>
-          <label>
-            <input
-              type="radio"
+              id="access-private"
               name="accessType"
               value="private"
               checked={formData.accessType === 'private'}
               onChange={handleAccessTypeChange}
+              required 
             />
-            Private
-          </label>
-          <label>
+            <label className="radio-repo" htmlFor="access-private">Private</label>
+          </div>
+
+          <div className="radio-repo-container">
             <input
               type="radio"
+              id="access-public"
+              name="accessType"
+              value="public"
+              checked={formData.accessType === 'public'}
+              onChange={handleAccessTypeChange}
+              required 
+            />
+            <label className="radio-repo" htmlFor="access-public">Public</label>
+          </div>
+
+          <div className="radio-repo-container">
+            <input
+              type="radio"
+              id="access-specific"
               name="accessType"
               value="specific"
               checked={formData.accessType === 'specific'}
               onChange={handleAccessTypeChange}
+              required 
             />
-            Specific Student
-          </label>
+            <label className="radio-repo" htmlFor="access-specific">Specific Student</label>
+          </div>
+
+
         </div>
 
         {formData.accessType === 'specific' && (
-          <>
+          <div className='select-student'>
             <label>Select Students:</label>
             <Select
               isMulti
@@ -202,10 +227,10 @@ const RepositoryForm = () => {
               placeholder="Search and select students..."
               isClearable
             />
-          </>
+          </div>
         )}
 
-        <button type="submit">Submit</button>
+        <button className='add-repo' type="submit">Submit</button>
       </form>
 
       <Toaster position="top-center" />

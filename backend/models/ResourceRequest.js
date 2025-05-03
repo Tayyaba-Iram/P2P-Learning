@@ -7,7 +7,7 @@ const requestSchema = new mongoose.Schema({
   repoDescription: { type: String, required: true },
   requestedAt: { type: Date, required: true, default: Date.now },
   repoId: { type: mongoose.Schema.Types.ObjectId, ref: 'Repository', required: true },
-  status: { type: String, default: 'pending', enum: ['pending', 'accepted', 'rejected'] },
+  status: { type: String, default: 'Pending', enum: ['Pending', 'accepted', 'rejected'] },
   receiverEmail: { type: String, required: true }, // The receiver's email (the uploader)
 });
 

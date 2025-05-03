@@ -88,7 +88,7 @@ const ComplaintForm = () => {
 
     return (
         <form onSubmit={handleSubmit} className="complaint-submit">
-            <h3>Submit a Complaint</h3>
+            <h2>Submit a Complaint</h2>
             <p>Please use this form to submit a complaint regarding any issue related to your experience as a student.</p>
 
             <input

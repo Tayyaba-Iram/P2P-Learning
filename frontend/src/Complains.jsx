@@ -6,9 +6,8 @@ import './Complain.css';
 
 const Complaints = () => {
   const [complaints, setComplaints] = useState([]);
-  const [confirmDeleteIndex, setConfirmDeleteIndex] = useState(null); // Track which complaint is selected for deletion
+  const [confirmDeleteIndex, setConfirmDeleteIndex] = useState(null);
 
-  // Fetch complaints on component mount
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
@@ -20,15 +19,14 @@ const Complaints = () => {
         });
         setComplaints(response.data);
       } catch (error) {
-        setError(error.response?.data?.error || 'Error fetching complaints');
+        toast.error(error.response?.data?.error || 'Error fetching complaints');
       }
     };
     fetchComplaints();
   }, []);
 
-  // Function to handle deleting a complaint
   const handleDelete = (id) => {
-    setConfirmDeleteIndex(id);  // Store the complaint ID to confirm delete
+    setConfirmDeleteIndex(id);
   };
 
   const handleDeleteConfirm = async () => {
@@ -42,47 +40,73 @@ const Complaints = () => {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setComplaints((prevComplaints) =>
-          prevComplaints.filter((complaint) => complaint._id !== confirmDeleteIndex)
+        setComplaints((prev) =>
+          prev.filter((complaint) => complaint._id !== confirmDeleteIndex)
         );
       } else {
         toast.error(response.data.message);
       }
 
-      setConfirmDeleteIndex(null); // Close the modal after confirming
+      setConfirmDeleteIndex(null);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to delete complaint');
-      setConfirmDeleteIndex(null); // Close the modal if there is an error
+      setConfirmDeleteIndex(null);
     }
   };
 
   const handleDeleteCancel = () => {
-    setConfirmDeleteIndex(null); // Close the modal if canceled
+    setConfirmDeleteIndex(null);
   };
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredComplaints = Array.isArray(complaints)
+    ? complaints.filter((complaint) =>
+      complaint.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      complaint.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      complaint.targetemail.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      complaint.targetname.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    : [];
 
   return (
     <div className="complaints-list-container">
-      <Link to="/complain-form">
-        <button className="complaint-add-button">Add Complain</button>
-      </Link>
-      <h2 className='complaintss'>Submitted Complaints</h2>
 
-      <table className="complaints-table">
-        <thead>
-          <tr>
-            <th className='heading'>Target Name</th>
-            <th className='heading'>Target Email</th>
-            <th className='heading'>Category</th>
-            <th className='heading'>Description</th>
-            <th className='heading'>Date</th>
-            <th className='heading'>File</th>
-            <th className='heading'>Action</th>
-            <th className='heading'>Status</th> 
-          </tr>
-        </thead>
-        <tbody>
-          {complaints.length > 0 ? (
-            complaints.map((complaint) => (
+<div style={{ display: 'flex', justifyContent: 'center' }}>
+  <input
+    type="text"
+    placeholder="🔍︎ Search complaints..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="directory-search"
+    style={{
+      width: '60%',
+      borderRadius: '8px',
+      border: '1px solid #ccc',
+    }}
+  />
+</div>
+
+
+      <Link to="/complain-form">
+        <button className="complaint-add-button">Add Complaint</button>
+      </Link>
+
+      {filteredComplaints.length > 0 ? (
+        <table className="complaints-table">
+          <thead>
+            <tr>
+              <th className="heading">Target Name</th>
+              <th className="heading">Target Email</th>
+              <th className="heading">Category</th>
+              <th className="heading">Description</th>
+              <th className="heading">Date</th>
+              <th className="heading">File</th>
+              <th className="heading">Status</th>
+              <th className="heading">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredComplaints.map((complaint) => (
               <tr key={complaint._id}>
                 <td>{complaint.targetname}</td>
                 <td>{complaint.targetemail}</td>
@@ -91,16 +115,18 @@ const Complaints = () => {
                 <td>{new Date(complaint.date).toLocaleDateString()}</td>
                 <td>
                   {complaint.file ? (
-                    <a href={`http://localhost:3001/complains/${complaint.file}`} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={`http://localhost:3001/complains/${complaint.file}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       View File
                     </a>
                   ) : (
                     'No file'
                   )}
                 </td>
-                <td>
-          {complaint.status || 'Pending'}
-        </td> 
+                <td>{complaint.status || 'Pending'}</td>
                 <td>
                   <button
                     className="delete-button"
@@ -110,16 +136,13 @@ const Complaints = () => {
                   </button>
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="7">No complaints found</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p className="no-complaints-msg">No complaints submitted yet.</p>
+      )}
 
-      {/* Delete Confirmation Modal */}
       {confirmDeleteIndex !== null && (
         <div className="delete-confirmation-modal">
           <div className="delete-modal-content">

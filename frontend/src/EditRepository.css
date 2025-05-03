@@ -1,7 +1,7 @@
 
  
   .editcontainer {
-    width: 40%;
+    width: 550px;
     align-items: center;
     background-color: white;
     padding: 30px;
@@ -69,5 +69,32 @@
     cursor: pointer;
   }
   
- 
+  .radioo-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
   
+  .radio-repo-container {
+    
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .radio-repo-container input[type='radio'] {
+    accent-color: #48742F;
+    margin: 0;
+  }
+  
+  .radio-repo {
+    cursor: pointer;
+    
+  }
+
+  .select-student-to-edit{
+    width: 100%;
+  }
+
+.label-stu{
+  margin: 13px 0px;
+}

@@ -142,6 +142,11 @@ function Login() {
     }
   }, [navigate, setUser]);
   
+  setTimeout(() => {
+    setMessage('');
+  }, 15000);
+
+
   return (
     <div className="login-container">
       <img src="Logo.jpg" alt="Logo" className="login-logo" />
@@ -153,7 +158,7 @@ function Login() {
           <h2>Login to your account</h2>
         </div>
 
-        {message && <p style={{ color: 'red', marginTop: "20px" }}>{message}</p>}
+        {message && <p style={{ color: 'red', marginTop: "20px", fontSize: "16px" }}>{message}</p>}
 
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-group">

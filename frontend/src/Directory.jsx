@@ -114,7 +114,7 @@ function Directory() {
         <input
           className="directory-search"
           type="text"
-          placeholder="Search by Name, Email, Title, or Description..."
+          placeholder="🔍︎ Search by Name, Email, Title, or Description..."
           value={searchTerm}
           onChange={handleSearch}
           style={{
@@ -128,7 +128,7 @@ function Directory() {
       </div>
 
       {filteredRepositories.length === 0 ? (
-        <p>No repositories found.</p>
+        <p className='no-repo'>No uploaded repositories found.</p>
       ) : (
         <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%' }}>
           <thead>
@@ -138,7 +138,6 @@ function Directory() {
               <th>Student Email</th>
               <th>Title</th>
               <th>Description</th>
-              <th>Access Type</th>
               <th>File</th>
               <th>File Link</th>
               <th>Request</th>
@@ -156,7 +155,6 @@ function Directory() {
                   <td>{repo.uploadedByEmail || 'N/A'}</td>
                   <td>{repo.title}</td>
                   <td>{repo.description}</td>
-                  <td>{repo.accessType}</td>
                   <td>
                     {repo.file === 'Restricted' ? 'Restricted' :
                       repo.file && repo.file.trim() !== '' && repo.file.toLowerCase() !== 'no file uploaded' ? (
@@ -190,16 +188,16 @@ function Directory() {
         } else if (status === 'rejected') {
           // Show request button again if rejected
           return (
-            <button
+            <button className='request-resource'
               onClick={() => handleSendRequest(repo._id)}
-              style={{ backgroundColor: 'green', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
             >
               Request
             </button>
           );
         } else {
           return (
-            <button
+            <button className='request-resource'
+           
               onClick={() => handleCancelRequest(repo._id)}
               style={{ backgroundColor: 'red', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
             >
@@ -209,7 +207,7 @@ function Directory() {
         }
       } else {
         return (
-          <button
+          <button className='request-resource'
             onClick={() => handleSendRequest(repo._id)}
             style={{ backgroundColor: 'green', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
           >

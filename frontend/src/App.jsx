@@ -53,26 +53,7 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   const { user } = useContext(UserContext);
   const location = useLocation();
-  const navigate = useNavigate();
 
-   // 🔄 Save last visited path (except login, register, etc.)
-   useEffect(() => {
-    const publicPaths = ['/login', '/register', '/forgot-password', '/reset-password'];
-    if (!publicPaths.includes(location.pathname)) {
-      // Save the last visited page in sessionStorage
-      sessionStorage.setItem('lastVisitedPage', location.pathname);
-    }
-  }, [location]);
-   // ⏪ Restore last visited page on reload
-   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    const lastVisited = sessionStorage.getItem('lastVisitedPage');
-
-    if (token && user && location.pathname === '/' && lastVisited) {
-      // Redirect to the last visited page if logged in and lastVisitedPage is stored
-      navigate(lastVisited);
-    }
-  }, [user, location.pathname, navigate]);
   
 
   // Conditionally render the navbar based on the user's role

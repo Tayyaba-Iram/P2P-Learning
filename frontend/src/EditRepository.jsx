@@ -75,7 +75,7 @@ export default function EditRepository() {
         console.error('Error fetching students:', error);
       }
     };
-    
+
     fetchStudents();
   }, [token]);
 
@@ -174,59 +174,63 @@ export default function EditRepository() {
       </div>
 
       <label>Access Type:</label>
-      <div>
-        <input
-          type="radio"
-          id="public"
-          name="accessType"
-          value="public"
-          checked={accessType === 'public'}
-          onChange={() => setAccessType('public')}
-        />
-        <label htmlFor="public">Public</label>
-
-        <input
-          type="radio"
-          id="private"
-          name="accessType"
-          value="private"
-          checked={accessType === 'private'}
-          onChange={() => setAccessType('private')}
-        />
-        <label htmlFor="private">Private</label>
-
-        <input
-          type="radio"
-          id="specific"
-          name="accessType"
-          value="specific"
-          checked={accessType === 'specific'}
-          onChange={() => setAccessType('specific')}
-        />
-        <label htmlFor="specific">Specific</label>
-      </div>
-
-      {accessType === 'specific' && (
-        <>
-          <label>Select Students:</label>
-          <Select
-            isMulti
-            options={studentOptions}
-            value={studentOptions.filter((option) =>
-              allowedStudent.some(student => student.email === option.value)
-            )}
-            onChange={(selectedOptions) => {
-              const selectedStudents = selectedOptions
-                ? selectedOptions.map((opt) => ({ name: opt.label.split(' (')[0], email: opt.value }))
-                : [];
-              setAllowedStudent(selectedStudents);
-            }}
-            placeholder="Search and select students..."
-            isClearable
+      <div className="radioo-group">
+        <div className="radio-repo-container">
+          <input
+            type="radio"
+            id="private"
+            name="accessType"
+            value="private"
+            checked={accessType === 'private'}
+            onChange={() => setAccessType('private')}
           />
-        </>
-      )}
+          <label className="radio-repo" htmlFor="access-private">Private</label>
+        </div>
+        <div className="radio-repo-container">
+          <input
+            type="radio"
+            id="public"
+            name="accessType"
+            value="public"
+            checked={accessType === 'public'}
+            onChange={() => setAccessType('public')}
+          />
+            <label className="radio-repo" htmlFor="access-public">Public</label>
+            </div>
 
+        <div className="radio-repo-container">
+          <input
+            type="radio"
+            id="specific"
+            name="accessType"
+            value="specific"
+            checked={accessType === 'specific'}
+            onChange={() => setAccessType('specific')}
+          />
+            <label className="radio-repo" htmlFor="access-specific">Specific Student</label>
+            </div>
+
+        {accessType === 'specific' && (
+          <div className='select-student-to-edit'>
+            <label className='label-stu'>Select Students:</label>
+            <Select
+              isMulti
+              options={studentOptions}
+              value={studentOptions.filter((option) =>
+                allowedStudent.some(student => student.email === option.value)
+              )}
+              onChange={(selectedOptions) => {
+                const selectedStudents = selectedOptions
+                  ? selectedOptions.map((opt) => ({ name: opt.label.split(' (')[0], email: opt.value }))
+                  : [];
+                setAllowedStudent(selectedStudents);
+              }}
+              placeholder="Search and select students..."
+              isClearable
+            />
+          </div>
+        )}
+      </div>
       <br />
       <button className="update-btn" onClick={handleSubmit}>Update Repository</button>
       <Toaster position="top-center" />

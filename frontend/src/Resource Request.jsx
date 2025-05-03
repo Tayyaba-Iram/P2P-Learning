@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import './Resource Request.css'
 function ResourceRequest() {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -81,7 +81,7 @@ function ResourceRequest() {
             <h2>Resource Access Requests</h2>
 
             {requests.length === 0 ? (
-                <p>No requests found.</p>
+                <p className='no-request'>No resource requests found.</p>
             ) : (
                 <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%' }}>
                     <thead>
@@ -89,7 +89,7 @@ function ResourceRequest() {
                             <th>#</th>
                             <th>Requestor Name</th>
                             <th>Requestor Email</th>
-                            <th>Request Title</th>
+                            <th>Title</th>
                             <th>Description</th>
                             <th>Actions</th>
                         </tr>
@@ -104,10 +104,10 @@ function ResourceRequest() {
                                 <td>{request.repoDescription}</td>
                                 <td>
                                     {request.localStatus === 'Pending' ? (
-                                        <>
-                                            <button onClick={() => handleAccept(index)}>Accept</button>{' '}
-                                            <button onClick={() => handleReject(index)}>Reject</button>
-                                        </>
+                                        <div className='accp-rej-btn'>
+                                            <button className='accp-btn' onClick={() => handleAccept(index)}>Accept</button>{' '}
+                                            <button className='rej-btn' onClick={() => handleReject(index)}>Reject</button>
+                                        </div>
                                     ) : request.localStatus === 'Accepted' ? (
                                         <span style={{ color: 'green', fontWeight: 'bold' }}>Accepted</span>
                                     ) : (

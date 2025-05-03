@@ -103,9 +103,6 @@
   border: none; 
 }
 
-.logout-button-student:hover {
-  color: red;
-}
 
 
 .modal-overlay {
@@ -146,6 +143,13 @@
   border: none;
   cursor: pointer;
   border-radius: 4px;
+}
+.confirm-button{
+  background-color: crimson;
+}
+
+.cancel-button{
+  background-color: #48742F;
 }
 
 

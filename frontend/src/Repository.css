@@ -7,7 +7,7 @@
     margin-bottom: 20px;
   }
   
-  .add-button {
+  .add-repository-btn {
     padding: 10px;
     background-color: #48742F;
     color: white;
@@ -50,10 +50,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .repo-buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px; /* space between buttons */
+    height: 100%;
+  }
   
-  .repository-table .edit-btn,
-  .repository-table .delete-btn {
-    background-color: #48742F;
+  .repository-table .edit-repo,
+  .repository-table .delete-repo {
     color: white;
     border: none;
     padding: 5px 10px;
@@ -63,12 +69,24 @@
     justify-content: center;
   }
   
-  
-  .repository-table .delete-btn {
+  .repository-table .edit-repo{
+    background-color: #48742F;
+    width: 80px;
+  }
+  .repository-table .delete-repo {
     background-color: #dc3545;
+    width: 80px;
   }
   
- 
+  .student-info {
+    text-align: left;
+    margin-bottom: 7px;
+  }
+  .student-info p {
+    margin: 0;
+    padding: 0;
+  }
+  
   .modaal {
     position: fixed;
     top: 0;
@@ -184,3 +202,7 @@
   
 }
 
+.empty-state{
+  text-align: center;
+  font-size: 18px;
+}
