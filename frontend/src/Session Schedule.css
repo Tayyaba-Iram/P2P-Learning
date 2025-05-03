@@ -113,4 +113,5 @@ p {
   transform: translateY(-50%);
   color: #888;
   pointer-events: none;
+  margin-top: -7px;
 }

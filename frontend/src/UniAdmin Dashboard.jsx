@@ -143,7 +143,7 @@ const AdminDashboard = () => {
     <div className="admin-dashboard">
       {userData ? (
         <div className="user-info">
-          <h2>Welcome: {userData.name}!</h2>
+          <h2>Welcome {userData.name}!</h2>
         </div>
       ) : (
         <div className="error-message">
@@ -152,7 +152,7 @@ const AdminDashboard = () => {
       )}
 
       <div className="bar-container">
-        <h2>Top Programs by Session Count </h2>
+        <h2>Programs Ranking by Session Count </h2>
 
         <Bar data={chartsData} options={chartOptions} />
       </div>

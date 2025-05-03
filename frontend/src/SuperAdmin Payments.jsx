@@ -21,7 +21,7 @@ const SuperAdminPayments = () => {
             session.topic?.toLowerCase().includes(query)
         );
     });
-    
+
     const token = sessionStorage.getItem('token');
 
     useEffect(() => {
@@ -87,6 +87,15 @@ const SuperAdminPayments = () => {
         initializeAccount();
 
     }, [token]);
+    function toggleSearchIcon() {
+        const inputField = document.querySelector('.search-input');
+        const searchIcon = document.querySelector('.search-icon');
+        if (inputField.value.trim() !== "") {
+            searchIcon.style.opacity = '0'; // hide the search icon
+        } else {
+            searchIcon.style.opacity = '1'; // show the search icon
+        }
+    }
 
     return (
         <>
@@ -113,15 +122,15 @@ const SuperAdminPayments = () => {
                     </div>
                 </div>
             </div>
-            <div className="search-bar-container">
-    <input
-        type="text"
-        placeholder="Search sessions..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="session-search-input"
-    />
-</div>
+
+            <div className="search-container">
+                <input
+                    type="text"
+                    className="search-input"
+                    placeholder=" 🔍︎ Search history by Sender Name, Email, University, Program, Phone Number, Instructor Name, Instructor Account Title, Instructor Account Number, Session Topic..."
+                />
+            </div>
+
 
             <div className="session-table-container">
                 <h2>Session Payments History</h2>
@@ -148,7 +157,7 @@ const SuperAdminPayments = () => {
                             </tr>
                         </thead>
                         <tbody>
-                        {filteredSessions.map((session, index) => {
+                            {filteredSessions.map((session, index) => {
 
                                 const payment = session.amount;
                                 const deductedAmount = payment * 0.10;

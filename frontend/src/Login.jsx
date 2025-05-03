@@ -39,8 +39,9 @@ function Login() {
   
     try {
       let response;
-  
-      // Check if the email belongs to an admin
+      sessionStorage.setItem('lastVisitedPage', window.location.pathname);
+
+      // Admin login
       if (email.endsWith('@admin.edu.pk')) {
         response = await axios.post(
           'http://localhost:3001/api/adminlogin',
@@ -49,15 +50,16 @@ function Login() {
         );
   
         if (response.data.success) {
-          setUser({ name: response.data.name, role: 'admin' });
+          const loggedInUser = { ...response.data.user, role: 'admin' };
+          sessionStorage.setItem('user', JSON.stringify(loggedInUser));
           sessionStorage.setItem('token', response.data.token);
-          sessionStorage.setItem('user', JSON.stringify(response.data.user));
+          setUser(loggedInUser);
           navigate('/admindashboard');
         } else {
           setMessage('Invalid Email or Password');
         }
   
-      // Check if the email belongs to a superadmin
+      // Superadmin login
       } else if (email.endsWith('@gmail.com')) {
         response = await axios.post(
           'http://localhost:3001/api/superadmin-check-or-create',
@@ -67,13 +69,13 @@ function Login() {
   
         if (response.data.created) {
           toast.success('Super Admin account created successfully!');
-        } else if (response.data.success) {
-          setUser({ name: response.data.name, role: 'superadmin' });
-          sessionStorage.setItem('token', response.data.token);
-          sessionStorage.setItem('user', JSON.stringify(response.data.user));
         }
   
         if (response.data.success || response.data.created) {
+          const loggedInUser = { ...response.data.user, role: 'superadmin' };
+          sessionStorage.setItem('user', JSON.stringify(loggedInUser));
+          sessionStorage.setItem('token', response.data.token);
+          setUser(loggedInUser);
           navigate('/superdashboard');
         } else {
           setMessage('Invalid Email or Password');
@@ -81,21 +83,23 @@ function Login() {
   
       // Student login
       } else {
-        // Student login
-        response = await axios.post('http://localhost:3001/api/studentlogin', { email, password }, { withCredentials: true });
-  
-        // Log the response for debugging
-        console.log('Response:', response.data);
+        response = await axios.post(
+          'http://localhost:3001/api/studentlogin',
+          { email, password },
+          { withCredentials: true }
+        );
   
         if (response.data.success) {
-          setUser({ name: response.data.user.name, role: 'student' });
-          sessionStorage.setItem('token', response.data.token);  // Store token in sessionStorage
-          sessionStorage.setItem('user', JSON.stringify(response.data.user));  // Store user in sessionStorage
-          console.log(sessionStorage.getItem('token')); // Log token
-          console.log(sessionStorage.getItem('user')); // Log user data
-          navigate('/');  // Navigate to home
+          const loggedInUser = { ...response.data.user, role: 'student' };
+          sessionStorage.setItem('user', JSON.stringify(loggedInUser));
+          sessionStorage.setItem('token', response.data.token);
+          setUser(loggedInUser);
+          navigate('/');
         } else {
-          if (response.data.message === 'Your account is suspended and blocked. Please contact support.') {
+          if (
+            response.data.message ===
+            'Your account is suspended and blocked. Please contact support.'
+          ) {
             setMessage('Your account is suspended. Please contact support.');
           } else {
             setMessage('Invalid Email or Password');
@@ -105,7 +109,7 @@ function Login() {
     } catch (error) {
       console.error('Login error:', error);
   
-      if (error.response && error.response.data && error.response.data.message) {
+      if (error.response?.data?.message) {
         setMessage(error.response.data.message);
       } else {
         setMessage('Invalid Email or Password');

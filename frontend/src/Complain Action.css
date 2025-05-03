@@ -146,8 +146,8 @@
   }
   
  
-  .confirm-btn {
-    background-color: #4caf50;
+  .modal-buttons  .confirm-btn {
+    background-color: #48742F;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -156,22 +156,14 @@
     transition: background-color 0.3s;
   }
   
-  .confirm-btn:hover {
-    background-color: #45a049;
-  }
   
-  
-  .cancel-btn {
-    background-color: #f44336;
+  .modal-buttons .cancel-btn {
+    background-color: #dc3545;
     color: white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
-  }
-  
-  .cancel-btn:hover {
-    background-color: #e53935;
   }
   
