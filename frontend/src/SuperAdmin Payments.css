@@ -40,18 +40,31 @@
     font-weight: bold;
     font-size: 28px;
   }
+
+  .search-container {
+    max-width: 1300px; /* Sets the maximum width for the search container */
+    margin: 0 auto; /* Centers the container horizontally */
+    padding: 5px; /* Optional: Adds some padding inside the container */
+}
+
+.search-input {
+    max-width: 1500px; /* Adjust the max-width of the input field */
+    padding: 10px; /* Reduces padding to avoid too much space inside */
+    font-size: 14px; /* Adjust font size if needed */
+    border: 1px solid #161515; /* Adds a border to the input field */
+    border-radius: 4px; /* Optional: Adds rounded corners to the input field */
+    width: 100%; /* Ensures the input field fills the container width */
+}
+
   
-  
- 
   .account-info { 
-  margin-top: 3%;
     background-color:#48742F;
-    height: 90px;
+    height: 110px;
   
   }
   .account-info p {
     text-align: left;
-    margin: 6px 0;
+    margin: 0px 0;
   }
   
   
@@ -103,4 +116,9 @@
     align-items: center;
     cursor: pointer;
   }
+  
+.session-table th{
+  font-size: 14px;
+}
+
   

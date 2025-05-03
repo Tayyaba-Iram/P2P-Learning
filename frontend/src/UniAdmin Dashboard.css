@@ -1,3 +1,10 @@
+.user-info h1 {
+    position: relative;
+   
+    color: #48742F;
+    padding-bottom: 23px;
+}
+
 
 .admin-dashboard {
     padding: 20px;
@@ -45,6 +52,14 @@ tr:hover {
     background-color: #48742F;
   }
 
-  .bar-container{
-    margin-bottom: 80px;
+  .bar-container {
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 80px auto;
+    width: 60%;
+    height: 350px;
+    margin-top: 40px;
+    margin-bottom: 120px;
   }
+  
+  
