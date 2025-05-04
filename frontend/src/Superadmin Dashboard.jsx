@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Superadmin Dashboard.css';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { Pie, Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement,Tooltip,Legend,CategoryScale,LinearScale,BarElement,Title,} from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, } from 'chart.js';
 
 // Register all necessary chart components at once
 ChartJS.register(
-  CategoryScale, 
-  LinearScale, 
-  BarElement, 
-  Title, 
-  ArcElement, 
-  Tooltip, 
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  ArcElement,
+  Tooltip,
   Legend
 );
 
@@ -30,16 +30,16 @@ function Dashboard() {
   const confirmDelete = (type, id) => {
     setDeleteTarget({ type, id });
   };
-  
 
-const [ratingsData, setRatingsData] = useState([]);
- const [loading, setLoading] = useState(true);
+
+  const [ratingsData, setRatingsData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  
+
   const navigate = useNavigate();
- 
-  
+
+
   // Fetch data on component mount
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -117,7 +117,7 @@ const [ratingsData, setRatingsData] = useState([]);
     );
   });
 
-  
+
 
   // Limiting displayed items
   const displayedUniversities = showAllUniversities
@@ -218,81 +218,83 @@ const [ratingsData, setRatingsData] = useState([]);
       },
     },
   };
-// Step 1: Filter out undefined or empty program labels
-const filteredLabels = data.labels.filter(label => label && label !== 'undefined' && label.trim() !== '');
+  // Step 1: Filter out undefined or empty program labels
+  const filteredLabels = data.labels.filter(label => label && label !== 'undefined' && label.trim() !== '');
 
-// Step 2: Clean and align datasets with filtered labels
-const cleanedDatasets = data.datasets
-  .filter(dataset => dataset.label && dataset.label !== 'undefined') // Remove undefined university names
-  .map((dataset, index) => {
-    // Align dataset data with filtered labels
-    const cleanedData = filteredLabels.map(label => {
-      const labelIndex = data.labels.indexOf(label);
-      return dataset.data[labelIndex] || 0; // Use 0 if index not found
+  // Step 2: Clean and align datasets with filtered labels
+  const cleanedDatasets = data.datasets
+    .filter(dataset => dataset.label && dataset.label !== 'undefined') // Remove undefined university names
+    .map((dataset, index) => {
+      // Align dataset data with filtered labels
+      const cleanedData = filteredLabels.map(label => {
+        const labelIndex = data.labels.indexOf(label);
+        return dataset.data[labelIndex] || 0; // Use 0 if index not found
+      });
+
+      return {
+        ...dataset,
+        data: cleanedData,
+        backgroundColor: `hsl(${(index * 360) / data.datasets.length}, 70%, 60%)`, // Unique color
+      };
     });
 
-    return {
-      ...dataset,
-      data: cleanedData,
-      backgroundColor: `hsl(${(index * 360) / data.datasets.length}, 70%, 60%)`, // Unique color
-    };
-  });
+  // Final chart data
+  const chartsData = {
+    labels: filteredLabels,
+    datasets: cleanedDatasets,
+  };
 
-// Final chart data
-const chartsData = {
-  labels: filteredLabels,
-  datasets: cleanedDatasets,
-};
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
 
-const handleDeleteConfirm = async () => {
-  if (!deleteTarget) return;
+    const { type, id } = deleteTarget;
 
-  const { type, id } = deleteTarget;
-
-  try {
-    if (type === 'university') {
-      await axios.delete(`http://localhost:3001/api/universities/${id}`);
-      setUniversities((prev) => prev.filter((uni) => uni._id !== id));
-      toast.success('University deleted successfully');
-    } else if (type === 'admin') {
-      await axios.delete(`http://localhost:3001/api/Uniadmins/${id}`);
-      setUniadmins((prev) => prev.filter((admin) => admin._id !== id));
-      setDisplayedAdmins((prev) => prev.filter((admin) => admin._id !== id));
-      toast.success('Admin deleted successfully');
+    try {
+      if (type === 'university') {
+        await axios.delete(`http://localhost:3001/api/universities/${id}`);
+        setUniversities((prev) => prev.filter((uni) => uni._id !== id));
+        toast.success('University deleted successfully');
+      } else if (type === 'admin') {
+        await axios.delete(`http://localhost:3001/api/Uniadmins/${id}`);
+        setUniadmins((prev) => prev.filter((admin) => admin._id !== id));
+        setDisplayedAdmins((prev) => prev.filter((admin) => admin._id !== id));
+        toast.success('Admin deleted successfully');
+      }
+    } catch (error) {
+      console.error('Error deleting:', error);
+      toast.error('Deletion failed');
     }
-  } catch (error) {
-    console.error('Error deleting:', error);
-    toast.error('Deletion failed');
-  }
 
-  setDeleteTarget(null);
-};
+    setDeleteTarget(null);
+  };
 
-const handleDeleteCancel = () => {
-  setDeleteTarget(null);
-};
+  const handleDeleteCancel = () => {
+    setDeleteTarget(null);
+  };
 
   return (
     <div className="container">
-        <h2 className='Academic-Analytics'>Academic Analytics</h2>
-       <div className='ratings'>
-   
-      <div>
-      {loading && <p>Loading...</p>}  {/* Show loading message while fetching */}
-      {error && <p style={{ color: 'red' }}>{error}</p>}  {/* Show error message if there's an issue */}
-      
-      {!loading && !error && (
-        <div className="chart-container">
-           <h2>University Ratings Distribution</h2>
-          <Pie data={chartData} options={{ responsive: true }} /> {/* Render the pie chart */}
+      <Toaster position="top-center" />
+
+      <h2 className='Academic-Analytics'>Academic Analytics</h2>
+      <div className='ratings'>
+
+        <div>
+          {loading && <p>Loading...</p>}  {/* Show loading message while fetching */}
+          {error && <p style={{ color: 'red' }}>{error}</p>}  {/* Show error message if there's an issue */}
+
+          {!loading && !error && (
+            <div className="chart-container">
+              <h2>University Ratings Distribution</h2>
+              <Pie data={chartData} options={{ responsive: true }} /> {/* Render the pie chart */}
+            </div>
+          )}
         </div>
-      )}
-    </div>
-    <div className="bar-container">
-    <h2>Programs Ranking by Session Count</h2>
-      <Bar data={chartsData} options={chartOptions} />
-    </div>
-    </div>
+        <div className="bar-container">
+          <h2>Programs Ranking by Session Count</h2>
+          <Bar data={chartsData} options={chartOptions} />
+        </div>
+      </div>
       <main className="main-content">
         {/* Universities Table */}
         <h2>Universities</h2>
@@ -346,14 +348,17 @@ const handleDeleteCancel = () => {
                               <td>{program.name}</td>
                               {/* Actions - only once per university */}
                               {campusIndex === 0 && programIndex === 0 && (
-                           <td rowSpan={totalCampusRows}>
-                           <div className="button-wrapper">
-                             <button className="edit-button" onClick={() => handleEditClick(university)}>Edit</button>
-                             <button className="delete-button" onClick={() => confirmDelete('university', university._id)}>Delete</button>
-                             </div>
-                         </td>
-                         
-                          
+                                <td rowSpan={totalCampusRows}>
+                                  <div className="button-wrapper">
+                                    <button className="edit-button" onClick={() => handleEditClick(university)}>Edit</button>
+                                    <button style={{
+                                      backgroundColor: 'crimson',
+                                    }}
+                                      className="delete-button" onClick={() => confirmDelete('university', university._id)}>Delete</button>
+                                  </div>
+                                </td>
+
+
                               )}
                             </tr>
                           ))
@@ -368,8 +373,12 @@ const handleDeleteCancel = () => {
                             {campusIndex === 0 && (
                               <td rowSpan={totalCampusRows}>
                                 <div className='edit-delete-buttons'>
-                                <button onClick={() => handleEditClick(university)}>Edit</button>
-                                <button className="delete-button" onClick={() => confirmDelete('university', university._id)}>Delete</button>
+                                  <button onClick={() => handleEditClick(university)}>Edit</button>
+                                  <button
+                                    style={{
+                                      backgroundColor: 'crimson',
+                                    }}
+                                    className="delete-button" onClick={() => confirmDelete('university', university._id)}>Delete</button>
 
                                 </div>
                               </td>
@@ -424,8 +433,12 @@ const handleDeleteCancel = () => {
                 <td>{admin.campus}</td>
                 <td>
                   {/* Delete button */}
-                  <button className="delete-button" onClick={() => confirmDelete('admin', admin._id)}>Delete</button>
-                  </td>
+                  <button
+                    style={{
+                      backgroundColor: 'crimson',
+                    }}
+                    className="delete-button" onClick={() => confirmDelete('admin', admin._id)}>Delete</button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -476,18 +489,21 @@ const handleDeleteCancel = () => {
 
 
       </main>
-        {/* Delete Confirmation Modal */}
-        {deleteTarget && (
-  <div className="delete-confirmation-modal">
-    <div className="delete-modal-content">
-      <p>Are you sure you want to delete this {deleteTarget.type}?</p>
-      <div className="modal-buttons">
-        <button className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
-        <button className="modal-button cancel" onClick={handleDeleteCancel}>No</button>
-      </div>
-    </div>
-  </div>
-)}
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div className="delete-confirmation-modal">
+          <div className="delete-modal-content">
+            <p>Are you sure you want to delete this {deleteTarget.type}?</p>
+            <div className="modal-buttons">
+              <button style={{
+                backgroundColor: 'crimson',
+              }}
+                className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
+              <button className="modal-button cancel" onClick={handleDeleteCancel}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
 
 
     </div>

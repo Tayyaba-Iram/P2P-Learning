@@ -121,9 +121,6 @@
     margin-left: -1%; /* Shift left to keep it aligned */
 }
 
-.login-button:hover {
-    background-color: #365922;
-}
 
 
 .signup-text {

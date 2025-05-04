@@ -46,28 +46,52 @@ function AdminRegister() {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
       setMessage('Password must be 8 characters with uppercase, lowercase letter, number, and special character.');
       return;
-    }
-    else if (password !== cpassword) {
+    } else if (password !== cpassword) {
       setMessage('Password and confirm password must be same.');
       return;
     }
-    else {
-      axios.post(
+  
+    try {
+      const response = await axios.post(
         'http://localhost:3001/api/registerUniAdmin',
         { name, sapid, email, cnic, phone, university, campus, password, cpassword },
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
-      )
+      );
+  
+      // Show success message from backend
+  
+      // Reset form fields
+      setName('');
+      setSapid('');
+      setEmail('');
+      setCnic('');
+      setPhone('');
+      setUniversity('');
+      setCampus([]);
+      setPassword('');
+      setCpassword('');
+      setMessage('');
+      navigate('/superdashboard')
+     
+      toast.success(response.data.message || 'Admin registered successfully');
+
+    } catch (error) {
+      // Show error message from backend
+      const errorMsg = error.response?.data?.error || 'Registration failed';
+      toast.error(errorMsg);
     }
   };
+  
   const handlePhoneChange = (value) => {
     // Remove any non-digit characters
     const cleanedValue = value.replace(/\D/g, '');
@@ -105,8 +129,7 @@ function AdminRegister() {
 
   return (
     <form className="admin-register-form" onSubmit={handleSubmit}>
-      <Toaster position="top-center" />
-      <h3>Admin Registration</h3>
+      <h2>Admin Registration</h2>
       <div className="form-fields">
         <label htmlFor="name">Name:</label>
         <input

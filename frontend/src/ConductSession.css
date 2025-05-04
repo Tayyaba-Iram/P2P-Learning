@@ -50,9 +50,6 @@
   transition: background-color 0.3s;
 }
 
-.footer-button:hover {
-  background-color: #48742F;
-}
 
 .footer-button:disabled {
   background-color: #999; 

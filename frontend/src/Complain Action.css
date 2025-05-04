@@ -48,17 +48,10 @@
     color: #555;
   }
   
-  .complaint-table tr:hover {
-    background-color: #f1f1f1;
-  }
-  
+ 
   .complaint-table a {
     color: #3498db;
     text-decoration: none;
-  }
-  
-  .complaint-table a:hover {
-    text-decoration: underline;
   }
   
  

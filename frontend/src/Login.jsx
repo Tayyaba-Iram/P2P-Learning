@@ -54,6 +54,7 @@ function Login() {
           sessionStorage.setItem('user', JSON.stringify(loggedInUser));
           sessionStorage.setItem('token', response.data.token);
           setUser(loggedInUser);
+          toast.success('Login successfully!');
           navigate('/admindashboard');
         } else {
           setMessage('Invalid Email or Password');
@@ -76,6 +77,7 @@ function Login() {
           sessionStorage.setItem('user', JSON.stringify(loggedInUser));
           sessionStorage.setItem('token', response.data.token);
           setUser(loggedInUser);
+          toast.success('Login successfully!');
           navigate('/superdashboard');
         } else {
           setMessage('Invalid Email or Password');
@@ -94,6 +96,8 @@ function Login() {
           sessionStorage.setItem('user', JSON.stringify(loggedInUser));
           sessionStorage.setItem('token', response.data.token);
           setUser(loggedInUser);
+          toast.success('Login successfully!');
+
           navigate('/');
         } else {
           if (
@@ -123,7 +127,6 @@ function Login() {
   
     if (token && user) {
       const parsedUser = JSON.parse(user);
-      console.log("Parsed User:", parsedUser); // Log to check if role is present
   
       if (parsedUser && parsedUser.role) {
         setUser({ name: parsedUser.name, role: parsedUser.role });
@@ -136,9 +139,7 @@ function Login() {
         } else if (parsedUser.role === 'student') {
           navigate('/');
         }
-      } else {
-        console.error('Role is missing in the user data');
-      }
+      } 
     }
   }, [navigate, setUser]);
   

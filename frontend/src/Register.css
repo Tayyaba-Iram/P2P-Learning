@@ -7,6 +7,7 @@
     color: #333;
     margin-bottom: 15px;
     margin-top: 5%;
+    text-align: center;
 }
 
 .signup-header {
@@ -71,9 +72,6 @@
     margin-left: -1%; 
 }
 
-.register-button:hover {
-    background-color: #3a5d24;
-}
 
 .Register-logo{
     width: 120px; 

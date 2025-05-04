@@ -5,10 +5,11 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Student Home.css';
-import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const localizer = momentLocalizer(moment);
 
@@ -111,37 +112,36 @@ function Home() {
 
     fetchBroadcastRequests();
   }, []);
-  const handleDeleteBroadcastRequest = async (requestId) => {
-    console.log('Deleting request with ID:', requestId);  // Log the requestId to verify it's correct
 
-    const confirmDelete = await Swal.fire({
-      title: 'Mark as resolved?',
-      text: 'This request will be marked as resolved and removed from the display.',
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonText: 'Mark as Resolved',
-      cancelButtonText: 'Cancel',
-    });
 
-    if (confirmDelete.isConfirmed) {
-      try {
-        const token = sessionStorage.getItem('token');  // Get token from sessionStorage
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const handleDeleteBroadcastRequest = (requestId) => {
+    setConfirmDeleteId(requestId); // Trigger modal
+  };
+  const handleDeleteConfirm = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+      await axios.delete(`http://localhost:3001/api/delete-broadcastRequest/${confirmDeleteId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        // Ensure the requestId is being passed correctly and is a valid MongoDB ObjectId
-        await axios.delete(`http://localhost:3001/api/delete-broadcastRequest/${requestId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Add the Bearer token to the request
-          },
-        });
-
-        setBroadcastRequests(broadcastRequests.filter(request => request._id !== requestId));
-        toast.success('Request deleted successfully');
-      } catch (error) {
-        console.error('Error deleting request:', error);
-        toast.error('Error deleting request');
-      }
+      setBroadcastRequests(prev =>
+        prev.filter(request => request._id !== confirmDeleteId)
+      );
+      toast.success('Request deleted successfully');
+      setConfirmDeleteId(null); // Close modal
+    } catch (error) {
+      console.error('Error deleting request:', error);
+      toast.error('Error deleting request');
     }
   };
+
+  const handleDeleteCancel = () => {
+    setConfirmDeleteId(null); // Just close modal
+  };
+
 
 
   const [requests, setRequests] = useState([]);
@@ -287,6 +287,8 @@ function Home() {
   return (
     <>
       <div className="main-container">
+        <Toaster position="top-center" />
+
         {/* Calendar Section */}
         <div className="calendar-container">
           <h3 className="calendar-title">Session Calendar</h3>
@@ -388,6 +390,9 @@ function Home() {
                 <button
                   className="delete-btn"
                   onClick={handleDeleteSession}
+                  style={{
+                    backgroundColor: 'crimson',
+                  }}
                 >
                   Delete Session
                 </button>
@@ -403,12 +408,12 @@ function Home() {
         )}
 
       </div>
-      <div style={{ marginTop: '40px' }}>
+      <div>
         {broadcastRequests.length === 0 ? (
           <p></p>
         ) : (
-          <div className="broadcast-requests-table">
-            <h3>Broadcast Requests</h3>
+          <div className="broadcast-request-table">
+            <h2>My Broadcast Requests</h2>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -427,13 +432,22 @@ function Home() {
                     <td>{request.urgency}</td>
                     <td>{request.programs?.join(', ')}</td>
                     <td>
-                      <button
-                        onClick={() => handleDeleteBroadcastRequest(request._id)}
-                        style={{ backgroundColor: 'green', color: 'white' }}
-                      >
-                        Resolved
-                      </button>
+                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', marginBottom: '7px' }}>
+                        <button className='request-resolve'
+                          style={{
+                            width: '110px',
+                            textAlign: 'center',
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                            justifyContent: 'center', alignItems: 'center',
+                            backgroundColor: 'crimson',
+                          }}
+                          onClick={() => handleDeleteBroadcastRequest(request._id)}>
+                          Delete
+                        </button>
+                      </div>
                     </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -445,8 +459,8 @@ function Home() {
         {requests.length === 0 ? (
           <p></p>
         ) : (
-          <div>
-            <h2>Broadcast Requests</h2>
+          <div className='broadcast-requests-table'>
+            <h2>Peer Learning Requests</h2>
             <table>
               <thead>
                 <tr>
@@ -467,10 +481,13 @@ function Home() {
                     <td>{req.subtopic}</td>
                     <td>{req.urgency}</td>
                     <td>
-                      <button onClick={() => handleChatClick(req)}>
-                        Chat
-                      </button>
+                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', marginBottom: '7px' }}>
+                        <button className='go-to-chat' onClick={() => handleChatClick(req)}>
+                          Go to Chat
+                        </button>
+                      </div>
                     </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -479,6 +496,17 @@ function Home() {
         )}
       </div>
 
+      {confirmDeleteId && (
+        <div className="delete-confirmation-modal">
+          <div className="delete-modal-content">
+            <p>Are you sure you want to delete this request?</p>
+            <div className="modal-buttons">
+              <button className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
+              <button className="modal-button cancel" onClick={handleDeleteCancel}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
 
 
     </>

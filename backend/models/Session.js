@@ -4,7 +4,7 @@ const sessionSchema = new mongoose.Schema({
   topic: { type: String, required: true },
   startTime: { type: String, required: true },
   endTime: { type: String, required: true },
-  date: { type: Date, required: true },
+  date: { type: String, required: true }, // saves "YYYY-MM-DD" directly
   meetingLink: { type: String, required: true, unique: true },
   
   // Payment method: cash or food
@@ -20,6 +20,7 @@ const sessionSchema = new mongoose.Schema({
   instructorNumber: { type: String, default: null },
 
   // Food-specific fields
+  receiver: { type: String, default: null },
   foodBrand: { type: String, default: null },
   foodItem: { type: String, default: null },
   foodBill: { type: String, default: null },

@@ -6,7 +6,6 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
   background-color: #f4f4f4;
 }
 
@@ -43,17 +42,11 @@ body {
   text-align: center;
 }
 
-/* ======================================
-   Side Panel Components
-====================================== */
-
-/* Header Styling for all containers */
 .conduct-session-container h3,
 .chat-container h3,
 .schedule-session-container h3 {
   margin-bottom: 10px;
   margin-top: 30px;
-  color: #48742F;
   text-align: center;
   /* Center text for uniform appearance */
 }
@@ -66,19 +59,9 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
+  margin-bottom: 7px;
 }
 
-
-
-
-
-
-
-
-/* ======================================
-   Modal Styles
-====================================== */
 
 .form-backdrop {
   position: fixed;
@@ -190,9 +173,6 @@ body {
   cursor: pointer;
 }
 
-.rbc-toolbar button:hover {
-  background-color: #3a5c23;
-}
 
 .rbc-event {
   background-color: #3a5c23;
@@ -202,13 +182,15 @@ body {
   font-size: 0.9rem;
 }
 
-
+.delete-btn{
+  background-color: #d32f2f;
+}
 
 
 .clear-btn {
   margin-top: 10px;
   padding: 10px;
-  width: 120px;
+  width: 130px;
   background-color: #48742F;
   color: white;
   border: none;
@@ -221,10 +203,6 @@ body {
 }
 
 
-.clear-btn:hover {
-  background-color: #d32f2f;
-}
-
 .form-groupd .react-datepicker-wrapper {
   width: 100%;
 }
@@ -235,6 +213,7 @@ body {
   border-radius: 5px;
   border: 1px solid #ddd;
   transition: border-color 0.3s;
+  display: flex;
 }
 
 .form-group .react-datepicker__input-container input:focus {
@@ -248,14 +227,11 @@ body {
   color: white;
   font-size: 16px;
   border-radius: 5px;
-  margin-top: 10px;
+  margin-top: 0px;
   width: 50%;
-
+  margin-bottom: 9px;
 
 }
-
-
-
 
 
 
@@ -284,13 +260,6 @@ body {
     /* Slightly reduce gap in smaller screens */
   }
 
-  /* Ensure buttons are sized appropriately for mobile screens */
-  .conduct-session-button,
-  .chat-button,
-  .schedule-btn {
-    width: 100%;
-    padding: 12px 20px;
-  }
 
   /* ======================================
    Modal Styles - Schedule Session
@@ -302,12 +271,11 @@ body {
     border-radius: 10px;
     width: 100%;
     max-width: 500px;
-    /* Limit the width of the modal */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     gap: 15px;
-    overflow: auto;
+   
     /* Ensure content is scrollable if it exceeds the container */
     max-height: 80vh;
     /* Prevent the modal from getting too tall */
@@ -327,20 +295,7 @@ body {
     z-index: 1000;
   }
 
-  /* Ensure modal content does not overflow */
-  .schedule-form::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  .schedule-form::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 5px;
-  }
-
-  .schedule-form::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-
+ 
   /* Adjusted Form Inputs */
   .form-group input,
   .form-group select {
@@ -374,13 +329,6 @@ body {
     color: white;
   }
 
-  .schedule-btn:hover {
-    background-color: #3a5c23;
-  }
-
-  .clear-btn:hover {
-    background-color: #d32f2f;
-  }
 
   .status-btn.pending {
     background-color: #e9f7ef;
@@ -394,8 +342,13 @@ body {
     border: 1px solid #c62828;
   }
 
-
-
+  .go-to-chat{
+    width: 120px !important;      
+    padding: 8px 0;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+  }
 
   /* ======================================
    Responsive Styling for Modal
@@ -407,3 +360,27 @@ body {
   }
 
 }
+
+.broadcast-requests-table h2{
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+.broadcast-request-table h2{
+  margin-top: 45px;
+  margin-bottom: 10px;
+}
+
+.schedule-session-container p{
+  font-size: 16px;
+  color: black;
+}
+
+.chat-container p{
+  font-size: 16px;
+  color: black;
+}
+.conduct-session-container p{
+  font-size: 16px;
+  color: black;
+}
+

@@ -65,7 +65,7 @@ function Register() {
      name, sapid, email, cnic, phone, university, campus, program, semester, specification, password, cpassword
         })
         .then(() => {
-          toast.success("Registration Successful!");
+          toast.success("Registration Successfull!");
           setTimeout(() => {
             navigate('/login');
           }, 2000);
@@ -172,8 +172,8 @@ function Register() {
           <input type="text" value={semester} onChange={handleSemesterChange} placeholder="Semester" maxLength={2} required/>            
           <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} required/>
          
-            <input type="text" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-            <input type="text" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+            <input type="password" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
           </div>
           <button type="submit" className="register-button">Submit</button>
           <p className="signup-text">

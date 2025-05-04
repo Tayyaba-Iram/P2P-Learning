@@ -45,7 +45,7 @@ router.post('/registerUniAdmin',verifyUser, async (req, res) => {
     await newUniAdmin.save();
     console.log('New UniAdmin saved:', newUniAdmin);
 
-    res.status(201).json({ message: 'Registration successful!', data: newUniAdmin });
+    res.status(201).json({ message: 'Admin registered successfully!', data: newUniAdmin });
   } catch (error) {
     console.error('Error during registration:', error);
     res.status(500).json({ error: 'Server error. Please try again later.' });

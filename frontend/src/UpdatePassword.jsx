@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify'; // Import toast
+import toast, { Toaster } from 'react-hot-toast';
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 import './UpdatePassword.css';
 
@@ -33,12 +33,7 @@ function ResetPassword() {
     setErrorMessage('');
   
     // Validate that current password is entered
-    if (!passwords.currentPassword) {
-      setErrorMessage('Please enter your current password.');
-      toast.error('Please enter your current password.'); // Toast message
-      return;
-    }
-    else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(passwords.currentPassword)) {
+     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(passwords.currentPassword)) {
       setErrorMessage('Password must be 8 characters with uppercase, lowercase letter, number, and special character.');
       return;
     } 
@@ -46,7 +41,10 @@ function ResetPassword() {
     // Validate that new password and confirm password match
     else if (passwords.newPassword !== passwords.confirmPassword) {
       setErrorMessage('New passwords do not match!');
-      toast.error('New passwords do not match!'); // Toast message
+      return;
+    }
+    else if (passwords.currentPassword === passwords.newPassword) {
+      setErrorMessage('Current password and new password must be different!');
       return;
     }
   
@@ -86,12 +84,14 @@ function ResetPassword() {
   return (
      
       <form onSubmit={handleSubmit} className="reset-password-form">
-      <h3>Reset Password</h3>
+              <Toaster position="top-center" />
+        
+      <h2>Reset Password</h2>
         {/* Current Password */}
         <div>
           <label>Current Password</label>
           <input
-            type='text'
+            type="password"
             name="currentPassword"
             value={passwords.currentPassword}
             onChange={handleChange}
@@ -104,7 +104,7 @@ function ResetPassword() {
         <div>
           <label>New Password</label>
           <input
-            type='text' 
+            type="password"
             name="newPassword"
             value={passwords.newPassword}
             onChange={handleChange}
@@ -116,7 +116,7 @@ function ResetPassword() {
         <div>
           <label>Confirm New Password</label>
           <input
-            type= 'text' 
+            type="password"
             name="confirmPassword"
             value={passwords.confirmPassword}
             onChange={handleChange}

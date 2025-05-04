@@ -126,13 +126,8 @@
     border-radius: 5px;
   }
   
-  .confirm-button:hover {
-    background-color:#253b18;
-  }
-  
-  .cancel-button:hover {
-    background-color: #999;
-  }
+
+
   .simple-dashboard {
     max-width: 400px;
     margin: 0 auto;

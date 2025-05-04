@@ -147,7 +147,9 @@ router.put('/update-password', verifyUser, async (req, res) => {
   if (!currentPassword || !newPassword || !confirmPassword) {
     return res.status(400).json({ success: false, message: 'Current password, new password, and confirm password are required.' });
   }
-
+  if (currentPassword == newPassword) {
+    return res.status(400).json({ success: false, message: 'Current password and new password must be different!' });
+  }
   // Ensure new password and confirm password match
   if (newPassword !== confirmPassword) {
     return res.status(400).json({ success: false, message: 'New password and confirm password do not match.' });

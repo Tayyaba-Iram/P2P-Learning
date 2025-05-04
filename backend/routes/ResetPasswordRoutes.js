@@ -95,6 +95,7 @@ router.post('/reset-password/:token', async (req, res) => {
     const user = await Model.findOne({ email });
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
+
     // Update both password and confirm password fields
     user.password = newPassword;
     user.cpassword = confirmPassword;

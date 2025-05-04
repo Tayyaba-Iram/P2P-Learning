@@ -106,12 +106,15 @@ function ResourceRequest() {
                                     {request.localStatus === 'Pending' ? (
                                         <div className='accp-rej-btn'>
                                             <button className='accp-btn' onClick={() => handleAccept(index)}>Accept</button>{' '}
-                                            <button className='rej-btn' onClick={() => handleReject(index)}>Reject</button>
+                                            <button style={{
+                                                backgroundColor: 'crimson',
+                                            }}
+                                                className='rej-btn' onClick={() => handleReject(index)}>Reject</button>
                                         </div>
                                     ) : request.localStatus === 'Accepted' ? (
                                         <span style={{ color: 'green', fontWeight: 'bold' }}>Accepted</span>
                                     ) : (
-                                        <span style={{ color: 'red' }}>Rejected</span>
+                                        <span style={{ color: 'crimson' }}>Rejected</span>
                                     )}
                                 </td>
                             </tr>

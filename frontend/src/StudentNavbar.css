@@ -39,7 +39,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: white
+  color: white;
+  margin-right: 1px;
 
 }
 .user-profile h3{
@@ -51,7 +52,7 @@
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-top: 6px solid #fff;
-  margin-right: 20px;
+ margin-right: 20px;
 }
 
 
@@ -76,7 +77,8 @@
   background: none;
   border: none;
   font-size: 13px;
-  width: 150%;
+  width: 100%; /* ✅ Fix here */
+  box-sizing: border-box; /* ensures padding doesn’t cause overflow */
   cursor: pointer;
 }
 

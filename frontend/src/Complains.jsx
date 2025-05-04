@@ -129,6 +129,9 @@ const Complaints = () => {
                 <td>{complaint.status || 'Pending'}</td>
                 <td>
                   <button
+                  style={{
+                    backgroundColor: 'crimson',
+                  }}
                     className="delete-button"
                     onClick={() => handleDelete(complaint._id)}
                   >
@@ -148,7 +151,10 @@ const Complaints = () => {
           <div className="delete-modal-content">
             <p>Are you sure you want to delete this complaint?</p>
             <div className="modal-buttons">
-              <button className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
+              <button style={{
+  backgroundColor: 'crimson',
+}}
+className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
               <button className="modal-button cancel" onClick={handleDeleteCancel}>No</button>
             </div>
           </div>

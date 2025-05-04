@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import './Broadcast Request.css';
 
 const BroadcastRequest = () => {
+  const navigate = useNavigate();
   const [programs, setPrograms] = useState([]); // To store fetched programs
   const [formData, setFormData] = useState({
     topic: '',
@@ -79,8 +81,8 @@ const BroadcastRequest = () => {
 
       if (response.status === 201) {
         setMyRequests((prev) => [...prev, response.data]);
-        toast.success('Your request has been successfully submitted!');
-
+        toast.success('Request sending successfully');
+        navigate('/')
         setFormData({ topic: '', subtopic: '', urgency: 'Low', programs: [] });
       }
     } catch (err) {
@@ -94,7 +96,7 @@ const BroadcastRequest = () => {
       <h2 className="broadcast-title">Broadcast a Learning Request</h2>
       <form onSubmit={handleSubmit} className="broadcast-form">
         <div className="form-groupb">
-          <label>Topic</label>
+          <label>Topic:</label>
           <input
             type="text"
             name="topic"
@@ -105,7 +107,7 @@ const BroadcastRequest = () => {
         </div>
 
         <div className="form-groupb">
-          <label>Subtopic</label>
+          <label>Subtopic:</label>
           <input
             type="text"
             name="subtopic"
@@ -116,22 +118,35 @@ const BroadcastRequest = () => {
         </div>
 
         <div className="form-groupb">
-          <label>Urgency</label>
+          <label>Urgency:</label>
           <select name="urgency" value={formData.urgency} onChange={handleChange}>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
           </select>
         </div>
+        <label className='chose-program'>Choose Programs:</label>
 
         {programs.length > 0 ? (
           programs.map((program) => (
-            <div key={program}>  {/* Use program name as the key */}
+            <div key={program} className="checkbox-group">  {/* Use program name as the key */}
               <input
                 type="checkbox"
                 value={program}
-                onChange={handleProgramChange}
+                checked={formData.programs.includes(program)} // ✅ make it controlled
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  const value = e.target.value;
+                  setFormData((prev) => ({
+                    ...prev,
+                    programs: checked
+                      ? [...prev.programs, value]
+                      : prev.programs.filter((p) => p !== value),
+                  }));
+                }}
+                
               />
+
               <label>{program}</label>
             </div>
           ))

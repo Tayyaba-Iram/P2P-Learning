@@ -187,6 +187,9 @@ const ComplainAction = () => {
                   </button>
                 ) : (
                   <button
+                  style={{
+                    backgroundColor: 'crimson',
+                  }}
                     onClick={() => openModal(complaint.targetemail, 'suspend')}
                     className="suspend-btn"
                   >

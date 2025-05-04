@@ -44,6 +44,8 @@ const ResetPassword = () => {
   return (
    
       <form className='Reset-form' onSubmit={handlePasswordReset}>
+               <Toaster position="top-center" />
+            
       <h3>Reset Password</h3>
         <div>
           <label>New Password:</label>
@@ -65,6 +67,8 @@ const ResetPassword = () => {
         {message &&  <p className="error-message" style={{ color: 'red' }}>{message}</p>}
         </div>
         <button className='reset-button' type="submit">Reset Password</button>
+        <Toaster position="top-center" />
+        
       </form>
   );
 };

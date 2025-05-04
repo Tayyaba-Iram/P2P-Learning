@@ -60,7 +60,10 @@ const SuperAdminNavbar = () => {
             <h3>Confirm Logout</h3>
             <p>Are you sure you want to log out?</p>
             <div className="modal-buttons">
-              <button className="confirm-button" onClick={handleConfirmLogout}>Yes</button>
+              <button style={{
+  backgroundColor: 'crimson',
+}}
+className="confirm-button" onClick={handleConfirmLogout}>Yes</button>
               <button className="cancel-button" onClick={() => setShowLogoutModal(false)}>No</button>
             </div>
           </div>

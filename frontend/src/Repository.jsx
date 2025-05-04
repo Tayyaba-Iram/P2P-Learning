@@ -185,7 +185,11 @@ const Repository = () => {
                   <Link to={`/editRepository/${repo._id}`}>
                     <button className="edit-repo">Edit</button>
                   </Link>
-                  <button className="delete-repo" onClick={() => handleDeleteRequest(index)}>Delete</button>
+                  <button 
+                  style={{
+                    backgroundColor: 'crimson',
+                  }}
+                  className="delete-repo" onClick={() => handleDeleteRequest(index)}>Delete</button>
                   </div>
                 </td>
               </tr>

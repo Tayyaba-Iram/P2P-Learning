@@ -35,7 +35,7 @@ import PrivacyPolicy from './PrivacyPolicy';
 import ComplainAction from './Complain Action';
 import RepositoryForm from './Repository Form';
 import ResourceRequest from './Resource Request';
-
+import './App.css'
 axios.defaults.withCredentials = true;
 
 // Protected Route Component
@@ -72,8 +72,9 @@ function App() {
   };
 
   return (
-    <>
+    <div className="app-wrapper">
       {renderNavbar()}
+      <div className="content">
       <Routes>
         {/* Public Routes */}
         <Route path="/register" element={<Register />} />
@@ -108,8 +109,9 @@ function App() {
         <Route path="/addRepository" element={<ProtectedRoute><RepositoryForm/></ProtectedRoute>} />
         <Route path="/resourceRequest" element={<ProtectedRoute><ResourceRequest /></ProtectedRoute>} />
       </Routes>
+      </div>
       <Footer />
-    </>
+    </div>
   );
 }
 

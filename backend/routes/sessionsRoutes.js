@@ -23,6 +23,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+
 // Route to add a new session
 router.post('/sessions', verifyUser, upload.single('file'), async (req, res) => {
   try {
@@ -40,6 +42,7 @@ router.post('/sessions', verifyUser, upload.single('file'), async (req, res) => 
       instructorName,
       instructorHolder,
       instructorNumber,
+      receiver,
       foodBrand,
       foodItem,
     } = req.body;
@@ -71,6 +74,7 @@ router.post('/sessions', verifyUser, upload.single('file'), async (req, res) => 
       sessionData.instructorHolder = instructorHolder;
       sessionData.instructorNumber = instructorNumber;
     } else if (paymentMethod === 'food') {
+      sessionData.receiver= receiver;
       sessionData.foodBrand = foodBrand;
       sessionData.foodItem = foodItem;
       if (req.file) {

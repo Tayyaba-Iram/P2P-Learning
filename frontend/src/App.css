@@ -1,7 +1,70 @@
-body, html {
+html {
   height: 100%;
-  margin: 0;
   font-family: Arial, sans-serif; 
   background-color: #f0f2f5; 
+
+}
+/* Make html and body full height */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+
+}
+
+/* Main wrapper to push footer to bottom if content is short */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Content grows and pushes footer */
+.content {
+  flex: 1;
+}
+
+/* Optional: Style your footer */
+.footer-container {
+  background-color: #48742F;
+  color: white;
+  padding: 12px 20px;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+
+
+/* Custom text styling */
+.swal2-html-container {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Button customization */
+.swal2-confirm {
+  background-color: #e74c3c !important; /* green */
+  color: white !important;
+  border: none !important;
+  padding: 8px 20px !important;
+  border-radius: 5px !important;
+  font-size: 1rem !important;
+}
+/* Cancel Button customization */
+.swal2-cancel {
+  background-color: #48742F !important; /* gray */
+  color: white !important;
+  border: none !important;
+  padding: 8px 20px !important;
+  border-radius: 5px !important;
+  font-size: 1rem !important;
+}
+
+/* Icon styling */
+.swal2-icon.swal2-error {
+  border-color: #e74c3c;
+  color: #e74c3c;
 }
 

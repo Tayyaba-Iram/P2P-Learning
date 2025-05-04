@@ -6,10 +6,11 @@ import { FaCalendarAlt, FaPen } from "react-icons/fa";
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import './Session Schedule.css';
+import Select from 'react-select';
 
 function SessionSchedule() {
     const [step, setStep] = useState(1); // 1: session info, 2: instructor info
-
+    
     const [sessionDetails, setSessionDetails] = useState({
         topic: '',
         startTime: '',
@@ -23,7 +24,7 @@ function SessionSchedule() {
         senderTitle: '',
         senderNumber: '',
         amount: '',
-        message: '',
+        receiver: '',
         foodBrand: '',
         foodItem: '',
         foodBill: '',
@@ -52,9 +53,9 @@ function SessionSchedule() {
     };
     const handleNext = () => {
         if (step === 1) {
-            const { topic, startTime, endTime } = sessionDetails;
+            const { topic, date, startTime, endTime } = sessionDetails;
 
-            if (!topic || !startTime || !endTime) {
+            if (!topic || !date || !startTime || !endTime) {
                 setMessage('Please fill all the fields');
                 return;
             }
@@ -101,11 +102,18 @@ function SessionSchedule() {
     };
 
     const handleAddSession = async () => {
+        console.log("Session date before submission:", sessionDetails.date);
+        const localDate = new Date(sessionDetails.date);
+    
+        // Normalize the local date to midnight (local time zone)
+        localDate.setHours(0, 0, 0, 0); 
+    
         const formData = new FormData();
         formData.append('topic', sessionDetails.topic);
         formData.append('startTime', sessionDetails.startTime);
         formData.append('endTime', sessionDetails.endTime);
-        formData.append('date', sessionDetails.date.toISOString());
+        const formattedDate = sessionDetails.date.toLocaleDateString('en-CA');
+        formData.append('date', formattedDate);
         formData.append('paymentMethod', sessionDetails.paymentMethod);
         formData.append('instructorName', sessionDetails.instructorName);
         formData.append('instructorHolder', sessionDetails.instructorHolder);
@@ -114,7 +122,7 @@ function SessionSchedule() {
         formData.append('senderTitle', sessionDetails.senderTitle);
         formData.append('senderNumber', sessionDetails.senderNumber);
         formData.append('amount', sessionDetails.amount);
-        formData.append('message', sessionDetails.message);
+        formData.append('receiver', sessionDetails.receiver);
         formData.append('foodBrand', sessionDetails.foodBrand);
         formData.append('foodItem', sessionDetails.foodItem);
         formData.append('file', sessionDetails.foodBill);
@@ -135,7 +143,6 @@ function SessionSchedule() {
                 topic: '',
                 startTime: '',
                 endTime: '',
-                date: '',
                 paymentMethod: '',
                 instructorName: '',
                 instructorHolder: '',
@@ -144,7 +151,7 @@ function SessionSchedule() {
                 senderTitle: '',
                 senderNumber: '',
                 amount: '',
-                message: '',
+                receiver: '',
                 foodBrand: '',
                 foodItem: '',
                 foodBill: '',
@@ -172,9 +179,20 @@ function SessionSchedule() {
             setStep(step - 1);
         }
     };
+    const handleBackup = () => {
+        if (step > 1) {
+            setStep(step - 4);
+        }
+    };
 
     const confirmpayment = () => {
         if (step === 5 && sessionDetails.paymentMethod === "cash") {
+            const {amount} = sessionDetails;
+            if(!amount){
+                setMessage('Please enter amount');
+                return;
+            }
+            setMessage('');
             setStep(7); // move from cash step 4 to cash step 5
         } else {
             setStep((prev) => prev + 1); // move to next step in general
@@ -189,6 +207,12 @@ function SessionSchedule() {
     };
     const confirmfood = () => {
         if (step === 6 && sessionDetails.paymentMethod === "food") {
+            const {receiver, foodBrand, foodItem, foodBill} = sessionDetails;
+            if(!receiver || !foodBrand || !foodItem || !foodBill){
+                setMessage('Please provide all food details');
+                return;
+            }
+            setMessage('');
             setStep(9); // move from cash step 4 to cash step 5
         } else { setStep((prev) => prev + 1); }// move to next step in general
     };
@@ -225,6 +249,30 @@ function SessionSchedule() {
         }
     }, [step, sessionDetails.paymentMethod]);
 
+
+    const [students, setStudents] = useState([]);
+
+    const fetchStudents = async () => {
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await axios.get('http://localhost:3001/api/repo-verifiedStudents', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setStudents(response.data);
+        } catch (error) {
+            console.error('Error fetching students:', error);
+        }
+    };
+    useEffect(() => {
+        fetchStudents();
+    }, []);
+
+    const studentOptions = students.map((student) => ({
+        value: student.email,
+        label: `${student.name} (${student.email})`,
+    }));
     return (
         <div className="simple-session-scheduler">
             <h3>Schedule a New Session</h3>
@@ -242,6 +290,7 @@ function SessionSchedule() {
                                 value={sessionDetails.topic}
                                 onChange={handleInputChange}
                                 placeholder="Enter session topic"
+                                required
                             />
                         </div>
                     </div>
@@ -254,6 +303,7 @@ function SessionSchedule() {
                                 onChange={handleDateChange}
                                 dateFormat="yyyy-MM-dd"
                                 className="custom-datepicker"
+                                required
                             />
                             <FaCalendarAlt className="calendar-icon" />
                         </div>
@@ -266,6 +316,7 @@ function SessionSchedule() {
                             name="startTime"
                             value={sessionDetails.startTime}
                             onChange={handleInputChange}
+                            required
                         />
                     </div>
 
@@ -276,6 +327,7 @@ function SessionSchedule() {
                             name="endTime"
                             value={sessionDetails.endTime}
                             onChange={handleInputChange}
+                            required
                         />
                     </div>
 
@@ -301,7 +353,9 @@ function SessionSchedule() {
                             <option value="">Select Payment Method</option>
                             <option value="cash">Payment via Cash</option>
                             <option value="food">Payment via Food</option>
+
                         </select>
+
                     </div>
 
                     <div className="form-actions">
@@ -323,8 +377,19 @@ function SessionSchedule() {
                             type="text"
                             name="instructorName"
                             value={sessionDetails.instructorName}
-                            onChange={handleInputChange}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                // Sirf alphabets aur spaces allow karein
+                                const regex = /^[a-zA-Z\s]*$/;
+                                if (regex.test(value)) {
+                                    setSessionDetails(prev => ({
+                                        ...prev,
+                                        [e.target.name]: value
+                                    }));
+                                }
+                            }}
                             placeholder="Enter instructor name"
+                            required
                         />
                     </div>
 
@@ -334,9 +399,21 @@ function SessionSchedule() {
                             type="text"
                             name="instructorHolder"
                             value={sessionDetails.instructorHolder}
-                            onChange={handleInputChange}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                // Sirf alphabets aur spaces allow karein
+                                const regex = /^[a-zA-Z\s]*$/;
+                                if (regex.test(value)) {
+                                    setSessionDetails(prev => ({
+                                        ...prev,
+                                        [e.target.name]: value
+                                    }));
+                                }
+                            }}
                             placeholder="e.g., Assistant Professor"
+                            required
                         />
+
                     </div>
 
                     <div className="form-group1">
@@ -345,9 +422,21 @@ function SessionSchedule() {
                             type="text"
                             name="instructorNumber"
                             value={sessionDetails.instructorNumber}
-                            onChange={handleInputChange}
+                            onChange={(e) => {
+                                let value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
+                                if (value.length > 11) value = value.slice(0, 11); // Limit to 11 digits
+
+                                // Add hyphen after 4 digits
+                                if (value.length > 4) {
+                                    value = value.slice(0, 4) + '-' + value.slice(4);
+                                }
+
+                                setSessionDetails({ ...sessionDetails, instructorNumber: value });
+                            }}
                             placeholder="03XX-XXXXXXX"
+                            required
                         />
+
                     </div>
                     <div className="form-actions">
                         <button type="button" className="schedule-btn" onClick={handleBack}>
@@ -369,22 +458,11 @@ function SessionSchedule() {
                             name="senderTitle"
                             value={sessionDetails.senderTitle}
                             onChange={handleInputChange}
-                            placeholder="e.g., Student, Admin"
                             readOnly
                         />
                     </div>
 
-                    <div className="form-group1">
-                        <label>Receiver's Account Number</label>
-                        <input
-                            type="text"
-                            name="senderNumber"
-                            value={sessionDetails.senderNumber}
-                            onChange={handleInputChange}
-                            placeholder="03XX-XXXXXXX"
-                            readOnly
-                        />
-                    </div>
+
 
                     <div className="form-actions">
                         <button type="button" className="schedule-btn" onClick={handleBack}>
@@ -400,31 +478,27 @@ function SessionSchedule() {
 
             {step === 5 && sessionDetails.paymentMethod === "cash" && (
                 <div className="step-container">
-                    <h3 className="step-title">Enter Payment Amount</h3>
                     <div className="amount-box">
-                        <label className="amount-label">Rs.</label>
-                        <input
-                            type="number"
-                            className="amount-input"
-                            placeholder="0"
-                            value={sessionDetails.amount}
-                            onChange={(e) =>
-                                setSessionDetails({ ...sessionDetails, amount: e.target.value })
-                            }
-                        />
-                    </div>
-                    <div className="message-optional">
-                        <label className="optional-label"> Add a Message (Optional)</label>
+                        <label className="amount-label" >Rs.</label>
                         <input
                             type="text"
-                            className="optional-input"
-                            placeholder="Type your message..."
-                            value={sessionDetails.message}
-                            onChange={(e) =>
-                                setSessionDetails({ ...sessionDetails, message: e.target.value })
-                            }
+                            className="amount-input"
+                            placeholder="Enter Amount"
+                            value={sessionDetails.amount}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                // Allow only digits
+                                if (/^\d*$/.test(value)) {
+                                    setSessionDetails({ ...sessionDetails, amount: value });
+                                }
+                            }}
+                            inputMode="numeric"
+                            pattern="\d*"
+                            required
                         />
+
                     </div>
+
                     <button type="button" className="schedule-btn" onClick={handleBack}>
                         Back
                     </button>
@@ -438,7 +512,6 @@ function SessionSchedule() {
                     <p style={{ color: 'green', fontWeight: 'bold' }}>Transaction Successful ✅</p>
                     <h4>Payment Receipt</h4>
                     <p><strong>Receiver's Account Title:</strong> {sessionDetails.senderTitle}</p>
-                    <p><strong>Receiver's Account Number:</strong> {sessionDetails.senderNumber}</p>
                     <p><strong>Amount:</strong> Rs. {sessionDetails.amount}</p>
 
                     <div className="form-actions">
@@ -452,8 +525,23 @@ function SessionSchedule() {
 
             {step === 6 && sessionDetails.paymentMethod === "food" && (
                 <div className="step-container">
-                    <h3 className="step-title">Food Payment Details</h3>
-
+                    <div className='select-student-for-food'>
+                        <label className='select-stuselect-stu' style={{ marginBottom: '10px', display: 'block' }}>
+                            Select Instructor Peer:
+                        </label>
+                        <Select
+                            options={studentOptions}
+                            value={sessionDetails.receiver}
+                            onChange={(selectedOption) => {
+                                setSessionDetails((prev) => ({
+                                    ...prev,
+                                    receiver: selectedOption,
+                                }));
+                            }}
+                            placeholder="Search and select a student..."
+                            isClearable
+                        />
+                    </div>
                     <div className="form-group1">
                         <label>Food Brand Name</label>
                         <input
@@ -462,6 +550,7 @@ function SessionSchedule() {
                             value={sessionDetails.foodBrand}
                             onChange={handleInputChange}
                             placeholder="e.g., McDonald's, KFC"
+                            required
                         />
                     </div>
 
@@ -473,24 +562,33 @@ function SessionSchedule() {
                             value={sessionDetails.foodItem}
                             onChange={handleInputChange}
                             placeholder="e.g., Zinger Burger, Pizza"
+                            required
                         />
                     </div>
 
                     <div className="form-group1">
-                        <label>Upload Bill (optional)</label>
+                        <label>Upload Bill </label>
                         <input
                             type="file"
                             name="file"
+                              accept=".jpg, .jpeg, .png, .svg"
                             onChange={(e) =>
                                 setSessionDetails({ ...sessionDetails, foodBill: e.target.files[0] })
                             }
+                            required
                         />
                     </div>
 
 
-                    <button className="schedule-btn" onClick={confirmfood}>
-                        Confirm & Submit
-                    </button>
+                    <div className="button-container">
+                    <button type="button" className="schedule-btn" onClick={handleBackup}>
+                            Back
+                        </button>
+                        <button className="schedule-btn" onClick={confirmfood}>
+                            Submit
+                        </button>
+                    </div>
+
                 </div>
             )}
 
@@ -525,13 +623,13 @@ function SessionSchedule() {
 
             {step === 9 && sessionDetails.paymentMethod === "food" && (
                 <div className="receipt">
-                    <p style={{ color: 'green', fontWeight: 'bold' }}>Transaction Successful ✅</p>
                     <h4>Session Details</h4>
                     <p><strong>Topic:</strong> {sessionDetails.topic}</p>
                     <p><strong>Date:</strong> {sessionDetails.date ? new Date(sessionDetails.date).toLocaleDateString() : 'No date available'}</p>
                     <p><strong>Start Time:</strong> {sessionDetails.startTime}</p>
                     <p><strong>End Time:</strong> {sessionDetails.endTime}</p>
                     <h4>Food Details</h4>
+                    <p><strong>Instructor Peer:</strong> {sessionDetails.receiver?.label}</p>
                     <p><strong>Food Brand:</strong> {sessionDetails.foodBrand}</p>
                     <p><strong>Food Items:</strong> {sessionDetails.foodItem}</p>
                     <p><strong>Food Bill:</strong> {sessionDetails.foodBill.name}</p>
