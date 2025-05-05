@@ -18,7 +18,7 @@ function Help() {
             to the instructor after the session is successfully conducted. Without making this payment, your session will not be scheduled.
           </li>
           <li>
-            <strong>Food:</strong> Enter the food brand name, the ordered item, and upload a receipt picture as proof.
+            <strong>Food:</strong> Select the instructor student, enter the food brand name, the ordered item, and upload a receipt picture as proof.
             Once all information is provided, your session will be scheduled with food as the payment.
           </li>
         </ul>

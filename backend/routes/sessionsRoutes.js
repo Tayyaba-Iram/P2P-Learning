@@ -4,6 +4,7 @@ import verifyUser from '../middleware/verifyUser.js';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const router = express.Router();
 
@@ -103,21 +104,38 @@ router.get('/get-sessions', verifyUser, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-// Route to delete a session
+
 router.delete('/sessions/:sessionId', async (req, res) => {
   const { sessionId } = req.params;
-  try {
-    // Find and delete session using the MongoDB _id (sessionId)
-    const session = await SessionModel.findByIdAndDelete(sessionId);
 
-    if (session) {
-      return res.json({ success: true, message: 'Session deleted successfully' });
-    } else {
+  try {
+    const session = await SessionModel.findById(sessionId);
+
+    if (!session) {
       return res.status(404).json({ success: false, message: 'Session not found' });
     }
+
+    // If session has a food bill file, attempt to delete it
+    if (session.foodBill) {
+      const filePath = path.join(__dirname, '../uploads', session.foodBill);
+
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.warn(`Failed to delete file: ${filePath}`, err);
+          // Not returning here because we still want to delete the DB entry
+        } else {
+          console.log(`Deleted file: ${filePath}`);
+        }
+      });
+    }
+
+    // Delete the session from MongoDB
+    await SessionModel.findByIdAndDelete(sessionId);
+
+    res.json({ success: true, message: 'Session and associated file deleted successfully' });
   } catch (error) {
     console.error('Error deleting session:', error);
-    return res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

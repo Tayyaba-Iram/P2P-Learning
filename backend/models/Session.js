@@ -21,7 +21,7 @@ const sessionSchema = new mongoose.Schema({
 
   // Food-specific fields
   receiver: { type: String, default: null },
-  foodBrand: { type: String, default: null },
+    foodBrand: { type: String, default: null },
   foodItem: { type: String, default: null },
   foodBill: { type: String, default: null },
   userEmail: {

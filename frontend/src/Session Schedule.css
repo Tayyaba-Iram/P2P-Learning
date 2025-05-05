@@ -73,6 +73,7 @@
 
 
 .form-actions {
+  margin-top: 20px;
   text-align: center;
 }
 
@@ -88,7 +89,21 @@
   transition: background-color 0.3s ease;
   justify-content: center;
   align-items: center;
-  margin-left: 28px;
+  gap: 10px;
+}
+.schedulee-btn {
+  background-color: #48742F;
+  color: white;
+  padding: 10px 18px;
+  font-size: 15px;
+  width: 40%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  justify-content: center;
+  align-items: center;
+  margin-left: 40px;
 }
 
 
@@ -123,4 +138,48 @@ p {
   color: #888;
   pointer-events: none;
   margin-top: -7px;
+}
+
+
+
+
+.receipt h4 {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #333;
+  
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.receipt p {
+text-align: left;
+  font-size: 16px;
+  color: #444;
+  
+}
+
+.receipt strong {
+  font-weight: 600;
+  color: #222;
+  margin-left: 18px;
+}
+
+.field-row {
+  display: flex;
+  font-size: 16px;
+  color: #444;
+  margin-left: 15px;
+}
+
+.label {
+  width: 180px; /* Adjust width as needed */
+  font-weight: 600;
+  color: #222;
+
+}
+
+.value {
+  flex: 1;
 }

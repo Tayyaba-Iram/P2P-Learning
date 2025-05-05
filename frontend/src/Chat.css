@@ -12,28 +12,36 @@ html, body {
 
 .Chat-container {
   display: flex;
-  height: 87vh;
+  height: 88vh;
 }
 
-
 .sidebar {
+  height: 88vh; /* added height */
   width: 330px;
   background-color: #ffffff;
-  border-color: #485460;
+  border-color: #25292e;
   color: white;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow-y: auto; 
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* added shadow */
+  
 }
 
 .sidebar input {
+  margin-top: 30px;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px; 
+}
+
+.sidebar .search{
+  margin-top: 25px;
 }
 .catted{
   text-align: left;
@@ -42,22 +50,22 @@ html, body {
   padding: 10px;
   margin-bottom: 10px;
   cursor: pointer;
-  background-color: #48742F;
+  background-color: white;         /* Changed background to white */
+  border: 1px solid #ccc;          /* Added light gray border */
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, border 0.3s ease;
+  color: black;
 }
-
 
 .chat-box {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  min-height: 88vh;
 }
 .chat-box h2 {
  
   color: #333;
-  margin-bottom: 15px;
 }
 
 
@@ -70,9 +78,11 @@ html, body {
 
 
 .chat-input {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); /* stronger top shadow */
   display: flex;
   padding: 5px;
-  background-color: #fff;
+  background-color: #ffffff;
+  border-color: #25292e;  
   position: sticky; 
 }
 
@@ -80,11 +90,13 @@ html, body {
   flex-grow: 1; 
   padding: 10px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: 1px solid #999999;
   border-radius: 4px;
   margin-right: 10px;
   resize: none; 
-  min-width: 150px; 
+  min-width: 150px;
+  margin-top: 17px !important;
+  margin-left: 15px !important;
 }
 
 .chat-input button {
@@ -94,6 +106,9 @@ html, body {
   color: white;
   border-radius: 4px;
   cursor: pointer;
+  margin-top: 17px !important;
+  margin-right: 15px !important;
+
 }
 
 .chat-input button:disabled {
@@ -106,6 +121,8 @@ html, body {
   padding: 10px;
   overflow-y: auto;
   scroll-behavior: smooth; 
+  padding: 20px;
+
 }
 
 .message {
@@ -200,3 +217,32 @@ html, body {
 }
 
 
+.chat-student {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.2s ease;
+}
+
+
+.chat-student.selected {
+  background-color: #dce0da   ; /* light green for selection */
+}
+
+.chat-placeholder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* or a specific height like 300px if needed */
+  text-align: center;
+  color: #9c9797;
+  margin-left: 240px;
+}
+.chat-placeholder h3{
+ 
+  color: gray;
+ 
+}

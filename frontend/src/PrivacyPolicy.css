@@ -1,5 +1,4 @@
 .privacy-main-div {
-    margin: 30px auto;
     padding: 30px;
     font-size: 18px;
     text-align: justify;
@@ -13,6 +12,7 @@
     margin-bottom: 20px;
     color: #050505;
     text-align: center;
+    margin-top: 10px;
   }
   
  .privacy-main-div h2 {

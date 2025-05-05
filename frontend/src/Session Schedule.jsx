@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaCalendarAlt, FaPen } from "react-icons/fa";
@@ -10,7 +12,7 @@ import Select from 'react-select';
 
 function SessionSchedule() {
     const [step, setStep] = useState(1); // 1: session info, 2: instructor info
-    
+
     const [sessionDetails, setSessionDetails] = useState({
         topic: '',
         startTime: '',
@@ -29,7 +31,7 @@ function SessionSchedule() {
         foodItem: '',
         foodBill: '',
     });
-
+    const navigate = useNavigate();
     const [agenda, setAgenda] = useState([]);
     const [message, setMessage] = useState('');
 
@@ -100,19 +102,17 @@ function SessionSchedule() {
         }
 
     };
-
     const handleAddSession = async () => {
         console.log("Session date before submission:", sessionDetails.date);
+
         const localDate = new Date(sessionDetails.date);
-    
-        // Normalize the local date to midnight (local time zone)
-        localDate.setHours(0, 0, 0, 0); 
-    
+        localDate.setHours(0, 0, 0, 0);
+        const formattedDate = localDate.toLocaleDateString('en-CA');
+
         const formData = new FormData();
         formData.append('topic', sessionDetails.topic);
         formData.append('startTime', sessionDetails.startTime);
         formData.append('endTime', sessionDetails.endTime);
-        const formattedDate = sessionDetails.date.toLocaleDateString('en-CA');
         formData.append('date', formattedDate);
         formData.append('paymentMethod', sessionDetails.paymentMethod);
         formData.append('instructorName', sessionDetails.instructorName);
@@ -122,23 +122,25 @@ function SessionSchedule() {
         formData.append('senderTitle', sessionDetails.senderTitle);
         formData.append('senderNumber', sessionDetails.senderNumber);
         formData.append('amount', sessionDetails.amount);
-        formData.append('receiver', sessionDetails.receiver);
+        formData.append('receiver', sessionDetails.receiver); // Directly append the formatted string
         formData.append('foodBrand', sessionDetails.foodBrand);
         formData.append('foodItem', sessionDetails.foodItem);
         formData.append('file', sessionDetails.foodBill);
         formData.append('meetingLink', `https://meet.jit.si/${Math.floor(Math.random() * 10000)}`);
 
         try {
+            const token = sessionStorage.getItem('token');
+            console.log('Token from sessionStorage:', token);
             const response = await axios.post('http://localhost:3001/api/sessions', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
                 }
             });
+
             setAgenda((prev) => [...prev, response.data]);
             toast.success('Session added successfully');
 
-            // Reset form after successful submission
             setSessionDetails({
                 topic: '',
                 startTime: '',
@@ -151,18 +153,19 @@ function SessionSchedule() {
                 senderTitle: '',
                 senderNumber: '',
                 amount: '',
-                receiver: '',
+                receiver: '', // Clear the receiver object
                 foodBrand: '',
                 foodItem: '',
-                foodBill: '',
+                foodBill: ''
             });
 
-            setStep(1);
+            navigate('/');
             setMessage('');
         } catch (error) {
             console.error('Error saving session:', error);
         }
     };
+
 
     const handleNextStep = () => {
         if (step === 2 && sessionDetails.paymentMethod === "cash") {
@@ -176,19 +179,21 @@ function SessionSchedule() {
 
     const handleBack = () => {
         if (step > 1) {
+            setMessage('');
             setStep(step - 1);
         }
     };
     const handleBackup = () => {
         if (step > 1) {
+            setMessage('');
             setStep(step - 4);
         }
     };
 
     const confirmpayment = () => {
         if (step === 5 && sessionDetails.paymentMethod === "cash") {
-            const {amount} = sessionDetails;
-            if(!amount){
+            const { amount } = sessionDetails;
+            if (!amount) {
                 setMessage('Please enter amount');
                 return;
             }
@@ -207,8 +212,8 @@ function SessionSchedule() {
     };
     const confirmfood = () => {
         if (step === 6 && sessionDetails.paymentMethod === "food") {
-            const {receiver, foodBrand, foodItem, foodBill} = sessionDetails;
-            if(!receiver || !foodBrand || !foodItem || !foodBill){
+            const { receiver, foodBrand, foodItem, foodBill } = sessionDetails;
+            if (!receiver || !foodBrand || !foodItem || !foodBill) {
                 setMessage('Please provide all food details');
                 return;
             }
@@ -276,7 +281,8 @@ function SessionSchedule() {
     return (
         <div className="simple-session-scheduler">
             <h3>Schedule a New Session</h3>
-            {message && <p style={{ color: 'red' }}>{message}</p>}
+            {message && <p style={{ color: 'red', fontWeight: 'bold', fontSize: '16px' }}
+            >{message}</p>}
 
             {step === 1 && (
                 <>
@@ -499,7 +505,7 @@ function SessionSchedule() {
 
                     </div>
 
-                    <button type="button" className="schedule-btn" onClick={handleBack}>
+                    <button type="button" className="schedulee-btn" onClick={handleBack}>
                         Back
                     </button>
                     <button className="schedule-btn" onClick={confirmpayment}>
@@ -509,11 +515,18 @@ function SessionSchedule() {
             )}
             {step === 7 && sessionDetails.paymentMethod === "cash" && (
                 <div className="receipt">
-                    <p style={{ color: 'green', fontWeight: 'bold' }}>Transaction Successful ✅</p>
+                    <h2 style={{ color: 'green', fontWeight: 'bold' }}>Transaction Successful ✅</h2>
                     <h4>Payment Receipt</h4>
-                    <p><strong>Receiver's Account Title:</strong> {sessionDetails.senderTitle}</p>
-                    <p><strong>Amount:</strong> Rs. {sessionDetails.amount}</p>
+                    <p className="field-row">
+                        <span className="label">Receiver Title:</span>
+                        <span className="value">{sessionDetails.senderTitle}</span>
+                    </p>
 
+                    <h4>Sending Payment</h4>
+                    <p className="field-row">
+                        <span className="label">Amount:</span>
+                        <span className="value">Rs. {sessionDetails.amount}</span>
+                    </p>
                     <div className="form-actions">
 
                         <button className="schedule-btn" onClick={confirmsession}>
@@ -525,23 +538,30 @@ function SessionSchedule() {
 
             {step === 6 && sessionDetails.paymentMethod === "food" && (
                 <div className="step-container">
-                    <div className='select-student-for-food'>
-                        <label className='select-stuselect-stu' style={{ marginBottom: '10px', display: 'block' }}>
+                    <div className="select-student-for-food">
+                        <label
+                            className="select-stuselect-stu"
+                            style={{ marginBottom: '10px', display: 'block' }}
+                        >
                             Select Instructor Peer:
                         </label>
                         <Select
-                            options={studentOptions}
-                            value={sessionDetails.receiver}
-                            onChange={(selectedOption) => {
-                                setSessionDetails((prev) => ({
-                                    ...prev,
-                                    receiver: selectedOption,
-                                }));
-                            }}
-                            placeholder="Search and select a student..."
-                            isClearable
-                        />
+  options={studentOptions}
+  value={
+    studentOptions.find(option => option.label === sessionDetails.receiver) || null
+  }
+  onChange={(selectedOption) => {
+    setSessionDetails((prev) => ({
+      ...prev,
+      receiver: selectedOption ? selectedOption.label : null,
+    }));
+  }}
+  placeholder="Search and select a student..."
+  isClearable
+/>
+
                     </div>
+
                     <div className="form-group1">
                         <label>Food Brand Name</label>
                         <input
@@ -571,7 +591,7 @@ function SessionSchedule() {
                         <input
                             type="file"
                             name="file"
-                              accept=".jpg, .jpeg, .png, .svg"
+                            accept=".jpg, .jpeg, .png, .svg"
                             onChange={(e) =>
                                 setSessionDetails({ ...sessionDetails, foodBill: e.target.files[0] })
                             }
@@ -581,7 +601,7 @@ function SessionSchedule() {
 
 
                     <div className="button-container">
-                    <button type="button" className="schedule-btn" onClick={handleBackup}>
+                        <button type="button" className="schedulee-btn" onClick={handleBackup}>
                             Back
                         </button>
                         <button className="schedule-btn" onClick={confirmfood}>
@@ -594,21 +614,54 @@ function SessionSchedule() {
 
             {step === 8 && (
                 <div className="receipt">
+                    <h2 style={{ color: 'green', fontWeight: 'bold', fontSize: '24px' }}>Transaction Successful ✅</h2>
+
                     <h4>Session Details</h4>
-                    <p><strong>Topic:</strong> {sessionDetails.topic}</p>
-                    <p><strong>Date:</strong> {sessionDetails.date ? new Date(sessionDetails.date).toLocaleDateString() : 'No date available'}</p>
-                    <p><strong>Start Time:</strong> {sessionDetails.startTime}</p>
-                    <p><strong>End Time:</strong> {sessionDetails.endTime}</p>
+
+
+                    <p className="field-row">
+                        <span className="label">Topic:</span>
+                        <span className="value">{sessionDetails.topic}</span>
+                    </p>
+                    <p className="field-row">
+                        <span className="label">Date:</span>
+                        <span className="value">
+                            {sessionDetails.date ? new Date(sessionDetails.date).toLocaleDateString() : 'No date available'}
+                        </span>
+                    </p>
+                    <p className="field-row">
+                        <span className="label">Start Time:</span>
+                        <span className="value">{sessionDetails.startTime}</span>
+                    </p>
+                    <p className="field-row">
+                        <span className="label">End Time:</span>
+                        <span className="value">{sessionDetails.endTime}</span>
+                    </p>
+
                     <h4>Instructor's Details</h4>
-                    <p><strong>Instructor Name:</strong> {sessionDetails.instructorName}</p>
-                    <p><strong>Instructor Account Ttile:</strong> {sessionDetails.instructorHolder}</p>
-                    <p><strong>Instructor Account Number:</strong> {sessionDetails.instructorNumber}</p>
+                    <p className="field-row">
+                        <span className="label">Instructor Name:</span>
+                        <span className="value">{sessionDetails.instructorName}</span>
+                    </p>
+                    <p className="field-row">
+                        <span className="label">Instructor Account Title:</span>
+                        <span className="value">{sessionDetails.instructorHolder}</span>
+                    </p>
+                    <p className="field-row">
+                        <span className="label">Instructor Account Number:</span>
+                        <span className="value">{sessionDetails.instructorNumber}</span>
+                    </p>
                     <h4>Receiver's Details</h4>
-                    <p><strong>Receiver Title:</strong> {sessionDetails.senderTitle}</p>
-                    <p><strong>Receiver Number:</strong> {sessionDetails.senderNumber}</p>
+                    <p className="field-row">
+                        <span className="label">Receiver Title:</span>
+                        <span className="value">{sessionDetails.senderTitle}</span>
+                    </p>
+
                     <h4>Sending Payment</h4>
-                    <p><strong>Amount:</strong> Rs {sessionDetails.amount}</p>
-                    <p style={{ color: 'green', fontWeight: 'bold' }}>Transaction Successful ✅</p>
+                    <p className="field-row">
+                        <span className="label">Amount:</span>
+                        <span className="value">Rs. {sessionDetails.amount}</span>
+                    </p>
 
                     <div className="form-actions">
                         <button type="button" className="schedule-btn" onClick={handleBack}>
@@ -624,15 +677,20 @@ function SessionSchedule() {
             {step === 9 && sessionDetails.paymentMethod === "food" && (
                 <div className="receipt">
                     <h4>Session Details</h4>
-                    <p><strong>Topic:</strong> {sessionDetails.topic}</p>
-                    <p><strong>Date:</strong> {sessionDetails.date ? new Date(sessionDetails.date).toLocaleDateString() : 'No date available'}</p>
-                    <p><strong>Start Time:</strong> {sessionDetails.startTime}</p>
-                    <p><strong>End Time:</strong> {sessionDetails.endTime}</p>
+                    <p className="field-row"><span className="label">Topic:</span> <span className="value">{sessionDetails.topic}</span></p>
+                    <p className="field-row"><span className="label">Date:</span> <span className="value">{sessionDetails.date ? new Date(sessionDetails.date).toLocaleDateString() : 'No date available'}</span></p>
+                    <p className="field-row"><span className="label">Start Time:</span> <span className="value">{sessionDetails.startTime}</span></p>
+                    <p className="field-row"><span className="label">End Time:</span> <span className="value">{sessionDetails.endTime}</span></p>
+
                     <h4>Food Details</h4>
-                    <p><strong>Instructor Peer:</strong> {sessionDetails.receiver?.label}</p>
-                    <p><strong>Food Brand:</strong> {sessionDetails.foodBrand}</p>
-                    <p><strong>Food Items:</strong> {sessionDetails.foodItem}</p>
-                    <p><strong>Food Bill:</strong> {sessionDetails.foodBill.name}</p>
+                    <p className="field-row">
+                        <span className="label">Receiver:</span>
+                        <span className="value">{sessionDetails.receiver || 'N/A'}</span>
+                    </p>
+
+                    <p className="field-row"><span className="label">Food Brand:</span> <span className="value">{sessionDetails.foodBrand}</span></p>
+                    <p className="field-row"><span className="label">Food Items:</span> <span className="value">{sessionDetails.foodItem}</span></p>
+                    <p className="field-row"><span className="label">Food Bill:</span> <span className="value">{sessionDetails.foodBill?.name}</span></p>
 
                     <div className="form-actions">
                         <button className="schedule-btn" onClick={handleAddSession}>
@@ -640,6 +698,7 @@ function SessionSchedule() {
                         </button>
                     </div>
                 </div>
+
             )}
 
         </div>

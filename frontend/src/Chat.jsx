@@ -136,7 +136,7 @@ function Chat() {
         }));
       }
     };
-    
+
 
     socketRef.current?.on('newMessage', handleIncomingMessage);
 
@@ -149,22 +149,24 @@ function Chat() {
   const fetchChatHistory = async (student) => {
     try {
       const token = sessionStorage.getItem('token'); // Or wherever you store the auth token
-  
+
       const { data } = await axios.get(`http://localhost:3001/api/chat/${student._id}`, {
         params: { userId: user._id },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       setMessages(data);
     } catch (err) {
       console.error('Error fetching chat history:', err);
     }
   };
-  
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+
   // Start a new chat with a selected student
   const handleStartChat = (student) => {
+    setSelectedStudentId(student._id);
     if (!user || !student) return;
     setActiveStudent(student);
     setMessages([]); // Clear previous chat history
@@ -176,7 +178,7 @@ function Chat() {
       const exists = prev.some((s) => s._id === student._id);
       return exists ? prev : [...prev, student];
     });
-    
+
     if (socketRef.current) {
       socketRef.current.emit('joinRoom', roomName, (err) => {
         if (err) console.error('Error joining room:', err);
@@ -227,9 +229,9 @@ function Chat() {
   const filteredStudents = students.filter((student) =>
     !chattedStudents.some(chattedStudent => chattedStudent._id === student._id) &&
     (student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-     student.specification.toLowerCase().includes(searchQuery.toLowerCase()))
+      student.specification.toLowerCase().includes(searchQuery.toLowerCase()))
   );
- 
+
   const toggleFavorite = async (studentId) => {
     try {
       // Check if the student is already in favorites
@@ -239,14 +241,14 @@ function Chat() {
       } else {
         // Add to favorites
         setFavoriteStudents((prev) => [...prev, studentId]);
-  
+
         // Send POST request to backend to save the favorite
         const token = sessionStorage.getItem('token'); // Get the token
         if (!token) {
           console.error('User is not authenticated');
           return;
         }
-  
+
         const response = await axios.post(
           `http://localhost:3001/api/favoriteStudent/${studentId}`,
           {},
@@ -256,7 +258,7 @@ function Chat() {
             },
           }
         );
-  
+
         console.log(response.data.message); // Show success message from backend
       }
     } catch (error) {
@@ -270,7 +272,7 @@ function Chat() {
         console.error('User is not authenticated');
         return;
       }
-  
+
       // Send DELETE request to remove the student from favorites
       const response = await axios.delete(
         `http://localhost:3001/api/unfavoriteStudent/${favoriteStudentId}`,
@@ -281,15 +283,15 @@ function Chat() {
         }
       );
       console.log(response.data.message); // Show success message from backend
-  
+
       // Remove from the favoriteStudents list in state
       setFavoriteStudents((prev) => prev.filter((id) => id !== favoriteStudentId));
     } catch (error) {
       console.error('Error unfavoriting student:', error.response?.data || error.message);
     }
   };
-  const token = sessionStorage.getItem('token'); 
- 
+  const token = sessionStorage.getItem('token');
+
   const fetchFavorites = async () => {
     if (!token) {
       console.log('User is not logged in');
@@ -312,7 +314,7 @@ function Chat() {
       fetchFavorites();
     }
   }, [token]);
-  
+
   // Filter favorite students
   const favoriteStudentsList = chattedStudents.filter(student => favoriteStudents.includes(student._id));
 
@@ -323,45 +325,46 @@ function Chat() {
   useEffect(() => {
     const fetchStudentAndStartChat = async () => {
       if (!studentId || !user) return; // <- wait for both studentId AND user
-  
+
       const token = sessionStorage.getItem('token');
-  
+
       try {
         const res = await axios.get(`http://localhost:3001/api/verifiedStudents/${studentId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+
         const student = res.data;
         setActiveStudent(student);
-  
+        setSelectedStudentId(student._id); // <-- Add this line
+
         const senderId = user._id;
         const receiverId = student._id;
         const roomName = [senderId, receiverId].sort().join('-');
-  
+
         socketRef.current?.emit('joinRoom', roomName, (err) => {
           if (err) console.error("Socket join error:", err);
           else console.log("Joined room:", roomName);
         });
-  
+
         const msgRes = await axios.get(`http://localhost:3001/api/chat/${student._id}`, {
           params: { userId: user._id, peerId: student._id },
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+
         setMessages(msgRes.data);
       } catch (error) {
         console.error("Error loading student/chat:", error);
       }
     };
-  
+
     fetchStudentAndStartChat();
   }, [studentId, user]); // <- add user to dependencies
-  
-    
+
+
   return (
     <div className="Chat-container">
       <div className="sidebar">
-        <input
+        <input className='search'
           type="text"
           value={searchQuery}
           onChange={handleSearchChange}
@@ -378,15 +381,23 @@ function Chat() {
             <div>No matching students found.</div>
           )
         )}
-        
-       
+
+
         <h3 className="catted">Chats</h3>
         {chattedStudents.length === 0 ? (
           <div>No chatted students found.</div>
         ) : (
           sortedChattedStudents.map(student => (
-            <div key={student._id} onClick={() => handleStartChat(student)}>
-              <span>{student.name}</span>
+            <div key={student._id} onClick={() => handleStartChat(student)}
+              className={`chat-student ${selectedStudentId === student._id ? 'selected' : ''}`}
+            >
+              {unreadMessages[student._id] && (
+                <span className="green-dot"></span>
+              )}
+              <span>{student.name} - </span>
+              <span>{student.specification}</span>
+
+
               <span
                 onClick={(e) => {
                   e.stopPropagation();
@@ -400,37 +411,40 @@ function Chat() {
               >
                 {favoriteStudents.includes(student._id) ? '❤️' : '🤍'}
               </span>
-              {unreadMessages[student._id] && (
-                <span className="green-dot"></span>
-              )}
+              
             </div>
           ))
         )}
       </div>
 
-      {activeStudent && (
-        <div className="chat-box">
-          <h2>Chat with {activeStudent.name}</h2>
-          <div className="chat-messages" ref={chatContainerRef}>
-            {messages.slice().reverse().map((msg, idx) => (
-              <div key={idx} className={`message ${msg.senderId === user._id ? 'sent' : 'received'}`}>
-                <strong>{msg.senderId === user._id ? 'You' : activeStudent.name}</strong>: {msg.text}
-              </div>
-            ))}
-          </div>
-
-          <div className="chat-input">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type a message..."
-              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-            />
-            <button onClick={handleSendMessage} disabled={isSending}>Send</button>
-          </div>
+      {activeStudent ? (
+  <div className="chat-box">
+    <h2>Chat with {activeStudent.name}</h2>
+    <div className="chat-messages" ref={chatContainerRef}>
+      {messages.slice().reverse().map((msg, idx) => (
+        <div key={idx} className={`message ${msg.senderId === user._id ? 'sent' : 'received'}`}>
+          <strong>{msg.senderId === user._id ? 'You' : activeStudent.name}</strong>: {msg.text}
         </div>
-      )}
+      ))}
+    </div>
+
+    <div className="chat-input">
+      <input
+        type="text"
+        value={newMessage}
+        onChange={(e) => setNewMessage(e.target.value)}
+        placeholder="Type a message..."
+        onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+      />
+      <button onClick={handleSendMessage} disabled={isSending}>Send</button>
+    </div>
+  </div>
+) : (
+  <div className="chat-placeholder">
+    <h3>Your chat inbox is quiet. Pick a student to break the silence!</h3>
+  </div>
+)}
+
     </div>
   );
 }

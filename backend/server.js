@@ -132,7 +132,7 @@ app.get('/api/chattedStudents', verifyUser, async (req, res) => {
 
     const chattedStudents = await VerifiedStudentModel.find({
       '_id': { $in: Array.from(participants) }
-    }).select('name _id');
+    }).select('name specification _id');
 
     res.json(chattedStudents);
   } catch (err) {

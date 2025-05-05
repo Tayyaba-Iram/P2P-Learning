@@ -17,7 +17,7 @@ const RepositoryForm = () => {
   const [message, setMessage] = useState('');
   const [students, setStudents] = useState([]);
   const fileInputRef = useRef();
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +66,7 @@ const RepositoryForm = () => {
     e.preventDefault();
     console.log('Form Data:', formData);
 
-    if ( (!formData.file && formData.fileLink.trim() === '')) {
+    if ((!formData.file && formData.fileLink.trim() === '')) {
       setMessage('Please upload a file, provide a file link, or both.');
       return;
     }
@@ -125,13 +125,13 @@ const RepositoryForm = () => {
           fileInputRef.current.value = '';
         }
       } else {
-        
-          toast.error('Failed to update repository');
-        
+
+        toast.error('Failed to update repository');
+
       }
     } catch (err) {
       console.error(err);
-      
+
     }
   };
 
@@ -147,24 +147,27 @@ const RepositoryForm = () => {
   return (
     <div className="repository-form-container">
       <h2>Add Repository</h2>
-      {message && <p style={{ color: 'red', marginTop: "20px", fontSize: "16px" }}>{message}</p>}
+      {message && <p style={{ color: 'red', fontWeight: 'bold', fontSize: '16px' }}>{message}</p>}
 
       <form onSubmit={handleSubmit}>
         <label>Title:</label>
-        <input type="text" name="title" value={formData.title} onChange={handleInputChange} required/>
+        <input type="text" name="title" value={formData.title} onChange={handleInputChange} required />
 
         <label>Description:</label>
-        <input type="text" name="description" value={formData.description} onChange={handleInputChange} required/>
+        <input type="text" name="description" value={formData.description} onChange={handleInputChange} required />
 
         <label>File:</label>
-        <input type="file" onChange={handleFileChange} ref={fileInputRef} />
+        <input type="file"
+          accept=".pdf, .docx, .doc, .pptx, .txt, .mp4, .avi, .mkv, .jpg, .jpeg, .png, .gif, .rar, .svg"
+
+          onChange={handleFileChange} ref={fileInputRef} />
 
         <label>File Link:</label>
         <input type="text" name="fileLink" value={formData.fileLink} onChange={handleInputChange} />
 
         <label>Access Type:</label>
         <div className="radioo-group">
-         <div className="radio-repo-container">
+          <div className="radio-repo-container">
             <input
               type="radio"
               id="access-private"
@@ -172,7 +175,7 @@ const RepositoryForm = () => {
               value="private"
               checked={formData.accessType === 'private'}
               onChange={handleAccessTypeChange}
-              required 
+              required
             />
             <label className="radio-repo" htmlFor="access-private">Private</label>
           </div>
@@ -185,7 +188,7 @@ const RepositoryForm = () => {
               value="public"
               checked={formData.accessType === 'public'}
               onChange={handleAccessTypeChange}
-              required 
+              required
             />
             <label className="radio-repo" htmlFor="access-public">Public</label>
           </div>
@@ -198,7 +201,7 @@ const RepositoryForm = () => {
               value="specific"
               checked={formData.accessType === 'specific'}
               onChange={handleAccessTypeChange}
-              required 
+              required
             />
             <label className="radio-repo" htmlFor="access-specific">Specific Student</label>
           </div>

@@ -85,10 +85,10 @@ function ResetPassword() {
      
       <form onSubmit={handleSubmit} className="reset-password-form">
               <Toaster position="top-center" />
-        
+
       <h2>Reset Password</h2>
-        {/* Current Password */}
-        <div>
+      {errorMessage &&  <p className="error-message" style={{ color: 'red', fontWeight: 'bold', fontSize: '16px'  }}>{errorMessage}</p>}
+      <div>
           <label>Current Password</label>
           <input
             type="password"
@@ -126,7 +126,6 @@ function ResetPassword() {
         </div>
 
         {/* Error Message */}
-        {errorMessage &&  <p className="error-message" style={{ color: 'red' }}>{errorMessage}</p>}
        
 
         <button type="submit" className="reset-button">Reset Password</button>

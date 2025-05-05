@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from './userContext';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaClipboardList,FaShieldAlt   ,FaQuestionCircle  ,FaTachometerAlt, FaUser, FaLock, FaExclamationCircle, FaSignOutAlt , FaFolder, FaFolderOpen,FaBullhorn} from 'react-icons/fa'; // Import icons from react-icons
+import { FaClipboardList, FaShieldAlt, FaQuestionCircle, FaTachometerAlt, FaUser, FaLock, FaExclamationCircle, FaSignOutAlt, FaFolder, FaFolderOpen, FaBullhorn } from 'react-icons/fa'; // Import icons from react-icons
 import './StudentNavbar.css';
 
 function StudentNavbar() {
@@ -89,44 +89,119 @@ function StudentNavbar() {
           )}
           {showDropdown && (
             <div className="dropdown-menu">
-              <Link to="/" onClick={handleDropdownSelect}>
+              <Link to="/" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+                marginTop:"10px"
+              }}>
                 <FaTachometerAlt /> Dashboard
               </Link>
-              <Link to="/studentprofile" onClick={handleDropdownSelect}>
+              <Link to="/studentprofile" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+              }}>
                 <FaUser /> Profile
               </Link>
-              <Link to="/resetpassword" onClick={handleDropdownSelect}>
+              <Link to="/resetpassword" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+              }}>
                 <FaLock /> Reset Password
               </Link>
-              <Link to="/repository" onClick={handleDropdownSelect}>
+              <Link to="/repository" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+              }}>
                 <FaFolder /> Repository
               </Link>
-              <Link to="/directory" onClick={handleDropdownSelect}>
-              <FaFolderOpen /> Directory
+              <Link to="/directory" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+              }}>
+                <FaFolderOpen /> Directory
               </Link>
-              <Link to="/resourceRequest" onClick={handleDropdownSelect}>
-                <FaClipboardList style={{ marginRight: '4px' }} />
+              <Link to="/resourceRequest" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+              }}>
+                <FaClipboardList/>
                 Resource Requests
               </Link>
-              <Link to="/complains" onClick={handleDropdownSelect}>
+              <Link to="/complains" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+              }}>
                 <FaExclamationCircle /> Complaints
               </Link>
-              <Link to="/broadcastRequest" onClick={handleDropdownSelect}>
-                <FaBullhorn style={{ marginRight: '4px' }} />
+              <Link to="/broadcastRequest" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+              }}>
+                <FaBullhorn />
                 Broadcast Request
-              </Link>
-              <Link to="/help" onClick={handleDropdownSelect}>
-                <FaQuestionCircle  style={{ marginRight: '4px' }} />
+              </Link >
+              <Link to="/help" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+              }}>
+                <FaQuestionCircle />
                 Help
               </Link>
-              <Link to="/privacy" onClick={handleDropdownSelect}>
-                <FaShieldAlt      style={{ marginRight: '4px' }} />
+              <Link
+                to="/paymentHistory"
+                onClick={handleDropdownSelect}
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", // controls space between icon and text
+                }}
+              >
+                <FaShieldAlt />
+                Session Histroy
+              </Link>
+              <Link
+                to="/privacy"
+                onClick={handleDropdownSelect}
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", // controls space between icon and text
+                }}
+              >
+                <FaShieldAlt />
                 Privacy Policy
               </Link>
-             
-              <button className="logout-button-student" onClick={handleLogout}>
+
+
+              <button
+                onClick={handleLogout}
+                style={{
+                  backgroundColor: "transparent",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "7px",
+                  fontSize: "14px",
+                  marginLeft: "1px",
+                  marginRight: '4px',
+                  marginBottom:"7px",
+                  marginTop:"0px"
+
+
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.color = "#48742F")}
+                onMouseOut={(e) => (e.currentTarget.style.color = "#000")}
+              >
                 <FaSignOutAlt /> Logout
               </button>
+
             </div>
           )}
         </div>
@@ -142,9 +217,9 @@ function StudentNavbar() {
             <p>Are you sure you want to log out?</p>
             <div className="modal-buttons">
               <button style={{
-  backgroundColor: 'crimson',
-}}
-className="confirm-button" onClick={handleConfirmLogout}>Yes</button>
+                backgroundColor: 'crimson',
+              }}
+                className="confirm-button" onClick={handleConfirmLogout}>Yes</button>
               <button className="cancel-button" onClick={() => setShowLogoutModal(false)}>No</button>
             </div>
           </div>

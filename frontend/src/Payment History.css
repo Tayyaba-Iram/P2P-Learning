@@ -1,0 +1,57 @@
+.session-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-bottom: 20px;
+  }
+  
+  .session-card {
+    width: 320px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 0 1 calc(33.333% - 20px); /* 3 per row */
+    margin-bottom: 20px;
+  }
+  
+  .session-card h4 {
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f9f9f9;
+  }
+  
+  .profile-table th,
+  .profile-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .profile-table th {
+    background-color: #f0f0f0;
+    color: #444;
+  }
+  .profile-table th {
+    width: 100px;      /* Fixed width for table headers */
+    background-color: #f0f0f0;
+    color: #333;
+    text-align: left;
+  }
+  
+  .profile-table td {
+    width: 200px;      /* Fixed width for table data cells */
+    color: #555;
+    text-align: left;
+    word-break: break-word; /* Prevent overflow */
+  }
+  

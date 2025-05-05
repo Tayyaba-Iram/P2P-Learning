@@ -35,7 +35,6 @@ const ComplaintForm = () => {
         const fileType = file?.type;
     
         if (!allowedTypes.includes(fileType) && !allowedExtensions.some(ext => fileExtension === ext)) {
-            toast.error('Invalid file type. Only .jpg, .jpeg, .png, .pdf, .docx, and .word files are allowed.');
             setFile(null); // Clear the file input if the file type is invalid
         } else {
             setFile(file); // Set the file if it's valid
@@ -92,13 +91,20 @@ const ComplaintForm = () => {
             <p>Please use this form to submit a complaint regarding any issue related to your experience as a student.</p>
 
             <input
-                type="text"
-                name="targetname"
-                placeholder="Target Name"
-                value={formData.targetname}
-                onChange={handleChange}
-                required
-            />
+  type="text"
+  name="targetname"
+  placeholder="Target Name"
+  value={formData.targetname}
+  onChange={(e) => {
+    // Regular expression to allow only alphabets (a-z, A-Z) and spaces
+    const regex = /^[A-Za-z\s]*$/;
+    if (regex.test(e.target.value)) {
+      handleChange(e);
+    }
+  }}
+  required
+/>
+
             <input
                 type="email"
                 name="targetemail"
@@ -107,13 +113,13 @@ const ComplaintForm = () => {
                 onChange={handleChange}
                 required
             />
-
-            <DatePicker
-                selected={formData.date}
-                onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-                className="date-pickerc"
-            />
+<DatePicker
+  selected={formData.date}
+  onChange={handleDateChange}
+  dateFormat="yyyy-MM-dd"
+  className="date-pickerc"
+  minDate={new Date()}  // Disable past dates
+/>
 
             <select
                 name="category"
@@ -137,7 +143,7 @@ const ComplaintForm = () => {
 
             <input
                 type="file"
-                accept=".jpg,.jpeg,.png,.pdf,.docx,.word"
+                accept=".jpg, .jpeg, .png, .pdf, .docx, .word"
                 onChange={handleFileChange}
                 required
             />

@@ -15,6 +15,8 @@ const localizer = momentLocalizer(moment);
 
 function Home() {
   const navigate = useNavigate();
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+
   const [agenda, setAgenda] = useState([]);
   const [isDetailsModalOpen, setDetailsModalOpen] = useState(false); // For viewing session details
   const [message, setMessage] = useState('');
@@ -275,6 +277,7 @@ function Home() {
 
     if (matchedStudent) {
       console.log(" Matched student:", matchedStudent);
+      setSelectedStudentId(matchedStudent._id);
       handleStartChat(matchedStudent);
     } else {
       console.error(" No matching student found for the request with ID:", studentId);
@@ -299,6 +302,7 @@ function Home() {
             endAccessor="end"
             style={{ height: 500 }}
             onSelectEvent={handleEventSelect}
+            
           />
         </div>
 
@@ -482,7 +486,10 @@ function Home() {
                     <td>{req.urgency}</td>
                     <td>
                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', marginBottom: '7px' }}>
-                        <button className='go-to-chat' onClick={() => handleChatClick(req)}>
+                        <button 
+className={`chat-student ${selectedStudentId === req.userId ? 'selected' : ''}`}
+
+                        onClick={() => handleChatClick(req)}>
                           Go to Chat
                         </button>
                       </div>
@@ -501,7 +508,11 @@ function Home() {
           <div className="delete-modal-content">
             <p>Are you sure you want to delete this request?</p>
             <div className="modal-buttons">
-              <button className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
+              <button 
+              style={{
+                backgroundColor: 'crimson',
+              }}
+              className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
               <button className="modal-button cancel" onClick={handleDeleteCancel}>No</button>
             </div>
           </div>
