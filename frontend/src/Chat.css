@@ -165,7 +165,7 @@ html, body {
 .green-dot {
   width: 10px;
   height: 10px;
-  background-color: rgb(183, 245, 12);
+  background-color: #48742F;
   border-radius: 50%;
   display: inline-block;
   margin-left: 5px;
@@ -204,7 +204,7 @@ html, body {
 
 
 .unread-badge {
-  background-color: rgb(45, 238, 45);
+  background-color: #48742F;
   color: white;
   border-radius: 50%;
   padding: 4px 8px;

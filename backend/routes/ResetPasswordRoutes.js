@@ -40,25 +40,36 @@ router.post('/request-reset-password', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid email domain' });
     }
 
-    const user = await Model.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-    console.log('User found');
 
     const resetToken = jwt.sign({ email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 
     // Send email with reset link
     const resetLink = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    console.log('Sending email to:', email); 
     console.log('Reset link:', resetLink);
-    await transporter.sendMail({
-      from: process.env.MY_GMAIL,
-      to: user.email,
-      subject: 'Password Reset Request',
-      text: `Click the link to reset your password: ${resetLink}`,
-    });
+    try {
+      await transporter.sendMail({
+        from: `"P2P Learning" <${process.env.MY_GMAIL}>`,
+        to: email,
+        subject: 'Password Reset Request',
+        html: `
+        <p>Hello,</p>
+        <p>You requested a password reset for your account. Please click the link below to reset your password:</p>
+        <p><a href="${resetLink}">Reset Your Password</a></p>
+        <p>If you did not request this, please ignore this email.</p>
+        <p>Thanks,</p>
+        <p>P2P Learning Team</p>
+      `, 
+      });
+      
+      console.log('Email sent');
+    } catch (emailErr) {
+      console.error('Failed to send email:', emailErr);
+      return res.status(500).json({ success: false, message: 'Failed to send reset email' });
+    }
+    
 
-    res.json({ success: true, message: 'Reset link sent to your email' });
+    res.json({ success: true, message: 'Reset link sent to your email',   link: resetLink});
   } catch (error) {
     console.error('Error requesting password reset:', error);
     res.status(500).json({ success: false, message: 'Server error' });

@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from './userContext';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaClipboardList, FaShieldAlt, FaQuestionCircle, FaTachometerAlt, FaUser, FaLock, FaExclamationCircle, FaSignOutAlt, FaFolder, FaFolderOpen, FaBullhorn } from 'react-icons/fa'; // Import icons from react-icons
+import { FaHistory ,FaClipboardList, FaShieldAlt, FaQuestionCircle, FaTachometerAlt, FaUser, FaLock, FaExclamationCircle, FaSignOutAlt, FaFolder, FaFolderOpen, FaBullhorn } from 'react-icons/fa'; // Import icons from react-icons
 import './StudentNavbar.css';
 
 function StudentNavbar() {
@@ -148,14 +148,6 @@ function StudentNavbar() {
                 <FaBullhorn />
                 Broadcast Request
               </Link >
-              <Link to="/help" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-              }}>
-                <FaQuestionCircle />
-                Help
-              </Link>
               <Link
                 to="/paymentHistory"
                 onClick={handleDropdownSelect}
@@ -164,9 +156,18 @@ function StudentNavbar() {
                   gap: "8px", // controls space between icon and text
                 }}
               >
-                <FaShieldAlt />
+                <FaHistory  />
                 Session Histroy
               </Link>
+              <Link to="/help" onClick={handleDropdownSelect}
+              style={{
+                display: "inline-flex",
+                gap: "8px", // controls space between icon and text
+              }}>
+                <FaQuestionCircle />
+                Help
+              </Link>
+              
               <Link
                 to="/privacy"
                 onClick={handleDropdownSelect}

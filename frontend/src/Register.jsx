@@ -175,6 +175,8 @@ function Register() {
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
             <input type="password" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
           </div>
+          {message && <p style={{ color: 'red', fontWeight: 'bold', fontSize: '16px' }}>{message}</p>}
+
           <button type="submit" className="register-button">Submit</button>
           <p className="signup-text">
         Already have an account? <Link to="/login" className="signup-link">Login</Link>

@@ -47,7 +47,10 @@ const AdminNavbar = () => {
         </div>
         <div className="nav-mid-links">
           <Link to="/admindashboard" className={isActive('/admindashboard') ? 'active' : ''}>Home</Link>
-          <button className="logout-button" onClick={() => setShowLogoutModal(true)}>Logout</button>
+          <button 
+                  style={{ backgroundColor: 'crimson'}}
+
+          className="logout-button" onClick={() => setShowLogoutModal(true)}>Logout</button>
         </div>
         <Toaster position="top-center" />
       </div>

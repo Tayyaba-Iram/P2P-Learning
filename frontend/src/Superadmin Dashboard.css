@@ -95,14 +95,15 @@ th {
 
 
 .bar-container {
-padding-left: 40px;
-width: 580px;
+padding-left: 20px;
+width: 600px;
 }
 
 
 .chart-container {
   width: 450px;
   padding-right: 70px;
+
 }
 
 .ratings{

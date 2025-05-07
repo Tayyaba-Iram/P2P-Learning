@@ -87,7 +87,11 @@ router.get('/broadcastRequest-By-Programs', verifyUser, async (req, res) => {
       programs: { $in: [studentProgram] },
       userId: { $ne: req.user._id } // exclude current user's requests
     });
-
+   // ✅ Log each matching request to console
+   console.log('Matching Broadcast Requests:');
+   matchingRequests.forEach((request, index) => {
+     console.log(`${index + 1}.`, request);
+   });
     res.status(200).json(matchingRequests);
   } catch (error) {
     console.error('Error fetching filtered broadcast requests:', error);

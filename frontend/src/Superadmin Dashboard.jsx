@@ -197,27 +197,43 @@ function Dashboard() {
   if (!data) {
     return <div>Loading...</div>;
   }
-
-  // Chart options
   const chartOptions = {
     responsive: true,
     plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          font: {
+            size: 18, 
+          },
+        },
+      },
       title: {
         display: true,
       },
-      legend: {
-        position: 'top',
-      },
+
     },
     scales: {
+      x: {
+        ticks: {
+          font: {
+            size: 14, // Optional: increase X-axis label size (programs)
+          },
+        },
+      },
       y: {
         beginAtZero: true,
         ticks: {
           stepSize: 1,
+          font: {
+            size: 14, // Optional: increase Y-axis label size
+          },
         },
       },
     },
   };
+  
+  
   // Step 1: Filter out undefined or empty program labels
   const filteredLabels = data.labels.filter(label => label && label !== 'undefined' && label.trim() !== '');
 

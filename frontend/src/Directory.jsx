@@ -199,7 +199,7 @@ function Directory() {
             <button className='request-resource'
            
               onClick={() => handleCancelRequest(repo._id)}
-              style={{ backgroundColor: 'red', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
+              style={{ backgroundColor: 'crimson', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
             >
               Cancel Request
             </button>
@@ -209,7 +209,7 @@ function Directory() {
         return (
           <button className='request-resource'
             onClick={() => handleSendRequest(repo._id)}
-            style={{ backgroundColor: 'green', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
+            style={{ backgroundColor: '#48742F', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
           >
             Request
           </button>

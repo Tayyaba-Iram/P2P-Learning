@@ -339,7 +339,7 @@ function Home() {
         {isDetailsModalOpen && (
           <div className="form-backdrop" onClick={() => setDetailsModalOpen(false)}>
             <div className="schedule-form" onClick={(e) => e.stopPropagation()}>
-              <h3 className="form-title">Session Details</h3>
+              <h2 className="form-title">Session Details</h2>
               <div className="form-group">
                 <label>Topic</label>
                 <input
@@ -349,8 +349,7 @@ function Home() {
                   style={{
                     border: '1px solid #ddd',
                     borderRadius: '5px',
-                    padding: '10px',
-                    width: '170%',
+                    width: '133.5%',
                   }}
                 />
               </div>
@@ -363,26 +362,42 @@ function Home() {
                   style={{
                     border: '1px solid #ddd',
                     borderRadius: '5px',
-                    padding: '10px',
-                    width: '170%',
+                    width: '133.5%',
                   }}
                 />
               </div>
 
               <div className="form-group">
                 <label>Start Time</label>
-                <input type="text" value={sessionDetails.startTime} readOnly />
+                <input type="text" value={sessionDetails.startTime} readOnly 
+                  style={{
+                    border: '1px solid #ddd',
+                    borderRadius: '5px',
+                    width: '133.5%',
+                  }}/>
               </div>
               <div className="form-group">
                 <label>End Time</label>
-                <input type="text" value={sessionDetails.endTime} readOnly />
+                <input type="text" value={sessionDetails.endTime} readOnly 
+                  style={{
+                    border: '1px solid #ddd',
+                    borderRadius: '5px',
+                    width: '133.5%',
+                  }}/>
               </div>
-              <div className="form-group">
-                <label>Meeting Link</label>
+              <div className="form-group-link">
+                <label
+                 style={{
+                 marginRight: '20px'
+                }}
+                >Meeting Link: </label>
                 <a
                   href={sessionDetails.meetingLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  style={{
+                    marginRight: '20px'
+                   }}
                 >
                   {sessionDetails.meetingLink}
                 </a>
@@ -390,7 +405,7 @@ function Home() {
                   Copy Link
                 </button>
               </div>
-              <div className="form-actions">
+              <div className="form-actionss">
                 <button
                   className="delete-btn"
                   onClick={handleDeleteSession}

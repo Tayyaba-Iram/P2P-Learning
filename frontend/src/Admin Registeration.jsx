@@ -197,7 +197,7 @@ function AdminRegister() {
         <label htmlFor="cpassword">Confirm Password:</label>
         <input id="cpassword" type="text" placeholder='Enter Confirm Password' value={cpassword} onChange={(e) => setCpassword(e.target.value)} required />
       </div>
-      {message && <p style={{ color: 'red' }}>{message}</p>}
+      {message && <p style={{ color: 'red', fontWeight: 'bold', fontSize: '16px' }}>{message}</p>}
       <button type="submit" className="register">Register</button>
     </form>
 

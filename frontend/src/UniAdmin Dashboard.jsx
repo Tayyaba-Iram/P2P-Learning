@@ -151,56 +151,66 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      <div className="bar-container">
-        <h2>Programs Ranking by Session Count </h2>
+      <div className="barr-container">
+      <h2>Programs Ranking by Session Count </h2>
+        <div className="barr-wrapper">
+      
 
         <Bar data={chartsData} options={chartOptions} />
-      </div>
+      </div></div>
 
-      <h2>Complaints Dashboard</h2>
-      <table>
-        <thead>
-          <tr>
-            <th className='heading'>Name</th>
-            <th className='heading'>Email</th>
-            <th className='heading'>Category</th>
-            <th className='heading'>Actions</th>
+      {complaints.length > 0 ? (
+  <>
+    <h2>Complaints Dashboard</h2>
+    <table>
+      <thead>
+        <tr>
+          <th className='heading'>Name</th>
+          <th className='heading'>Email</th>
+          <th className='heading'>Category</th>
+          <th className='heading'>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {complaints.map((complaint) => (
+          <tr
+            key={complaint._id}
+            onClick={() => navigate(`/complain-action/${complaint._id}`)}
+            style={{ cursor: 'pointer' }}
+          >
+            <td>{complaint.username}</td>
+            <td>{complaint.useremail}</td>
+            <td>{complaint.category}</td>
+            <td>
+              <button
+                className='admin-resolve-button'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleResolve(complaint._id);
+                }}
+                disabled={complaint.status === 'Resolved'}
+                style={{
+                  backgroundColor: complaint.status === 'Resolved' ? 'gray' : 'green',
+                  color: 'white',
+                  border: 'none',
+                  padding: '6px 12px',
+                  borderRadius: '5px',
+                  cursor: complaint.status === 'Resolved' ? 'not-allowed' : 'pointer'
+                }}
+              >
+                {complaint.status === 'Resolved' ? 'Resolved' : 'Resolve'}
+              </button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {complaints.map((complaint) => (
-            <tr
-              key={complaint._id}
-              onClick={() => navigate(`/complain-action/${complaint._id}`)}
-              style={{ cursor: 'pointer' }} // cursor pointer show karega
-            >
-              <td>{complaint.username}</td>
-              <td>{complaint.useremail}</td>
-              <td>{complaint.category}</td>
-              <td>
-                <button className='admin-resolve-button'
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent table row click (navigation)
-                    handleResolve(complaint._id);
-                  }}
-                  disabled={complaint.status === 'Resolved'}
-                  style={{
-                    backgroundColor: complaint.status === 'Resolved' ? 'gray' : 'green',
-                    color: 'white',
-                    border: 'none',
-                    padding: '6px 12px',
-                    borderRadius: '5px',
-                    cursor: complaint.status === 'Resolved' ? 'not-allowed' : 'pointer'
-                  }}
-                >
-                  {complaint.status === 'Resolved' ? 'Resolved' : 'Resolve'}
-                </button>
-
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        ))}
+      </tbody>
+    </table>
+  </>
+) : (
+  <p style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>
+  No complaints found.
+</p>
+)}
     </div>
   );
 };

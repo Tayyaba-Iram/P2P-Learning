@@ -66,44 +66,27 @@
 .button-container {
   justify-content: center;
   align-items: center;
-  width: 450px;
   font-size: 16px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 
-.form-actions {
+.form-actionss {
   margin-top: 20px;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .schedule-btn {
   background-color: #48742F;
   color: white;
-  padding: 10px 18px;
   font-size: 15px;
   width: 40%;
-  border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-.schedulee-btn {
-  background-color: #48742F;
-  color: white;
-  padding: 10px 18px;
-  font-size: 15px;
-  width: 40%;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  justify-content: center;
-  align-items: center;
-  margin-left: 40px;
+  align-items: center !important;
 }
 
 
