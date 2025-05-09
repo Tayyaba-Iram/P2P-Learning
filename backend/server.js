@@ -80,15 +80,21 @@ io.on('connection', (socket) => {
   });
 });
 
-// Chat Routes
 app.get('/api/chat/:receiverId', async (req, res) => {
   const { receiverId } = req.params;
   const { userId } = req.query;
+
   if (!userId || !receiverId) {
     return res.status(400).json({ error: 'Missing userId or receiverId' });
   }
 
   try {
+    // Mark messages sent to current user as read
+    await Message.updateMany(
+      { senderId: receiverId, receiverId: userId, isRead: false },
+      { $set: { isRead: true } }
+    );
+
     const messages = await Message.find({
       $or: [
         { senderId: userId, receiverId },
@@ -116,10 +122,10 @@ app.post('/api/chat', async (req, res) => {
     res.status(500).json({ error: 'Failed to save message' });
   }
 });
-
 app.get('/api/chattedStudents', verifyUser, async (req, res) => {
   try {
     const userId = req.user._id;
+
     const messages = await Message.find({
       $or: [{ senderId: userId }, { receiverId: userId }]
     }).select('senderId receiverId');
@@ -130,16 +136,48 @@ app.get('/api/chattedStudents', verifyUser, async (req, res) => {
       if (msg.receiverId.toString() !== userId.toString()) participants.add(msg.receiverId.toString());
     });
 
+    const participantIds = Array.from(participants);
+
     const chattedStudents = await VerifiedStudentModel.find({
-      '_id': { $in: Array.from(participants) }
+      '_id': { $in: participantIds }
     }).select('name specification _id');
 
-    res.json(chattedStudents);
+    // Get which participants have any unread messages
+    const unreadMessages = await Message.find({
+      receiverId: userId,
+      senderId: { $in: participantIds },
+      isRead: false
+    }).select('senderId');
+
+    const unreadSenders = new Set(unreadMessages.map(m => m.senderId.toString()));
+
+    // Attach hasUnread: true/false to each student
+    const result = chattedStudents.map(student => ({
+      ...student.toObject(),
+      hasUnread: unreadSenders.has(student._id.toString())
+    }));
+
+    res.json(result);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching chatted students', error: err.message });
   }
 });
+app.post('/api/chat/markAsRead', async (req, res) => {
+  const { senderId, receiverId } = req.body;
+  if (!senderId || !receiverId) {
+    return res.status(400).json({ error: 'Missing senderId or receiverId' });
+  }
 
+  try {
+    await Message.updateMany(
+      { senderId, receiverId, read: false },
+      { $set: { read: true } }
+    );
+    res.status(200).json({ message: 'Messages marked as read' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to mark messages as read' });
+  }
+});
 
 
 // Serve static files from the Complains folder

@@ -121,6 +121,7 @@ function Chat() {
         console.log('Disconnected from socket server');
       });
     }
+  
     const handleIncomingMessage = (message) => {
       if (
         activeStudent &&
@@ -128,18 +129,34 @@ function Chat() {
       ) {
         // Show message in the current chat view
         setMessages((prev) => [...prev, message]);
+    
+        // Mark the student's hasUnread as false if the active chat is with the sender
+        setChattedStudents((prevStudents) =>
+          prevStudents.map((s) =>
+            s._id === activeStudent._id ? { ...s, hasUnread: false } : s
+          )
+        );
       } else {
-        // Message is from another student — show green dot
-        setUnreadMessages((prevUnread) => ({
-          ...prevUnread,
-          [message.senderId]: true, // You can add more logic if needed
-        }));
+        // Message is from another student — update unreadMessages state
+        setUnreadMessages((prevUnread) => {
+          const updated = { ...prevUnread };
+          updated[message.senderId] = true; // Mark message as unread for this sender
+          return updated;
+        });
+    
+        // Also, update the chatted student's hasUnread to true
+        setChattedStudents((prevStudents) =>
+          prevStudents.map((s) =>
+            s._id === message.senderId ? { ...s, hasUnread: true } : s
+          )
+        );
+        
       }
     };
-
-
+    
+  
     socketRef.current?.on('newMessage', handleIncomingMessage);
-
+  
     return () => {
       if (socketRef.current) {
         socketRef.current.off('newMessage', handleIncomingMessage);
@@ -164,38 +181,61 @@ function Chat() {
   };
   const [selectedStudentId, setSelectedStudentId] = useState(null);
 
-  // Start a new chat with a selected student
-  const handleStartChat = (student) => {
+ 
+  const handleStartChat = async (student) => {
     setSelectedStudentId(student._id);
     if (!user || !student) return;
+  
     setActiveStudent(student);
     setMessages([]); // Clear previous chat history
-
+  
     const senderId = user._id;
     const receiverId = student._id;
     const roomName = [senderId, receiverId].sort().join('-');
+  
+    // Add student to the chatted list if not already there
     setChattedStudents((prev) => {
       const exists = prev.some((s) => s._id === student._id);
       return exists ? prev : [...prev, student];
     });
-
+  
+    // Join the socket room
     if (socketRef.current) {
       socketRef.current.emit('joinRoom', roomName, (err) => {
         if (err) console.error('Error joining room:', err);
         else console.log(`Joined room: ${roomName}`);
       });
     }
-
-    // Remove green dot for this student (clear unread)
-    setUnreadMessages((prev) => {
-      const updated = { ...prev };
-      delete updated[student._id];
-      return updated;
-    });
-
+  
+    // Mark messages as read using Axios and remove the green dot
+    try {
+      await axios.post('http://localhost:3001/api/chat/markAsRead', {
+        senderId: student._id,
+        receiverId: user._id
+      });
+  
+      // Update the unreadMessages state to remove the green dot for this student
+      setUnreadMessages((prev) => {
+        const updated = { ...prev };
+        delete updated[student._id]; // Remove the green dot for this student
+        return updated;
+      });
+  
+      // Update the student's `hasUnread` property to false
+      setChattedStudents((prevStudents) =>
+        prevStudents.map((s) =>
+          s._id === student._id ? { ...s, hasUnread: false } : s
+        )
+      );
+    } catch (err) {
+      console.error('Error marking messages as read:', err);
+    }
+  
+    // Fetch chat history for the selected student
     fetchChatHistory(student);
   };
-
+  
+  
   const [isSending, setIsSending] = useState(false);
   const handleSendMessage = () => {
     if (!newMessage.trim() || !activeStudent || !user) {
@@ -388,12 +428,14 @@ function Chat() {
           <div>No chatted students found.</div>
         ) : (
           sortedChattedStudents.map(student => (
-            <div key={student._id} onClick={() => handleStartChat(student)}
-              className={`chat-student ${selectedStudentId === student._id ? 'selected' : ''}`}
-            >
-              {unreadMessages[student._id] && (
-                <span className="green-dot"></span>
-              )}
+            <div
+            key={student._id}
+            onClick={() => handleStartChat(student)}
+            className={`chat-student ${selectedStudentId === student._id ? 'selected' : ''}`}
+          >
+            {student.hasUnread && (
+              <span className="green-dot"></span>
+            )}
               <span>{student.name} - </span>
               <span>{student.specification}</span>
 
