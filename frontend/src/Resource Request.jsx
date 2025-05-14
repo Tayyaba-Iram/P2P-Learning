@@ -6,6 +6,7 @@ function ResourceRequest() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+         const interval = setInterval(() => {
         const fetchRequests = async () => {
             try {
                 const token = sessionStorage.getItem('token');
@@ -28,8 +29,12 @@ function ResourceRequest() {
         };
 
         fetchRequests();
-    }, []);
+    }, 1000);
 
+    return () => clearInterval(interval);
+      
+    }, []);
+ 
     const handleAccept = async (index) => {
         const updated = [...requests];
         updated[index].localStatus = 'Accepted';

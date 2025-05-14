@@ -13,7 +13,15 @@ function Directory() {
     fetchRepositories();
     fetchSentRequests();
   }, []);
+  
+useEffect(() => {
+  const interval = setInterval(() => {
+    fetchRepositories();
+    fetchSentRequests();
+  }, 1000); // Every 10 seconds
 
+  return () => clearInterval(interval);
+}, []);
   const fetchSentRequests = async () => {
     try {
       const token = sessionStorage.getItem('token');
@@ -108,7 +116,7 @@ function Directory() {
   if (loading) return <div>Loading repositories...</div>;
 
   return (
-    <div className="directory-container">
+    <div className="directory-container" >
       <h2>Peer-Uploaded Repositories</h2>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <input
@@ -130,7 +138,8 @@ function Directory() {
       {filteredRepositories.length === 0 ? (
         <p className='no-repo'>No uploaded repositories found.</p>
       ) : (
-        <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%' }}>
+          <div style={{ overflowX: 'auto' }}>
+        <table  style={{ width: '100%', minWidth: '1000px', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ backgroundColor: '#f0f0f0' }}>
               <th>#</th>
@@ -156,22 +165,23 @@ function Directory() {
                   <td>{repo.title}</td>
                   <td>{repo.description}</td>
                   <td>
-                    {repo.file === 'Restricted' ? 'Restricted' :
-                      repo.file && repo.file.trim() !== '' && repo.file.toLowerCase() !== 'no file uploaded' ? (
-                        <a
-                          href={`http://localhost:3001/uploads/${repo.file}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {repo.file}
-                        </a>
-                      ) : 'No file uploaded'}
-                  </td>
+  {repo.file === 'Restricted' ? 'Restricted' :
+    repo.file && repo.file.trim() !== '' && repo.file.toLowerCase() !== 'no file uploaded' ? (
+      <a
+        href={`http://localhost:3001/uploads/${repo.file}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View File
+      </a>
+    ) : 'No file uploaded'}
+</td>
+
                   <td>
                     {repo.fileLink === 'Restricted' ? 'Restricted' :
                       repo.fileLink && repo.fileLink.trim() !== '' && repo.fileLink.toLowerCase() !== 'no file link uploaded' ? (
                         <a href={repo.fileLink} target="_blank" rel="noopener noreferrer">
-                          {repo.fileLink}
+                          View Link
                         </a>
                       ) : 'No file link uploaded'}
                   </td>
@@ -236,8 +246,9 @@ function Directory() {
               );
             })}
           </tbody>
-        </table>
-      )}
+        </table></div>
+      )
+      }
     </div>
   );
 }

@@ -204,7 +204,9 @@ const Repository = () => {
           <div className="delete-modal-content">
             <p>Are you sure you want to delete this repository?</p>
             <div className="modal-buttons">
-              <button onClick={handleDeleteConfirm}>Yes</button>
+              <button  style={{
+                    backgroundColor: 'crimson',
+                  }} onClick={handleDeleteConfirm}>Yes</button>
               <button onClick={handleDeleteCancel}>No</button>
             </div>
           </div>

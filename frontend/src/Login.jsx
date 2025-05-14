@@ -102,9 +102,9 @@ function Login() {
         } else {
           if (
             response.data.message ===
-            'Your account is suspended and blocked. Please contact support.'
+            'Your account is suspended and blocked.'
           ) {
-            setMessage('Your account is suspended. Please contact support.');
+            setMessage('Your account is suspended.');
           } else {
             setMessage('Invalid Email or Password');
           }
