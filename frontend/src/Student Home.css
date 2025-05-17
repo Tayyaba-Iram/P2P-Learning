@@ -6,7 +6,7 @@
 }
 
 body {
-  background-color: #f4f4f4;
+  background-color: #ffffff;
 }
 
 .main-container {
@@ -59,9 +59,11 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border: 1px solid rgb(221, 216, 216); /* Add this line */
+  border: 2px solid rgb(221, 216, 216); /* Add this line */
   border-radius: 8px; /* Optional: for rounded corners */
   margin-bottom: 17px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
 }
 
 /* Modal Background */
@@ -139,7 +141,7 @@ body {
   margin: 20px auto;
   margin-bottom: 10px;
   margin-top: 1px;
-  border: 1px solid #ddd;
+  border: 2px solid rgb(221, 216, 216); /* Add this line */
   border-radius: 10px;
   overflow: hidden;
   max-width: 900px;
@@ -243,36 +245,6 @@ body {
 
 
 
-
-
-/* ======================================
-   Responsiveness
-====================================== */
-
-@media (max-width: 768px) {
-  .main-container {
-    flex-direction: column;
-  }
-
-  .calendar-container,
-  .side-container {
-    width: 100%;
-  }
-
-  .schedule-form {
-    width: 95%;
-  }
-
-  .side-container {
-    gap: 15px;
-    /* Slightly reduce gap in smaller screens */
-  }
-
-
-  /* ======================================
-   Modal Styles - Schedule Session
-====================================== */
-
   .schedule-form {
     background-color: #ffffff;
     padding: 20px;
@@ -351,32 +323,54 @@ body {
   }
 
   .go-to-chat{
-    width: 120px !important;      
+    width: 130px !important;      
     padding: 8px 0;
     color: white;
     cursor: pointer;
     text-align: center;
   }
 
-  /* ======================================
-   Responsive Styling for Modal
-====================================== */
-  @media (max-width: 768px) {
-    .schedule-form {
-      width: 90%;
-    }
-  }
 
-}
-
-.broadcast-requests-table h2{
-  margin-top: 0px;
-  margin-bottom: 10px;
+.broadcast-request-table {
+  margin-left: 20px;
+  margin-right: 20px;
 }
 .broadcast-request-table h2{
-  margin-top: 45px;
-  margin-bottom: 10px;
+  margin-top: 3%;
+  margin-bottom: 15px;
 }
+.broadcast-request-table table {
+  margin-top: 0px;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  border: gray;
+}
+
+.broadcast-request-table thead tr {
+  background-color: #f3f3f3;
+}
+
+.broadcast-request-table th,
+.broadcast-request-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+.broadcast-request-table tbody tr:nth-child(even) {
+  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+}
+
+.broadcast-request-table tbody tr:nth-child(odd) {
+  background-color: #ffffff; /* White for odd rows */
+}
+
+.broadcast-request-table td:last-child {
+  padding: 8px;
+}
+
 
 .schedule-session-container p{
   font-size: 16px;

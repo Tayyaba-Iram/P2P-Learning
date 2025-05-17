@@ -119,7 +119,16 @@ const BroadcastRequest = () => {
 
         <div className="form-groupb">
           <label>Urgency:</label>
-          <select name="urgency" value={formData.urgency} onChange={handleChange}>
+          <select name="urgency" value={formData.urgency} onChange={handleChange}
+            style={{
+    paddingRight: '24px', // creates space inside the select box on the right
+    backgroundPosition: 'right 8px center', // moves the arrow slightly left
+    backgroundRepeat: 'no-repeat',
+    backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
+    appearance: 'none', // hide default arrow (optional)
+    WebkitAppearance: 'none',
+    MozAppearance: 'none',
+  }}>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
@@ -129,11 +138,11 @@ const BroadcastRequest = () => {
 
         {programs.length > 0 ? (
           programs.map((program) => (
-            <div key={program} className="checkbox-group">  {/* Use program name as the key */}
+            <div key={program} className="checkbox-group"   style={{ marginBottom: '0' }}> 
               <input
                 type="checkbox"
                 value={program}
-                checked={formData.programs.includes(program)} // ✅ make it controlled
+                checked={formData.programs.includes(program)} 
                 onChange={(e) => {
                   const checked = e.target.checked;
                   const value = e.target.value;

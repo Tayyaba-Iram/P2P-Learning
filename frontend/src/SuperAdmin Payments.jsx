@@ -87,15 +87,6 @@ const SuperAdminPayments = () => {
         initializeAccount();
 
     }, [token]);
-    function toggleSearchIcon() {
-        const inputField = document.querySelector('.search-input');
-        const searchIcon = document.querySelector('.search-icon');
-        if (inputField.value.trim() !== "") {
-            searchIcon.style.opacity = '0'; // hide the search icon
-        } else {
-            searchIcon.style.opacity = '1'; // show the search icon
-        }
-    }
 
     return (
         <>
@@ -128,6 +119,8 @@ const SuperAdminPayments = () => {
                     type="text"
                     className="search-input"
                     placeholder=" 🔍︎ Search history by Sender Name, Email, University, Program, Phone Number, Instructor Name, Instructor Account Title, Instructor Account Number, Session Topic..."
+                     value={searchQuery} 
+  onChange={(e) => setSearchQuery(e.target.value)}
                 />
             </div>
 

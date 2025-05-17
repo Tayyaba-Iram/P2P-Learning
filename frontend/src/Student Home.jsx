@@ -284,6 +284,10 @@ function Home() {
     }
     navigate(`/chat/${studentId}`);
   };
+ const [showAll, setShowAll] = useState(false);
+
+  const visibleRequests = showAll ? broadcastRequests : broadcastRequests.slice(0, 5);
+  const visibleRequest = showAll ? requests : requests.slice(0, 5);
 
 
 
@@ -432,7 +436,30 @@ function Home() {
           <p></p>
         ) : (
           <div className="broadcast-request-table">
-            <h2>My Broadcast Requests</h2>
+             <h2>My Broadcast Requests</h2>
+  <div style={{ position: 'relative', textAlign: 'right' }}>
+           
+             {broadcastRequests.length > 5 && (
+              <button
+                style={{
+                  padding: '6px 12px',
+                  backgroundColor: '#2e7d32',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  width:'100px',
+                  textAlign: 'center',
+                  justifyContent: 'center', 
+                  marginRight:'25px',
+                  marginBottom:'15px',
+                  marginTop:'0px'
+                }}
+                onClick={() => setShowAll(!showAll)}
+              >
+                {showAll ? 'View Less' : 'View All'}
+              </button>
+            )}</div>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -440,21 +467,21 @@ function Home() {
                   <th>Subtopic</th>
                   <th>Urgency</th>
                   <th>Programs</th>
-                  <th>Actions</th>
+                  <th style={{ width: '155px' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {broadcastRequests.map((request, index) => (
+                {visibleRequests.map((request, index) => (
                   <tr key={index}>
                     <td>{request.topic}</td>
                     <td>{request.subtopic}</td>
                     <td>{request.urgency}</td>
                     <td>{request.programs?.join(', ')}</td>
                     <td>
-                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', marginBottom: '7px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', marginBottom: '9px' }}>
                         <button className='request-resolve'
                           style={{
-                            width: '110px',
+                            width: '100px',
                             textAlign: 'center',
                             cursor: 'pointer',
                             textAlign: 'center',
@@ -478,8 +505,31 @@ function Home() {
         {requests.length === 0 ? (
           <p></p>
         ) : (
-          <div className='broadcast-requests-table'>
+          <div className='broadcast-request-table'>
             <h2>Peer Learning Requests</h2>
+             <div style={{ position: 'relative', textAlign: 'right' }}>
+           
+             {requests.length > 5 && (
+              <button
+                style={{
+                  padding: '6px 12px',
+                  backgroundColor: '#2e7d32',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  width:'100px',
+                  textAlign: 'center',
+                  justifyContent: 'center', 
+                  marginRight:'25px',
+                  marginBottom:'15px',
+                  marginTop:'0px'
+                }}
+                onClick={() => setShowAll(!showAll)}
+              >
+                {showAll ? 'View Less' : 'View All'}
+              </button>
+            )}</div>
             <table>
               <thead>
                 <tr>
@@ -488,11 +538,11 @@ function Home() {
                   <th>Topic</th>
                   <th>Subtopic</th>
                   <th>Urgency</th>
-                  <th>Action</th>
+                  <th style={{ width: '155px' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {requests.map((req) => (
+                {visibleRequest.map((req) => (
                   <tr key={req._id}>
                     <td>{req.name}</td>
                     <td>{req.email}</td>
@@ -500,7 +550,7 @@ function Home() {
                     <td>{req.subtopic}</td>
                     <td>{req.urgency}</td>
                     <td>
-                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', marginBottom: '7px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', marginBottom: '9px' }}>
                         <button 
 className={`chat-student ${selectedStudentId === req.userId ? 'selected' : ''}`}
 

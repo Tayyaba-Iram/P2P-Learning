@@ -31,4 +31,31 @@
 .no-request{
     font-size: 18px;
   }
-  
+.resource-request-table {
+  width: 96%;
+  max-width: 100%;
+  margin-left: 2%;
+  margin-right: 2% !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  table-layout: fixed;      /* Important to prevent overflow */
+    border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.resource-request-table thead tr {
+  background-color: #f0f0f0;
+}
+
+.resource-request-table th,
+.resource-request-table td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.resource-request-table tbody tr:nth-child(even) {
+  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+}
+
+

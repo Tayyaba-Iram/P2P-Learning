@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import './UniAdmin Dashboard.css';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { UserContext } from './userContext';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
@@ -19,23 +18,6 @@ const AdminDashboard = () => {
   const [data, setData] = useState(null);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (token) {
-      axios.get('http://localhost:3001/api/admin-dashboard', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-        .then(response => {
-          setUserData(response.data.user);
-        })
-        .catch(err => {
-          setError(err.response ? err.response.data.error : 'An error occurred');
-        });
-    } else {
-      setError('Token is missing, please log in.');
-    }
-  }, []);
 
   useEffect(() => {
     const fetchComplaints = async () => {
@@ -141,16 +123,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      {userData ? (
-        <div className="user-info">
-          <h2>Welcome {userData.name}!</h2>
-        </div>
-      ) : (
-        <div className="error-message">
-          {error ? <p>{error}</p> : <p>Loading user data...</p>}
-        </div>
-      )}
-
       <div className="barr-container">
       <h2>Programs Ranking by Session Count </h2>
         <div className="barr-wrapper">
@@ -161,10 +133,14 @@ const AdminDashboard = () => {
 
       {complaints.length > 0 ? (
   <>
-    <h2>Complaints Dashboard</h2>
-    <table>
+    <h2 style={{marginTop:'180px'}}>Complaints Dashboard</h2>
+    <table  style={{
+    borderRadius: '12px',
+    borderSpacing: '0',
+    overflow: 'hidden',
+  }}>
       <thead>
-        <tr>
+        <tr >
           <th className='heading'>Name</th>
           <th className='heading'>Email</th>
           <th className='heading'>Category</th>

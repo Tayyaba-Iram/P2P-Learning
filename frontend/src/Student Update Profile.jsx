@@ -205,10 +205,19 @@ function UpdateProfile() {
         </div>
 
         {/* Semester */}
-        <div>
-          <label>Semester</label>
-          <input className='profile-data' type="text" name="semester" value={profile.semester} onChange={handleChange} />
-        </div>
+      <div>
+  <label>Semester</label>
+  <input
+    className="profile-data"
+    type="number"
+    name="semester"
+    min="1"
+    max="10"
+    value={profile.semester}
+    onChange={handleChange}
+  />
+</div>
+
 
         {/* Specification */}
         <div>

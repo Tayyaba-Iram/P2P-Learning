@@ -140,7 +140,7 @@ const Repository = () => {
                     repo.file !== null &&
                     !repo.file.toLowerCase().includes('no file uploaded') ? (
                     <a href={`http://localhost:3001/uploads/${repo.file}`} target="_blank" rel="noopener noreferrer">
-                      {repo.file}
+                      View File
                     </a>
                   ) : (
                     <span>No file uploaded</span>
@@ -154,7 +154,7 @@ const Repository = () => {
                     repo.fileLink !== null &&
                     !repo.fileLink.toLowerCase().includes('no file link uploaded') ? (
                     <a href={repo.fileLink} target="_blank" rel="noopener noreferrer">
-                      {repo.fileLink}
+                      View Link
                     </a>
                   ) : (
                     <span>No file link uploaded</span>

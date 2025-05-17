@@ -21,7 +21,7 @@ useEffect(() => {
   }, 1000); // Every 10 seconds
 
   return () => clearInterval(interval);
-}, []);
+}, [searchTerm]);
   const fetchSentRequests = async () => {
     try {
       const token = sessionStorage.getItem('token');
@@ -36,29 +36,40 @@ useEffect(() => {
       console.error('Failed to fetch sent requests:', error);
     }
   };
+const fetchRepositories = async () => {
+  try {
+    const token = sessionStorage.getItem('token');
+    const res = await axios.get('http://localhost:3001/api/directory', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  const fetchRepositories = async () => {
-    try {
-      const token = sessionStorage.getItem('token');
-      const res = await axios.get('http://localhost:3001/api/directory', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    if (res.data && Array.isArray(res.data)) {
+      setRepositories(res.data);
 
-      if (res.data && Array.isArray(res.data)) {
-        setRepositories(res.data);
-        setFilteredRepositories(res.data);
+      // Respect current searchTerm
+      if (searchTerm.trim() !== '') {
+        const lowerSearch = searchTerm.toLowerCase();
+        const filtered = res.data.filter((repo) =>
+          (repo.uploadedByStudent && repo.uploadedByStudent.toLowerCase().includes(lowerSearch)) ||
+          (repo.uploadedByEmail && repo.uploadedByEmail.toLowerCase().includes(lowerSearch)) ||
+          (repo.title && repo.title.toLowerCase().includes(lowerSearch)) ||
+          (repo.description && repo.description.toLowerCase().includes(lowerSearch))
+        );
+        setFilteredRepositories(filtered);
       } else {
-        console.warn('Unexpected data format received:', res.data);
-        setRepositories([]);
+        setFilteredRepositories(res.data);
       }
-    } catch (err) {
-      console.error('Error fetching repositories:', err);
-    } finally {
-      setLoading(false);
+    } else {
+      setRepositories([]);
     }
-  };
+  } catch (err) {
+    console.error('Error fetching repositories:', err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleSendRequest = async (repoId) => {
     try {
@@ -113,7 +124,6 @@ useEffect(() => {
     setFilteredRepositories(filtered);
   };
 
-  if (loading) return <div>Loading repositories...</div>;
 
   return (
     <div className="directory-container" >
@@ -138,10 +148,10 @@ useEffect(() => {
       {filteredRepositories.length === 0 ? (
         <p className='no-repo'>No uploaded repositories found.</p>
       ) : (
-          <div style={{ overflowX: 'auto' }}>
-        <table  style={{ width: '100%', minWidth: '1000px', borderCollapse: 'collapse' }}>
+          <div className='Directory-table'>
+        <table>
           <thead>
-            <tr style={{ backgroundColor: '#f0f0f0' }}>
+            <tr>
               <th>#</th>
               <th>Student Name</th>
               <th>Student Email</th>

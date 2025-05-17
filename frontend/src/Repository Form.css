@@ -35,7 +35,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin: 8px 0;
+    margin: 2px 0px;
     font-size: 15px;
     color: #333;
     cursor: pointer;
@@ -43,10 +43,11 @@
   }
   
   .radio-repo-container input[type="radio"] {
-    accent-color: #48742F; /* Purple tone for better UI */
+    accent-color: #48742F; 
     cursor: pointer;
     width: 16px;
     height: 16px;
+    margin-top: 7px;
   }
   
   .radio-repo {

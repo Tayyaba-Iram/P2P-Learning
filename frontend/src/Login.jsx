@@ -145,7 +145,7 @@ function Login() {
   
   setTimeout(() => {
     setMessage('');
-  }, 15000);
+  }, 10000);
 
 
   return (
@@ -159,7 +159,7 @@ function Login() {
           <h2>Login to your account</h2>
         </div>
 
-        {message && <p style={{ color: 'red', marginTop: "20px", fontSize: "16px" }}>{message}</p>}
+        {message && <p style={{ color: 'red', marginTop: "20px", fontWeight: 'bold', fontSize: '16px', textAlign:'center' }}>{message}</p>}
 
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-group">

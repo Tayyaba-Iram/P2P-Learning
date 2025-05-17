@@ -96,18 +96,20 @@ function Dashboard() {
   );
 
 
-  const filteredStudents = students.filter((student) => {
-    // Convert all fields to lowercase for case-insensitive search
-    const searchQuery = studentSearch.toLowerCase();
-    return (
-      student.sapid.toLowerCase().includes(searchQuery) ||
-      typeof student.university === 'string' && student.university.toLowerCase().includes(searchQuery),
-      typeof student.campus === 'string' && student.campus.toLowerCase().includes(searchQuery),
-      typeof student.program === 'string' && student.program.toLowerCase().includes(searchQuery)
 
+const filteredStudents = students.filter((student) => {
+  const term = studentSearch.toLowerCase();
+  return (
+    student.name?.toLowerCase().includes(term) ||
+    student.sapid?.toLowerCase().includes(term) ||
+    student.email?.toLowerCase().includes(term) ||
+    student.phone?.toLowerCase().includes(term) ||
+    student.university?.toLowerCase().includes(term) ||
+    student.campus?.toLowerCase().includes(term) ||
+    student.program?.toLowerCase().includes(term)
+  );
+});
 
-    );
-  });
   const filteredUniAdmins = uniadmins.filter((admin) => {
     // Convert all fields to lowercase for case-insensitive search
     const searchQuery = adminSearch.toLowerCase();
@@ -326,13 +328,17 @@ function Dashboard() {
             {showAllUniversities ? 'View Less' : 'View All'}
           </button>
         )}
-        <table>
+        <table style={{
+    borderRadius: '12px',
+    borderSpacing: '0',
+    overflow: 'hidden',
+  }} className='university-table'>
           <thead>
             <tr>
               <th>University</th>
               <th>Campus</th>
               <th>Program</th>
-              <th>Actions</th>
+              <th style={{width:'200px'}}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -426,7 +432,11 @@ function Dashboard() {
             {showAllAdmins ? 'View Less' : 'View All'}
           </button>
         )}
-        <table>
+        <table className='admin-table' style={{
+    borderRadius: '12px',
+    borderSpacing: '0',
+    overflow: 'hidden',
+  }}>
           <thead>
             <tr>
               <th>Name</th>
@@ -476,7 +486,11 @@ function Dashboard() {
             {showAllStudents ? 'View Less' : 'View All'}
           </button>
         )}
-        <table>
+        <table className='student-table' style={{
+    borderRadius: '12px',
+    borderSpacing: '0',
+    overflow: 'hidden',
+  }}>
           <thead>
             <tr>
               <th>Name</th>

@@ -13,7 +13,6 @@
     color: white;
     border: none;
     cursor: pointer;
-    margin-bottom: 20px;
     width: 12%;
     justify-content: center;
   }
@@ -29,16 +28,25 @@
     table-layout: fixed;
     border-collapse: collapse;
     overflow: hidden;
+     border-radius: 8px;
+      border: gray;
   }
   
   .repository-table th,
   .repository-table td {
-    text-align: left;
+    text-align: center;
     padding: 10px;
     word-wrap: break-word;
     max-width: 200px;
   }
-  
+  .repository-table tbody tr:nth-child(even) {
+  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+}
+
+.repository-table tbody tr:nth-child(odd) {
+  background-color: #ffffff; /* White for odd rows */
+}
+
   .repository-table th {
     background-color: #48742F; 
     color: white; 

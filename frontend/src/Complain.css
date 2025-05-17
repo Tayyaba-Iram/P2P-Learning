@@ -10,7 +10,6 @@
 justify-content: center;
 text-align: center;
 width: 150px;
-margin-bottom: 20px;
 }
 .delete-button {
     padding: 8px 16px;
@@ -24,27 +23,13 @@ margin-bottom: 20px;
     width: 110px;
   }
   
-.complaintss{
-    text-align: center;
-    margin-bottom: 10px;
-    
-}
-
-.complaints-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 16px;
-    table-layout: fixed;
-  }
 
   .complaints-table th,
 .complaints-table td {
   padding: 12px 15px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #ddd;
   word-wrap: break-word; 
-  max-width: 200px; 
 }
 
 .no-complaints-msg{

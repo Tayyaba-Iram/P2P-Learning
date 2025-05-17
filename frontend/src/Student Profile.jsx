@@ -67,7 +67,7 @@ function StudentProfile() {
             <td>{profile.name}</td>
           </tr>
           <tr>
-            <th>SAP ID</th>
+            <th>ID</th>
             <td>{profile.sapid}</td>
           </tr>
           <tr>

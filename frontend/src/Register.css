@@ -19,11 +19,13 @@
     color: #333;
     border: 1px solid #ddd;
     border-radius: 10px;
-  
+  align-items: center;
 }
 
-
-
+.signup-header form{
+    align-items: center;
+    
+}
 
 .form-group input
  {
@@ -44,7 +46,7 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
     color: black;
     width: 170%;
     background-color: white;

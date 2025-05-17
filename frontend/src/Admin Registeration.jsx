@@ -190,12 +190,12 @@ function AdminRegister() {
 
       <div className="form-fields">
         <label htmlFor="password">Password:</label>
-        <input id="password" type="text" placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input id="password" type="password" placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
       </div>
 
       <div className="form-fields">
         <label htmlFor="cpassword">Confirm Password:</label>
-        <input id="cpassword" type="text" placeholder='Enter Confirm Password' value={cpassword} onChange={(e) => setCpassword(e.target.value)} required />
+        <input id="cpassword" type="password" placeholder='Enter Confirm Password' value={cpassword} onChange={(e) => setCpassword(e.target.value)} required />
       </div>
       {message && <p style={{ color: 'red', fontWeight: 'bold', fontSize: '16px' }}>{message}</p>}
       <button type="submit" className="register">Register</button>

@@ -54,10 +54,14 @@ function Register() {
     e.preventDefault();
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
       setMessage('Password must be 8 characters with uppercase, lowercase letter, number, and special character.');
+                   setTimeout(() => setMessage(''), 10000);
+
       return;
     } 
     else if(password!==cpassword) {
       setMessage('Password and confirm password must be same.');
+                         setTimeout(() => setMessage(''), 10000);
+
       return;
     }else {
       axios
@@ -73,10 +77,11 @@ function Register() {
         .catch((err) => {
           if (err.response && err.response.data.error === "Email is already registered.") {
             setMessage('Email already exists');
-            
+             setTimeout(() => setMessage(''), 10000);
           } else {
             setMessage('Registration failed due to incorrect data');
-           
+                              setTimeout(() => setMessage(''), 10000);
+
           }
         });
     }
@@ -126,10 +131,15 @@ function Register() {
       .join(' ');
   };
 
-  const handleNameChange = (e) => {
-    const value = e.target.value;
-    setName(capitalizeFullName(value));
-  };
+const handleNameChange = (e) => {
+  const value = e.target.value;
+  if (/^[a-zA-Z\s]*$/.test(value)) {
+    const capitalizedValue = capitalizeFullName(value);
+    setName(capitalizedValue);
+  }
+};
+
+
 
   return (
     <div className="registration-container">
@@ -139,7 +149,6 @@ function Register() {
         <div className="signup-header">
         <img src="Logo.jpg" alt="Logo" className="Register-logo" />
           <h1>Sign Up</h1>
-          {message && <p style={{ color: 'red',whiteSpace: 'pre-wrap'  }}>{message}</p>}
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-group">
           <input className="name" type="text" placeholder="Name" value={name} onChange={handleNameChange} required/>            
@@ -169,13 +178,35 @@ function Register() {
             </select>
             <input type="text" placeholder="Student ID" value={sapid} onChange={handleSapChange} required/>
 
-          <input type="text" value={semester} onChange={handleSemesterChange} placeholder="Semester" maxLength={2} required/>            
+<input
+  type="number"
+  value={semester}
+  onChange={handleSemesterChange}
+  placeholder="Semester"
+  min={1}
+  max={10}
+  required
+/>
           <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} required/>
          
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
             <input type="password" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
           </div>
-          {message && <p style={{ color: 'red', fontWeight: 'bold', fontSize: '16px' }}>{message}</p>}
+{message && (
+  <p style={{
+    color: 'red',
+    marginTop: "20px",
+    fontWeight: 'bold',
+    fontSize: '16px',
+    textAlign: 'center',
+    display: 'block',
+    width: '100%',
+    marginLeft:'55px'
+  }}>
+    {message}
+  </p>
+)}
+
 
           <button type="submit" className="register-button">Submit</button>
           <p className="signup-text">

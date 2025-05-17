@@ -6,12 +6,9 @@
 }
 
 .main-content {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
-  background-color: #ffffff;
   border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .main-content h2 {
@@ -53,7 +50,7 @@ table thead th {
   background-color: #48742F;
   color: white;
   padding: 12px;
-  text-align: left;
+  text-align: center;
   font-weight: 600;
   font-size: 16px;
 }
@@ -62,6 +59,7 @@ table thead th {
 table th,
 table td {
   font-size: 14px;
+  text-align: center;
 }
 
 th {
@@ -163,3 +161,19 @@ width: 600px;
 .modal-button.cancel {
   background-color: #48742F;
 }
+.university-table tbody tr {
+  background-color: #f9f9f9; /* light gray background */
+  border-bottom: 1px solid #ccc; /* horizontal line */
+}
+
+.university-table tbody tr:nth-child(even) {
+  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+}
+
+.admin-table tbody tr:nth-child(even){
+  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+}
+.student-table tbody tr:nth-child(even){
+  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+}
+

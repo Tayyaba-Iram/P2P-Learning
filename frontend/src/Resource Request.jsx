@@ -88,10 +88,10 @@ function ResourceRequest() {
             {requests.length === 0 ? (
                 <p className='no-request'>No resource requests found.</p>
             ) : (
-                <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%' }}>
+                <table className='resource-request-table'>
                     <thead>
                         <tr style={{ backgroundColor: '#f0f0f0' }}>
-                            <th>#</th>
+                            <th style={{width:'40px'}}>#</th>
                             <th>Requestor Name</th>
                             <th>Requestor Email</th>
                             <th>Title</th>

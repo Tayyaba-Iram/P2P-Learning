@@ -74,7 +74,7 @@ const Complaints = () => {
 <div style={{ display: 'flex', justifyContent: 'center' }}>
   <input
     type="text"
-    placeholder="🔍︎ Search complaints..."
+    placeholder="🔍︎ Search complaints by Target Name, Email, Category and Description..."
     value={searchTerm}
     onChange={(e) => setSearchTerm(e.target.value)}
     className="directory-search"
@@ -92,7 +92,11 @@ const Complaints = () => {
       </Link>
 
       {filteredComplaints.length > 0 ? (
-        <table className="complaints-table">
+        <table  style={{
+    borderRadius: '12px',
+    borderSpacing: '0',
+    overflow: 'hidden',
+  }}className="complaints-table">
           <thead>
             <tr>
               <th className="heading">Target Name</th>
@@ -131,6 +135,7 @@ const Complaints = () => {
                   <button
                   style={{
                     backgroundColor: 'crimson',
+                    fontSize:'16px'
                   }}
                     className="delete-button"
                     onClick={() => handleDelete(complaint._id)}
