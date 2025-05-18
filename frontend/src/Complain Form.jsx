@@ -69,7 +69,7 @@ const ComplaintForm = () => {
         },
       });
 
-      console.log('Response:', res);  
+      console.log('Response:', res);
       toast.success(res.data.message);
       setFormData({
         targetname: '',
@@ -126,8 +126,8 @@ const ComplaintForm = () => {
         onChange={handleChange}
         required
         style={{
-          paddingRight: '24px', 
-          backgroundPosition: 'right 8px center', 
+          paddingRight: '24px',
+          backgroundPosition: 'right 8px center',
           backgroundRepeat: 'no-repeat',
           backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
           appearance: 'none',
@@ -139,6 +139,8 @@ const ComplaintForm = () => {
         <option value="Technical Issue">Technical Issue</option>
         <option value="Content Concern">Content Concern</option>
         <option value="User Behavior">User Behavior</option>
+        <option value="other">Others</option>
+
       </select>
 
       <textarea
