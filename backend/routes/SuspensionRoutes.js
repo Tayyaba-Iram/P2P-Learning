@@ -6,7 +6,7 @@ import ComplaintModel from '../models/Complain.js';
 const router = express.Router();
 
 router.post('/suspend-account/:email', verifyUser, async (req, res) => {
-  const email = req.params.email.trim(); // TRIM ADDED
+  const email = req.params.email.trim();
   console.log(`Received request to suspend account with email: ${email}`);
 
   try {
@@ -28,7 +28,7 @@ router.post('/suspend-account/:email', verifyUser, async (req, res) => {
 
     return res.json({
       message: `Account with email ${email} has been suspended.`,
-      user: user // Send the updated user back in the response
+      user: user 
     });
     } catch (error) {
     console.error(error);
@@ -38,7 +38,7 @@ router.post('/suspend-account/:email', verifyUser, async (req, res) => {
 
 
 router.post('/unsuspend-account/:email',verifyUser, async (req, res) => {
-  const email = req.params.email.trim(); // TRIM ADDED
+  const email = req.params.email.trim(); 
   console.log(`Received request to unsuspend account with email: ${email}`);
 
   try {
@@ -54,7 +54,7 @@ router.post('/unsuspend-account/:email',verifyUser, async (req, res) => {
 
     return res.json({
       message: `Account with email ${email} has been unsuspended.`,
-      user: user // Send the updated user back in the response
+      user: user 
     });
     } catch (error) {
     console.error(error);

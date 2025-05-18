@@ -15,7 +15,7 @@ const repositorySchema = new mongoose.Schema({
       name: { type: String, required: true },
       email: { type: String, required: true }
     }],
-    default: []  // Default empty array if no specific students
+    default: []  // default empty array if no specific students
   },
   uploadedBy: {
     type: mongoose.Schema.Types.ObjectId,

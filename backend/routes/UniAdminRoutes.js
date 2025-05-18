@@ -1,11 +1,10 @@
-// routes/register.js
 import express from 'express';
 import UniAdminModel from '../models/UniAdmin.js';
 import verifyUser from '../middleware/verifyUser.js';
 
 const router = express.Router();
 
-// Registration endpoint
+
 router.post('/registerUniAdmin',verifyUser, async (req, res) => {
   const { name, sapid, email, cnic, phone, university, campus, password, cpassword } = req.body;
 
@@ -14,21 +13,18 @@ router.post('/registerUniAdmin',verifyUser, async (req, res) => {
   });
 
   try {
-    // Check if the email already exists in the UniAdminModel collection
     const existingEmail = await UniAdminModel.findOne({ email });
     if (existingEmail) {
       console.log('Email already registered:', email);
       return res.status(400).json({ error: 'Email is already registered.' });
     }
 
-    // Check if the SAP ID already exists in the UniAdminModel collection
     const existingSapid = await UniAdminModel.findOne({ sapid });
     if (existingSapid) {
       console.log('SAP ID already registered:', sapid);
       return res.status(400).json({ error: 'SAP ID is already registered.' });
     }
 
-    // Create a new UniAdmin instance
     const newUniAdmin = new UniAdminModel({
       name,
       sapid,
@@ -36,12 +32,11 @@ router.post('/registerUniAdmin',verifyUser, async (req, res) => {
       cnic,
       phone,
       university,
-      campus, // Assuming campus is an array of strings
+      campus, 
       password, 
-      cpassword  // Storing password as plain text
+      cpassword  
     });
 
-    // Save the new UniAdmin to the database
     await newUniAdmin.save();
     console.log('New UniAdmin saved:', newUniAdmin);
 
@@ -67,7 +62,6 @@ router.delete('/Uniadmins/:id', async (req, res) => {
   try {
     const adminId = req.params.id;
     
-    // Find the admin by ID and delete
     const result = await UniAdminModel.findByIdAndDelete(adminId);
     
     if (!result) {

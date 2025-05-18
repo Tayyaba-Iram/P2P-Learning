@@ -16,11 +16,11 @@ const verifiedStudentSchema = new mongoose.Schema({
   verifiedAt: { type: Date, default: Date.now },  
   accountStatus: {
     type: String,
-    default: 'Active',  // Default to 'Active', can be 'Suspended'
+    default: 'Active',  
   },
   blocked: {
     type: Boolean,
-    default: false,  // Flag to mark if the account is blocked
+    default: false,  
   },
 });
 

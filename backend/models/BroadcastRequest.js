@@ -16,19 +16,19 @@ const broadcastRequestSchema = new mongoose.Schema({
     default: 'Low',
   },
   programs: {
-    type: [String],  // This makes sure programs are stored as an array of strings
+    type: [String],  
     required: true,
   },
   userId: {
-    type: String,  // Or mongoose.Schema.Types.ObjectId if referencing a user model
+    type: String,  
     required: true,
   },
   name: {
-    type: String,  // Save user's name
+    type: String, 
     required: true,
   },
   email: {
-    type: String,  // Save user's email
+    type: String,  
     required: true,
   },
 });

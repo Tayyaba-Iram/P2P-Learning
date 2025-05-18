@@ -13,7 +13,7 @@ const campusSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    programs: [programSchema] // Array of program objects
+    programs: [programSchema]
 });
 
 // University Schema
@@ -21,12 +21,11 @@ const universitySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true // Ensure university names are unique
+        unique: true 
     },
-    campuses: [campusSchema] // Array of campus objects
+    campuses: [campusSchema] 
 });
 
-// Model creation
 const University = mongoose.model('University', universitySchema);
 
 export default University;

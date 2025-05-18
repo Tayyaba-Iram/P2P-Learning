@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Student Home.css';
@@ -29,6 +28,7 @@ function Home() {
   });
 
   const [selectedEvent, setSelectedEvent] = useState(null);
+  
   useEffect(() => {
     const fetchSessions = async () => {
       try {
@@ -45,7 +45,12 @@ function Home() {
       }
     };
     fetchSessions();
-  }, []);
+     const intervalId = setInterval(() => {
+            fetchSessions();
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+  }, [token]);
 
 
   const handleEventSelect = (event) => {

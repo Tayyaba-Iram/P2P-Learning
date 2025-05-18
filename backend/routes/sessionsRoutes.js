@@ -162,17 +162,22 @@ router.get("/sessions/verify/:meetingID", async (req, res) => {
 
 router.get('/sessions', verifyUser, async (req, res) => {
   try {
-    const userEmail = req.user.email; // Get the email from the verified token
+    const userEmail = req.user.email;
     console.log("Logged-in user's email:", userEmail);
 
-    const sessions = await SessionModel.find({ userEmail }); // Filter by email
+    const allSessions = await SessionModel.find({ userEmail });
 
-    res.json(sessions);
+    // Filter sessions where endTime is in the future
+    const upcomingSessions = allSessions.filter(session => {
+      const endDateTime = new Date(`${session.date}T${session.endTime}`);
+      return endDateTime > new Date();
+    });
+
+    res.json(upcomingSessions);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
   }
 });
-
 
 export default router;

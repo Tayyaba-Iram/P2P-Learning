@@ -14,7 +14,7 @@ router.post("/submits", verifyUser, async (req, res) => {
   }
 
   try {
-    // Fetch user details
+  
     const user = await VerifiedStudentModel.findById(req.user._id);
     console.log("Fetched user:", user);
     if (!user) {
@@ -26,10 +26,10 @@ router.post("/submits", verifyUser, async (req, res) => {
       sessionId,
       rating,
       user: req.user._id,
-      university: user.university, // assuming field name is `university`
-      program: user.program,       // assuming field name is `program`
+      university: user.university, 
+      program: user.program,       
     });
-    console.log("New Rating to be saved:", newRating); // ✅ Log the rating object
+    console.log("New Rating to be saved:", newRating); 
     await newRating.save();
 
     res.status(201).json({ message: "Rating submitted successfully." });
@@ -41,7 +41,6 @@ router.post("/submits", verifyUser, async (req, res) => {
 
 router.get('/ratings-by-strenth', verifyUser, async (req, res) => {
   try {
-    // Fetch ratings from the database and count them based on rating value (1 to 5)
     const ratingsData = await SessionRating.aggregate([
       {
         $group: {
@@ -51,7 +50,7 @@ router.get('/ratings-by-strenth', verifyUser, async (req, res) => {
       },
       {
         $match: {
-          _id: { $in: [1, 2, 3, 4, 5] }  // Include ratings 1, 2, 3, 4, and 5
+          _id: { $in: [1, 2, 3, 4, 5] }  
         }
       },
       {
@@ -59,16 +58,14 @@ router.get('/ratings-by-strenth', verifyUser, async (req, res) => {
       }
     ]);
 
-    // Prepare the data for the frontend
-    const ratings = [1, 2, 3, 4, 5];  // All possible ratings
+    const ratings = [1, 2, 3, 4, 5];  
     const ratingCounts = ratings.map(rating => {
       const ratingData = ratingsData.find(item => item._id === rating);
       return ratingData ? ratingData.count : 0;
     });
 
-    // Send the data to frontend
     res.json({
-      labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],  // Labels for each rating section
+      labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],  
       datasets: [
         {
           data: ratingCounts,  // The counts of ratings 1 to 5
@@ -87,8 +84,8 @@ router.get('/ratings-per-university-program', verifyUser, async (req, res) => {
     const ratingsData = await SessionRating.aggregate([
       {
         $match: {
-          program: { $ne: null, $ne: '' },  // 🚫 Skip if program is null or empty
-          university: { $ne: null, $ne: '' } // 🚫 Skip if university is null or empty
+          program: { $ne: null, $ne: '' },  
+          university: { $ne: null, $ne: '' } 
         }
       },
       {
@@ -115,16 +112,13 @@ router.get('/ratings-per-university-program', verifyUser, async (req, res) => {
       return res.json({ labels: [], datasets: [] });
     }
 
-    // If no data is returned
     if (ratingsData.length === 0) {
       return res.json({ labels: [], datasets: [] });
     }
 
-    // Get all unique programs and universities
     const allPrograms = [...new Set(ratingsData.map(item => item._id.program))];
     const allUniversities = [...new Set(ratingsData.map(item => item._id.university))];
 
-    // Prepare datasets per university
     const datasets = allUniversities.map(university => {
       const universityData = ratingsData.filter(item => item._id.university === university);
 
@@ -155,10 +149,8 @@ router.get('/ratings-per-university-program', verifyUser, async (req, res) => {
 
 router.get('/ratings-university-program', verifyUser, async (req, res) => {
   try {
-    // Step 1: Get logged-in user's email or ID
     const userEmail = req.user.email;
 
-    // Step 2: Find the university name from UniAdminModel
     const uniAdmin = await UniAdminModel.findOne({ email: userEmail });
     if (!uniAdmin || !uniAdmin.university) {
       return res.status(404).json({ message: "University not found for this user" });
@@ -166,7 +158,6 @@ router.get('/ratings-university-program', verifyUser, async (req, res) => {
 
     const userUniversity = uniAdmin.university;
 
-    // Step 3: Aggregate data only for the user's university
     const ratingsData = await SessionRating.aggregate([
       {
         $match: {

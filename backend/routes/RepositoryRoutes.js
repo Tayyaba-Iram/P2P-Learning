@@ -9,11 +9,9 @@ import VerifiedStudentModel from '../models/VerifiedStudent.js';
 
 const router = express.Router();
 
-// Helper to handle __dirname in ES6
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// File upload setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../uploads'));
@@ -26,12 +24,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Get all verified students excluding the logged-in user
 router.get('/repo-verifiedStudents', verifyUser, async (req, res) => {
   try {
-    // Fetch all verified students excluding the logged-in user
     const students = await VerifiedStudentModel.find({
-      _id: { $ne: req.user._id } // Exclude the logged-in user by their ID
+      _id: { $ne: req.user._id } 
     });
 
     res.json(students);
@@ -49,14 +45,12 @@ router.post('/uploadRepositories', verifyUser, upload.single('file'), async (req
 
     if (accessType === 'specific' && req.body.allowedStudent) {
       try {
-        // Check if allowedStudent is a string or an array
         if (typeof req.body.allowedStudent === 'string') {
-          allowedStudent = JSON.parse(req.body.allowedStudent); // Parse the JSON string
+          allowedStudent = JSON.parse(req.body.allowedStudent); 
         } else if (Array.isArray(req.body.allowedStudent)) {
-          allowedStudent = req.body.allowedStudent; // Directly use the array if already in correct format
+          allowedStudent = req.body.allowedStudent; 
         }
 
-        // Validate allowedStudent array
         if (!Array.isArray(allowedStudent) || !allowedStudent.every(s => s.name && s.email)) {
           return res.status(400).json({ error: 'allowedStudent must be an array of objects with name and email' });
         }
@@ -76,7 +70,7 @@ router.post('/uploadRepositories', verifyUser, upload.single('file'), async (req
       file,
       fileLink,
       accessType,
-      allowedStudent: accessType === 'specific' ? allowedStudent : [], // Only set if 'specific'
+      allowedStudent: accessType === 'specific' ? allowedStudent : [], 
       uploadedBy: req.user._id,
       uploadedByEmail: email,
       uploadedByStudent: student,
@@ -107,24 +101,20 @@ router.get('/repositories', verifyUser, async (req, res) => {
   });
 
 
-  // Delete repository
   router.delete('/repositories/:id', verifyUser, async (req, res) => {
     try {
-      console.log('Repository ID:', req.params.id); // Add this to inspect the ID
+      console.log('Repository ID:', req.params.id); 
       const id = req.params.id;
   
-      // If ID is undefined or not valid, handle it
       if (!id) {
         return res.status(400).json({ message: 'Repository ID is required' });
       }
   
-      // Find the repository
       const deletedRepo = await Repository.findByIdAndDelete(id);
       if (!deletedRepo) {
         return res.status(404).json({ message: 'Repository not found' });
       }
   
-      // If the repository has an associated file, delete it
       if (deletedRepo.file && deletedRepo.file.trim() !== 'Restricted' && deletedRepo.file.trim() !== 'no file uploaded') {
         const filePath = path.join(__dirname, '../uploads', deletedRepo.file);  // Path to the file
   
@@ -149,25 +139,21 @@ router.get('/repositories', verifyUser, async (req, res) => {
     const { repoId } = req.params;
     let { title, description, fileLink, accessType, allowedStudent } = req.body;
   
-    // Ensure allowedStudent is parsed if it's a string
     if (typeof allowedStudent === 'string') {
-      allowedStudent = JSON.parse(allowedStudent);  // Now allowedStudent can be reassigned
+      allowedStudent = JSON.parse(allowedStudent);  
     }
   
     let updatedFields = { title, description, accessType };
   
-    // If accessType is 'specific', we need to handle allowedStudent
     if (accessType === 'specific') {
-      updatedFields.allowedStudent = allowedStudent; // Store the updated list of allowed students
+      updatedFields.allowedStudent = allowedStudent; 
     }
   
-    // If a new file is uploaded, handle it
     if (req.file) {
-      const filePath = `/uploads/${req.file.filename}`; // Correct the file path format
-      updatedFields.file = req.file.filename;  // Store the filename in DB
-      updatedFields.fileLink = filePath;      // Store the file link for access
+      const filePath = `/uploads/${req.file.filename}`; 
+      updatedFields.file = req.file.filename;
+      updatedFields.fileLink = filePath;      
     } else {
-      // If no new file is uploaded, retain the existing fileLink in the repository
       updatedFields.fileLink = fileLink;
     }
   
@@ -187,10 +173,9 @@ router.get('/repositories', verifyUser, async (req, res) => {
   
   router.get('/yourRepositories', verifyUser, async (req, res) => {
     try {
-      // Find repositories uploaded by other users (exclude the logged-in user's repositories)
       const repositories = await Repository.find({ uploadedBy: { $ne: req.user._id } })  // Excluding logged-in user's repositories
         .select('title description file fileLink uploadedByEmail uploadedByStudent') // Make sure email is included
-        .populate('uploadedBy', 'email') // Populate the email field
+        .populate('uploadedBy', 'email') 
   
       res.status(200).json(repositories);
     } catch (error) {

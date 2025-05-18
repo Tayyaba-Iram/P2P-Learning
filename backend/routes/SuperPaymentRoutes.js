@@ -6,22 +6,17 @@ import SessionModel from '../models/Session.js';
 
 const router = express.Router();
 
-// Save account dynamically
 router.post('/save-account', verifyUser, async (req, res) => {
     try {
-        const { holder, number, balance = 0 } = req.body;  // Default balance to 10000 if not provided
-        
-        // Check if the account already exists based on number
+        const { holder, number, balance = 0 } = req.body;  
         const existingAccount = await Account.findOne({ number });
 
         if (existingAccount) {
-            // If the account exists, update the balance
             existingAccount.balance = balance;
             await existingAccount.save();
             return res.status(200).json({ message: 'Account updated successfully', account: existingAccount });
         }
 
-        // If the account doesn't exist, create a new one
         const newAccount = new Account({ holder, number, balance });
         await newAccount.save();
   
@@ -32,10 +27,9 @@ router.post('/save-account', verifyUser, async (req, res) => {
     }
 });
 
-// Fetch saved account data
 router.get('/get-account', verifyUser, async (req, res) => {
     try {
-        const account = await Account.findOne(); // Assuming you want to fetch one account for simplicity
+        const account = await Account.findOne(); 
         if (!account) {
             return res.status(404).json({ message: 'No account found' });
         }
@@ -46,25 +40,22 @@ router.get('/get-account', verifyUser, async (req, res) => {
     }
 });
 
-// Fetch session payments and update the account balance
 router.get('/get-payment-details', verifyUser, async (req, res) => {
     try {
         const sessions = await SessionModel.find({ paymentMethod: { $ne: 'food' } }); // Filter out 'food' payments
         const students = await VerifiedStudentModel.find();
 
-        // If no sessions are added, set the balance to 0
         if (sessions.length === 0) {
             const account = await Account.findOne();
-            const currentBalance = account ? 0 : 0; // Default balance is 0 if no sessions
+            const currentBalance = account ? 0 : 0; 
             return res.json({
                 message: 'No sessions found, current balance is 0',
                 currentBalance: currentBalance
             });
         }
 
-        // Calculate the total deducted amount and process the sessions
         let totalDeductedAmount = 0;
-        let deductedOnce = false; // Flag to ensure deduction happens only once
+        let deductedOnce = false; 
 
         const combinedData = await Promise.all(sessions.map(async (session) => {
             const student = students.find(std => std.email === session.userEmail);
@@ -97,7 +88,6 @@ router.get('/get-payment-details', verifyUser, async (req, res) => {
         // Update the current balance by adding the total deducted amount
         currentBalance += totalDeductedAmount;
 
-        // Save the updated account balance in the database
         if (account) {
             account.balance = currentBalance;
             await account.save();

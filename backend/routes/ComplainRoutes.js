@@ -6,6 +6,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
+
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,8 +21,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// POST route for complaints
-
 router.post('/complaints', verifyUser, upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'File is required' });
@@ -33,12 +32,10 @@ router.post('/complaints', verifyUser, upload.single('file'), async (req, res) =
     return res.status(400).json({ error: 'All fields including file are required' });
   }
 
-  // Ensure target email is not same as current user
   if (targetemail === req.user.email) {
     return res.status(400).json({ error: 'You cannot file a complaint against yourself.' });
   }
 
-  // Check if targetemail exists in VerifiedStudentModel
   const targetUser = await VerifiedStudentModel.findOne({ email: targetemail });
   if (!targetUser) {
     return res.status(400).json({ error: 'Target user not found.' });
@@ -65,7 +62,6 @@ router.post('/complaints', verifyUser, upload.single('file'), async (req, res) =
   }
 });
 
-// GET route to view all complaints
 router.get('/viewComplaints', async (req, res) => {
   try {
     const complaints = await ComplaintModel.find();
@@ -76,7 +72,7 @@ router.get('/viewComplaints', async (req, res) => {
   }
 });
 
-// Route to get complaints for the logged-in user
+
 router.get('/get-complaints', verifyUser, async (req, res) => {
   try {
     const userComplaints = await ComplaintModel.find({ userId: req.user._id });
@@ -96,7 +92,6 @@ router.delete('/delete-complaint/:id', verifyUser, async (req, res) => {
   try {
     const complaintId = req.params.id;
 
-    // Find the complaint first
     const complaint = await ComplaintModel.findById(complaintId);
 
     if (!complaint) {
@@ -114,7 +109,6 @@ router.delete('/delete-complaint/:id', verifyUser, async (req, res) => {
       }
     }
 
-    // Now delete the complaint document
     await ComplaintModel.findByIdAndDelete(complaintId);
 
     res.status(200).json({ success: true, message: 'Complaint deleted successfully' });
@@ -128,7 +122,6 @@ router.delete('/delete-complaint/:id', verifyUser, async (req, res) => {
 
 router.get('/complaint/:complaintId', async (req, res) => {
   try {
-    // Find the complaint by ID (mongoose will automatically cast string to ObjectId)
     const complaint = await ComplaintModel.findById(req.params.complaintId);
 
     if (!complaint) {

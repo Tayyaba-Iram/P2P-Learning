@@ -89,11 +89,11 @@ const ComplaintForm = () => {
     <form onSubmit={handleSubmit} className="complaint-submit">
       <h2>Submit a Complaint</h2>
       <p>Please use this form to submit a complaint regarding any issue related to your experience as a student.</p>
-
+      <label className='label-complain'>Name:</label>
       <input
         type="text"
         name="targetname"
-        placeholder="Target Name"
+        placeholder="Target User Name"
         value={formData.targetname}
         onChange={(e) => {
           const regex = /^[A-Za-z\s]*$/;
@@ -104,14 +104,17 @@ const ComplaintForm = () => {
         required
       />
 
+      <label className='label-complain'>Email:</label>
       <input
         type="email"
         name="targetemail"
-        placeholder="Target Email"
+        placeholder="Target User Email"
         value={formData.targetemail}
         onChange={handleChange}
         required
       />
+
+      <label className='label-complain'>Date:</label>
       <DatePicker
         selected={formData.date}
         onChange={handleDateChange}
@@ -120,6 +123,7 @@ const ComplaintForm = () => {
         minDate={new Date()}  // Disable past dates
       />
 
+      <label className='label-complain'>Category:</label>
       <select
         name="category"
         value={formData.category}
@@ -140,9 +144,9 @@ const ComplaintForm = () => {
         <option value="Content Concern">Content Concern</option>
         <option value="User Behavior">User Behavior</option>
         <option value="other">Others</option>
-
       </select>
 
+      <label className='label-complain'>Description:</label>
       <textarea
         name="description"
         placeholder="Describe your issue"
@@ -151,6 +155,7 @@ const ComplaintForm = () => {
         required
       ></textarea>
 
+      <label className='label-complain'>Proof:</label>
       <input
         type="file"
         accept=".jpg, .jpeg, .png, .pdf, .docx, .word"

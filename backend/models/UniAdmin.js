@@ -5,10 +5,10 @@ const UniAdminSchema = new mongoose.Schema({
   sapid: { type: String, required: true },
   email: { type: String, required: true },
   cnic: { type: String, required: true },
-  phone: { type: String, required: false }, // Phone is optional
+  phone: { type: String, required: false }, 
   university: { type: String, required: true },
-  campus: { type: [String], required: true }, // Change this to allow an array of strings
-  password: { type: String, required: true }, // Storing password as plain text
+  campus: { type: [String], required: true }, 
+  password: { type: String, required: true }, 
   cpassword: { type: String, required: true },
 });
 

@@ -1,12 +1,10 @@
-// routes/register.js
 import express from 'express';
 import StudentModel from '../models/Student.js';
 import VerifiedStudentModel from '../models/VerifiedStudent.js';
-import verifyUser from '../middleware/verifyUser.js'; // Import the middleware
+import verifyUser from '../middleware/verifyUser.js'; 
 
 const router = express.Router();
 
-// Registration endpoint
 router.post('/registerStudent', async (req, res) => {
   const { name, sapid, email, cnic, phone, university, campus, program, semester,specification, password, cpassword } = req.body;
 
@@ -15,24 +13,20 @@ router.post('/registerStudent', async (req, res) => {
   });
 
   try {
-    // Check if the email already exists in the VerifiedStudentModel collection
     const existingVerifiedStudent = await VerifiedStudentModel.findOne({ email });
     if (existingVerifiedStudent) {
       console.log('Email already registered:', email);
       return res.status(400).json({ error: 'Email is already registered.' });
     }
 
-    // Check if the student exists in the StudentModel collection
     const student = await StudentModel.findOne({
       name, sapid, email, cnic, phone, university, campus, program,  semester});
 
     if (student) {
       console.log('Student found:', student);
 
-      // Create a new verified student object, including password fields
       const verifiedStudentData = { ...student.toObject(), specification,phone,password, cpassword };
 
-      // Save to VerifiedStudentModel collection
       const verifiedStudent = new VerifiedStudentModel(verifiedStudentData);
       await verifiedStudent.save();
 
@@ -51,10 +45,9 @@ router.post('/registerStudent', async (req, res) => {
 
 router.get('/verifiedStudents', async (req, res) => {
   try {
-    const query = req.query.query || ''; // Get search query from request
-    const regex = new RegExp(query, 'i'); // Create a case-insensitive regex for search
+    const query = req.query.query || ''; 
+    const regex = new RegExp(query, 'i'); 
 
-    // Find students matching the search query in name or specification
     const verifiedStudents = await VerifiedStudentModel.find({
       $or: [
         { name: { $regex: regex } },
@@ -70,12 +63,10 @@ router.get('/verifiedStudents', async (req, res) => {
 });
 
 
-// Fetch profile data based on the token's email
 router.get('/get-profile', verifyUser, async (req, res) => {
   try {
-    const userEmail = req.user.email;  // Extract email from token
+    const userEmail = req.user.email;  
     console.log('Decoded email:', userEmail); 
-    // Fetch the student's data from the database using the email
     const student = await VerifiedStudentModel.findOne({ email: userEmail });
     if (student) {
       console.log('Student Found:', student);
@@ -84,7 +75,6 @@ router.get('/get-profile', verifyUser, async (req, res) => {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    // Return the student data in the response
     res.status(200).json({
       success: true,
       user: {
@@ -98,8 +88,8 @@ router.get('/get-profile', verifyUser, async (req, res) => {
         program: student.program,
         semester: student.semester,
         specification: student.specification,
-        password: student.password,  // Be cautious with passwords - consider excluding them in the response
-        cpassword: student.cpassword,  // Same for confirmation password
+        password: student.password,  
+        cpassword: student.cpassword,  
       },
     });
   } catch (err) {
@@ -112,18 +102,14 @@ router.put('/update-profile', verifyUser, async (req, res) => {
   const { phone, campus, program, semester, specification} = req.body;
 
   try {
-    // Use the email from the verified token
     const userEmail = req.user.email;
 
-    // Fetch the user's data from the VerifiedStudentModel
     const student = await VerifiedStudentModel.findOne({ email: userEmail });
 
-    // Check if the student exists
     if (!student) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    // Update fields only if they are provided in the request body
     if (phone) student.phone = phone;
     if (campus) student.campus = campus;
     if (program) student.program = program;
@@ -131,7 +117,6 @@ router.put('/update-profile', verifyUser, async (req, res) => {
     if (specification) student.specification = specification;
 
   
-    // Save the updated student profile
     await student.save();
 
     res.status(200).json({ success: true, message: 'Profile updated successfully' });
@@ -143,14 +128,12 @@ router.put('/update-profile', verifyUser, async (req, res) => {
 router.put('/update-password', verifyUser, async (req, res) => {
   const { currentPassword, newPassword, confirmPassword } = req.body;
 
-  // Check if all required fields are provided
   if (!currentPassword || !newPassword || !confirmPassword) {
     return res.status(400).json({ success: false, message: 'Current password, new password, and confirm password are required.' });
   }
   if (currentPassword == newPassword) {
     return res.status(400).json({ success: false, message: 'Current password and new password must be different!' });
   }
-  // Ensure new password and confirm password match
   if (newPassword !== confirmPassword) {
     return res.status(400).json({ success: false, message: 'New password and confirm password do not match.' });
   }
@@ -163,14 +146,12 @@ router.put('/update-password', verifyUser, async (req, res) => {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    // Check if the current password is correct
     if (currentPassword !== student.password) {
       return res.status(400).json({ success: false, message: 'Current password is incorrect.' });
     }
 
-    // Update the password and confirm password fields in the database
     student.password = newPassword;
-    student.cpassword = confirmPassword; // You might need to save confirmPassword if you're using it separately
+    student.cpassword = confirmPassword; 
     await student.save();
 
     res.status(200).json({ success: true, message: 'Password updated successfully.' });
@@ -180,7 +161,6 @@ router.put('/update-password', verifyUser, async (req, res) => {
   }
 });
 
-// Assuming you're using Express.js
 router.get('/verifiedStudents/:studentId', async (req, res) => {
   const { studentId } = req.params;
   console.log('Fetching student details for studentId:', studentId);

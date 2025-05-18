@@ -4,7 +4,7 @@ const sessionSchema = new mongoose.Schema({
   topic: { type: String, required: true },
   startTime: { type: String, required: true },
   endTime: { type: String, required: true },
-  date: { type: String, required: true }, // saves "YYYY-MM-DD" directly
+  date: { type: String, required: true }, 
   meetingLink: { type: String, required: true, unique: true },
   
   // Payment method: cash or food

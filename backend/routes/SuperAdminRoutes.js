@@ -1,6 +1,6 @@
 import express from 'express';
 import SuperAdminModel from '../models/Superadmin.js';
-import jwt from 'jsonwebtoken'; // Importing JWT
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -9,9 +9,9 @@ const router = express.Router();
 // Function to generate JWT token
 const generateToken = (user) => {
     return jwt.sign(
-        { email: user.email}, // Payload
-        process.env.JWT_SECRET_KEY, // Secret key for signing
-        { expiresIn: '1h' } // Expiration time
+        { email: user.email },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: '1h' }
     );
 };
 
@@ -31,9 +31,9 @@ router.post('/superadmin-check-or-create', async (req, res) => {
                 // Verify existing super admin login
                 if (password === superAdmin.password) {
                     // Create JWT token for the super admin
-                    const token = generateToken(superAdmin);                 
+                    const token = generateToken(superAdmin);
 
-                     res.json({
+                    res.json({
                         success: true,
                         created: false,
                         message: 'Login successful.',
@@ -52,13 +52,11 @@ router.post('/superadmin-check-or-create', async (req, res) => {
             const newSuperAdmin = new SuperAdminModel({ email, password });
             await newSuperAdmin.save();
 
-            // Log the new super admin's details
             console.log("email: ", newSuperAdmin.email);
 
-            // Create JWT token for the new super admin
             const token = generateToken(newSuperAdmin);
             console.log("Generated token:", token);
-        res.json({
+            res.json({
                 success: true,
                 created: true,
                 message: 'Super admin account created successfully.',

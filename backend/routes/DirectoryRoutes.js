@@ -28,7 +28,6 @@ router.get('/directory', verifyUser, async (req, res) => {
         const allowedStudents = repo.allowedStudent || [];
 
 
-        // Check if current user is in allowedStudent list by email
         const isAllowed = allowedStudents.some(student => student.email === req.user.email);
 
         if (isAllowed) {
@@ -39,7 +38,6 @@ router.get('/directory', verifyUser, async (req, res) => {
           repoObj.fileLink = 'Restricted';
         }
 
-        // Optionally include allowedStudent list in the response for frontend
         repoObj.allowedStudents = allowedStudents;
 
 

@@ -17,7 +17,6 @@ router.post('/request-resource', verifyUser, async (req, res) => {
       const receiver = await VerifiedStudentModel.findById(repo.uploadedBy);
       if (!receiver) return res.status(404).json({ message: 'Uploader not found' });
   
-      // Check for existing request
       const existing = await Request.findOne({
         senderEmail: user.email,
         repoId,
@@ -26,7 +25,6 @@ router.post('/request-resource', verifyUser, async (req, res) => {
   
       if (existing) {
         if (existing.status === 'Rejected') {
-          // Delete rejected request
           await Request.deleteOne({ _id: existing._id });
         } else {
           // Don't allow duplicate if status is Pending or Accepted
@@ -53,7 +51,6 @@ router.post('/request-resource', verifyUser, async (req, res) => {
   });
   
 
-// DELETE /api/request-resource/:repoId
 router.delete('/cancel-request/:repoId', verifyUser, async (req, res) => {
     const { repoId } = req.params;
     const user = req.user;
@@ -76,11 +73,10 @@ router.delete('/cancel-request/:repoId', verifyUser, async (req, res) => {
   });
 
   
-// GET /api/my-received-requests
 router.get('/my-received-requests', verifyUser, async (req, res) => {
     try {
       const requests = await Request.find({
-        receiverEmail: req.user.email,     // Match receiverEmail to logged-in user
+        receiverEmail: req.user.email,     
         senderEmail: { $ne: req.user.email } // Exclude self-sent requests
       });
       res.status(200).json(requests);
@@ -90,7 +86,6 @@ router.get('/my-received-requests', verifyUser, async (req, res) => {
     }
   });
   
-// GET /api/my-requests
 router.get('/my-resource-requests', verifyUser, async (req, res) => {
     try {
       const requests = await Request.find({ senderEmail: req.user.email }).select('repoId status');
@@ -105,18 +100,17 @@ router.get('/my-resource-requests', verifyUser, async (req, res) => {
   router.put('/requests/:requestId/accept', async (req, res) => {
     try {
       const { requestId } = req.params;
-      // Find the request by its ID and update its status
       const request = await Request.findByIdAndUpdate(
         requestId,
-        { status: 'Accepted' }, // Change status to "Accepted"
-        { new: true } // Return the updated request
+        { status: 'Accepted' }, 
+        { new: true }
       );
   
       if (!request) {
         return res.status(404).json({ message: 'Request not found' });
       }
   
-      res.json(request); // Send back the updated request
+      res.json(request);
     } catch (error) {
       console.error('Error accepting request:', error);
       res.status(500).json({ message: 'Server error' });
@@ -126,18 +120,17 @@ router.get('/my-resource-requests', verifyUser, async (req, res) => {
   router.put('/requests/:requestId/reject', async (req, res) => {
     try {
       const { requestId } = req.params;
-      // Find the request by its ID and update its status to "Rejected"
       const request = await Request.findByIdAndUpdate(
         requestId,
-        { status: 'Rejected' }, // Change status to "Rejected"
-        { new: true } // Return the updated request
+        { status: 'Rejected' }, 
+        { new: true }
       );
   
       if (!request) {
         return res.status(404).json({ message: 'Request not found' });
       }
   
-      res.json(request); // Send back the updated request
+      res.json(request); 
     } catch (error) {
       console.error('Error rejecting request:', error);
       res.status(500).json({ message: 'Server error' });
@@ -147,11 +140,10 @@ router.get('/my-resource-requests', verifyUser, async (req, res) => {
   router.put('/requests/:requestId/resolve', async (req, res) => {
     try {
       const { requestId } = req.params;
-      // Find the request by its ID and update its status to "Resolved"
       const request = await Request.findByIdAndUpdate(
         requestId,
-        { status: 'Resolved' }, // Change status to "Resolved"
-        { new: true } // Return the updated request
+        { status: 'Resolved' }, 
+        { new: true } 
       );
   
       if (!request) {

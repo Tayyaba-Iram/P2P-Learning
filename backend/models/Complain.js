@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const complaintSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'VerifiedStudent' }, // reference to the user
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'VerifiedStudent' }, 
     username: { type: String, required: true }, // login user's name
     useremail: { type: String, required: true }, // login user's email
     targetname: { type: String, required: true },

@@ -8,11 +8,9 @@ router.post('/favoriteStudent/:studentId', verifyUser, async (req, res) => {
     const { studentId } = req.params;
     const userId = req.user._id;
 
-    
-    // Create new favorite student entry
-    const favorite = new FavoriteStudents({
+      const favorite = new FavoriteStudents({
       userId,
-      favoriteStudentId: studentId,  // Ensure the field is correct here
+      favoriteStudentId: studentId,  
     });
 
     await favorite.save();
@@ -24,14 +22,12 @@ router.post('/favoriteStudent/:studentId', verifyUser, async (req, res) => {
 });
 
 
-// Route to unfavorite a student
 router.delete('/unfavoriteStudent/:favoriteStudentId', verifyUser, async (req, res) => {
   console.log('Request received to unfavorite student');
   try {
     const { favoriteStudentId } = req.params;
     const userId = req.user._id;
 
-    // Remove the student from the user's favorites
     const deletedFavorite = await FavoriteStudents.findOneAndDelete({ userId, favoriteStudentId });
     console.log('Deleted Favorite:', deletedFavorite);
     
@@ -46,14 +42,12 @@ router.delete('/unfavoriteStudent/:favoriteStudentId', verifyUser, async (req, r
   }
 });
 
-// Route to get all favorite students of a user
 router.get('/favoriteStudents', verifyUser, async (req, res) => {
   try {
     const userId = req.user._id;
 
-    // Get all the students favorited by the logged-in user
     const favorites = await FavoriteStudents.find({ userId })
-      .populate('favoriteStudentId', 'name email');  // Populate the favoriteStudentId with student data
+      .populate('favoriteStudentId', 'name email'); 
     
     res.status(200).json(favorites);
   } catch (error) {
