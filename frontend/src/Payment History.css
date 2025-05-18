@@ -14,7 +14,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    flex: 0 1 calc(33.333% - 20px); /* 3 per row */
+    flex: 0 1 calc(33.333% - 20px); 
     margin-bottom: 20px;
   }
   
@@ -42,17 +42,17 @@
     color: #444;
   }
   .profile-table th {
-    width: 100px;      /* Fixed width for table headers */
+    width: 100px;     
     background-color: #f0f0f0;
     color: #333;
     text-align: left;
   }
   
   .profile-table td {
-    width: 200px;      /* Fixed width for table data cells */
+    width: 200px;      
     color: #555;
     text-align: left;
-    word-break: break-word; /* Prevent overflow */
+    word-break: break-word; 
   }
   .delete-button {
     background-color: crimson;
