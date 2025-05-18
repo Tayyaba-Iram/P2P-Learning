@@ -81,10 +81,11 @@ th {
   text-align: center;
   margin: 0 auto 10px; /* centers the button horizontally */
   display: block; /* ensures it takes up full line */
+  border-radius: 6px;
+  margin-top: 5px;
 }
 
-.delete-button {
-  background-color: #f44336;
+.edit-delete-buttons .delete--button {
   width: 110px;
   cursor: pointer; 
   text-align: center;

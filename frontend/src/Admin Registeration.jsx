@@ -119,12 +119,16 @@ function AdminRegister() {
     setCnic(formattedValue);
   };
 
-  const handleSapChange = (event) => {
-    const value = event.target.value;
-    // Allow only numbers
-    const cleanedValue = value.replace(/\D/g, '');
-    setSapid(cleanedValue); // Update the state with numeric value
-  };
+const handleSapChange = (event) => {
+  let value = event.target.value;
+  // Allow only numbers
+  let cleanedValue = value.replace(/\D/g, '');
+  // Limit to max 7 digits
+  if (cleanedValue.length > 7) {
+    cleanedValue = cleanedValue.slice(0, 7);
+  }
+  setSapid(cleanedValue); // Update the state with numeric value
+};
 
 
   return (
@@ -168,7 +172,16 @@ function AdminRegister() {
 
       <div className="form-fields">
         <label htmlFor="university">University:</label>
-        <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required>
+        <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required
+          style={{
+    paddingRight: '24px', // creates space inside the select box on the right
+    backgroundPosition: 'right 8px center', // moves the arrow slightly left
+    backgroundRepeat: 'no-repeat',
+    backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
+    appearance: 'none', // hide default arrow (optional)
+    WebkitAppearance: 'none',
+    MozAppearance: 'none',
+  }}>
           <option value="" hidden>Select University</option>
           {universities.map(uni => (
             <option key={uni._id} value={uni.name}>{uni.name}</option>

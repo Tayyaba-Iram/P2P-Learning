@@ -85,7 +85,11 @@ const SuperAdminPayments = () => {
         };
 
         initializeAccount();
+    const intervalId = setInterval(() => {
+        initializeAccount();
+    }, 1000); 
 
+    return () => clearInterval(intervalId);
     }, [token]);
 
     return (
@@ -149,32 +153,41 @@ const SuperAdminPayments = () => {
                                 <th>Date</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {filteredSessions.map((session, index) => {
+                       <tbody>
+  {filteredSessions.length > 0 ? (
+    filteredSessions.map((session, index) => {
+      const payment = session.amount;
+      const deductedAmount = payment * 0.10;
+      const amountAfterDeduction = payment - deductedAmount;
 
-                                const payment = session.amount;
-                                const deductedAmount = payment * 0.10;
-                                const amountAfterDeduction = payment - deductedAmount;
-                                return (
-                                    <tr key={session._id}>
-                                        <td>{index + 1}</td>
-                                        <td>{session.studentName}</td>
-                                        <td>{session.userEmail}</td>
-                                        <td>{session.university}</td>
-                                        <td>{session.program}</td>
-                                        <td>{session.phoneNumber}</td>
-                                        <td>{session.instructorName}</td>
-                                        <td>{session.instructorHolder}</td>
-                                        <td>{session.instructorNumber}</td>
-                                        <td>{session.topic}</td>
-                                        <td>Rs. {Math.round(payment)}</td>
-                                        <td>Rs. {Math.round(deductedAmount)}</td>
-                                        <td>Rs. {Math.round(amountAfterDeduction)}</td>
-                                        <td>{new Date(session.date).toLocaleDateString()}</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
+      return (
+        <tr key={session._id}>
+          <td>{index + 1}</td>
+          <td>{session.studentName}</td>
+          <td>{session.userEmail}</td>
+          <td>{session.university}</td>
+          <td>{session.program}</td>
+          <td>{session.phoneNumber}</td>
+          <td>{session.instructorName}</td>
+          <td>{session.instructorHolder}</td>
+          <td>{session.instructorNumber}</td>
+          <td>{session.topic}</td>
+          <td>Rs. {Math.round(payment)}</td>
+          <td>Rs. {Math.round(deductedAmount)}</td>
+          <td>Rs. {Math.round(amountAfterDeduction)}</td>
+          <td>{new Date(session.date).toLocaleDateString()}</td>
+        </tr>
+      );
+    })
+  ) : (
+    <tr>
+      <td colSpan="14" style={{ textAlign: 'center', padding: '10px' }}>
+        No sessions found.
+      </td>
+    </tr>
+  )}
+</tbody>
+
                     </table>
                 ) : (
                     <p>No session data available.</p>

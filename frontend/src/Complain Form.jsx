@@ -16,6 +16,7 @@ const ComplaintForm = () => {
   });
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
+const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -81,7 +82,7 @@ const ComplaintForm = () => {
       setFile(null);
       navigate('/complains');
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Error submitting complaint');
+setMessage(error.response?.data?.error || 'Error fetching complaints');
     }
   };
 
@@ -126,6 +127,15 @@ const ComplaintForm = () => {
         value={formData.category}
         onChange={handleChange}
         required
+        style={{
+    paddingRight: '24px', // creates space inside the select box on the right
+    backgroundPosition: 'right 8px center', // moves the arrow slightly left
+    backgroundRepeat: 'no-repeat',
+    backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
+    appearance: 'none', // hide default arrow (optional)
+    WebkitAppearance: 'none',
+    MozAppearance: 'none',
+  }}
       >
         <option value="" disabled>Select Category</option>
         <option value="Technical Issue">Technical Issue</option>
@@ -147,6 +157,7 @@ const ComplaintForm = () => {
         onChange={handleFileChange}
         required
       />
+        {message && <p style={{ color: 'red', marginTop: "20px", fontWeight: 'bold', fontSize: '16px', textAlign:'center' }}>{message}</p>}
 
       <button className='submit-complain' type="submit">Submit Complaint</button>
       <Toaster position="top-center" />

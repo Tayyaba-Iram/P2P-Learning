@@ -7,6 +7,7 @@ import './Complain.css';
 const Complaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [confirmDeleteIndex, setConfirmDeleteIndex] = useState(null);
+const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchComplaints = async () => {
@@ -19,7 +20,7 @@ const Complaints = () => {
         });
         setComplaints(response.data);
       } catch (error) {
-        toast.error(error.response?.data?.error || 'Error fetching complaints');
+setMessage(error.response?.data?.error || 'Error fetching complaints');
       }
     };
     fetchComplaints();
@@ -109,43 +110,52 @@ const Complaints = () => {
               <th className="heading">Action</th>
             </tr>
           </thead>
-          <tbody>
-            {filteredComplaints.map((complaint) => (
-              <tr key={complaint._id}>
-                <td>{complaint.targetname}</td>
-                <td>{complaint.targetemail}</td>
-                <td>{complaint.category}</td>
-                <td>{complaint.description}</td>
-                <td>{new Date(complaint.date).toLocaleDateString()}</td>
-                <td>
-                  {complaint.file ? (
-                    <a
-                      href={`http://localhost:3001/complains/${complaint.file}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View File
-                    </a>
-                  ) : (
-                    'No file'
-                  )}
-                </td>
-                <td>{complaint.status || 'Pending'}</td>
-                <td>
-                  <button
-                  style={{
-                    backgroundColor: 'crimson',
-                    fontSize:'16px'
-                  }}
-                    className="delete-button"
-                    onClick={() => handleDelete(complaint._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+         <tbody>
+  {filteredComplaints.length > 0 ? (
+    filteredComplaints.map((complaint) => (
+      <tr key={complaint._id}>
+        <td>{complaint.targetname}</td>
+        <td>{complaint.targetemail}</td>
+        <td>{complaint.category}</td>
+        <td>{complaint.description}</td>
+        <td>{new Date(complaint.date).toLocaleDateString()}</td>
+        <td>
+          {complaint.file ? (
+            <a
+              href={`http://localhost:3001/complains/${complaint.file}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View File
+            </a>
+          ) : (
+            'No file'
+          )}
+        </td>
+        <td>{complaint.status || 'Pending'}</td>
+        <td>
+          <button
+            style={{
+              backgroundColor: 'crimson',
+              fontSize: '16px'
+            }}
+            className="delete-button"
+            onClick={() => handleDelete(complaint._id)}
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="8" style={{ textAlign: 'center', padding: '10px' }}>
+        No complaints found.
+      </td>
+    </tr>
+  )}
+</tbody>
+
         </table>
       ) : (
         <p className="no-complaints-msg">No complaints submitted yet.</p>

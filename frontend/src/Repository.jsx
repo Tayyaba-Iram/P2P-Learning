@@ -115,7 +115,7 @@ const Repository = () => {
       {loading ? (
         <div className="loading">Loading repositories...</div>
       ) : filteredRepositories.length === 0 ? (
-        <div className="empty-state">No repository files uploaded yet.</div>
+        <div className="empty-state">No repository uploaded yet.</div>
       ) : (
         <table className="repository-table">
           <thead>

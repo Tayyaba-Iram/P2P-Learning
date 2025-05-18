@@ -32,6 +32,7 @@
 .input-with-icon {
   position: relative;
   width: 100%;
+  
 }
 
 .input-with-icon input {
@@ -109,6 +110,7 @@ p {
   border-radius: 6px;
   outline: none;
   display: block;
+  cursor: pointer;
 }
 
 

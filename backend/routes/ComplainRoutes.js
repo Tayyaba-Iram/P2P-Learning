@@ -1,6 +1,7 @@
 import express from 'express';
 import ComplaintModel from '../models/Complain.js';
 import verifyUser from '../middleware/verifyUser.js';
+import VerifiedStudentModel from '../models/VerifiedStudent.js';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -20,6 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // POST route for complaints
+
 router.post('/complaints', verifyUser, upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'File is required' });
@@ -27,8 +29,19 @@ router.post('/complaints', verifyUser, upload.single('file'), async (req, res) =
 
   const { targetname, targetemail, date, category, description } = req.body;
 
-  if (!targetname || !targetemail || !date || !category || !description || !req.file) {
+  if (!targetname || !targetemail || !date || !category || !description) {
     return res.status(400).json({ error: 'All fields including file are required' });
+  }
+
+  // Ensure target email is not same as current user
+  if (targetemail === req.user.email) {
+    return res.status(400).json({ error: 'You cannot file a complaint against yourself.' });
+  }
+
+  // Check if targetemail exists in VerifiedStudentModel
+  const targetUser = await VerifiedStudentModel.findOne({ email: targetemail });
+  if (!targetUser) {
+    return res.status(400).json({ error: 'Target user not found.' });
   }
 
   const newComplaint = new ComplaintModel({
@@ -40,11 +53,12 @@ router.post('/complaints', verifyUser, upload.single('file'), async (req, res) =
     date,
     category,
     description,
-    file: req.file.filename  // Save the filename
+    file: req.file.filename
   });
+
   try {
     await newComplaint.save();
-    res.status(201).json({ message: 'Complaint created successfully', filename: req.file.filename });  // Send filename
+    res.status(201).json({ message: 'Complaint created successfully', filename: req.file.filename });
   } catch (err) {
     console.error('Error:', err);
     res.status(500).json({ error: 'Error creating complaint', details: err.message });

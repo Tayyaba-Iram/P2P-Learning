@@ -342,7 +342,7 @@ function Home() {
         {/* Session Details Modal */}
         {isDetailsModalOpen && (
           <div className="form-backdrop" onClick={() => setDetailsModalOpen(false)}>
-            <div className="schedule-form" onClick={(e) => e.stopPropagation()}>
+            <div className="schedulee-form" onClick={(e) => e.stopPropagation()}>
               <h2 className="form-title">Session Details</h2>
               <div className="form-group">
                 <label>Topic</label>
@@ -421,6 +421,7 @@ function Home() {
                 </button>
                 <button
                   className="clear-btn"
+                  style={{backgroundColor:'#48742F'}}
                   onClick={() => setDetailsModalOpen(false)}
                 >
                   Close

@@ -86,12 +86,17 @@ function Register() {
         });
     }
   };
-  const handleSapChange = (event) => {
-    const value = event.target.value;
-    // Allow only numbers
-    const cleanedValue = value.replace(/\D/g, '');
-    setSapid(cleanedValue); // Update the state with numeric value
-  };
+const handleSapChange = (event) => {
+  let value = event.target.value;
+  // Allow only numbers
+  let cleanedValue = value.replace(/\D/g, '');
+  // Limit to max 7 digits
+  if (cleanedValue.length > 7) {
+    cleanedValue = cleanedValue.slice(0, 7);
+  }
+  setSapid(cleanedValue); // Update the state with numeric value
+};
+
   const handlePhoneChange = (value) => {
     // Remove any non-digit characters
     const cleanedValue = value.replace(/\D/g, '');

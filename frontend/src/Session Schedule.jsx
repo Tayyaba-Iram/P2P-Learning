@@ -304,7 +304,7 @@ function SessionSchedule() {
                     <div className="form-groupd">
                         <label>Date</label>
                         <div className="datepicker-with-icon">
-                            <DatePicker
+                            <DatePicker 
                                 selected={sessionDetails.date}
                                 onChange={handleDateChange}
                                 dateFormat="yyyy-MM-dd"
