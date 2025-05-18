@@ -48,10 +48,10 @@ body {
   margin-bottom: 10px;
   margin-top: 19px;
   text-align: center;
-  /* Center text for uniform appearance */
+  
 }
 
-/* Container Styles for Buttons */
+
 .conduct-session-container,
 .chat-container,
 .schedule-session-container {
@@ -59,33 +59,33 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border: 2px solid rgb(221, 216, 216); /* Add this line */
-  border-radius: 8px; /* Optional: for rounded corners */
+  border: 2px solid rgb(221, 216, 216); 
+  border-radius: 8px; 
   margin-bottom: 17px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
 }
 
-/* Modal Background */
+
 .form-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  background: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999; /* Ensure it appears on top */
+  z-index: 999; 
 }
 
-/* Modal Content */
+
 .schedulee-form {
   background-color: #ffffff;
   padding: 40px;
   border-radius: 10px;
-  max-width: 600px; /* Set max width */
+  max-width: 600px; 
   max-height: 640px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
@@ -130,7 +130,7 @@ body {
 
 
 
-/* Form Actions Container */
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -141,7 +141,7 @@ body {
   margin: 20px auto;
   margin-bottom: 10px;
   margin-top: 1px;
-  border: 2px solid rgb(221, 216, 216); /* Add this line */
+  border: 2px solid rgb(221, 216, 216); 
   border-radius: 10px;
   overflow: hidden;
   max-width: 900px;
@@ -256,12 +256,12 @@ body {
     flex-direction: column;
     gap: 15px;
    
-    /* Ensure content is scrollable if it exceeds the container */
+   
     max-height: 80vh;
-    /* Prevent the modal from getting too tall */
+   
   }
 
-  /* Add overflow for content */
+
   .form-backdrop {
     position: fixed;
     top: 0;
@@ -276,7 +276,7 @@ body {
   }
 
  
-  /* Adjusted Form Inputs */
+  
   .form-group input,
   .form-group select {
     width: 100%;
@@ -287,9 +287,7 @@ body {
     margin-top: 5px;
   }
 
-  /* ======================================
-   Buttons Styling
-====================================== */
+ 
   .schedule-btn,
   .clear-btn {
     padding: 12px;
@@ -360,11 +358,11 @@ body {
   border-bottom: 1px solid #ddd;
 }
 .broadcast-request-table tbody tr:nth-child(even) {
-  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+  background-color: rgb(238, 234, 234); 
 }
 
 .broadcast-request-table tbody tr:nth-child(odd) {
-  background-color: #ffffff; /* White for odd rows */
+  background-color: #ffffff; 
 }
 
 .broadcast-request-table td:last-child {

@@ -58,7 +58,7 @@
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  right: 0px;  /* aligns to right of parent */
+  right: 0px;  
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -75,8 +75,8 @@
   background: none;
   border: none;
   font-size: 13px;
-  width: 100%; /* ✅ Fix here */
-  box-sizing: border-box; /* ensures padding doesn’t cause overflow */
+  width: 100%; 
+  box-sizing: border-box; 
   cursor: pointer;
   
 }

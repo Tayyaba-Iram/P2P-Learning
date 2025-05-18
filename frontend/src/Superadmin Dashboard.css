@@ -70,7 +70,7 @@ th {
 
 .button-wrapper {
   justify-content: center;
-  gap: 10px; /* Adds spacing between the buttons */
+  gap: 10px; 
 }
 
 
@@ -79,8 +79,8 @@ th {
   width: 110px;
   cursor: pointer;
   text-align: center;
-  margin: 0 auto 10px; /* centers the button horizontally */
-  display: block; /* ensures it takes up full line */
+  margin: 0 auto 10px; 
+  display: block; 
   border-radius: 6px;
   margin-top: 5px;
 }
@@ -163,18 +163,18 @@ width: 600px;
   background-color: #48742F;
 }
 .university-table tbody tr {
-  background-color: #f9f9f9; /* light gray background */
-  border-bottom: 1px solid #ccc; /* horizontal line */
+  background-color: #f9f9f9; 
+  border-bottom: 1px solid #ccc; 
 }
 
 .university-table tbody tr:nth-child(even) {
-  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+  background-color: rgb(238, 234, 234); 
 }
 
 .admin-table tbody tr:nth-child(even){
-  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+  background-color: rgb(238, 234, 234); 
 }
 .student-table tbody tr:nth-child(even){
-  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+  background-color: rgb(238, 234, 234); 
 }
 
