@@ -42,18 +42,18 @@
   }
 
   .search-container {
-    max-width: 1300px; /* Sets the maximum width for the search container */
-    margin: 0 auto; /* Centers the container horizontally */
-    padding: 5px; /* Optional: Adds some padding inside the container */
+    max-width: 1300px; 
+    margin: 0 auto; 
+    padding: 5px; 
 }
 
 .search-input {
-    max-width: 1500px; /* Adjust the max-width of the input field */
-    padding: 10px; /* Reduces padding to avoid too much space inside */
-    font-size: 14px; /* Adjust font size if needed */
-    border: 1px solid #161515; /* Adds a border to the input field */
-    border-radius: 4px; /* Optional: Adds rounded corners to the input field */
-    width: 100%; /* Ensures the input field fills the container width */
+    max-width: 1500px; 
+    padding: 10px; 
+    font-size: 14px; 
+    border: 1px solid #161515; 
+    border-radius: 4px; 
+    width: 100%; 
 }
 
   
