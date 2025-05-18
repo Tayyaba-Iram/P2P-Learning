@@ -90,9 +90,9 @@ margin-left: 12px;
   align-items: center;
 }
 .broadcast-form .checkbox-group input[type="checkbox"] {
-  width: 18px; /* Adjust size of the checkbox */
-  height: 18px; /* Adjust size of the checkbox */
-  cursor: pointer; /* Pointer cursor for better UX */
+  width: 18px; 
+  height: 18px; 
+  cursor: pointer; 
  margin-left: 17px;
 }
 

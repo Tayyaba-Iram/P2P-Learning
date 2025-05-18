@@ -16,7 +16,7 @@ html, body {
 }
 
 .sidebar {
-  height: 88vh; /* added height */
+  height: 88vh;
   width: 330px;
   background-color: #ffffff;
   border-color: #25292e;
@@ -27,7 +27,7 @@ html, body {
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* added shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   
 }
 
@@ -50,8 +50,8 @@ html, body {
   padding: 10px;
   margin-bottom: 10px;
   cursor: pointer;
-  background-color: white;         /* Changed background to white */
-  border: 1px solid #ccc;          /* Added light gray border */
+  background-color: white;        
+  border: 1px solid #ccc;         
   border-radius: 5px;
   transition: background-color 0.3s ease, border 0.3s ease;
   color: black;
@@ -78,7 +78,7 @@ html, body {
 
 
 .chat-input {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); /* stronger top shadow */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); 
   display: flex;
   padding: 5px;
   background-color: #ffffff;
@@ -228,7 +228,7 @@ html, body {
 
 
 .chat-student.selected {
-  background-color: #dce0da   ; /* light green for selection */
+  background-color: #dce0da   ; 
 }
 
 .chat-placeholder {
@@ -236,7 +236,7 @@ html, body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%; /* or a specific height like 300px if needed */
+  height: 100%; 
   text-align: center;
   color: #9c9797;
   margin-left: 240px;

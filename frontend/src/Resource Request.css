@@ -38,7 +38,7 @@
   margin-right: 2% !important;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  table-layout: fixed;      /* Important to prevent overflow */
+  table-layout: fixed;      
     border-collapse: collapse;
   border-radius: 12px;
   overflow: hidden;
@@ -55,7 +55,7 @@
 }
 
 .resource-request-table tbody tr:nth-child(even) {
-  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+  background-color: rgb(238, 234, 234); 
 }
 
 
