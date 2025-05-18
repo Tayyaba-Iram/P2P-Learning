@@ -5,12 +5,12 @@ import './Edit University.css';
 import toast from 'react-hot-toast';
 
 function EditUniversity() {
-  const { state } = useLocation(); // Get the university data passed from the Dashboard
+  const { state } = useLocation(); 
   const navigate = useNavigate();
 
   const [universityName, setUniversityName] = useState('');
   const [campuses, setCampuses] = useState([]);
-  const [loading, setLoading] = useState(false); // Loading state for saving
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (state && state.university) {
@@ -19,78 +19,67 @@ function EditUniversity() {
     }
   }, [state]);
 
-  // Get token from local storage
   const token = sessionStorage.getItem('token');
   const headers = {
-    Authorization: `Bearer ${token}`, // Add token to headers for authentication
+    Authorization: `Bearer ${token}`, 
   };
-console.log(token)
-  // Handle changes in the university name
+  console.log(token)
+
   const handleUniversityChange = (e) => {
     setUniversityName(e.target.value);
   };
 
-  // Handle changes in the campus name
   const handleCampusChange = (index, field, value) => {
     const updatedCampuses = [...campuses];
     updatedCampuses[index][field] = value;
     setCampuses(updatedCampuses);
   };
 
-  // Handle changes in program name within a campus
   const handleProgramChange = (campusIndex, programIndex, value) => {
     const updatedCampuses = [...campuses];
     updatedCampuses[campusIndex].programs[programIndex].name = value;
     setCampuses(updatedCampuses);
   };
 
-  // Add a new campus
   const handleAddCampus = () => {
     setCampuses([...campuses, { name: '', programs: [] }]);
   };
 
-  // Remove a campus
   const handleRemoveCampus = (index) => {
     const updatedCampuses = campuses.filter((_, i) => i !== index);
     setCampuses(updatedCampuses);
   };
 
-  // Add a new program to a campus
   const handleAddProgram = (campusIndex) => {
     const updatedCampuses = [...campuses];
     updatedCampuses[campusIndex].programs.push({ name: '' });
     setCampuses(updatedCampuses);
   };
 
-  // Remove a program from a campus
   const handleRemoveProgram = (campusIndex, programIndex) => {
     const updatedCampuses = [...campuses];
     updatedCampuses[campusIndex].programs = updatedCampuses[campusIndex].programs.filter((_, i) => i !== programIndex);
     setCampuses(updatedCampuses);
   };
 
-  // Handle saving the updated university data
   const handleSave = async () => {
-    if (loading) return; // Prevent multiple saves
+    if (loading) return; 
 
-    setLoading(true); // Set loading state while saving
+    setLoading(true);
     try {
       const updatedUniversity = { name: universityName, campuses };
 
-      // Save university name
       await axios.put(
         `http://localhost:3001/api/universities/${state.university._id}`,
         updatedUniversity,
         { headers }
       );
 
-      // Save campus and program data
       for (let i = 0; i < campuses.length; i++) {
-        if (!campuses[i].name) continue; // Skip invalid campuses
+        if (!campuses[i].name) continue; 
 
-        const campusId = campuses[i]._id; // Get the campus _id
+        const campusId = campuses[i]._id;
         if (campusId) {
-          // Update campus data using the campus _id
           await axios.put(
             `http://localhost:3001/api/universities/${state.university._id}/campuses/${campusId}`,
             { name: campuses[i].name },
@@ -99,11 +88,10 @@ console.log(token)
         }
 
         for (let j = 0; j < campuses[i].programs.length; j++) {
-          if (!campuses[i].programs[j].name) continue; // Skip invalid programs
+          if (!campuses[i].programs[j].name) continue; 
 
-          const programId = campuses[i].programs[j]._id; // Get the program _id
+          const programId = campuses[i].programs[j]._id; 
           if (programId) {
-            // Update program data using the program _id
             await axios.put(
               `http://localhost:3001/api/universities/${state.university._id}/campuses/${campusId}/programs/${programId}`,
               { name: campuses[i].programs[j].name },
@@ -113,20 +101,19 @@ console.log(token)
         }
       }
 
-      navigate('/superdashboard'); // Navigate to dashboard after saving
+      navigate('/superdashboard'); 
     } catch (error) {
       toast.success('University Updated Successfully')
-      navigate('/superdashboard'); // Navigate to dashboard after saving
-     
+      navigate('/superdashboard'); 
+
       console.error('Error updating university:', error.response?.data?.message || error.message);
     } finally {
-      setLoading(false); // Reset loading state after the save is completed
+      setLoading(false); 
     }
   };
 
   return (
     <div className="update-university-container">
-      {/* University Section */}
       <div className="university-section">
         <h3>Edit University</h3>
         <label>University Name</label>
@@ -137,7 +124,6 @@ console.log(token)
         />
       </div>
 
-      {/* Campuses Section */}
       <div className="campuses-section">
         {campuses.map((campus, campusIndex) => (
           <div key={campusIndex} className="campus-item">
@@ -149,12 +135,11 @@ console.log(token)
                 onChange={(e) => handleCampusChange(campusIndex, 'name', e.target.value)}
               />
               <button className="trash-basket" onClick={() => handleRemoveCampus(campusIndex)}>
-              <i className="fa fa-trash"></i>
+                <i className="fa fa-trash"></i>
 
               </button>
             </div>
 
-            {/* Programs Section */}
             <div className="programs-section">
               <h3>Programs</h3>
               {campus.programs.map((program, programIndex) => (
@@ -166,7 +151,7 @@ console.log(token)
                       value={program.name}
                       onChange={(e) => handleProgramChange(campusIndex, programIndex, e.target.value)}
                     />
-                    <button className="trash-basket"  onClick={() => handleRemoveProgram(campusIndex, programIndex)}>
+                    <button className="trash-basket" onClick={() => handleRemoveProgram(campusIndex, programIndex)}>
                       <i className="fa fa-trash"></i>
                     </button>
                   </div>
@@ -183,7 +168,6 @@ console.log(token)
         </button>
       </div>
 
-      {/* Save Changes Section */}
       <button className="save-changes-section" onClick={handleSave}>
         Save Changes
       </button>

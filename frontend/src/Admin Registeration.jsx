@@ -19,7 +19,7 @@ function AdminRegister() {
   const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
-  const token = sessionStorage.getItem('token'); // Or localStorage.getItem('token')
+  const token = sessionStorage.getItem('token');
 
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -37,7 +37,7 @@ function AdminRegister() {
   useEffect(() => {
     const selectedUniversity = universities.find(uni => uni.name === university);
     setCampusOptions(selectedUniversity ? selectedUniversity.campuses : []);
-    setCampus([]); // Reset campus when university changes
+    setCampus([]);
   }, [university, universities]);
 
   const handleCampusChange = (campusName) => {
@@ -48,7 +48,7 @@ function AdminRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
       setMessage('Password must be 8 characters with uppercase, lowercase letter, number, and special character.');
       return;
@@ -56,7 +56,7 @@ function AdminRegister() {
       setMessage('Password and confirm password must be same.');
       return;
     }
-  
+
     try {
       const response = await axios.post(
         'http://localhost:3001/api/registerUniAdmin',
@@ -67,10 +67,7 @@ function AdminRegister() {
           },
         }
       );
-  
-      // Show success message from backend
-  
-      // Reset form fields
+
       setName('');
       setSapid('');
       setEmail('');
@@ -82,32 +79,27 @@ function AdminRegister() {
       setCpassword('');
       setMessage('');
       navigate('/superdashboard')
-     
+
       toast.success(response.data.message || 'Admin registered successfully');
 
     } catch (error) {
-      // Show error message from backend
+
       const errorMsg = error.response?.data?.error || 'Registration failed';
       toast.error(errorMsg);
     }
   };
-  
-  const handlePhoneChange = (value) => {
-    // Remove any non-digit characters
-    const cleanedValue = value.replace(/\D/g, '');
 
-    // Format as '0000-0000000'
+  const handlePhoneChange = (value) => {
+    const cleanedValue = value.replace(/\D/g, '');
     if (cleanedValue.length > 4) {
       setPhone(`${cleanedValue.slice(0, 4)}-${cleanedValue.slice(4, 11)}`);
     } else {
       setPhone(cleanedValue);
     }
   };
-  const handleCnicChange = (value) => {
-    // Remove any non-digit characters
-    const cleanedValue = value.replace(/\D/g, '');
 
-    // Format as '00000-0000000-0'
+  const handleCnicChange = (value) => {
+    const cleanedValue = value.replace(/\D/g, '');
     let formattedValue = cleanedValue;
 
     if (cleanedValue.length > 5 && cleanedValue.length <= 12) {
@@ -119,16 +111,16 @@ function AdminRegister() {
     setCnic(formattedValue);
   };
 
-const handleSapChange = (event) => {
-  let value = event.target.value;
-  // Allow only numbers
-  let cleanedValue = value.replace(/\D/g, '');
-  // Limit to max 7 digits
-  if (cleanedValue.length > 7) {
-    cleanedValue = cleanedValue.slice(0, 7);
-  }
-  setSapid(cleanedValue); // Update the state with numeric value
-};
+  const handleSapChange = (event) => {
+    let value = event.target.value;
+    // Allow only numbers
+    let cleanedValue = value.replace(/\D/g, '');
+    // Limit to max 7 digits
+    if (cleanedValue.length > 7) {
+      cleanedValue = cleanedValue.slice(0, 7);
+    }
+    setSapid(cleanedValue);
+  };
 
 
   return (
@@ -174,14 +166,14 @@ const handleSapChange = (event) => {
         <label htmlFor="university">University:</label>
         <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required
           style={{
-    paddingRight: '24px', // creates space inside the select box on the right
-    backgroundPosition: 'right 8px center', // moves the arrow slightly left
-    backgroundRepeat: 'no-repeat',
-    backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
-    appearance: 'none', // hide default arrow (optional)
-    WebkitAppearance: 'none',
-    MozAppearance: 'none',
-  }}>
+            paddingRight: '24px',
+            backgroundPosition: 'right 8px center',
+            backgroundRepeat: 'no-repeat',
+            backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
+            appearance: 'none',
+            WebkitAppearance: 'none',
+            MozAppearance: 'none',
+          }}>
           <option value="" hidden>Select University</option>
           {universities.map(uni => (
             <option key={uni._id} value={uni.name}>{uni.name}</option>
@@ -210,7 +202,9 @@ const handleSapChange = (event) => {
         <label htmlFor="cpassword">Confirm Password:</label>
         <input id="cpassword" type="password" placeholder='Enter Confirm Password' value={cpassword} onChange={(e) => setCpassword(e.target.value)} required />
       </div>
+
       {message && <p style={{ color: 'red', fontWeight: 'bold', fontSize: '16px' }}>{message}</p>}
+     
       <button type="submit" className="register">Register</button>
     </form>
 

@@ -11,7 +11,6 @@ const Repository = () => {
   const [confirmDeleteIndex, setConfirmDeleteIndex] = useState(null);
   const navigate = useNavigate();
 
-  // State for search term
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -88,7 +87,6 @@ const Repository = () => {
 
   return (
     <div className="repository-container">
-      {/* Search bar */}
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <input
           className="directory-search"
@@ -167,10 +165,10 @@ const Repository = () => {
                       {repo.allowedStudent && repo.allowedStudent.length > 0 ? (
                         repo.allowedStudent.map((student, index) => (
                           <div key={index} className="student-info">
-                          <strong>{student.name}</strong> 
-                          <p>{student.email}</p>
-                        </div>
-                        
+                            <strong>{student.name}</strong>
+                            <p>{student.email}</p>
+                          </div>
+
                         ))
                       ) : (
                         <span>No specific students allowed</span>
@@ -182,14 +180,14 @@ const Repository = () => {
                 </td>
                 <td>
                   <div className='repo-buttons'>
-                  <Link to={`/editRepository/${repo._id}`}>
-                    <button className="edit-repo">Edit</button>
-                  </Link>
-                  <button 
-                  style={{
-                    backgroundColor: 'crimson',
-                  }}
-                  className="delete-repo" onClick={() => handleDeleteRequest(index)}>Delete</button>
+                    <Link to={`/editRepository/${repo._id}`}>
+                      <button className="edit-repo">Edit</button>
+                    </Link>
+                    <button
+                      style={{
+                        backgroundColor: 'crimson',
+                      }}
+                      className="delete-repo" onClick={() => handleDeleteRequest(index)}>Delete</button>
                   </div>
                 </td>
               </tr>
@@ -198,15 +196,14 @@ const Repository = () => {
         </table>
       )}
 
-      {/* Delete Confirmation Modal */}
       {confirmDeleteIndex !== null && (
         <div className="delete-confirmation-modal">
           <div className="delete-modal-content">
             <p>Are you sure you want to delete this repository?</p>
             <div className="modal-buttons">
-              <button  style={{
-                    backgroundColor: 'crimson',
-                  }} onClick={handleDeleteConfirm}>Yes</button>
+              <button style={{
+                backgroundColor: 'crimson',
+              }} onClick={handleDeleteConfirm}>Yes</button>
               <button onClick={handleDeleteCancel}>No</button>
             </div>
           </div>

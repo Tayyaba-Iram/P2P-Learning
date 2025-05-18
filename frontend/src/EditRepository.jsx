@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Select from 'react-select'; // Import Select for dropdown
+import Select from 'react-select'; 
 import './EditRepository.css'
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -14,10 +14,10 @@ export default function EditRepository() {
   const [fileLink, setFileLink] = useState('');
   const [fileName, setFileName] = useState('');
   const [newFile, setNewFile] = useState(null);
-  const [accessType, setAccessType] = useState('public');  // To track selected access type
-  const [students, setStudents] = useState([]);  // To hold list of students
-  const [studentOptions, setStudentOptions] = useState([]); // For populating Select dropdown
-  const [allowedStudent, setAllowedStudent] = useState([]); // For storing selected students
+  const [accessType, setAccessType] = useState('public');  
+  const [students, setStudents] = useState([]);  
+  const [studentOptions, setStudentOptions] = useState([]); 
+  const [allowedStudent, setAllowedStudent] = useState([]); 
   const token = sessionStorage.getItem('token');
   const navigate = useNavigate();
 
@@ -54,7 +54,6 @@ export default function EditRepository() {
     fetchRepo();
   }, [repoId, token]);
 
-  // Fetch the list of students for "specific" access
   useEffect(() => {
     const fetchStudents = async () => {
       try {
@@ -65,7 +64,6 @@ export default function EditRepository() {
         });
         const studentData = response.data;
         setStudents(studentData);
-        // Prepare student options for Select dropdown
         const options = studentData.map(student => ({
           value: student.email,
           label: `${student.name} (${student.email})`,
@@ -98,7 +96,7 @@ export default function EditRepository() {
 
     formData.append('fileLink', fileLink);
     formData.append('accessType', accessType);
-    formData.append('allowedStudent', JSON.stringify(allowedStudent)); // Pass allowed students as JSON string
+    formData.append('allowedStudent', JSON.stringify(allowedStudent));
 
     try {
       const response = await axios.put(
@@ -195,8 +193,8 @@ export default function EditRepository() {
             checked={accessType === 'public'}
             onChange={() => setAccessType('public')}
           />
-            <label className="radio-repo" htmlFor="access-public">Public</label>
-            </div>
+          <label className="radio-repo" htmlFor="access-public">Public</label>
+        </div>
 
         <div className="radio-repo-container">
           <input
@@ -207,8 +205,8 @@ export default function EditRepository() {
             checked={accessType === 'specific'}
             onChange={() => setAccessType('specific')}
           />
-            <label className="radio-repo" htmlFor="access-specific">Specific Student</label>
-            </div>
+          <label className="radio-repo" htmlFor="access-specific">Specific Student</label>
+        </div>
 
         {accessType === 'specific' && (
           <div className='select-student-to-edit'>

@@ -120,7 +120,6 @@ const RepositoryForm = () => {
           allowedStudent: [],
         });
 
-        // ✅ Clear file input manually
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
         }

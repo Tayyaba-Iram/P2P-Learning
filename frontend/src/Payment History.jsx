@@ -62,8 +62,8 @@ const StudentSessions = () => {
 
   return (
     <div>
-        <Toaster position="top-center" />
-        <h2 style={{ textAlign: 'center', marginTop: '50px' }}>Sessions History</h2>
+      <Toaster position="top-center" />
+      <h2 style={{ textAlign: 'center', marginTop: '50px' }}>Sessions History</h2>
 
       {loading ? (
         <p style={{ textAlign: 'center', marginTop: '20px' }}>Loading...</p>
@@ -128,7 +128,6 @@ const StudentSessions = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {confirmDeleteIndex !== null && (
         <div className="delete-confirmation-modal">
           <div className="delete-modal-content">

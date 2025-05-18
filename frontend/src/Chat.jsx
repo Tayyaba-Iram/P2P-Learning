@@ -3,8 +3,6 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import './Chat.css';
 import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-
 
 function Chat() {
   const [user, setUser] = useState(null);
@@ -84,8 +82,8 @@ function Chat() {
           withCredentials: true,
         });
 
-        console.log('Chatted students:', response.data); // Log the response
-        setChattedStudents(response.data); // Update your state with the data
+        console.log('Chatted students:', response.data);
+        setChattedStudents(response.data);
       } catch (err) {
         console.error('Error fetching chatted students:', err.response?.data || err.message);
       }
@@ -109,7 +107,6 @@ function Chat() {
     fetchStudents();
   }, [user]);
 
-  // Initialize socket connection and handle incoming messages
   useEffect(() => {
     if (!socketRef.current) {
       socketRef.current = io('http://localhost:3001');
@@ -121,42 +118,38 @@ function Chat() {
         console.log('Disconnected from socket server');
       });
     }
-  
+
     const handleIncomingMessage = (message) => {
       if (
         activeStudent &&
         (message.senderId === activeStudent._id || message.receiverId === activeStudent._id)
       ) {
-        // Show message in the current chat view
         setMessages((prev) => [...prev, message]);
-    
-        // Mark the student's hasUnread as false if the active chat is with the sender
+
         setChattedStudents((prevStudents) =>
           prevStudents.map((s) =>
             s._id === activeStudent._id ? { ...s, hasUnread: false } : s
           )
         );
       } else {
-        // Message is from another student — update unreadMessages state
         setUnreadMessages((prevUnread) => {
           const updated = { ...prevUnread };
           updated[message.senderId] = true; // Mark message as unread for this sender
           return updated;
         });
-    
-        // Also, update the chatted student's hasUnread to true
+
         setChattedStudents((prevStudents) =>
           prevStudents.map((s) =>
             s._id === message.senderId ? { ...s, hasUnread: true } : s
           )
         );
-        
+
       }
     };
-    
-  
+
+
     socketRef.current?.on('newMessage', handleIncomingMessage);
-  
+
     return () => {
       if (socketRef.current) {
         socketRef.current.off('newMessage', handleIncomingMessage);
@@ -165,7 +158,7 @@ function Chat() {
   }, [activeStudent]);
   const fetchChatHistory = async (student) => {
     try {
-      const token = sessionStorage.getItem('token'); // Or wherever you store the auth token
+      const token = sessionStorage.getItem('token');
 
       const { data } = await axios.get(`http://localhost:3001/api/chat/${student._id}`, {
         params: { userId: user._id },
@@ -181,24 +174,23 @@ function Chat() {
   };
   const [selectedStudentId, setSelectedStudentId] = useState(null);
 
- 
+
   const handleStartChat = async (student) => {
     setSelectedStudentId(student._id);
     if (!user || !student) return;
-  
+
     setActiveStudent(student);
     setMessages([]); // Clear previous chat history
-  
+
     const senderId = user._id;
     const receiverId = student._id;
     const roomName = [senderId, receiverId].sort().join('-');
-  
-    // Add student to the chatted list if not already there
+
     setChattedStudents((prev) => {
       const exists = prev.some((s) => s._id === student._id);
       return exists ? prev : [...prev, student];
     });
-  
+
     // Join the socket room
     if (socketRef.current) {
       socketRef.current.emit('joinRoom', roomName, (err) => {
@@ -206,22 +198,19 @@ function Chat() {
         else console.log(`Joined room: ${roomName}`);
       });
     }
-  
-    // Mark messages as read using Axios and remove the green dot
+
     try {
       await axios.post('http://localhost:3001/api/chat/markAsRead', {
         senderId: student._id,
         receiverId: user._id
       });
-  
-      // Update the unreadMessages state to remove the green dot for this student
+
       setUnreadMessages((prev) => {
         const updated = { ...prev };
-        delete updated[student._id]; // Remove the green dot for this student
+        delete updated[student._id];
         return updated;
       });
-  
-      // Update the student's `hasUnread` property to false
+
       setChattedStudents((prevStudents) =>
         prevStudents.map((s) =>
           s._id === student._id ? { ...s, hasUnread: false } : s
@@ -230,12 +219,11 @@ function Chat() {
     } catch (err) {
       console.error('Error marking messages as read:', err);
     }
-  
-    // Fetch chat history for the selected student
+
     fetchChatHistory(student);
   };
-  
-  
+
+
   const [isSending, setIsSending] = useState(false);
   const handleSendMessage = () => {
     if (!newMessage.trim() || !activeStudent || !user) {
@@ -250,10 +238,10 @@ function Chat() {
 
     socketRef.current?.emit('newMessage', { room: roomName, message: msg });
 
-    setNewMessage(''); // Clear the message input field
+    setNewMessage('');
   };
 
-  // Ensure that the chat container scrolls to the bottom when a new message is added
+  //  chat container scroll to the bottom when a new message is added
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -274,16 +262,13 @@ function Chat() {
 
   const toggleFavorite = async (studentId) => {
     try {
-      // Check if the student is already in favorites
       if (favoriteStudents.includes(studentId)) {
         // Remove from favorites
         setFavoriteStudents((prev) => prev.filter((id) => id !== studentId));
       } else {
         // Add to favorites
         setFavoriteStudents((prev) => [...prev, studentId]);
-
-        // Send POST request to backend to save the favorite
-        const token = sessionStorage.getItem('token'); // Get the token
+        const token = sessionStorage.getItem('token');
         if (!token) {
           console.error('User is not authenticated');
           return;
@@ -299,7 +284,7 @@ function Chat() {
           }
         );
 
-        console.log(response.data.message); // Show success message from backend
+        console.log(response.data.message);
       }
     } catch (error) {
       console.error('Error favoriting student:', error.response?.data || error.message);
@@ -307,13 +292,12 @@ function Chat() {
   };
   const unfavoriteStudent = async (favoriteStudentId) => {
     try {
-      const token = sessionStorage.getItem('token'); // Get the token
+      const token = sessionStorage.getItem('token');
       if (!token) {
         console.error('User is not authenticated');
         return;
       }
 
-      // Send DELETE request to remove the student from favorites
       const response = await axios.delete(
         `http://localhost:3001/api/unfavoriteStudent/${favoriteStudentId}`,
         {
@@ -322,9 +306,8 @@ function Chat() {
           },
         }
       );
-      console.log(response.data.message); // Show success message from backend
+      console.log(response.data.message);
 
-      // Remove from the favoriteStudents list in state
       setFavoriteStudents((prev) => prev.filter((id) => id !== favoriteStudentId));
     } catch (error) {
       console.error('Error unfavoriting student:', error.response?.data || error.message);
@@ -364,7 +347,7 @@ function Chat() {
   const sortedChattedStudents = [...favoriteStudentsList, ...nonFavoriteStudentsList];
   useEffect(() => {
     const fetchStudentAndStartChat = async () => {
-      if (!studentId || !user) return; // <- wait for both studentId AND user
+      if (!studentId || !user) return;
 
       const token = sessionStorage.getItem('token');
 
@@ -375,7 +358,7 @@ function Chat() {
 
         const student = res.data;
         setActiveStudent(student);
-        setSelectedStudentId(student._id); // <-- Add this line
+        setSelectedStudentId(student._id);
 
         const senderId = user._id;
         const receiverId = student._id;
@@ -398,7 +381,7 @@ function Chat() {
     };
 
     fetchStudentAndStartChat();
-  }, [studentId, user]); // <- add user to dependencies
+  }, [studentId, user]);
 
 
   return (
@@ -429,17 +412,15 @@ function Chat() {
         ) : (
           sortedChattedStudents.map(student => (
             <div
-            key={student._id}
-            onClick={() => handleStartChat(student)}
-            className={`chat-student ${selectedStudentId === student._id ? 'selected' : ''}`}
-          >
-            {student.hasUnread && (
-              <span className="green-dot"></span>
-            )}
+              key={student._id}
+              onClick={() => handleStartChat(student)}
+              className={`chat-student ${selectedStudentId === student._id ? 'selected' : ''}`}
+            >
+              {student.hasUnread && (
+                <span className="green-dot"></span>
+              )}
               <span>{student.name} - </span>
               <span>{student.specification}</span>
-
-
               <span
                 onClick={(e) => {
                   e.stopPropagation();
@@ -453,39 +434,39 @@ function Chat() {
               >
                 {favoriteStudents.includes(student._id) ? '❤️' : '🤍'}
               </span>
-              
+
             </div>
           ))
         )}
       </div>
 
       {activeStudent ? (
-  <div className="chat-box">
-    <h2>Chat with {activeStudent.name}</h2>
-    <div className="chat-messages" ref={chatContainerRef}>
-      {messages.slice().reverse().map((msg, idx) => (
-        <div key={idx} className={`message ${msg.senderId === user._id ? 'sent' : 'received'}`}>
-          <strong>{msg.senderId === user._id ? 'You' : activeStudent.name}</strong>: {msg.text}
-        </div>
-      ))}
-    </div>
+        <div className="chat-box">
+          <h2>Chat with {activeStudent.name}</h2>
+          <div className="chat-messages" ref={chatContainerRef}>
+            {messages.slice().reverse().map((msg, idx) => (
+              <div key={idx} className={`message ${msg.senderId === user._id ? 'sent' : 'received'}`}>
+                <strong>{msg.senderId === user._id ? 'You' : activeStudent.name}</strong>: {msg.text}
+              </div>
+            ))}
+          </div>
 
-    <div className="chat-input">
-      <input
-        type="text"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="Type a message..."
-        onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-      />
-      <button onClick={handleSendMessage} disabled={isSending}>Send</button>
-    </div>
-  </div>
-) : (
-  <div className="chat-placeholder">
-    <h3>Your chat inbox is quiet. Pick a student to break the silence!</h3>
-  </div>
-)}
+          <div className="chat-input">
+            <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="Type a message..."
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+            />
+            <button onClick={handleSendMessage} disabled={isSending}>Send</button>
+          </div>
+        </div>
+      ) : (
+        <div className="chat-placeholder">
+          <h3>Your chat inbox is quiet. Pick a student to break the silence!</h3>
+        </div>
+      )}
 
     </div>
   );

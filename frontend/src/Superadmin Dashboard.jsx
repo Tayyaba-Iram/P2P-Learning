@@ -6,7 +6,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, } from 'chart.js';
 
-// Register all necessary chart components at once
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,15 +21,13 @@ function Dashboard() {
   const [students, setStudents] = useState([]);
   const [uniadmins, setUniadmins] = useState([]);
   const [displayeAdmins, setDisplayedAdmins] = useState([]);
-  // Search states for each table
   const [universitySearch, setUniversitySearch] = useState('');
   const [studentSearch, setStudentSearch] = useState('');
   const [adminSearch, setAdminSearch] = useState('');
-  const [deleteTarget, setDeleteTarget] = useState(null); // { type: 'admin' | 'university', id: string }
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const confirmDelete = (type, id) => {
     setDeleteTarget({ type, id });
   };
-
 
   const [ratingsData, setRatingsData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,10 +35,8 @@ function Dashboard() {
 
 
   const navigate = useNavigate();
-  const token = sessionStorage.getItem('token'); // Assuming you stored the token in sessionStorage
+  const token = sessionStorage.getItem('token'); 
 
-
-  // Fetch data on component mount
   useEffect(() => {
     const fetchUniversities = async () => {
 
@@ -89,9 +84,6 @@ function Dashboard() {
     navigate('/edituniversity', { state: { university } });
   };
 
-
-
-  // Toggle functionality
   const [showAllUniversities, setShowAllUniversities] = useState(false);
   const [showAllStudents, setShowAllStudents] = useState(false);
   const [showAllAdmins, setShowAllAdmins] = useState(false);
@@ -104,8 +96,6 @@ function Dashboard() {
   const filteredUniversities = universities.filter((uni) =>
     uni.name.toLowerCase().includes(universitySearch.toLowerCase())
   );
-
-
 
   const filteredStudents = students.filter((student) => {
     const term = studentSearch.toLowerCase();
@@ -121,7 +111,6 @@ function Dashboard() {
   });
 
   const filteredUniAdmins = uniadmins.filter((admin) => {
-    // Convert all fields to lowercase for case-insensitive search
     const searchQuery = adminSearch.toLowerCase();
     return (
       admin.sapid.toLowerCase().includes(searchQuery) ||
@@ -129,9 +118,6 @@ function Dashboard() {
     );
   });
 
-
-
-  // Limiting displayed items
   const displayedUniversities = showAllUniversities
     ? filteredUniversities
     : filteredUniversities.slice(0, 5);
@@ -139,9 +125,8 @@ function Dashboard() {
   const displayedAdmins = showAllAdmins ? filteredUniAdmins : filteredUniAdmins.slice(0, 5);
 
   useEffect(() => {
-    // Function to fetch the ratings data from the backend with the Bearer token
     const fetchRatings = async () => {
-      const token = sessionStorage.getItem('token'); // Assuming you stored the token in sessionStorage
+      const token = sessionStorage.getItem('token'); 
 
       if (!token) {
         setError('No authentication token found');
@@ -153,7 +138,7 @@ function Dashboard() {
         const response = await fetch('http://localhost:3001/api/ratings-by-strenth', {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`, // Include the Bearer token in the Authorization header
+            'Authorization': `Bearer ${token}`, 
             'Content-Type': 'application/json',
           }
         });
@@ -162,16 +147,16 @@ function Dashboard() {
           throw new Error('Failed to fetch ratings data');
         }
 
-        const data = await response.json(); // Parse the JSON response
-        setRatingsData(data.datasets[0].data); // Set the ratings data in state
-        setLoading(false); // Set loading to false once the data is fetched
+        const data = await response.json(); 
+        setRatingsData(data.datasets[0].data); 
+        setLoading(false);
       } catch (err) {
-        setError('Error fetching data: ' + err.message); // Handle any errors
+        setError('Error fetching data: ' + err.message);
         setLoading(false);
       }
     };
 
-    fetchRatings(); // Call the fetchRatings function on component mount
+    fetchRatings(); 
     const intervalId = setInterval(() => {
       fetchRatings();
     }, 1000);
@@ -179,21 +164,20 @@ function Dashboard() {
     return () => clearInterval(intervalId);
   }, [token]);
 
-  // Prepare chart data for rendering
   const chartData = {
-    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'], // Labels for each section (now with 5 stars)
+    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'], 
     datasets: [{
-      data: ratingsData, // Data fetched from the backend
-      backgroundColor: ['#FF5733', '#FF8D1A', '#FFD700', '#32CD32', '#4CAF50'], // Custom colors for each section
+      data: ratingsData, 
+      backgroundColor: ['#FF5733', '#FF8D1A', '#FFD700', '#32CD32', '#4CAF50'], 
     }],
   };
 
 
-  const [data, setData] = useState(null); // Renaming chartData to data to avoid conflicts
+  const [data, setData] = useState(null); 
 
   useEffect(() => {
     const fetchChartData = async () => {
-      const token = sessionStorage.getItem('token'); // Assuming you stored the token in sessionStorage
+      const token = sessionStorage.getItem('token');
 
       try {
         const response = await fetch('http://localhost:3001/api/ratings-per-university-program', {
@@ -203,7 +187,7 @@ function Dashboard() {
           },
         });
         const chartsData = await response.json();
-        setData(chartsData); // Store the data in state
+        setData(chartsData); 
       } catch (error) {
         console.error('Error fetching chart data:', error);
       }
@@ -217,7 +201,6 @@ function Dashboard() {
     return () => clearInterval(intervalId);
   }, [token]);
 
-  // If data is still loading, show a loading message
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -241,7 +224,7 @@ function Dashboard() {
       x: {
         ticks: {
           font: {
-            size: 14, // Optional: increase X-axis label size (programs)
+            size: 14, 
           },
         },
       },
@@ -250,7 +233,7 @@ function Dashboard() {
         ticks: {
           stepSize: 1,
           font: {
-            size: 14, // Optional: increase Y-axis label size
+            size: 14,
           },
         },
       },
@@ -258,17 +241,14 @@ function Dashboard() {
   };
 
 
-  // Step 1: Filter out undefined or empty program labels
   const filteredLabels = data.labels.filter(label => label && label !== 'undefined' && label.trim() !== '');
 
-  // Step 2: Clean and align datasets with filtered labels
   const cleanedDatasets = data.datasets
-    .filter(dataset => dataset.label && dataset.label !== 'undefined') // Remove undefined university names
+    .filter(dataset => dataset.label && dataset.label !== 'undefined') 
     .map((dataset, index) => {
-      // Align dataset data with filtered labels
       const cleanedData = filteredLabels.map(label => {
         const labelIndex = data.labels.indexOf(label);
-        return dataset.data[labelIndex] || 0; // Use 0 if index not found
+        return dataset.data[labelIndex] || 0; 
       });
 
       return {
@@ -278,7 +258,6 @@ function Dashboard() {
       };
     });
 
-  // Final chart data
   const chartsData = {
     labels: filteredLabels,
     datasets: cleanedDatasets,
@@ -380,83 +359,83 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-  {displayedUniversities.length > 0 ? (
-    displayedUniversities.map((university) => {
-      const totalCampusRows = university.campuses.reduce(
-        (sum, campus) => sum + (campus.programs.length || 1),
-        0
-      );
+            {displayedUniversities.length > 0 ? (
+              displayedUniversities.map((university) => {
+                const totalCampusRows = university.campuses.reduce(
+                  (sum, campus) => sum + (campus.programs.length || 1),
+                  0
+                );
 
-      return (
-        <React.Fragment key={university._id}>
-          {university.campuses.map((campus, campusIndex) => {
-            const totalProgramRows = campus.programs.length || 1;
+                return (
+                  <React.Fragment key={university._id}>
+                    {university.campuses.map((campus, campusIndex) => {
+                      const totalProgramRows = campus.programs.length || 1;
 
-            return (
-              <React.Fragment key={campusIndex}>
-                {campus.programs.length > 0 ? (
-                  campus.programs.map((program, programIndex) => (
-                    <tr key={programIndex}>
-                      {campusIndex === 0 && programIndex === 0 && (
-                        <td rowSpan={totalCampusRows}>{university.name}</td>
-                      )}
-                      {programIndex === 0 && (
-                        <td rowSpan={totalProgramRows}>{campus.name}</td>
-                      )}
-                      <td>{program.name}</td>
-                      {campusIndex === 0 && programIndex === 0 && (
-                        <td rowSpan={totalCampusRows}>
-                          <div className="button-wrapper">
-                            <button className="edit-button" onClick={() => handleEditClick(university)}>Edit</button>
-                            <button
-                              style={{
-                                backgroundColor: 'crimson',
-                                fontSize: '16px',
-                                height: '39px'
-                              }}
-                              className="delete-button"
-                              onClick={() => confirmDelete('university', university._id)}
-                            >Delete</button>
-                          </div>
-                        </td>
-                      )}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    {campusIndex === 0 && (
-                      <td rowSpan={totalCampusRows}>{university.name}</td>
-                    )}
-                    <td>{campus.name}</td>
-                    <td>No programs</td>
-                    {campusIndex === 0 && (
-                      <td rowSpan={totalCampusRows}>
-                        <div className='edit-delete-buttons'>
-                          <button onClick={() => handleEditClick(university)}>Edit</button>
-                          <button
-                            style={{ backgroundColor: 'crimson' }}
-                            className="delete-button"
-                            onClick={() => confirmDelete('university', university._id)}
-                          >Delete</button>
-                        </div>
-                      </td>
-                    )}
-                  </tr>
-                )}
-              </React.Fragment>
-            );
-          })}
-        </React.Fragment>
-      );
-    })
-  ) : (
-    <tr>
-      <td colSpan="4" style={{ textAlign: 'center', padding: '10px' }}>
-        No universities found.
-      </td>
-    </tr>
-  )}
-</tbody>
+                      return (
+                        <React.Fragment key={campusIndex}>
+                          {campus.programs.length > 0 ? (
+                            campus.programs.map((program, programIndex) => (
+                              <tr key={programIndex}>
+                                {campusIndex === 0 && programIndex === 0 && (
+                                  <td rowSpan={totalCampusRows}>{university.name}</td>
+                                )}
+                                {programIndex === 0 && (
+                                  <td rowSpan={totalProgramRows}>{campus.name}</td>
+                                )}
+                                <td>{program.name}</td>
+                                {campusIndex === 0 && programIndex === 0 && (
+                                  <td rowSpan={totalCampusRows}>
+                                    <div className="button-wrapper">
+                                      <button className="edit-button" onClick={() => handleEditClick(university)}>Edit</button>
+                                      <button
+                                        style={{
+                                          backgroundColor: 'crimson',
+                                          fontSize: '16px',
+                                          height: '39px'
+                                        }}
+                                        className="delete-button"
+                                        onClick={() => confirmDelete('university', university._id)}
+                                      >Delete</button>
+                                    </div>
+                                  </td>
+                                )}
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              {campusIndex === 0 && (
+                                <td rowSpan={totalCampusRows}>{university.name}</td>
+                              )}
+                              <td>{campus.name}</td>
+                              <td>No programs</td>
+                              {campusIndex === 0 && (
+                                <td rowSpan={totalCampusRows}>
+                                  <div className='edit-delete-buttons'>
+                                    <button onClick={() => handleEditClick(university)}>Edit</button>
+                                    <button
+                                      style={{ backgroundColor: 'crimson' }}
+                                      className="delete-button"
+                                      onClick={() => confirmDelete('university', university._id)}
+                                    >Delete</button>
+                                  </div>
+                                </td>
+                              )}
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </React.Fragment>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="4" style={{ textAlign: 'center', padding: '10px' }}>
+                  No universities found.
+                </td>
+              </tr>
+            )}
+          </tbody>
 
         </table>
 
@@ -504,7 +483,7 @@ function Dashboard() {
               <th>Phone</th>
               <th>University</th>
               <th>Campus</th>
-              <th>Actions</th> {/* Add actions column for the delete button */}
+              <th>Actions</th> 
             </tr>
           </thead>
           <tbody>
@@ -590,27 +569,27 @@ function Dashboard() {
               <th>Program</th>
             </tr>
           </thead>
-         <tbody>
-  {displayedStudents.length > 0 ? (
-    displayedStudents.map((student) => (
-      <tr key={student._id}>
-        <td>{student.name}</td>
-        <td>{student.sapid}</td>
-        <td>{student.email}</td>
-        <td>{student.phone}</td>
-        <td>{student.university}</td>
-        <td>{student.campus}</td>
-        <td>{student.program}</td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan="7" style={{ textAlign: 'center', padding: '10px' }}>
-        No students found.
-      </td>
-    </tr>
-  )}
-</tbody>
+          <tbody>
+            {displayedStudents.length > 0 ? (
+              displayedStudents.map((student) => (
+                <tr key={student._id}>
+                  <td>{student.name}</td>
+                  <td>{student.sapid}</td>
+                  <td>{student.email}</td>
+                  <td>{student.phone}</td>
+                  <td>{student.university}</td>
+                  <td>{student.campus}</td>
+                  <td>{student.program}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" style={{ textAlign: 'center', padding: '10px' }}>
+                  No students found.
+                </td>
+              </tr>
+            )}
+          </tbody>
 
         </table>
 

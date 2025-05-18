@@ -58,7 +58,7 @@ function App() {
 
   
 
-  // Conditionally render the navbar based on the user's role
+  //render the navbar based on the user's role
   const renderNavbar = () => {
     if (!user) return null;
     switch (user.role) {

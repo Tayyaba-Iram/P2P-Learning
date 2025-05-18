@@ -36,12 +36,9 @@ const ComplainAction = () => {
   useEffect(() => {
     const fetchComplaint = async () => {
       try {
-        // Fetch only the complaint by its ID
         const response = await axios.get(`http://localhost:3001/api/complaint/${complaintId}`);
         setComplaint(response.data);
         console.log(response.data);
-
-        // Fetch the account status
         const token = sessionStorage.getItem('token');
         const userResponse = await axios.get(
           `http://localhost:3001/api/user-status/${response.data.targetemail}`,
@@ -51,7 +48,7 @@ const ComplainAction = () => {
             }
           }
         );
-                if (userResponse.data) {
+        if (userResponse.data) {
           setComplaint((prevComplaint) => ({
             ...prevComplaint,
             status: userResponse.data.accountStatus,
@@ -94,14 +91,10 @@ const ComplainAction = () => {
       });
 
       toast.success(response.data.message);
-
-      // Update the complaint status locally to reflect the change
       setComplaint((prevComplaint) => ({
         ...prevComplaint,
         status: actionType === 'suspend' ? 'Suspended' : 'Active',
       }));
-
-      // Update complaints array (if necessary)
       setComplaints((prevComplaints) =>
         prevComplaints.map((complaint) =>
           complaint.targetemail === selectedEmail
@@ -179,7 +172,7 @@ const ComplainAction = () => {
               <th>Action</th>
               <td>
                 {complaint.status === 'Suspended' ? (
-                  <button 
+                  <button
                     onClick={() => openModal(complaint.targetemail, 'unsuspend')}
                     className="unsuspend-btn"
                   >
@@ -187,9 +180,9 @@ const ComplainAction = () => {
                   </button>
                 ) : (
                   <button
-                  style={{
-                    backgroundColor: 'crimson',
-                  }}
+                    style={{
+                      backgroundColor: 'crimson',
+                    }}
                     onClick={() => openModal(complaint.targetemail, 'suspend')}
                     className="suspend-btn"
                   >

@@ -16,7 +16,7 @@ const ConductSession = () => {
   const [isSessionStarted, setIsSessionStarted] = useState(false);
 
   const navigate = useNavigate();
-  const jitsiContainerRef = useRef(null); // Use ref for the Jitsi container
+  const jitsiContainerRef = useRef(null); 
 
   useEffect(() => {
     const loadJitsiScript = () => {
@@ -26,7 +26,7 @@ const ConductSession = () => {
         script.async = true;
         script.onload = () => {
           console.log("Jitsi script loaded.");
-          initializeJitsi(); // Call initializeJitsi after the script is loaded
+          initializeJitsi(); 
         };
         script.onerror = () => {
           console.error("Failed to load Jitsi script.");
@@ -34,7 +34,6 @@ const ConductSession = () => {
         };
         document.body.appendChild(script);
       } else {
-        // If Jitsi is already loaded, initialize it
         initializeJitsi();
       }
     };
@@ -48,13 +47,13 @@ const ConductSession = () => {
     };
 
     loadJitsiScript();
-  }, []); // Empty dependency array to load the script only once when the component mounts
+  }, []); 
 
   useEffect(() => {
     if (isSessionStarted && window.JitsiMeetExternalAPI && jitsiContainerRef.current) {
       initializeJitsiAPI();
     }
-  }, [isSessionStarted]); // Re-run when session starts
+  }, [isSessionStarted]); 
 
   const handleMeetingLinkChange = (e) => {
     const link = e.target.value;
@@ -94,7 +93,7 @@ const ConductSession = () => {
       roomName: meetingLink.split("https://meet.jit.si/")[1],
       width: "100%",
       height: 600,
-      parentNode: jitsiContainerRef.current, // Ensure container is available
+      parentNode: jitsiContainerRef.current, 
       configOverwrite: { disableDeepLinking: true },
       interfaceConfigOverwrite: {
         SHOW_JITSI_WATERMARK: false,
@@ -123,13 +122,13 @@ const ConductSession = () => {
       icon: "info",
       showCancelButton: true,
       confirmButtonText: "End Session",
-  cancelButtonText: "Cancel",
-  customClass: {
-    icon: "swal-info-icon",
-    confirmButton: 'swal-confirm-btn',
-    cancelButton: 'swal-cancel-btn'
-  },
-  buttonsStyling: false
+      cancelButtonText: "Cancel",
+      customClass: {
+        icon: "swal-info-icon",
+        confirmButton: 'swal-confirm-btn',
+        cancelButton: 'swal-cancel-btn'
+      },
+      buttonsStyling: false
     });
 
     if (confirmDelete.isConfirmed) {
@@ -142,47 +141,47 @@ const ConductSession = () => {
   };
 
 
-    const handleRatingSubmit = async () => {
-        try {
-          const token = sessionStorage.getItem("token");
-          const sessionId = meetingLink?.replace("https://meet.jit.si/", "") || "";
-      
-          console.log("Token:", token);
-          console.log("Full Meeting Link:", meetingLink);
-          console.log("Session ID:", sessionId);
-          console.log("Rating:", rating);
-      
-          await axios.post("http://localhost:3001/api/submits", {
-            sessionId,
-            rating,
-          }, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-      
-          Swal.fire({
-            title: "Thank you!",
-            text: "Your rating has been submitted.",
-            icon: "success",
-            confirmButtonText: "OK",
-            customClass: {
-              confirmButton: "swal-confirm-btn-ok",
-            },
-            buttonsStyling: false, 
-          }).then(() => {
-            setIsRatingSubmitted(true);
-            navigate("/");
-          });
-      
-        } catch (err) {
-          console.error("Rating submission failed:", err);
-          Swal.fire("Error", "Failed to submit rating. Please try again.", "error");
-        }
-      };
-      const applyCustomStyles = () => {
-        const style = document.createElement("style");
-        style.innerHTML = `
+  const handleRatingSubmit = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const sessionId = meetingLink?.replace("https://meet.jit.si/", "") || "";
+
+      console.log("Token:", token);
+      console.log("Full Meeting Link:", meetingLink);
+      console.log("Session ID:", sessionId);
+      console.log("Rating:", rating);
+
+      await axios.post("http://localhost:3001/api/submits", {
+        sessionId,
+        rating,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      Swal.fire({
+        title: "Thank you!",
+        text: "Your rating has been submitted.",
+        icon: "success",
+        confirmButtonText: "OK",
+        customClass: {
+          confirmButton: "swal-confirm-btn-ok",
+        },
+        buttonsStyling: false,
+      }).then(() => {
+        setIsRatingSubmitted(true);
+        navigate("/");
+      });
+
+    } catch (err) {
+      console.error("Rating submission failed:", err);
+      Swal.fire("Error", "Failed to submit rating. Please try again.", "error");
+    }
+  };
+  const applyCustomStyles = () => {
+    const style = document.createElement("style");
+    style.innerHTML = `
           .swal-confirm-btn-ok {
             background-color: #48742F !important;
             color: white !important;
@@ -213,31 +212,30 @@ const ConductSession = () => {
              border: 3px solid #48742F !important;
           }
         `;
-        document.head.appendChild(style);
-      };
-      
-      // Call this function when the component is ready or before opening SweetAlert
-      applyCustomStyles();
-      
+    document.head.appendChild(style);
+  };
+
+  applyCustomStyles();
+
 
   return (
     <div style={{ textAlign: "center" }}>
       {!isSessionStarted ? (
         <>
           <h2 className="conduct-session" style={{ marginBottom: "10px" }}>Conduct Session</h2>
-<input
-  type="text"
-  value={meetingLink}
-  onChange={handleMeetingLinkChange}
-  placeholder="Enter meeting link"
-  style={{
-    width: "80%",
-    maxWidth: "300px",
-    marginBottom: "20px",
-    marginTop: "13px",  // Reduced space above the input
-  }}
-  disabled={isSessionEnded}
-/>
+          <input
+            type="text"
+            value={meetingLink}
+            onChange={handleMeetingLinkChange}
+            placeholder="Enter meeting link"
+            style={{
+              width: "80%",
+              maxWidth: "300px",
+              marginBottom: "20px",
+              marginTop: "13px",  
+            }}
+            disabled={isSessionEnded}
+          />
 
           <br />
           <button
@@ -264,7 +262,7 @@ const ConductSession = () => {
               height: "100%",
               padding: 0,
               margin: 0,
-              position: "absolute", /* Ensure absolute positioning to fill the screen */
+              position: "absolute", 
               top: 0,
               left: 0,
             }}
@@ -290,18 +288,18 @@ const ConductSession = () => {
       )}
 
       {isSessionEnded && !isRatingSubmitted && (
-       <div style={{ marginTop: "10px" }}> {/* Reduce marginTop here */}
-       <h2 style={{ marginBottom: "5px" }}>Rate this session</h2> {/* Reduce margin-bottom here */}
-       <Rating
-         style={{
-           maxWidth: 250,
-           margin: "auto",
-           marginTop: "20px",  // Reduced space above the rating component
-         }}
-         value={rating}
-         onChange={setRating}
-       />
-    
+        <div style={{ marginTop: "10px" }}> 
+          <h2 style={{ marginBottom: "5px" }}>Rate this session</h2> 
+          <Rating
+            style={{
+              maxWidth: 250,
+              margin: "auto",
+              marginTop: "20px",
+            }}
+            value={rating}
+            onChange={setRating}
+          />
+
           <button
             onClick={handleRatingSubmit}
             style={{

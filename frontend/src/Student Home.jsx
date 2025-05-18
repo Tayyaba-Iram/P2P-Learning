@@ -16,6 +16,7 @@ const localizer = momentLocalizer(moment);
 function Home() {
   const navigate = useNavigate();
   const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const token = sessionStorage.getItem('token');  
 
   const [agenda, setAgenda] = useState([]);
   const [isDetailsModalOpen, setDetailsModalOpen] = useState(false); // For viewing session details
@@ -31,13 +32,13 @@ function Home() {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const token = sessionStorage.getItem('token'); // Get token from local storage
+        const token = sessionStorage.getItem('token'); 
         const response = await axios.get('http://localhost:3001/api/sessions', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("Fetched sessions:", response.data); // ✅ log sessions here
+        console.log("Fetched sessions:", response.data);
         setAgenda(response.data);
       } catch (error) {
         console.error('Error fetching sessions:', error);
@@ -113,7 +114,12 @@ function Home() {
     };
 
     fetchBroadcastRequests();
-  }, []);
+     const intervalId = setInterval(() => {
+        fetchBroadcastRequests();
+    }, 1000); 
+
+    return () => clearInterval(intervalId);
+  }, [token]);
 
 
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
@@ -153,37 +159,31 @@ function Home() {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        // Log to check if the effect is running
         console.log('Fetching broadcast requests...');
 
-        const token = sessionStorage.getItem('token');  // Get token from sessionStorage
-        console.log('Token:', token);  // Log the token to verify if it's being retrieved
+        const token = sessionStorage.getItem('token');  
+        console.log('Token:', token);  
 
         if (!token) {
-          console.log('Token not found');  // Log if token is missing
+          console.log('Token not found');  
           setError('Token not found');
           setLoading(false);
           return;
         }
 
-        // Log before making the API call
         console.log('Making API call to fetch broadcast requests...');
 
-        // Make API call to fetch broadcast requests
         const res = await axios.get('http://localhost:3001/api/broadcastRequest-By-Programs', {
           headers: {
-            Authorization: `Bearer ${token}`  // Add token to headers
+            Authorization: `Bearer ${token}`  
           }
         });
 
-        // Log the response data to verify it's being received
         console.log('Response received:', res.data);
 
-        // Set the fetched data to state
         setRequests(res.data);
         setLoading(false);
       } catch (err) {
-        // Log the error
         console.log('Error in fetchRequests:', err);
         setError('Error fetching broadcast requests');
         setLoading(false);
@@ -191,19 +191,17 @@ function Home() {
     };
 
     fetchRequests();
-    /*  const intervalId = setInterval(() => {
-        fetchRequests();  // Re-fetch data every 10 seconds
-      }, 1000);  // 10000ms = 10 seconds
-  
-      // Cleanup on component unmount
-      return () => clearInterval(intervalId);*/
-  }, []);  // Call the fetchRequests function when the component mounts
-  // Fetch the logged-in user details
+   const intervalId = setInterval(() => {
+        fetchRequests();
+    }, 1000); 
+
+    return () => clearInterval(intervalId);
+  }, [token]);  
+
   const [user, setUser] = useState(null);
   const [verifiedStudents, setVerifiedStudents] = useState([]);
   const [activeStudent, setActiveStudent] = useState(null);
 
-  // Fetch user details from the server (keep token logic intact)
   useEffect(() => {
     const fetchUser = async () => {
       const token = sessionStorage.getItem('token');
@@ -230,7 +228,6 @@ function Home() {
     fetchUser();
   }, []);
 
-  // Fetch verified students list from the server (with token)
   useEffect(() => {
     const fetchVerifiedStudents = async () => {
       const token = sessionStorage.getItem('token');
@@ -241,7 +238,7 @@ function Home() {
       try {
         const response = await axios.get('http://localhost:3001/api/verifiedStudents', {
           headers: {
-            Authorization: `Bearer ${token}`, // Add the token here for authentication
+            Authorization: `Bearer ${token}`, 
           },
         });
         if (response.data && Array.isArray(response.data)) {
@@ -265,10 +262,9 @@ function Home() {
     console.log(" Full request object received:", request);
     console.log(" Keys in request:", Object.keys(request));
 
-    const studentId = request.userId; // Extract userId for matching
+    const studentId = request.userId; 
     console.log(" Extracted studentId:", studentId);
 
-    //  Add this line to debug all verified student IDs
     console.log(" All verified student IDs:", verifiedStudents.map(s => s._id));
 
     const matchedStudent = verifiedStudents.find(
@@ -284,7 +280,7 @@ function Home() {
     }
     navigate(`/chat/${studentId}`);
   };
- const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   const visibleRequests = showAll ? broadcastRequests : broadcastRequests.slice(0, 5);
   const visibleRequest = showAll ? requests : requests.slice(0, 5);
@@ -306,7 +302,7 @@ function Home() {
             endAccessor="end"
             style={{ height: 500 }}
             onSelectEvent={handleEventSelect}
-            
+
           />
         </div>
 
@@ -373,27 +369,27 @@ function Home() {
 
               <div className="form-group">
                 <label>Start Time</label>
-                <input type="text" value={sessionDetails.startTime} readOnly 
+                <input type="text" value={sessionDetails.startTime} readOnly
                   style={{
                     border: '1px solid #ddd',
                     borderRadius: '5px',
                     width: '133.5%',
-                  }}/>
+                  }} />
               </div>
               <div className="form-group">
                 <label>End Time</label>
-                <input type="text" value={sessionDetails.endTime} readOnly 
+                <input type="text" value={sessionDetails.endTime} readOnly
                   style={{
                     border: '1px solid #ddd',
                     borderRadius: '5px',
                     width: '133.5%',
-                  }}/>
+                  }} />
               </div>
               <div className="form-group-link">
                 <label
-                 style={{
-                 marginRight: '20px'
-                }}
+                  style={{
+                    marginRight: '20px'
+                  }}
                 >Meeting Link: </label>
                 <a
                   href={sessionDetails.meetingLink}
@@ -401,7 +397,7 @@ function Home() {
                   rel="noopener noreferrer"
                   style={{
                     marginRight: '20px'
-                   }}
+                  }}
                 >
                   {sessionDetails.meetingLink}
                 </a>
@@ -421,7 +417,7 @@ function Home() {
                 </button>
                 <button
                   className="clear-btn"
-                  style={{backgroundColor:'#48742F'}}
+                  style={{ backgroundColor: '#48742F' }}
                   onClick={() => setDetailsModalOpen(false)}
                 >
                   Close
@@ -437,30 +433,30 @@ function Home() {
           <p></p>
         ) : (
           <div className="broadcast-request-table">
-             <h2>My Broadcast Requests</h2>
-  <div style={{ position: 'relative', textAlign: 'right' }}>
-           
-             {broadcastRequests.length > 5 && (
-              <button
-                style={{
-                  padding: '6px 12px',
-                  backgroundColor: '#2e7d32',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  width:'100px',
-                  textAlign: 'center',
-                  justifyContent: 'center', 
-                  marginRight:'25px',
-                  marginBottom:'15px',
-                  marginTop:'0px'
-                }}
-                onClick={() => setShowAll(!showAll)}
-              >
-                {showAll ? 'View Less' : 'View All'}
-              </button>
-            )}</div>
+            <h2>My Broadcast Requests</h2>
+            <div style={{ position: 'relative', textAlign: 'right' }}>
+
+              {broadcastRequests.length > 5 && (
+                <button
+                  style={{
+                    padding: '6px 12px',
+                    backgroundColor: '#2e7d32',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    width: '100px',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    marginRight: '25px',
+                    marginBottom: '15px',
+                    marginTop: '0px'
+                  }}
+                  onClick={() => setShowAll(!showAll)}
+                >
+                  {showAll ? 'View Less' : 'View All'}
+                </button>
+              )}</div>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -508,29 +504,29 @@ function Home() {
         ) : (
           <div className='broadcast-request-table'>
             <h2>Peer Learning Requests</h2>
-             <div style={{ position: 'relative', textAlign: 'right' }}>
-           
-             {requests.length > 5 && (
-              <button
-                style={{
-                  padding: '6px 12px',
-                  backgroundColor: '#2e7d32',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  width:'100px',
-                  textAlign: 'center',
-                  justifyContent: 'center', 
-                  marginRight:'25px',
-                  marginBottom:'15px',
-                  marginTop:'0px'
-                }}
-                onClick={() => setShowAll(!showAll)}
-              >
-                {showAll ? 'View Less' : 'View All'}
-              </button>
-            )}</div>
+            <div style={{ position: 'relative', textAlign: 'right' }}>
+
+              {requests.length > 5 && (
+                <button
+                  style={{
+                    padding: '6px 12px',
+                    backgroundColor: '#2e7d32',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    width: '100px',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    marginRight: '25px',
+                    marginBottom: '15px',
+                    marginTop: '0px'
+                  }}
+                  onClick={() => setShowAll(!showAll)}
+                >
+                  {showAll ? 'View Less' : 'View All'}
+                </button>
+              )}</div>
             <table>
               <thead>
                 <tr>
@@ -552,10 +548,10 @@ function Home() {
                     <td>{req.urgency}</td>
                     <td>
                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', marginBottom: '9px' }}>
-                        <button 
-className={`chat-student ${selectedStudentId === req.userId ? 'selected' : ''}`}
+                        <button
+                          className={`chat-student ${selectedStudentId === req.userId ? 'selected' : ''}`}
 
-                        onClick={() => handleChatClick(req)}>
+                          onClick={() => handleChatClick(req)}>
                           Go to Chat
                         </button>
                       </div>
@@ -574,11 +570,11 @@ className={`chat-student ${selectedStudentId === req.userId ? 'selected' : ''}`}
           <div className="delete-modal-content">
             <p>Are you sure you want to delete this request?</p>
             <div className="modal-buttons">
-              <button 
-              style={{
-                backgroundColor: 'crimson',
-              }}
-              className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
+              <button
+                style={{
+                  backgroundColor: 'crimson',
+                }}
+                className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
               <button className="modal-button cancel" onClick={handleDeleteCancel}>No</button>
             </div>
           </div>

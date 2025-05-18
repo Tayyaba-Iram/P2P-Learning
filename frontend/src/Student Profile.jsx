@@ -16,42 +16,42 @@ function StudentProfile() {
     semester: '',
     specification: '',
   });
- 
+
 
   useEffect(() => {
     const fetchProfile = async () => {
-        const token = sessionStorage.getItem('token');
-        if (!token) {
-          return;
-        }
-      
-        try {
-          const response = await axios.get('http://localhost:3001/api/get-profile', {
-            headers: { Authorization: `Bearer ${token}` },
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        return;
+      }
+
+      try {
+        const response = await axios.get('http://localhost:3001/api/get-profile', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log('Backend Response:', response.data);
+
+        if (response.data.success) {
+          const userData = response.data.user;
+          console.log('User Data:', userData); 
+          setProfile({
+            name: userData.name || '',
+            sapid: userData.sapid || '',
+            email: userData.email || '',
+            cnic: userData.cnic || '',
+            phone: userData.phone || '',
+            university: userData.university || '',
+            campus: userData.campus || '',
+            program: userData.program || '',
+            semester: userData.semester || '',
+            specification: userData.specification || '',
           });
-      
-          console.log('Backend Response:', response.data);
-      
-          if (response.data.success) {
-            const userData = response.data.user;
-            console.log('User Data:', userData); // Check if sapid and cnic are present
-            setProfile({
-              name: userData.name || '',
-              sapid: userData.sapid || '',
-              email: userData.email || '',
-              cnic: userData.cnic || '',
-              phone: userData.phone || '',
-              university: userData.university || '',
-              campus: userData.campus || '',
-              program: userData.program || '',
-              semester: userData.semester || '',
-              specification: userData.specification || '',
-            });
-          }
-        } catch (err) {
-          console.error('Error fetching profile:', err);
         }
-      };
+      } catch (err) {
+        console.error('Error fetching profile:', err);
+      }
+    };
     fetchProfile();
   }, []);
 
@@ -59,7 +59,6 @@ function StudentProfile() {
     <div className="profile-containerr">
       <h3>Profile Information</h3>
 
-      {/* Display profile data in a table */}
       <table className="profile-table">
         <tbody>
           <tr>
@@ -106,8 +105,8 @@ function StudentProfile() {
       </table>
 
       <Link to="/studentupdateprofile">
-            <button className="btn">Edit</button>
-          </Link>
+        <button className="btn">Edit</button>
+      </Link>
     </div>
   );
 }

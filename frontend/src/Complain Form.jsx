@@ -16,7 +16,7 @@ const ComplaintForm = () => {
   });
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
-const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,14 +31,13 @@ const [message, setMessage] = useState('');
     const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/msword']; // File MIME types
     const allowedExtensions = ['.jpg', '.jpeg', '.png', '.pdf', '.docx', '.word']; // File extensions
 
-    // Check if the file type matches the allowed MIME types or extensions
     const fileExtension = file?.name.split('.').pop().toLowerCase();
     const fileType = file?.type;
 
     if (!allowedTypes.includes(fileType) && !allowedExtensions.some(ext => fileExtension === ext)) {
-      setFile(null); // Clear the file input if the file type is invalid
+      setFile(null);
     } else {
-      setFile(file); // Set the file if it's valid
+      setFile(file);
     }
   };
 
@@ -70,7 +69,7 @@ const [message, setMessage] = useState('');
         },
       });
 
-      console.log('Response:', res);  // Check response for the filename
+      console.log('Response:', res);  
       toast.success(res.data.message);
       setFormData({
         targetname: '',
@@ -82,7 +81,7 @@ const [message, setMessage] = useState('');
       setFile(null);
       navigate('/complains');
     } catch (error) {
-setMessage(error.response?.data?.error || 'Error fetching complaints');
+      setMessage(error.response?.data?.error || 'Error fetching complaints');
     }
   };
 
@@ -97,7 +96,6 @@ setMessage(error.response?.data?.error || 'Error fetching complaints');
         placeholder="Target Name"
         value={formData.targetname}
         onChange={(e) => {
-          // Regular expression to allow only alphabets (a-z, A-Z) and spaces
           const regex = /^[A-Za-z\s]*$/;
           if (regex.test(e.target.value)) {
             handleChange(e);
@@ -128,14 +126,14 @@ setMessage(error.response?.data?.error || 'Error fetching complaints');
         onChange={handleChange}
         required
         style={{
-    paddingRight: '24px', // creates space inside the select box on the right
-    backgroundPosition: 'right 8px center', // moves the arrow slightly left
-    backgroundRepeat: 'no-repeat',
-    backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
-    appearance: 'none', // hide default arrow (optional)
-    WebkitAppearance: 'none',
-    MozAppearance: 'none',
-  }}
+          paddingRight: '24px', 
+          backgroundPosition: 'right 8px center', 
+          backgroundRepeat: 'no-repeat',
+          backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
+          appearance: 'none',
+          WebkitAppearance: 'none',
+          MozAppearance: 'none',
+        }}
       >
         <option value="" disabled>Select Category</option>
         <option value="Technical Issue">Technical Issue</option>
@@ -157,7 +155,7 @@ setMessage(error.response?.data?.error || 'Error fetching complaints');
         onChange={handleFileChange}
         required
       />
-        {message && <p style={{ color: 'red', marginTop: "20px", fontWeight: 'bold', fontSize: '16px', textAlign:'center' }}>{message}</p>}
+      {message && <p style={{ color: 'red', marginTop: "20px", fontWeight: 'bold', fontSize: '16px', textAlign: 'center' }}>{message}</p>}
 
       <button className='submit-complain' type="submit">Submit Complaint</button>
       <Toaster position="top-center" />

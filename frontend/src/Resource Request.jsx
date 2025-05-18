@@ -6,35 +6,35 @@ function ResourceRequest() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-         const interval = setInterval(() => {
-        const fetchRequests = async () => {
-            try {
-                const token = sessionStorage.getItem('token');
-                const response = await axios.get('http://localhost:3001/api/my-received-requests', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+        const interval = setInterval(() => {
+            const fetchRequests = async () => {
+                try {
+                    const token = sessionStorage.getItem('token');
+                    const response = await axios.get('http://localhost:3001/api/my-received-requests', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
 
-                const requestsWithLocalState = response.data.map((req) => ({
-                    ...req,
-                    localStatus: (req.status?.charAt(0).toUpperCase() + req.status?.slice(1).toLowerCase()) || 'Pending',
-                }));
-                setRequests(requestsWithLocalState);
-            } catch (error) {
-                console.error('Error fetching requests:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+                    const requestsWithLocalState = response.data.map((req) => ({
+                        ...req,
+                        localStatus: (req.status?.charAt(0).toUpperCase() + req.status?.slice(1).toLowerCase()) || 'Pending',
+                    }));
+                    setRequests(requestsWithLocalState);
+                } catch (error) {
+                    console.error('Error fetching requests:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
 
-        fetchRequests();
-    }, 1000);
+            fetchRequests();
+        }, 1000);
 
-    return () => clearInterval(interval);
-      
+        return () => clearInterval(interval);
+
     }, []);
- 
+
     const handleAccept = async (index) => {
         const updated = [...requests];
         updated[index].localStatus = 'Accepted';
@@ -91,7 +91,7 @@ function ResourceRequest() {
                 <table className='resource-request-table'>
                     <thead>
                         <tr style={{ backgroundColor: '#f0f0f0' }}>
-                            <th style={{width:'40px'}}>#</th>
+                            <th style={{ width: '40px' }}>#</th>
                             <th>Requestor Name</th>
                             <th>Requestor Email</th>
                             <th>Title</th>

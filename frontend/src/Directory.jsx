@@ -13,15 +13,15 @@ function Directory() {
     fetchRepositories();
     fetchSentRequests();
   }, []);
-  
-useEffect(() => {
-  const interval = setInterval(() => {
-    fetchRepositories();
-    fetchSentRequests();
-  }, 1000); // Every 10 seconds
 
-  return () => clearInterval(interval);
-}, [searchTerm]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchRepositories();
+      fetchSentRequests();
+    }, 1000); 
+
+    return () => clearInterval(interval);
+  }, [searchTerm]);
   const fetchSentRequests = async () => {
     try {
       const token = sessionStorage.getItem('token');
@@ -36,45 +36,44 @@ useEffect(() => {
       console.error('Failed to fetch sent requests:', error);
     }
   };
-const fetchRepositories = async () => {
-  try {
-    const token = sessionStorage.getItem('token');
-    const res = await axios.get('http://localhost:3001/api/directory', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const fetchRepositories = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+      const res = await axios.get('http://localhost:3001/api/directory', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (res.data && Array.isArray(res.data)) {
-      setRepositories(res.data);
+      if (res.data && Array.isArray(res.data)) {
+        setRepositories(res.data);
 
-      // Respect current searchTerm
-      if (searchTerm.trim() !== '') {
-        const lowerSearch = searchTerm.toLowerCase();
-        const filtered = res.data.filter((repo) =>
-          (repo.uploadedByStudent && repo.uploadedByStudent.toLowerCase().includes(lowerSearch)) ||
-          (repo.uploadedByEmail && repo.uploadedByEmail.toLowerCase().includes(lowerSearch)) ||
-          (repo.title && repo.title.toLowerCase().includes(lowerSearch)) ||
-          (repo.description && repo.description.toLowerCase().includes(lowerSearch))
-        );
-        setFilteredRepositories(filtered);
+        if (searchTerm.trim() !== '') {
+          const lowerSearch = searchTerm.toLowerCase();
+          const filtered = res.data.filter((repo) =>
+            (repo.uploadedByStudent && repo.uploadedByStudent.toLowerCase().includes(lowerSearch)) ||
+            (repo.uploadedByEmail && repo.uploadedByEmail.toLowerCase().includes(lowerSearch)) ||
+            (repo.title && repo.title.toLowerCase().includes(lowerSearch)) ||
+            (repo.description && repo.description.toLowerCase().includes(lowerSearch))
+          );
+          setFilteredRepositories(filtered);
+        } else {
+          setFilteredRepositories(res.data);
+        }
       } else {
-        setFilteredRepositories(res.data);
+        setRepositories([]);
       }
-    } else {
-      setRepositories([]);
+    } catch (err) {
+      console.error('Error fetching repositories:', err);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error('Error fetching repositories:', err);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const handleSendRequest = async (repoId) => {
     try {
       const token = sessionStorage.getItem('token');
-  
+
       // Check if there's a rejected request already
       const existingRequest = sentRequests.find(r => r.repoId === repoId && r.status.toLowerCase() === 'rejected');
       if (existingRequest) {
@@ -83,18 +82,18 @@ const fetchRepositories = async () => {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
-  
+
       // Now send the new request
       await axios.post('http://localhost:3001/api/request-resource', { repoId }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-  
+
       fetchSentRequests(); // Refresh request list
     } catch (error) {
       alert(error.response?.data?.message || 'Error sending request');
     }
   };
-  
+
 
   const handleCancelRequest = async (repoId) => {
     try {
@@ -148,115 +147,115 @@ const fetchRepositories = async () => {
       {filteredRepositories.length === 0 ? (
         <p className='no-repo'>No uploaded repositories found.</p>
       ) : (
-          <div className='Directory-table'>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Student Name</th>
-              <th>Student Email</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>File</th>
-              <th>File Link</th>
-              <th>Request</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRepositories.map((repo, index) => {
-              const request = sentRequests.find(r => r.repoId === repo._id);
+        <div className='Directory-table'>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Student Name</th>
+                <th>Student Email</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>File</th>
+                <th>File Link</th>
+                <th>Request</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredRepositories.map((repo, index) => {
+                const request = sentRequests.find(r => r.repoId === repo._id);
 
-              return (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{repo.uploadedByStudent || 'N/A'}</td>
-                  <td>{repo.uploadedByEmail || 'N/A'}</td>
-                  <td>{repo.title}</td>
-                  <td>{repo.description}</td>
-                  <td>
-  {repo.file === 'Restricted' ? 'Restricted' :
-    repo.file && repo.file.trim() !== '' && repo.file.toLowerCase() !== 'no file uploaded' ? (
-      <a
-        href={`http://localhost:3001/uploads/${repo.file}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        View File
-      </a>
-    ) : 'No file uploaded'}
-</td>
+                return (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{repo.uploadedByStudent || 'N/A'}</td>
+                    <td>{repo.uploadedByEmail || 'N/A'}</td>
+                    <td>{repo.title}</td>
+                    <td>{repo.description}</td>
+                    <td>
+                      {repo.file === 'Restricted' ? 'Restricted' :
+                        repo.file && repo.file.trim() !== '' && repo.file.toLowerCase() !== 'no file uploaded' ? (
+                          <a
+                            href={`http://localhost:3001/uploads/${repo.file}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            View File
+                          </a>
+                        ) : 'No file uploaded'}
+                    </td>
 
-                  <td>
-                    {repo.fileLink === 'Restricted' ? 'Restricted' :
-                      repo.fileLink && repo.fileLink.trim() !== '' && repo.fileLink.toLowerCase() !== 'no file link uploaded' ? (
-                        <a href={repo.fileLink} target="_blank" rel="noopener noreferrer">
-                          View Link
-                        </a>
-                      ) : 'No file link uploaded'}
-                  </td>
-                  <td>
-  {(() => {
-    const isRestricted = repo.file === 'Restricted' || repo.fileLink === 'Restricted';
-    const isPrivateOrRestricted = repo.accessType === 'private' || isRestricted;
+                    <td>
+                      {repo.fileLink === 'Restricted' ? 'Restricted' :
+                        repo.fileLink && repo.fileLink.trim() !== '' && repo.fileLink.toLowerCase() !== 'no file link uploaded' ? (
+                          <a href={repo.fileLink} target="_blank" rel="noopener noreferrer">
+                            View Link
+                          </a>
+                        ) : 'No file link uploaded'}
+                    </td>
+                    <td>
+                      {(() => {
+                        const isRestricted = repo.file === 'Restricted' || repo.fileLink === 'Restricted';
+                        const isPrivateOrRestricted = repo.accessType === 'private' || isRestricted;
 
-    if (isPrivateOrRestricted) {
-      if (request) {
-        const status = request.status.toLowerCase();
-        if (status === 'accepted' && !isRestricted) {
-          return <span style={{ color: 'gray' }}>Access Granted</span>;
-        } else if (status === 'rejected') {
-          // Show request button again if rejected
-          return (
-            <button className='request-resource'
-              onClick={() => handleSendRequest(repo._id)}
-            >
-              Request
-            </button>
-          );
-        } else {
-          return (
-            <button className='request-resource'
-           
-              onClick={() => handleCancelRequest(repo._id)}
-              style={{ backgroundColor: 'crimson', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
-            >
-              Cancel Request
-            </button>
-          );
-        }
-      } else {
-        return (
-          <button className='request-resource'
-            onClick={() => handleSendRequest(repo._id)}
-            style={{ backgroundColor: '#48742F', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
-          >
-            Request
-          </button>
-        );
-      }
-    } else {
-      return <span style={{ color: 'gray' }}>Access Granted</span>;
-    }
-  })()}
-</td>
+                        if (isPrivateOrRestricted) {
+                          if (request) {
+                            const status = request.status.toLowerCase();
+                            if (status === 'accepted' && !isRestricted) {
+                              return <span style={{ color: 'gray' }}>Access Granted</span>;
+                            } else if (status === 'rejected') {
+                              // Show request button again if rejected
+                              return (
+                                <button className='request-resource'
+                                  onClick={() => handleSendRequest(repo._id)}
+                                >
+                                  Request
+                                </button>
+                              );
+                            } else {
+                              return (
+                                <button className='request-resource'
+
+                                  onClick={() => handleCancelRequest(repo._id)}
+                                  style={{ backgroundColor: 'crimson', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
+                                >
+                                  Cancel Request
+                                </button>
+                              );
+                            }
+                          } else {
+                            return (
+                              <button className='request-resource'
+                                onClick={() => handleSendRequest(repo._id)}
+                                style={{ backgroundColor: '#48742F', color: 'white', padding: '5px 10px', borderRadius: '5px' }}
+                              >
+                                Request
+                              </button>
+                            );
+                          }
+                        } else {
+                          return <span style={{ color: 'gray' }}>Access Granted</span>;
+                        }
+                      })()}
+                    </td>
 
 
-                  <td>
-                    {(() => {
-                      if (!request) return <span style={{ color: 'gray' }}>Not Requested</span>;
-                      const statusColor = request.status === 'Accepted' ? 'green'
-                                        : request.status === 'Pending' ? 'orange'
-                                        : request.status === 'Rejected' ? 'red'
-                                        : 'gray';
-                      return <span style={{ fontWeight: 'bold', color: statusColor }}>{request.status}</span>;
-                    })()}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table></div>
+                    <td>
+                      {(() => {
+                        if (!request) return <span style={{ color: 'gray' }}>Not Requested</span>;
+                        const statusColor = request.status === 'Accepted' ? 'green'
+                          : request.status === 'Pending' ? 'orange'
+                            : request.status === 'Rejected' ? 'red'
+                              : 'gray';
+                        return <span style={{ fontWeight: 'bold', color: statusColor }}>{request.status}</span>;
+                      })()}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table></div>
       )
       }
     </div>

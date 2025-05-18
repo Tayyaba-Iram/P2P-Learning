@@ -6,16 +6,16 @@ import './Broadcast Request.css';
 
 const BroadcastRequest = () => {
   const navigate = useNavigate();
-  const [programs, setPrograms] = useState([]); // To store fetched programs
+  const [programs, setPrograms] = useState([]); 
   const [formData, setFormData] = useState({
     topic: '',
     subtopic: '',
     urgency: 'Low',
     programs: [],
   });
-  const [myRequests, setMyRequests] = useState([]); // To store the user's previous requests
+  const [myRequests, setMyRequests] = useState([]); 
   const [statusMessage, setStatusMessage] = useState('');
-  const [showPopup, setShowPopup] = useState(false);
+  const token = sessionStorage.getItem('token');
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -26,28 +26,21 @@ const BroadcastRequest = () => {
           },
         });
 
-        // Assuming the API now returns an array of program names
-        setPrograms(response.data);  // Store fetched program names
-
+        setPrograms(response.data); 
       } catch (error) {
         console.error('Error fetching programs:', error);
       }
     };
 
     fetchPrograms();
-  }, []);
+      const intervalId = setInterval(() => {
+        fetchPrograms();
+    }, 1000); 
 
+    return () => clearInterval(intervalId);
+  }, [token]);
 
-  // Handle checkbox selection
-  const handleProgramChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setFormData((prev) => ({ ...prev, programs: [...prev.programs, value] }));
-    } else {
-      setFormData((prev) => ({ ...prev, programs: prev.programs.filter((program) => program !== value) }));
-    }
-  };
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -121,14 +114,14 @@ const BroadcastRequest = () => {
           <label>Urgency:</label>
           <select name="urgency" value={formData.urgency} onChange={handleChange}
             style={{
-    paddingRight: '24px', // creates space inside the select box on the right
-    backgroundPosition: 'right 8px center', // moves the arrow slightly left
-    backgroundRepeat: 'no-repeat',
-    backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
-    appearance: 'none', // hide default arrow (optional)
-    WebkitAppearance: 'none',
-    MozAppearance: 'none',
-  }}>
+              paddingRight: '24px', 
+              backgroundPosition: 'right 8px center',
+              backgroundRepeat: 'no-repeat',
+              backgroundImage: 'url("data:image/svg+xml;utf8,<svg fill=\'%23000\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/></svg>")', // custom arrow
+              appearance: 'none', 
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+            }}>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
@@ -138,11 +131,11 @@ const BroadcastRequest = () => {
 
         {programs.length > 0 ? (
           programs.map((program) => (
-            <div key={program} className="checkbox-group"   style={{ marginBottom: '0' }}> 
+            <div key={program} className="checkbox-group" style={{ marginBottom: '0' }}>
               <input
                 type="checkbox"
                 value={program}
-                checked={formData.programs.includes(program)} 
+                checked={formData.programs.includes(program)}
                 onChange={(e) => {
                   const checked = e.target.checked;
                   const value = e.target.value;
@@ -153,7 +146,7 @@ const BroadcastRequest = () => {
                       : prev.programs.filter((p) => p !== value),
                   }));
                 }}
-                
+
               />
 
               <label>{program}</label>

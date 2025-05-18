@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from './userContext';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaHistory ,FaClipboardList, FaShieldAlt, FaQuestionCircle, FaTachometerAlt, FaUser, FaLock, FaExclamationCircle, FaSignOutAlt, FaFolder, FaFolderOpen, FaBullhorn } from 'react-icons/fa'; // Import icons from react-icons
+import { FaHistory, FaClipboardList, FaShieldAlt, FaQuestionCircle, FaTachometerAlt, FaUser, FaLock, FaExclamationCircle, FaSignOutAlt, FaFolder, FaFolderOpen, FaBullhorn } from 'react-icons/fa'; // Import icons from react-icons
 import './StudentNavbar.css';
 
 function StudentNavbar() {
@@ -12,8 +12,8 @@ function StudentNavbar() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const [showDropdown, setShowDropdown] = useState(false); // State for dropdown menu
-  const [showLogoutModal, setShowLogoutModal] = useState(false); // State for modal visibility
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -32,7 +32,7 @@ function StudentNavbar() {
   }, []);
 
   const handleLogout = async () => {
-    setShowLogoutModal(true); // Show confirmation modal when logout is clicked
+    setShowLogoutModal(true);
   };
 
   const handleConfirmLogout = async () => {
@@ -44,11 +44,11 @@ function StudentNavbar() {
     } catch (err) {
       console.error('Error logging out:', err);
     }
-    setShowLogoutModal(false); // Close the modal after confirming logout
+    setShowLogoutModal(false);
   };
 
-  const toggleDropdown = () => setShowDropdown(!showDropdown); // Toggle dropdown visibility
-  const closeDropdown = () => setShowDropdown(false); // Close dropdown when clicking outside
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
+  const closeDropdown = () => setShowDropdown(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -64,7 +64,7 @@ function StudentNavbar() {
   }, []);
 
   const handleDropdownSelect = () => {
-    closeDropdown(); // Close dropdown after selecting an option
+    closeDropdown();
   };
 
   return (
@@ -90,61 +90,61 @@ function StudentNavbar() {
           {showDropdown && (
             <div className="dropdown-menu"   >
               <Link to="/" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-                marginTop:"10px"
-              }}>
+                style={{
+                  display: "inline-flex",
+                  gap: "8px",
+                  marginTop: "10px"
+                }}>
                 <FaTachometerAlt /> Dashboard
               </Link>
               <Link to="/studentprofile" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-              }}>
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", 
+                }}>
                 <FaUser /> Profile
               </Link>
               <Link to="/resetpassword" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-              }}>
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", 
+                }}>
                 <FaLock /> Reset Password
               </Link>
               <Link to="/repository" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-              }}>
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", 
+                }}>
                 <FaFolder /> Repository
               </Link>
               <Link to="/directory" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-              }}>
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", 
+                }}>
                 <FaFolderOpen /> Directory
               </Link>
               <Link to="/resourceRequest" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-              }}>
-                <FaClipboardList/>
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", 
+                }}>
+                <FaClipboardList />
                 Resource Requests
               </Link>
               <Link to="/complains" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-              }}>
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", 
+                }}>
                 <FaExclamationCircle /> Complaints
               </Link>
               <Link to="/broadcastRequest" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-              }}>
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", 
+                }}>
                 <FaBullhorn />
                 Broadcast Request
               </Link >
@@ -153,27 +153,27 @@ function StudentNavbar() {
                 onClick={handleDropdownSelect}
                 style={{
                   display: "inline-flex",
-                  gap: "8px", // controls space between icon and text
+                  gap: "8px",
                 }}
               >
-                <FaHistory  />
+                <FaHistory />
                 Session Histroy
               </Link>
               <Link to="/help" onClick={handleDropdownSelect}
-              style={{
-                display: "inline-flex",
-                gap: "8px", // controls space between icon and text
-              }}>
+                style={{
+                  display: "inline-flex",
+                  gap: "8px", 
+                }}>
                 <FaQuestionCircle />
                 Help
               </Link>
-              
+
               <Link
                 to="/privacy"
                 onClick={handleDropdownSelect}
                 style={{
                   display: "inline-flex",
-                  gap: "8px", // controls space between icon and text
+                  gap: "8px", 
                 }}
               >
                 <FaShieldAlt />
@@ -192,10 +192,8 @@ function StudentNavbar() {
                   fontSize: "14px",
                   marginLeft: "1px",
                   marginRight: '4px',
-                  marginBottom:"7px",
-                  marginTop:"0px"
-
-
+                  marginBottom: "7px",
+                  marginTop: "0px"
                 }}
                 onMouseOver={(e) => (e.currentTarget.style.color = "#48742F")}
                 onMouseOut={(e) => (e.currentTarget.style.color = "#000")}

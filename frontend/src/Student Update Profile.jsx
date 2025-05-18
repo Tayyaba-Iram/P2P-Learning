@@ -19,13 +19,10 @@ function UpdateProfile() {
   });
 
   const [loading, setLoading] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showCPassword, setShowCPassword] = useState(false);
   const [universities, setUniversities] = useState([]);
   const [campusOptions, setCampusOptions] = useState([]);
   const [programOptions, setProgramOptions] = useState([]);
 
-  // Fetch profile and universities on mount
   useEffect(() => {
     const fetchProfile = async () => {
       const token = sessionStorage.getItem('token');
@@ -63,7 +60,6 @@ function UpdateProfile() {
     fetchProfile();
   }, []);
 
-  // Fetch universities and campuses
   const fetchUniversities = async (selectedUniversity, selectedCampus) => {
     try {
       const response = await axios.get('http://localhost:3001/api/universities');
@@ -86,7 +82,6 @@ function UpdateProfile() {
     }
   };
 
-  // Handle form input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
@@ -103,11 +98,9 @@ function UpdateProfile() {
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate passwords
     if (profile.password !== profile.cpassword) {
       alert('Passwords do not match!');
       return;
@@ -127,106 +120,106 @@ function UpdateProfile() {
 
       if (response.data.success) {
         toast.success('Profile updated Successfully')
-        navigate('/studentprofile'); // Navigate to student profile page
+        navigate('/studentprofile'); 
       } else {
         alert(response.data.message);
       }
     } catch (err) {
       console.error(err);
-     
+
     }
   };
 
   const handlePhoneChange = (value) => {
     // Remove any non-digit characters
     const cleanedValue = value.replace(/\D/g, '');
-  
+
     // Format as '0000-0000000'
     const formattedValue =
       cleanedValue.length > 4
         ? `${cleanedValue.slice(0, 4)}-${cleanedValue.slice(4, 11)}`
         : cleanedValue;
-  
+
     setProfile((prevProfile) => ({
       ...prevProfile,
       phone: formattedValue,
     }));
   };
-  
+
 
   return (
-  <form onSubmit={handleSubmit} className="update-profile-form">
+    <form onSubmit={handleSubmit} className="update-profile-form">
       <h3>Update Profile</h3>
-        {/* Phone */}
-        <div>
-          <label>Phone</label>
-          <input
-  className="profile-data"
-  type="text"
-  name="phone"
-  value={profile.phone}
-  onChange={(e) => {
-    const { name, value } = e.target;
-    if (name === 'phone') {
-      handlePhoneChange(value); // Use the specialized phone handler
-    } else {
-      handleChange(e); // Use the generic handler for other fields
-    }
-  }}
-/>
-        </div>
-
-        {/* University (read-only) */}
-        <div>
-          <label>University</label>
-          <input className='profile-data' type="text" value={profile.university} readOnly />
-        </div>
-
-        {/* Campus */}
-        <div>
-          <label>Campus</label>
-          <select name="campus" value={profile.campus} onChange={handleChange}>
-            <option value="" hidden>Select Campus</option>
-            {campusOptions.map((campus) => (
-              <option key={campus._id} value={campus.name}>{campus.name}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Program */}
-        <div>
-          <label>Program</label>
-          <select name="program" value={profile.program} onChange={handleChange}>
-            <option value="" hidden>Select Program</option>
-            {programOptions.map((program) => (
-              <option key={program._id} value={program.name}>{program.name}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Semester */}
+      {/* Phone */}
       <div>
-  <label>Semester</label>
-  <input
-    className="profile-data"
-    type="number"
-    name="semester"
-    min="1"
-    max="10"
-    value={profile.semester}
-    onChange={handleChange}
-  />
-</div>
+        <label>Phone</label>
+        <input
+          className="profile-data"
+          type="text"
+          name="phone"
+          value={profile.phone}
+          onChange={(e) => {
+            const { name, value } = e.target;
+            if (name === 'phone') {
+              handlePhoneChange(value); 
+            } else {
+              handleChange(e); 
+            }
+          }}
+        />
+      </div>
+
+      {/* University (read-only) */}
+      <div>
+        <label>University</label>
+        <input className='profile-data' type="text" value={profile.university} readOnly />
+      </div>
+
+      {/* Campus */}
+      <div>
+        <label>Campus</label>
+        <select name="campus" value={profile.campus} onChange={handleChange}>
+          <option value="" hidden>Select Campus</option>
+          {campusOptions.map((campus) => (
+            <option key={campus._id} value={campus.name}>{campus.name}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Program */}
+      <div>
+        <label>Program</label>
+        <select name="program" value={profile.program} onChange={handleChange}>
+          <option value="" hidden>Select Program</option>
+          {programOptions.map((program) => (
+            <option key={program._id} value={program.name}>{program.name}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Semester */}
+      <div>
+        <label>Semester</label>
+        <input
+          className="profile-data"
+          type="number"
+          name="semester"
+          min="1"
+          max="10"
+          value={profile.semester}
+          onChange={handleChange}
+        />
+      </div>
 
 
-        {/* Specification */}
-        <div>
-          <label>Specification</label>
-          <input className='profile-data' type="text" name="specification" value={profile.specification} onChange={handleChange} />
-        </div>
+      {/* Specification */}
+      <div>
+        <label>Specification</label>
+        <input className='profile-data' type="text" name="specification" value={profile.specification} onChange={handleChange} />
+      </div>
 
-        <button type="submit" className="update-button">Update Profile</button>
-      </form>
+      <button type="submit" className="update-button">Update Profile</button>
+    </form>
   );
 }
 

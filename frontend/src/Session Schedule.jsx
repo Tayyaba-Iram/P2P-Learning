@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaCalendarAlt, FaPen } from "react-icons/fa";
@@ -11,7 +10,7 @@ import './Session Schedule.css';
 import Select from 'react-select';
 
 function SessionSchedule() {
-    const [step, setStep] = useState(1); // 1: session info, 2: instructor info
+    const [step, setStep] = useState(1); 
 
     const [sessionDetails, setSessionDetails] = useState({
         topic: '',
@@ -74,7 +73,7 @@ function SessionSchedule() {
             }
 
             setMessage('');
-            setStep(2); // move to instructor info
+            setStep(2); 
         } else if (step === 2) {
             const { paymentMethod } = sessionDetails;
 
@@ -85,9 +84,9 @@ function SessionSchedule() {
 
             setMessage('');
             if (paymentMethod === 'cash') {
-                setStep(3); // show cash step
+                setStep(3); 
             } else if (paymentMethod === 'food') {
-                setStep(6); // go to food step directly
+                setStep(6);
             }
         } else if (step === 3) {
             const { instructorName, instructorHolder, instructorNumber } = sessionDetails;
@@ -98,7 +97,7 @@ function SessionSchedule() {
             }
 
             setMessage('');
-            setStep(4); // move to sender info
+            setStep(4); 
         }
 
     };
@@ -122,7 +121,7 @@ function SessionSchedule() {
         formData.append('senderTitle', sessionDetails.senderTitle);
         formData.append('senderNumber', sessionDetails.senderNumber);
         formData.append('amount', sessionDetails.amount);
-        formData.append('receiver', sessionDetails.receiver); // Directly append the formatted string
+        formData.append('receiver', sessionDetails.receiver); 
         formData.append('foodBrand', sessionDetails.foodBrand);
         formData.append('foodItem', sessionDetails.foodItem);
         formData.append('file', sessionDetails.foodBill);
@@ -153,7 +152,7 @@ function SessionSchedule() {
                 senderTitle: '',
                 senderNumber: '',
                 amount: '',
-                receiver: '', // Clear the receiver object
+                receiver: '', 
                 foodBrand: '',
                 foodItem: '',
                 foodBill: ''
@@ -169,11 +168,11 @@ function SessionSchedule() {
 
     const handleNextStep = () => {
         if (step === 2 && sessionDetails.paymentMethod === "cash") {
-            setStep(3); // move from cash step 4 to cash step 5
+            setStep(3); 
         } else if (sessionDetails.paymentMethod === "food") {
-            setStep(6); // move to food step directly
+            setStep(6); 
         } else {
-            setStep((prev) => prev + 1); // move to next step in general
+            setStep((prev) => prev + 1); 
         }
     };
 
@@ -198,16 +197,16 @@ function SessionSchedule() {
                 return;
             }
             setMessage('');
-            setStep(7); // move from cash step 4 to cash step 5
+            setStep(7); 
         } else {
-            setStep((prev) => prev + 1); // move to next step in general
+            setStep((prev) => prev + 1); 
         }
     };
     const confirmsession = () => {
         if (step === 5 && sessionDetails.paymentMethod === "cash") {
-            setStep(8); // move from cash step 4 to cash step 5
+            setStep(8);
         } else {
-            setStep((prev) => prev + 1); // move to next step in general
+            setStep((prev) => prev + 1); 
         }
     };
     const confirmfood = () => {
@@ -218,8 +217,8 @@ function SessionSchedule() {
                 return;
             }
             setMessage('');
-            setStep(9); // move from cash step 4 to cash step 5
-        } else { setStep((prev) => prev + 1); }// move to next step in general
+            setStep(9); 
+        } else { setStep((prev) => prev + 1); }
     };
 
     const [loadingAccount, setLoadingAccount] = useState(false);
@@ -235,7 +234,7 @@ function SessionSchedule() {
                 });
                 console.log('Full Account Data:', response.data);
                 const { holder, number } = response.data;
-                console.log('Sender Title:', holder); // Log senderTitle
+                console.log('Sender Title:', holder); 
                 console.log('Sender Number:', number);
                 setSessionDetails(prev => ({
                     ...prev,
@@ -304,7 +303,7 @@ function SessionSchedule() {
                     <div className="form-groupd">
                         <label>Date</label>
                         <div className="datepicker-with-icon">
-                            <DatePicker 
+                            <DatePicker
                                 selected={sessionDetails.date}
                                 onChange={handleDateChange}
                                 dateFormat="yyyy-MM-dd"
@@ -339,9 +338,9 @@ function SessionSchedule() {
 
                     <div className="form-actionss">
 
-                        <button type="button" className="schedule-btn" 
+                        <button type="button" className="schedule-btn"
 
-                        onClick={handleNext}>
+                            onClick={handleNext}>
                             Next
                         </button>
                     </div>
@@ -368,11 +367,11 @@ function SessionSchedule() {
 
                     <div className="button-container">
                         <button type="button" className="schedule-btn" onClick={handleBack}
-                        style={{marginLeft:'25px'}}
+                            style={{ marginLeft: '25px' }}
                         >
                             Back
                         </button>
-                        <button className="schedule-btn" onClick={handleNext}  style={{marginRight:'25px'}}
+                        <button className="schedule-btn" onClick={handleNext} style={{ marginRight: '25px' }}
                         >
                             Next
                         </button>
@@ -390,7 +389,6 @@ function SessionSchedule() {
                             value={sessionDetails.instructorName}
                             onChange={(e) => {
                                 const value = e.target.value;
-                                // Sirf alphabets aur spaces allow karein
                                 const regex = /^[a-zA-Z\s]*$/;
                                 if (regex.test(value)) {
                                     setSessionDetails(prev => ({
@@ -412,7 +410,6 @@ function SessionSchedule() {
                             value={sessionDetails.instructorHolder}
                             onChange={(e) => {
                                 const value = e.target.value;
-                                // Sirf alphabets aur spaces allow karein
                                 const regex = /^[a-zA-Z\s]*$/;
                                 if (regex.test(value)) {
                                     setSessionDetails(prev => ({
@@ -436,8 +433,6 @@ function SessionSchedule() {
                             onChange={(e) => {
                                 let value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
                                 if (value.length > 11) value = value.slice(0, 11); // Limit to 11 digits
-
-                                // Add hyphen after 4 digits
                                 if (value.length > 4) {
                                     value = value.slice(0, 4) + '-' + value.slice(4);
                                 }
@@ -450,11 +445,11 @@ function SessionSchedule() {
 
                     </div>
                     <div className="button-container ">
-                        <button type="button" className="schedule-btn" onClick={handleBack}    
+                        <button type="button" className="schedule-btn" onClick={handleBack}
                         >
                             Back
                         </button>
-                        <button className="schedule-btn" onClick={handleNext}    
+                        <button className="schedule-btn" onClick={handleNext}
                         >
                             Next
                         </button>
@@ -511,13 +506,13 @@ function SessionSchedule() {
                         />
 
                     </div>
-<div className='form-actionss'>
-                    <button type="button" className="schedule-btn" onClick={handleBack}>
-                        Back
-                    </button>
-                    <button className="schedule-btn" onClick={confirmpayment}>
-                        Send Payment
-                    </button></div>
+                    <div className='form-actionss'>
+                        <button type="button" className="schedule-btn" onClick={handleBack}>
+                            Back
+                        </button>
+                        <button className="schedule-btn" onClick={confirmpayment}>
+                            Send Payment
+                        </button></div>
                 </div>
             )}
             {step === 7 && sessionDetails.paymentMethod === "cash" && (
@@ -551,19 +546,19 @@ function SessionSchedule() {
                             Select Instructor Peer:
                         </label>
                         <Select
-  options={studentOptions}
-  value={
-    studentOptions.find(option => option.label === sessionDetails.receiver) || null
-  }
-  onChange={(selectedOption) => {
-    setSessionDetails((prev) => ({
-      ...prev,
-      receiver: selectedOption ? selectedOption.label : null,
-    }));
-  }}
-  placeholder="Search and select a student..."
-  isClearable
-/>
+                            options={studentOptions}
+                            value={
+                                studentOptions.find(option => option.label === sessionDetails.receiver) || null
+                            }
+                            onChange={(selectedOption) => {
+                                setSessionDetails((prev) => ({
+                                    ...prev,
+                                    receiver: selectedOption ? selectedOption.label : null,
+                                }));
+                            }}
+                            placeholder="Search and select a student..."
+                            isClearable
+                        />
 
                     </div>
 

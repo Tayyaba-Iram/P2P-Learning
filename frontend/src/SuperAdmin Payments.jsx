@@ -27,7 +27,6 @@ const SuperAdminPayments = () => {
     useEffect(() => {
         const initializeAccount = async () => {
             try {
-                // Step 1: Save initial account with 0 (just to ensure it exists)
                 await axios.post('http://localhost:3001/api/save-account', {
                     holder: 'P2P Learning',
                     number: '0331-6384756',
@@ -38,7 +37,6 @@ const SuperAdminPayments = () => {
                     }
                 });
 
-                // Step 2: Fetch payment sessions
                 const sessionRes = await axios.get('http://localhost:3001/api/get-payment-details', {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -47,19 +45,15 @@ const SuperAdminPayments = () => {
 
                 const fetchedSessions = sessionRes.data.sessions || [];
 
-                // Reverse the array to show latest sessions first (based on insertion order)
                 fetchedSessions.reverse();
 
                 setSessions(fetchedSessions);
 
-
-                // Step 3: Calculate 10% from all payments
                 const total10PercentAmount = fetchedSessions.reduce((acc, session) => {
                     const deductedAmount = session.amount * 0.10;
                     return acc + deductedAmount;
                 }, 0);
 
-                // Step 4: Use base balance and update it
                 const initialBalance = 0;
                 const updatedBalance = initialBalance + total10PercentAmount;
 
@@ -69,7 +63,6 @@ const SuperAdminPayments = () => {
                     balance: updatedBalance
                 };
 
-                // Step 5: Save the updated balance
                 await axios.post('http://localhost:3001/api/save-account', account, {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -85,11 +78,11 @@ const SuperAdminPayments = () => {
         };
 
         initializeAccount();
-    const intervalId = setInterval(() => {
-        initializeAccount();
-    }, 1000); 
+        const intervalId = setInterval(() => {
+            initializeAccount();
+        }, 1000);
 
-    return () => clearInterval(intervalId);
+        return () => clearInterval(intervalId);
     }, [token]);
 
     return (
@@ -123,11 +116,10 @@ const SuperAdminPayments = () => {
                     type="text"
                     className="search-input"
                     placeholder=" 🔍︎ Search history by Sender Name, Email, University, Program, Phone Number, Instructor Name, Instructor Account Title, Instructor Account Number, Session Topic..."
-                     value={searchQuery} 
-  onChange={(e) => setSearchQuery(e.target.value)}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                 />
             </div>
-
 
             <div className="session-table-container">
                 <h2>Session Payments History</h2>
@@ -153,40 +145,40 @@ const SuperAdminPayments = () => {
                                 <th>Date</th>
                             </tr>
                         </thead>
-                       <tbody>
-  {filteredSessions.length > 0 ? (
-    filteredSessions.map((session, index) => {
-      const payment = session.amount;
-      const deductedAmount = payment * 0.10;
-      const amountAfterDeduction = payment - deductedAmount;
+                        <tbody>
+                            {filteredSessions.length > 0 ? (
+                                filteredSessions.map((session, index) => {
+                                    const payment = session.amount;
+                                    const deductedAmount = payment * 0.10;
+                                    const amountAfterDeduction = payment - deductedAmount;
 
-      return (
-        <tr key={session._id}>
-          <td>{index + 1}</td>
-          <td>{session.studentName}</td>
-          <td>{session.userEmail}</td>
-          <td>{session.university}</td>
-          <td>{session.program}</td>
-          <td>{session.phoneNumber}</td>
-          <td>{session.instructorName}</td>
-          <td>{session.instructorHolder}</td>
-          <td>{session.instructorNumber}</td>
-          <td>{session.topic}</td>
-          <td>Rs. {Math.round(payment)}</td>
-          <td>Rs. {Math.round(deductedAmount)}</td>
-          <td>Rs. {Math.round(amountAfterDeduction)}</td>
-          <td>{new Date(session.date).toLocaleDateString()}</td>
-        </tr>
-      );
-    })
-  ) : (
-    <tr>
-      <td colSpan="14" style={{ textAlign: 'center', padding: '10px' }}>
-        No sessions found.
-      </td>
-    </tr>
-  )}
-</tbody>
+                                    return (
+                                        <tr key={session._id}>
+                                            <td>{index + 1}</td>
+                                            <td>{session.studentName}</td>
+                                            <td>{session.userEmail}</td>
+                                            <td>{session.university}</td>
+                                            <td>{session.program}</td>
+                                            <td>{session.phoneNumber}</td>
+                                            <td>{session.instructorName}</td>
+                                            <td>{session.instructorHolder}</td>
+                                            <td>{session.instructorNumber}</td>
+                                            <td>{session.topic}</td>
+                                            <td>Rs. {Math.round(payment)}</td>
+                                            <td>Rs. {Math.round(deductedAmount)}</td>
+                                            <td>Rs. {Math.round(amountAfterDeduction)}</td>
+                                            <td>{new Date(session.date).toLocaleDateString()}</td>
+                                        </tr>
+                                    );
+                                })
+                            ) : (
+                                <tr>
+                                    <td colSpan="14" style={{ textAlign: 'center', padding: '10px' }}>
+                                        No sessions found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
 
                     </table>
                 ) : (

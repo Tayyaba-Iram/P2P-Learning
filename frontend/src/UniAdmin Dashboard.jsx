@@ -14,7 +14,6 @@ const AdminDashboard = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [userData, setUserData] = useState(null);
   const [data, setData] = useState(null);
 
   const navigate = useNavigate();
@@ -109,7 +108,6 @@ const AdminDashboard = () => {
       });
       toast.success(response.data.message);
 
-      // Update the complaints list by marking the resolved one
       setComplaints(prevComplaints =>
         prevComplaints.map(complaint =>
           complaint._id === id ? { ...complaint, status: 'Resolved' } : complaint
@@ -124,69 +122,68 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard">
       <div className="barr-container">
-      <h2>Programs Ranking by Session Count </h2>
+        <h2>Programs Ranking by Session Count </h2>
         <div className="barr-wrapper">
-      
 
-        <Bar data={chartsData} options={chartOptions} />
-      </div></div>
+          <Bar data={chartsData} options={chartOptions} />
+        </div></div>
 
       {complaints.length > 0 ? (
-  <>
-    <h2 style={{marginTop:'180px'}}>Complaints Dashboard</h2>
-    <table  style={{
-    borderRadius: '12px',
-    borderSpacing: '0',
-    overflow: 'hidden',
-  }}>
-      <thead>
-        <tr >
-          <th className='heading'>Name</th>
-          <th className='heading'>Email</th>
-          <th className='heading'>Category</th>
-          <th className='heading'>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {complaints.map((complaint) => (
-          <tr
-            key={complaint._id}
-            onClick={() => navigate(`/complain-action/${complaint._id}`)}
-            style={{ cursor: 'pointer' }}
-          >
-            <td>{complaint.username}</td>
-            <td>{complaint.useremail}</td>
-            <td>{complaint.category}</td>
-            <td>
-              <button
-                className='admin-resolve-button'
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleResolve(complaint._id);
-                }}
-                disabled={complaint.status === 'Resolved'}
-                style={{
-                  backgroundColor: complaint.status === 'Resolved' ? 'gray' : 'green',
-                  color: 'white',
-                  border: 'none',
-                  padding: '6px 12px',
-                  borderRadius: '5px',
-                  cursor: complaint.status === 'Resolved' ? 'not-allowed' : 'pointer'
-                }}
-              >
-                {complaint.status === 'Resolved' ? 'Resolved' : 'Resolve'}
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </>
-) : (
-  <p style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>
-  No complaints found.
-</p>
-)}
+        <>
+          <h2 style={{ marginTop: '180px' }}>Complaints Dashboard</h2>
+          <table style={{
+            borderRadius: '12px',
+            borderSpacing: '0',
+            overflow: 'hidden',
+          }}>
+            <thead>
+              <tr >
+                <th className='heading'>Name</th>
+                <th className='heading'>Email</th>
+                <th className='heading'>Category</th>
+                <th className='heading'>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {complaints.map((complaint) => (
+                <tr
+                  key={complaint._id}
+                  onClick={() => navigate(`/complain-action/${complaint._id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <td>{complaint.username}</td>
+                  <td>{complaint.useremail}</td>
+                  <td>{complaint.category}</td>
+                  <td>
+                    <button
+                      className='admin-resolve-button'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleResolve(complaint._id);
+                      }}
+                      disabled={complaint.status === 'Resolved'}
+                      style={{
+                        backgroundColor: complaint.status === 'Resolved' ? 'gray' : 'green',
+                        color: 'white',
+                        border: 'none',
+                        padding: '6px 12px',
+                        borderRadius: '5px',
+                        cursor: complaint.status === 'Resolved' ? 'not-allowed' : 'pointer'
+                      }}
+                    >
+                      {complaint.status === 'Resolved' ? 'Resolved' : 'Resolve'}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      ) : (
+        <p style={{ fontSize: '18px', fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>
+          No complaints found.
+        </p>
+      )}
     </div>
   );
 };

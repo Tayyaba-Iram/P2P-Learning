@@ -5,16 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
 function AddUniversity() {
+
   const [newUniversityData, setNewUniversityData] = useState({
     name: '',
     campuses: [{ name: '', programs: [{ name: '' }] }],
   });
+
   const navigate = useNavigate();
 
   const handleInputChange = (e, campusIndex = null, programIndex = null) => {
     const { name, value } = e.target;
 
-    // Allow only alphabets and spaces
     if (!/^[a-zA-Z\s]*$/.test(value)) return;
 
     setNewUniversityData((prevData) => {

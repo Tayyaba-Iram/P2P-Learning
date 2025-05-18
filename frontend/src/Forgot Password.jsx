@@ -18,7 +18,7 @@ function ForgotPassword() {
         if (res.data.success) {
           toast.success(res.data.message);
           if (res.data.link) {
-            setResetLink(res.data.link); // ✅ Store reset link for display
+            setResetLink(res.data.link);
             console.log(res.data.link);
           }
         } else {
@@ -53,8 +53,6 @@ function ForgotPassword() {
         )}
         <Toaster position="top-center" />
       </form>
-
-      {/* ✅ Show reset link if available */}
 
     </div>
   );

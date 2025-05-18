@@ -7,7 +7,7 @@ import './Complain.css';
 const Complaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [confirmDeleteIndex, setConfirmDeleteIndex] = useState(null);
-const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchComplaints = async () => {
@@ -20,7 +20,7 @@ const [message, setMessage] = useState('');
         });
         setComplaints(response.data);
       } catch (error) {
-setMessage(error.response?.data?.error || 'Error fetching complaints');
+        setMessage(error.response?.data?.error || 'Error fetching complaints');
       }
     };
     fetchComplaints();
@@ -72,20 +72,20 @@ setMessage(error.response?.data?.error || 'Error fetching complaints');
   return (
     <div className="complaints-list-container">
 
-<div style={{ display: 'flex', justifyContent: 'center' }}>
-  <input
-    type="text"
-    placeholder="🔍︎ Search complaints by Target Name, Email, Category and Description..."
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    className="directory-search"
-    style={{
-      width: '60%',
-      borderRadius: '8px',
-      border: '1px solid #ccc',
-    }}
-  />
-</div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <input
+          type="text"
+          placeholder="🔍︎ Search complaints by Target Name, Email, Category and Description..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="directory-search"
+          style={{
+            width: '60%',
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+          }}
+        />
+      </div>
 
 
       <Link to="/complain-form">
@@ -93,11 +93,11 @@ setMessage(error.response?.data?.error || 'Error fetching complaints');
       </Link>
 
       {filteredComplaints.length > 0 ? (
-        <table  style={{
-    borderRadius: '12px',
-    borderSpacing: '0',
-    overflow: 'hidden',
-  }}className="complaints-table">
+        <table style={{
+          borderRadius: '12px',
+          borderSpacing: '0',
+          overflow: 'hidden',
+        }} className="complaints-table">
           <thead>
             <tr>
               <th className="heading">Target Name</th>
@@ -110,51 +110,51 @@ setMessage(error.response?.data?.error || 'Error fetching complaints');
               <th className="heading">Action</th>
             </tr>
           </thead>
-         <tbody>
-  {filteredComplaints.length > 0 ? (
-    filteredComplaints.map((complaint) => (
-      <tr key={complaint._id}>
-        <td>{complaint.targetname}</td>
-        <td>{complaint.targetemail}</td>
-        <td>{complaint.category}</td>
-        <td>{complaint.description}</td>
-        <td>{new Date(complaint.date).toLocaleDateString()}</td>
-        <td>
-          {complaint.file ? (
-            <a
-              href={`http://localhost:3001/complains/${complaint.file}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View File
-            </a>
-          ) : (
-            'No file'
-          )}
-        </td>
-        <td>{complaint.status || 'Pending'}</td>
-        <td>
-          <button
-            style={{
-              backgroundColor: 'crimson',
-              fontSize: '16px'
-            }}
-            className="delete-button"
-            onClick={() => handleDelete(complaint._id)}
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan="8" style={{ textAlign: 'center', padding: '10px' }}>
-        No complaints found.
-      </td>
-    </tr>
-  )}
-</tbody>
+          <tbody>
+            {filteredComplaints.length > 0 ? (
+              filteredComplaints.map((complaint) => (
+                <tr key={complaint._id}>
+                  <td>{complaint.targetname}</td>
+                  <td>{complaint.targetemail}</td>
+                  <td>{complaint.category}</td>
+                  <td>{complaint.description}</td>
+                  <td>{new Date(complaint.date).toLocaleDateString()}</td>
+                  <td>
+                    {complaint.file ? (
+                      <a
+                        href={`http://localhost:3001/complains/${complaint.file}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View File
+                      </a>
+                    ) : (
+                      'No file'
+                    )}
+                  </td>
+                  <td>{complaint.status || 'Pending'}</td>
+                  <td>
+                    <button
+                      style={{
+                        backgroundColor: 'crimson',
+                        fontSize: '16px'
+                      }}
+                      className="delete-button"
+                      onClick={() => handleDelete(complaint._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8" style={{ textAlign: 'center', padding: '10px' }}>
+                  No complaints found.
+                </td>
+              </tr>
+            )}
+          </tbody>
 
         </table>
       ) : (
@@ -167,9 +167,9 @@ setMessage(error.response?.data?.error || 'Error fetching complaints');
             <p>Are you sure you want to delete this complaint?</p>
             <div className="modal-buttons">
               <button style={{
-  backgroundColor: 'crimson',
-}}
-className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
+                backgroundColor: 'crimson',
+              }}
+                className="modal-button confirm" onClick={handleDeleteConfirm}>Yes</button>
               <button className="modal-button cancel" onClick={handleDeleteCancel}>No</button>
             </div>
           </div>

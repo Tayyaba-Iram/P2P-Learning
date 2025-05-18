@@ -40,33 +40,33 @@ function Register() {
   useEffect(() => {
     const selectedUniversity = universities.find(uni => uni.name === university);
     setCampusOptions(selectedUniversity ? selectedUniversity.campuses : []);
-    setCampus(''); // Reset campus when university changes
-    setProgram(''); // Reset program when university changes
+    setCampus(''); 
+    setProgram(''); 
   }, [university, universities]);
 
   useEffect(() => {
     const selectedCampus = campusOptions.find(camp => camp.name === campus);
     setProgramOptions(selectedCampus ? selectedCampus.programs : []);
-    setProgram(''); // Reset program when campus changes
+    setProgram(''); 
   }, [campus, campusOptions]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
       setMessage('Password must be 8 characters with uppercase, lowercase letter, number, and special character.');
-                   setTimeout(() => setMessage(''), 10000);
+      setTimeout(() => setMessage(''), 10000);
 
       return;
-    } 
-    else if(password!==cpassword) {
+    }
+    else if (password !== cpassword) {
       setMessage('Password and confirm password must be same.');
-                         setTimeout(() => setMessage(''), 10000);
+      setTimeout(() => setMessage(''), 10000);
 
       return;
-    }else {
+    } else {
       axios
         .post('http://localhost:3001/api/registerStudent', {
-     name, sapid, email, cnic, phone, university, campus, program, semester, specification, password, cpassword
+          name, sapid, email, cnic, phone, university, campus, program, semester, specification, password, cpassword
         })
         .then(() => {
           toast.success("Registration Successfull!");
@@ -77,30 +77,30 @@ function Register() {
         .catch((err) => {
           if (err.response && err.response.data.error === "Email is already registered.") {
             setMessage('Email already exists');
-             setTimeout(() => setMessage(''), 10000);
+            setTimeout(() => setMessage(''), 10000);
           } else {
             setMessage('Registration failed due to incorrect data');
-                              setTimeout(() => setMessage(''), 10000);
+            setTimeout(() => setMessage(''), 10000);
 
           }
         });
     }
   };
-const handleSapChange = (event) => {
-  let value = event.target.value;
-  // Allow only numbers
-  let cleanedValue = value.replace(/\D/g, '');
-  // Limit to max 7 digits
-  if (cleanedValue.length > 7) {
-    cleanedValue = cleanedValue.slice(0, 7);
-  }
-  setSapid(cleanedValue); // Update the state with numeric value
-};
+  const handleSapChange = (event) => {
+    let value = event.target.value;
+    // Allow only numbers
+    let cleanedValue = value.replace(/\D/g, '');
+    // Limit to max 7 digits
+    if (cleanedValue.length > 7) {
+      cleanedValue = cleanedValue.slice(0, 7);
+    }
+    setSapid(cleanedValue); // Update the state with numeric value
+  };
 
   const handlePhoneChange = (value) => {
     // Remove any non-digit characters
     const cleanedValue = value.replace(/\D/g, '');
-  
+
     // Format as '0000-0000000'
     if (cleanedValue.length > 4) {
       setPhone(`${cleanedValue.slice(0, 4)}-${cleanedValue.slice(4, 11)}`);
@@ -111,16 +111,16 @@ const handleSapChange = (event) => {
   const handleCnicChange = (value) => {
     // Remove any non-digit characters
     const cleanedValue = value.replace(/\D/g, '');
-  
+
     // Format as '00000-0000000-0'
     let formattedValue = cleanedValue;
-  
+
     if (cleanedValue.length > 5 && cleanedValue.length <= 12) {
       formattedValue = `${cleanedValue.slice(0, 5)}-${cleanedValue.slice(5)}`;
     } else if (cleanedValue.length > 12) {
       formattedValue = `${cleanedValue.slice(0, 5)}-${cleanedValue.slice(5, 12)}-${cleanedValue.slice(12)}`;
     }
-  
+
     setCnic(formattedValue);
   };
   const handleSemesterChange = (event) => {
@@ -136,39 +136,39 @@ const handleSapChange = (event) => {
       .join(' ');
   };
 
-const handleNameChange = (e) => {
-  const value = e.target.value;
-  if (/^[a-zA-Z\s]*$/.test(value)) {
-    const capitalizedValue = capitalizeFullName(value);
-    setName(capitalizedValue);
-  }
-};
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    if (/^[a-zA-Z\s]*$/.test(value)) {
+      const capitalizedValue = capitalizeFullName(value);
+      setName(capitalizedValue);
+    }
+  };
 
 
 
   return (
     <div className="registration-container">
-        
+
       <Toaster position="top-center" />
 
-        <div className="signup-header">
+      <div className="signup-header">
         <img src="Logo.jpg" alt="Logo" className="Register-logo" />
-          <h1>Sign Up</h1>
+        <h1>Sign Up</h1>
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-group">
-          <input className="name" type="text" placeholder="Name" value={name} onChange={handleNameChange} required/>            
-            <input className="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-            <input  type="text" placeholder="CNIC"value={cnic}onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} required/>
-          
+            <input className="name" type="text" placeholder="Name" value={name} onChange={handleNameChange} required />
+            <input className="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="text" placeholder="CNIC" value={cnic} onChange={(e) => handleCnicChange(e.target.value)} maxLength={15} required />
 
-          <input type="text" placeholder="Phone Number"value={phone}onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} required/> 
+
+            <input type="text" placeholder="Phone Number" value={phone} onChange={(e) => handlePhoneChange(e.target.value)} maxLength={12} required />
             <select id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required>
               <option value="" hidden>Select University</option>
               {universities.map((uni) => (
                 <option key={uni._id} value={uni.name} required>{uni.name}</option>
               ))}
             </select>
-          
+
             <select id="campus" value={campus} onChange={(e) => setCampus(e.target.value)} disabled={!university}>
               <option value="" hidden required>Select Campus</option>
               {campusOptions.map((camp) => (
@@ -181,44 +181,44 @@ const handleNameChange = (e) => {
                 <option key={prog._id} value={prog.name}>{prog.name}</option>
               ))}
             </select>
-            <input type="text" placeholder="Student ID" value={sapid} onChange={handleSapChange} required/>
+            <input type="text" placeholder="Student ID" value={sapid} onChange={handleSapChange} required />
 
-<input
-  type="number"
-  value={semester}
-  onChange={handleSemesterChange}
-  placeholder="Semester"
-  min={1}
-  max={10}
-  required
-/>
-          <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} required/>
-         
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-            <input type="password" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required/>
+            <input
+              type="number"
+              value={semester}
+              onChange={handleSemesterChange}
+              placeholder="Semester"
+              min={1}
+              max={10}
+              required
+            />
+            <input type="text" placeholder="Specification" value={specification} onChange={(e) => setSpecification(e.target.value)} required />
+
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input type="password" placeholder="Confirm Password" value={cpassword} onChange={(e) => setCpassword(e.target.value)} required />
           </div>
-{message && (
-  <p style={{
-    color: 'red',
-    marginTop: "20px",
-    fontWeight: 'bold',
-    fontSize: '16px',
-    textAlign: 'center',
-    display: 'block',
-    width: '100%',
-    marginLeft:'55px'
-  }}>
-    {message}
-  </p>
-)}
+          {message && (
+            <p style={{
+              color: 'red',
+              marginTop: "20px",
+              fontWeight: 'bold',
+              fontSize: '16px',
+              textAlign: 'center',
+              display: 'block',
+              width: '100%',
+              marginLeft: '55px'
+            }}>
+              {message}
+            </p>
+          )}
 
 
           <button type="submit" className="register-button">Submit</button>
           <p className="signup-text">
-        Already have an account? <Link to="/login" className="signup-link">Login</Link>
-      </p>
+            Already have an account? <Link to="/login" className="signup-link">Login</Link>
+          </p>
         </form>
-        </div>
+      </div>
     </div>
   );
 }

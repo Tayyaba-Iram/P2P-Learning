@@ -13,17 +13,14 @@ function Login() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
-  // Check if user is already logged in when the page loads or refreshes
   useEffect(() => {
-    const token = sessionStorage.getItem('token'); // Get token from sessionStorage
-    const user = sessionStorage.getItem('user'); // Get user from sessionStorage
+    const token = sessionStorage.getItem('token'); 
+    const user = sessionStorage.getItem('user'); 
 
     if (token && user) {
-      // If token and user data exists, redirect to the appropriate dashboard
       const parsedUser = JSON.parse(user);
       setUser({ name: parsedUser.name, role: parsedUser.role });
 
-      // Redirect based on role
       if (parsedUser.role === 'admin') {
         navigate('/admindashboard');
       } else if (parsedUser.role === 'superadmin') {
@@ -36,7 +33,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       let response;
       sessionStorage.setItem('lastVisitedPage', window.location.pathname);
@@ -48,7 +45,7 @@ function Login() {
           { email, password },
           { withCredentials: true }
         );
-  
+
         if (response.data.success) {
           const loggedInUser = { ...response.data.user, role: 'admin' };
           sessionStorage.setItem('user', JSON.stringify(loggedInUser));
@@ -59,19 +56,19 @@ function Login() {
         } else {
           setMessage('Invalid Email or Password');
         }
-  
-      // Superadmin login
+
+        // Superadmin login
       } else if (email.endsWith('@gmail.com')) {
         response = await axios.post(
           'http://localhost:3001/api/superadmin-check-or-create',
           { email, password },
           { withCredentials: true }
         );
-  
+
         if (response.data.created) {
           toast.success('Super Admin account created successfully!');
         }
-  
+
         if (response.data.success || response.data.created) {
           const loggedInUser = { ...response.data.user, role: 'superadmin' };
           sessionStorage.setItem('user', JSON.stringify(loggedInUser));
@@ -82,15 +79,15 @@ function Login() {
         } else {
           setMessage('Invalid Email or Password');
         }
-  
-      // Student login
+
+        // Student login
       } else {
         response = await axios.post(
           'http://localhost:3001/api/studentlogin',
           { email, password },
           { withCredentials: true }
         );
-  
+
         if (response.data.success) {
           const loggedInUser = { ...response.data.user, role: 'student' };
           sessionStorage.setItem('user', JSON.stringify(loggedInUser));
@@ -112,7 +109,7 @@ function Login() {
       }
     } catch (error) {
       console.error('Login error:', error);
-  
+
       if (error.response?.data?.message) {
         setMessage(error.response.data.message);
       } else {
@@ -120,17 +117,17 @@ function Login() {
       }
     }
   };
-  
+
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     const user = sessionStorage.getItem('user');
-  
+
     if (token && user) {
       const parsedUser = JSON.parse(user);
-  
+
       if (parsedUser && parsedUser.role) {
         setUser({ name: parsedUser.name, role: parsedUser.role });
-  
+
         // Redirect based on role
         if (parsedUser.role === 'admin') {
           navigate('/admindashboard');
@@ -139,10 +136,10 @@ function Login() {
         } else if (parsedUser.role === 'student') {
           navigate('/');
         }
-      } 
+      }
     }
   }, [navigate, setUser]);
-  
+
   setTimeout(() => {
     setMessage('');
   }, 10000);
@@ -159,7 +156,7 @@ function Login() {
           <h2>Login to your account</h2>
         </div>
 
-        {message && <p style={{ color: 'red', marginTop: "20px", fontWeight: 'bold', fontSize: '16px', textAlign:'center' }}>{message}</p>}
+        {message && <p style={{ color: 'red', marginTop: "20px", fontWeight: 'bold', fontSize: '16px', textAlign: 'center' }}>{message}</p>}
 
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-group">
