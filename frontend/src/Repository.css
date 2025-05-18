@@ -40,11 +40,11 @@
     max-width: 200px;
   }
   .repository-table tbody tr:nth-child(even) {
-  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+  background-color: rgb(238, 234, 234); 
 }
 
 .repository-table tbody tr:nth-child(odd) {
-  background-color: #ffffff; /* White for odd rows */
+  background-color: #ffffff; 
 }
 
   .repository-table th {
@@ -62,7 +62,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 7px; /* space between buttons */
+    gap: 7px; 
     height: 100%;
   }
   

@@ -1,4 +1,4 @@
-/* SessionSchedule.css */
+
 
 .simple-session-scheduler {
   max-width: 500px;
@@ -102,9 +102,9 @@ p {
 }
 
 .custom-datepicker {
-  width: 100%; /* Force full width */
-  box-sizing: border-box; /* Include padding and border in width */
-  padding: 10px 12px 10px 36px; /* Left space for icon */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px 10px 36px; 
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -159,7 +159,7 @@ text-align: left;
 }
 
 .label {
-  width: 180px; /* Adjust width as needed */
+  width: 180px; 
   font-weight: 600;
   color: #222;
 
