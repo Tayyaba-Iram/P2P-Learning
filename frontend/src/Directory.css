@@ -42,7 +42,7 @@
 text-align: center;
 }
 
-/* Optional: zebra striping */
+
 .Directory-table tbody tr:nth-child(even) {
-  background-color: rgb(238, 234, 234); /* Light gray for even rows */
+  background-color: rgb(238, 234, 234); 
 }
