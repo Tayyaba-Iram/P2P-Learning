@@ -27,7 +27,3 @@ const verifyUser = (req, res, next) => {
 
 export default verifyUser;
 
-/* Think of a concert ticket 🎫. 
-Whoever holds the ticket is allowed to enter the concert — 
-the staff won’t ask your name or ID, they just check the ticket.
-The token is the ticket, and Bearer means “I hold it.”*/
