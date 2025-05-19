@@ -139,26 +139,34 @@ router.delete('/sessions/:sessionId', async (req, res) => {
   }
 });
 
-
-
-// Verify session API route
 router.get("/sessions/verify/:meetingID", async (req, res) => {
   const { meetingID } = req.params;
 
   try {
-    // Find the session by meeting ID in the database
-    const session = await SessionModel.findOne({ meetingLink: `https://meet.jit.si/${meetingID}` });
+    const session = await SessionModel.findOne({
+      meetingLink: `https://meet.jit.si/${meetingID}`,
+    });
 
-    if (session) {
-      return res.json({ success: true, message: "Session found" });
-    } else {
+    if (!session) {
       return res.status(404).json({ success: false, message: "Session not found" });
     }
+
+    const now = new Date();
+    const sessionDate = new Date(session.date);
+    const [endHour, endMinute] = session.endTime.split(":");
+    sessionDate.setHours(endHour, endMinute, 0, 0); // setting session end time
+
+    if (now > sessionDate) {
+      return res.json({ success: false, expired: true, message: "Session time is over" });
+    }
+
+    return res.json({ success: true, message: "Session is active" });
   } catch (error) {
     console.error("Error verifying session:", error);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });
+
 
 router.get('/sessions', verifyUser, async (req, res) => {
   try {

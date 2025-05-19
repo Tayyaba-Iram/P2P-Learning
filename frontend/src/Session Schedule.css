@@ -168,3 +168,9 @@ text-align: left;
 .value {
   flex: 1;
 }
+
+.p-text{
+  color: crimson;
+  font-size: 16px;
+  font-weight: bold;
+}
