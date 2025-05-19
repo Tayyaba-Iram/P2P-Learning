@@ -10,7 +10,7 @@ import './Session Schedule.css';
 import Select from 'react-select';
 
 function SessionSchedule() {
-    const [step, setStep] = useState(1); 
+    const [step, setStep] = useState(1);
 
     const [sessionDetails, setSessionDetails] = useState({
         topic: '',
@@ -73,7 +73,7 @@ function SessionSchedule() {
             }
 
             setMessage('');
-            setStep(2); 
+            setStep(2);
         } else if (step === 2) {
             const { paymentMethod } = sessionDetails;
 
@@ -84,7 +84,7 @@ function SessionSchedule() {
 
             setMessage('');
             if (paymentMethod === 'cash') {
-                setStep(3); 
+                setStep(3);
             } else if (paymentMethod === 'food') {
                 setStep(6);
             }
@@ -97,7 +97,7 @@ function SessionSchedule() {
             }
 
             setMessage('');
-            setStep(4); 
+            setStep(4);
         }
 
     };
@@ -121,7 +121,7 @@ function SessionSchedule() {
         formData.append('senderTitle', sessionDetails.senderTitle);
         formData.append('senderNumber', sessionDetails.senderNumber);
         formData.append('amount', sessionDetails.amount);
-        formData.append('receiver', sessionDetails.receiver); 
+        formData.append('receiver', sessionDetails.receiver);
         formData.append('foodBrand', sessionDetails.foodBrand);
         formData.append('foodItem', sessionDetails.foodItem);
         formData.append('file', sessionDetails.foodBill);
@@ -152,7 +152,7 @@ function SessionSchedule() {
                 senderTitle: '',
                 senderNumber: '',
                 amount: '',
-                receiver: '', 
+                receiver: '',
                 foodBrand: '',
                 foodItem: '',
                 foodBill: ''
@@ -168,11 +168,11 @@ function SessionSchedule() {
 
     const handleNextStep = () => {
         if (step === 2 && sessionDetails.paymentMethod === "cash") {
-            setStep(3); 
+            setStep(3);
         } else if (sessionDetails.paymentMethod === "food") {
-            setStep(6); 
+            setStep(6);
         } else {
-            setStep((prev) => prev + 1); 
+            setStep((prev) => prev + 1);
         }
     };
 
@@ -197,16 +197,16 @@ function SessionSchedule() {
                 return;
             }
             setMessage('');
-            setStep(7); 
+            setStep(7);
         } else {
-            setStep((prev) => prev + 1); 
+            setStep((prev) => prev + 1);
         }
     };
     const confirmsession = () => {
         if (step === 5 && sessionDetails.paymentMethod === "cash") {
             setStep(8);
         } else {
-            setStep((prev) => prev + 1); 
+            setStep((prev) => prev + 1);
         }
     };
     const confirmfood = () => {
@@ -217,7 +217,7 @@ function SessionSchedule() {
                 return;
             }
             setMessage('');
-            setStep(9); 
+            setStep(9);
         } else { setStep((prev) => prev + 1); }
     };
 
@@ -234,7 +234,7 @@ function SessionSchedule() {
                 });
                 console.log('Full Account Data:', response.data);
                 const { holder, number } = response.data;
-                console.log('Sender Title:', holder); 
+                console.log('Sender Title:', holder);
                 console.log('Sender Number:', number);
                 setSessionDetails(prev => ({
                     ...prev,
@@ -495,7 +495,7 @@ function SessionSchedule() {
                             value={sessionDetails.amount}
                             onChange={(e) => {
                                 const value = e.target.value;
-                                // Allow only digits
+                                // Allow only digits and check > 200
                                 if (/^\d*$/.test(value)) {
                                     setSessionDetails({ ...sessionDetails, amount: value });
                                 }
@@ -504,15 +504,31 @@ function SessionSchedule() {
                             pattern="\d*"
                             required
                         />
+                        {sessionDetails.amount !== "" && Number(sessionDetails.amount) < 200 && (
+                            <p className="p-text">Amount must be equal or greater than 200</p>
+                        )}
+
 
                     </div>
                     <div className='form-actionss'>
                         <button type="button" className="schedule-btn" onClick={handleBack}>
                             Back
                         </button>
-                        <button className="schedule-btn" onClick={confirmpayment}>
+                        <button
+                            className={`schedule-btn ${Number(sessionDetails.amount) <= 200 ? "cursor-not-allowed" : ""
+                                }`}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (Number(sessionDetails.amount) < 200) {
+                                    return;
+                                }
+                                confirmpayment();
+                            }}
+                            disabled={Number(sessionDetails.amount) < 200}
+                        >
                             Send Payment
-                        </button></div>
+                        </button>
+                    </div>
                 </div>
             )}
             {step === 7 && sessionDetails.paymentMethod === "cash" && (

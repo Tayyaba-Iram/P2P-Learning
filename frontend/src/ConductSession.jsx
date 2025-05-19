@@ -16,107 +16,133 @@ const ConductSession = () => {
   const [isSessionStarted, setIsSessionStarted] = useState(false);
 
   const navigate = useNavigate();
-  const jitsiContainerRef = useRef(null); 
+  const jitsiContainerRef = useRef(null);
 
+  // Helper: extract meeting ID
+  const extractMeetingID = (link) => link?.split("https://meet.jit.si/")[1] || "";
+
+  // Load Jitsi script
   useEffect(() => {
     const loadJitsiScript = () => {
       if (!window.JitsiMeetExternalAPI) {
         const script = document.createElement("script");
         script.src = "https://meet.jit.si/external_api.js";
         script.async = true;
-        script.onload = () => {
-          console.log("Jitsi script loaded.");
-          initializeJitsi(); 
-        };
-        script.onerror = () => {
-          console.error("Failed to load Jitsi script.");
+        script.onload = () => console.log("Jitsi script loaded.");
+        script.onerror = () =>
           Swal.fire("Error", "Failed to load Jitsi. Please refresh the page and try again.", "error");
-        };
         document.body.appendChild(script);
-      } else {
-        initializeJitsi();
       }
     };
-
-    const initializeJitsi = () => {
-      if (jitsiContainerRef.current) {
-        console.log("Jitsi initialized.");
-      } else {
-        console.log("Jitsi container not available yet.");
-      }
-    };
-
     loadJitsiScript();
-  }, []); 
+  }, []);
 
+  // Initialize Jitsi API when session starts
   useEffect(() => {
     if (isSessionStarted && window.JitsiMeetExternalAPI && jitsiContainerRef.current) {
-      initializeJitsiAPI();
+      const domain = "meet.jit.si";
+      const roomName = extractMeetingID(meetingLink);
+      const options = {
+        roomName,
+        width: "100%",
+        height: 600,
+        parentNode: jitsiContainerRef.current,
+        configOverwrite: { disableDeepLinking: true },
+        interfaceConfigOverwrite: {
+          SHOW_JITSI_WATERMARK: false,
+          HIDE_INVITE_MORE_HEADER: true,
+          TOOLBAR_BUTTONS: [
+            "microphone", "camera", "hangup", "chat", "fullscreen",
+            "raisehand", "tileview", "videobackgroundblur", "desktop",
+          ],
+        },
+      };
+
+      const api = new window.JitsiMeetExternalAPI(domain, options);
+      setApiInstance(api);
     }
-  }, [isSessionStarted]); 
+  }, [isSessionStarted, meetingLink]);
+
+  // Poll to check if session has expired
+  useEffect(() => {
+    if (!isSessionStarted) return;
+
+    const interval = setInterval(async () => {
+      const meetingID = extractMeetingID(meetingLink);
+      try {
+        const response = await axios.get(`http://localhost:3001/api/sessions/verify/${meetingID}`);
+        if (response.data.expired) {
+          Swal.fire({
+            title: "Session Ended",
+            text: "Session time is over.",
+            icon: "info",
+            confirmButtonText: "OK",
+            customClass: { confirmButton: "swal-confirm-btn-ok",
+               icon: "swal-info-icon",
+             },
+          }).then(() => {
+            if (apiInstance) {
+              apiInstance.dispose();
+              setApiInstance(null);
+            }
+            setIsSessionEnded(true);
+            setIsSessionStarted(false);
+          });
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
+      }
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [isSessionStarted, meetingLink, apiInstance]);
 
   const handleMeetingLinkChange = (e) => {
     const link = e.target.value;
     setMeetingLink(link);
-    const jitsiLinkPattern = /^https:\/\/meet\.jit\.si\/([a-zA-Z0-9-_]+)$/;
-    setJoinEnabled(jitsiLinkPattern.test(link));
+    const validPattern = /^https:\/\/meet\.jit\.si\/([a-zA-Z0-9-_]+)$/;
+    setJoinEnabled(validPattern.test(link));
   };
 
   const handleJoinSession = async () => {
     setIsJoining(true);
-    const meetingID = meetingLink.split("https://meet.jit.si/")[1] || "";
-
+    const meetingID = extractMeetingID(meetingLink);
     if (!meetingID) {
       setIsJoining(false);
       return;
     }
 
     try {
-      const response = await axios.get(
-        `http://localhost:3001/api/sessions/verify/${meetingID}`
-      );
-
-      if (response.data.success) {
+      const res = await axios.get(`http://localhost:3001/api/sessions/verify/${meetingID}`);
+      if (res.data.success) {
         setIsSessionStarted(true);
+      } else if (res.data.expired) {
+        Swal.fire({
+          title: "Session Ended",
+          text: "This session has already expired.",
+          icon: "info",
+          confirmButtonText: "OK",
+          customClass: { confirmButton: "swal-confirm-btn-ok",
+             icon: "swal-info-icon",
+           },
+        }).then(() => {
+          setIsJoining(false);
+          setIsSessionEnded(true);
+          navigate("/");
+        });
       } else {
+        Swal.fire("Not Found", "Session not found.", "error");
         setIsJoining(false);
       }
-    } catch (error) {
-      console.error("Error verifying session:", error);
+    } catch (err) {
+      console.error("Session verify error:", err);
+      Swal.fire("Error", "Failed to verify session. Please try again.", "error");
       setIsJoining(false);
     }
   };
 
-  const initializeJitsiAPI = () => {
-    const domain = "meet.jit.si";
-    const options = {
-      roomName: meetingLink.split("https://meet.jit.si/")[1],
-      width: "100%",
-      height: 600,
-      parentNode: jitsiContainerRef.current, 
-      configOverwrite: { disableDeepLinking: true },
-      interfaceConfigOverwrite: {
-        SHOW_JITSI_WATERMARK: false,
-        HIDE_INVITE_MORE_HEADER: true,
-        TOOLBAR_BUTTONS: [
-          "microphone", "camera", "hangup", "chat", "fullscreen",
-          "raisehand", "tileview", "videobackgroundblur", "desktop",
-        ],
-      },
-    };
-
-    const api = new window.JitsiMeetExternalAPI(domain, options);
-    setApiInstance(api);
-
-    api.addListener("readyToClose", () => {
-      setIsJoining(false);
-      setIsSessionEnded(true);
-      setIsSessionStarted(false);
-    });
-  };
-
   const handleEndSession = async () => {
-    const confirmDelete = await Swal.fire({
+    const confirm = await Swal.fire({
       title: "End Session?",
       text: "Are you sure you want to end this session?",
       icon: "info",
@@ -124,40 +150,33 @@ const ConductSession = () => {
       confirmButtonText: "End Session",
       cancelButtonText: "Cancel",
       customClass: {
+        confirmButton: "swal-confirm-btn",
+        cancelButton: "swal-cancel-btn",
         icon: "swal-info-icon",
-        confirmButton: 'swal-confirm-btn',
-        cancelButton: 'swal-cancel-btn'
       },
-      buttonsStyling: false
+      buttonsStyling: false,
     });
 
-    if (confirmDelete.isConfirmed) {
+    if (confirm.isConfirmed) {
       if (apiInstance) {
         apiInstance.dispose();
-        setIsSessionEnded(true);
-        setIsSessionStarted(false);
+        setApiInstance(null);
       }
+      setIsSessionEnded(true);
+      setIsSessionStarted(false);
     }
   };
-
 
   const handleRatingSubmit = async () => {
     try {
       const token = sessionStorage.getItem("token");
-      const sessionId = meetingLink?.replace("https://meet.jit.si/", "") || "";
-
-      console.log("Token:", token);
-      console.log("Full Meeting Link:", meetingLink);
-      console.log("Session ID:", sessionId);
-      console.log("Rating:", rating);
+      const sessionId = extractMeetingID(meetingLink);
 
       await axios.post("http://localhost:3001/api/submits", {
         sessionId,
         rating,
       }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       Swal.fire({
@@ -165,9 +184,7 @@ const ConductSession = () => {
         text: "Your rating has been submitted.",
         icon: "success",
         confirmButtonText: "OK",
-        customClass: {
-          confirmButton: "swal-confirm-btn-ok",
-        },
+        customClass: { confirmButton: "swal-confirm-btn-ok" },
         buttonsStyling: false,
       }).then(() => {
         setIsRatingSubmitted(true);
@@ -175,54 +192,57 @@ const ConductSession = () => {
       });
 
     } catch (err) {
-      console.error("Rating submission failed:", err);
+      console.error("Rating submit failed:", err);
       Swal.fire("Error", "Failed to submit rating. Please try again.", "error");
     }
   };
+
+  // Custom SweetAlert2 styles
   const applyCustomStyles = () => {
     const style = document.createElement("style");
     style.innerHTML = `
-          .swal-confirm-btn-ok {
-            background-color: #48742F !important;
-            color: white !important;
-            padding: 10px 20px !important;
-            border-radius: 5px !important;
-            font-size: 16px !important;
-            width: 120px !important;
-            cursor: pointer !important;
-          }
-          .swal-cancel-btn {
-            background-color: #48742F !important;
-            color: white !important;
-            padding: 8px 16px !important;
-            border-radius: 5px !important;
-            cursor: pointer !important;
-            width: 150px !important;
-          }
-            .swal-confirm-btn {
-            background-color: #FF4C4C !important;
-            color: white !important;
-            padding: 8px 16px !important;
-            border-radius: 5px !important;
-            cursor: pointer !important;
-            width: 150px !important;
-          }
-          .swal-info-icon {
-            color: #48742F !important;
-             border: 3px solid #48742F !important;
-          }
-        `;
+      .swal-confirm-btn-ok {
+        background-color: #48742F !important;
+        color: white !important;
+        padding: 10px 20px !important;
+        border-radius: 5px !important;
+        font-size: 16px !important;
+        width: 120px !important;
+        cursor: pointer !important;
+      }
+      .swal-cancel-btn {
+        background-color: #48742F !important;
+        color: white !important;
+        padding: 8px 16px !important;
+        border-radius: 5px !important;
+        cursor: pointer !important;
+        width: 150px !important;
+      }
+      .swal-confirm-btn {
+        background-color: #FF4C4C !important;
+        color: white !important;
+        padding: 8px 16px !important;
+        border-radius: 5px !important;
+        cursor: pointer !important;
+        width: 150px !important;
+      }
+      .swal-info-icon {
+        color: #48742F !important;
+        border: 3px solid #48742F !important;
+      }
+    `;
     document.head.appendChild(style);
   };
 
-  applyCustomStyles();
-
+  useEffect(() => {
+    applyCustomStyles();
+  }, []);
 
   return (
     <div style={{ textAlign: "center" }}>
       {!isSessionStarted ? (
         <>
-          <h2 className="conduct-session" style={{ marginBottom: "10px" }}>Conduct Session</h2>
+          <h2 style={{ marginBottom: "10px" }}>Conduct Session</h2>
           <input
             type="text"
             value={meetingLink}
@@ -232,11 +252,10 @@ const ConductSession = () => {
               width: "80%",
               maxWidth: "300px",
               marginBottom: "20px",
-              marginTop: "13px",  
+              marginTop: "13px",
             }}
             disabled={isSessionEnded}
           />
-
           <br />
           <button
             onClick={handleJoinSession}
@@ -260,9 +279,7 @@ const ConductSession = () => {
             style={{
               width: "100%",
               height: "100%",
-              padding: 0,
-              margin: 0,
-              position: "absolute", 
+              position: "absolute",
               top: 0,
               left: 0,
             }}
@@ -280,6 +297,7 @@ const ConductSession = () => {
               position: "absolute",
               top: "20px",
               right: "20px",
+              zIndex: 10,
             }}
           >
             End Session
@@ -288,18 +306,13 @@ const ConductSession = () => {
       )}
 
       {isSessionEnded && !isRatingSubmitted && (
-        <div style={{ marginTop: "10px" }}> 
-          <h2 style={{ marginBottom: "5px" }}>Rate this session</h2> 
+        <div style={{ marginTop: "10px" }}>
+          <h2 style={{ marginBottom: "5px" }}>Rate this session</h2>
           <Rating
-            style={{
-              maxWidth: 250,
-              margin: "auto",
-              marginTop: "20px",
-            }}
+            style={{ maxWidth: 250, margin: "auto", marginTop: "20px" }}
             value={rating}
             onChange={setRating}
           />
-
           <button
             onClick={handleRatingSubmit}
             style={{
