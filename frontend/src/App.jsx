@@ -78,13 +78,13 @@ function App() {
       {renderNavbar()}
       <div className="content">
       <Routes>
-        {/* Public Routes */}
+        {/* Public Routes for all access */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-        {/* Protected Routes */}
+        {/* Protected Routes for authentic users */}
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/ConductSession" element={<ProtectedRoute><ConductSession /></ProtectedRoute>} />
         <Route path="/superdashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
