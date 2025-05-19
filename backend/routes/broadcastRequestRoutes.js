@@ -46,6 +46,7 @@ router.get('/get-broadcastRequest', verifyUser, async (req, res) => {
     const userId = req.user.id || req.user._id; 
 
     const requests = await BroadcastRequest.find({ userId });
+       console.log('Fetched requests:', requests); 
     res.status(200).json(requests);
   } catch (error) {
     console.error('Error fetching requests:', error);

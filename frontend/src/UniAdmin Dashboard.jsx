@@ -31,6 +31,11 @@ const AdminDashboard = () => {
     };
 
     fetchComplaints();
+    const intervalId = setInterval(() => {
+      fetchComplaints();
+    }, 1000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const fetchChartData = async () => {

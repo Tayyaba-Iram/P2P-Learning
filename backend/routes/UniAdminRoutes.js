@@ -21,8 +21,8 @@ router.post('/registerUniAdmin',verifyUser, async (req, res) => {
 
     const existingSapid = await UniAdminModel.findOne({ sapid });
     if (existingSapid) {
-      console.log('SAP ID already registered:', sapid);
-      return res.status(400).json({ error: 'SAP ID is already registered.' });
+      console.log('ID already registered:', sapid);
+      return res.status(400).json({ error: 'ID is already registered.' });
     }
 
     const newUniAdmin = new UniAdminModel({

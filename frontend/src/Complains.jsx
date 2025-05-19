@@ -8,6 +8,7 @@ const Complaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [confirmDeleteIndex, setConfirmDeleteIndex] = useState(null);
   const [message, setMessage] = useState('');
+  const token = sessionStorage.getItem('token');
 
   useEffect(() => {
     const fetchComplaints = async () => {
@@ -24,7 +25,12 @@ const Complaints = () => {
       }
     };
     fetchComplaints();
-  }, []);
+     const intervalId = setInterval(() => {
+      fetchComplaints();
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [token]);
 
   const handleDelete = (id) => {
     setConfirmDeleteIndex(id);

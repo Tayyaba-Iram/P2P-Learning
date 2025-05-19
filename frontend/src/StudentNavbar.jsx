@@ -84,7 +84,7 @@ function StudentNavbar() {
             </div>
           ) : (
             <div className="error-message">
-              {error ? <p>{error}</p> : <p>Loading user data...</p>}
+              {error ? <p>{error}</p> : <p style={{backgroundColor:'white'}}>Loading user data...</p>}
             </div>
           )}
           {showDropdown && (

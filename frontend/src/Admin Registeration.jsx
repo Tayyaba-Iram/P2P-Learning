@@ -27,7 +27,10 @@ function AdminRegister() {
         const response = await axios.get('http://localhost:3001/api/universities');
         setUniversities(response.data);
       } catch (error) {
+            const errorMessage = error.response?.data?.error || "Something went wrong";
+
         console.error('Error fetching universities:', error);
+
         toast.error('Failed to fetch universities');
       }
     };
@@ -84,8 +87,8 @@ function AdminRegister() {
 
     } catch (error) {
 
-      const errorMsg = error.response?.data?.error || 'Registration failed';
-      toast.error(errorMsg);
+const errorMsg = error.response?.data?.error || "Something went wrong";
+    setMessage(errorMsg);      
     }
   };
 
@@ -204,7 +207,7 @@ function AdminRegister() {
       </div>
 
       {message && <p style={{ color: 'red', fontWeight: 'bold', fontSize: '16px' }}>{message}</p>}
-     
+
       <button type="submit" className="register">Register</button>
     </form>
 

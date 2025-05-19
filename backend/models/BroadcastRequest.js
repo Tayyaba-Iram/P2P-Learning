@@ -1,4 +1,3 @@
-// models/BroadcastRequest.js
 import mongoose from 'mongoose';
 
 const broadcastRequestSchema = new mongoose.Schema({
