@@ -7,7 +7,7 @@ import verifyUser from '../middleware/verifyUser.js';
 dotenv.config();
 
 const router = express.Router();
-
+{/*verifyuser is coming from our middleware */}
 router.get('/getUserDetails', verifyUser, async (req, res) => {
   try {
     const user = await VerifiedStudentModel.findOne({ email: req.user.email });

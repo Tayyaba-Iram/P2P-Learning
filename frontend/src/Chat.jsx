@@ -432,7 +432,7 @@ function Chat() {
                 }}
                 style={{ marginLeft: '10px', cursor: 'pointer' }}
               >
-                {favoriteStudents.includes(student._id) ? '❤️' : '🤍'}
+                {favoriteStudents.includes(student._id) ? '❤️' : '🤍'} 
               </span>
 
             </div>
