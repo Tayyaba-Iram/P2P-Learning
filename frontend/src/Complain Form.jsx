@@ -158,7 +158,7 @@ const ComplaintForm = () => {
       <label className='label-complain'>Proof:</label>
       <input
         type="file"
-        accept=".jpg, .jpeg, .png, .pdf, .docx, .word"
+        accept=".jpg, .jpeg, .png, .pdf, .docx"
         onChange={handleFileChange}
         required
       />
